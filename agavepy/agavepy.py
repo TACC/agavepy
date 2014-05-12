@@ -3,8 +3,8 @@
 
 """
 
-EasyRest
-========
+AgavePy
+=======
 
 Very basic wrapper for requests to play with the Agave API.
 
