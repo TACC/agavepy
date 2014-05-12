@@ -45,6 +45,7 @@ class AgaveAPI(object):
 
     GET = verb('get')
     POST = verb('post')
+    DELETE = verb('delete')
 
     def clients_create(self, client_name):
         url = self._url('clients/v2')
