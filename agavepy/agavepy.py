@@ -10,7 +10,6 @@ Very basic wrapper for requests to play with the Agave API.
 
 """
 
-import errno
 import os
 import shelve
 import urllib
