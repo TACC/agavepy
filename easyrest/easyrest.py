@@ -10,6 +10,7 @@ Very basic wrapper for requests to play with the Agave API.
 
 """
 
+import errno
 import os
 import shelve
 import urllib
@@ -40,7 +41,28 @@ class AgaveAPI(object):
         self.password = password
         self.tenant = tenant or self.BASE
         self.auth = requests.auth.HTTPBasicAuth(self.user, self.password)
-        self.clients = shelve.open(os.path.expanduser('~/.agave_clients'))
+        self.load_persistent_data()
+
+    @property
+    def persistent_data_filename(self):
+        tenant = urllib.parse.urlparse(self.tenant).netloc
+        return os.path.join(self.persistent_data_dir,
+                            '{}_{}'.format(self.user, tenant))
+
+    @property
+    def persistent_data_dir(self):
+        dot_dir = os.path.expanduser('~/.agave_clients')
+        os.makedirs(dot_dir, exist_ok=True)
+        return dot_dir
+
+    def load_persistent_data(self, abort_on_error=False):
+        try:
+            self.clients = shelve.open(self.persistent_data_filename)
+        except BlockingIOError:
+            if abort_on_error:
+                raise
+            self.clients.close()
+            self.load_persistent_data(abort_on_error=True)
 
     def _url(self, *args):
         return urllib.parse.urljoin(self.tenant, os.path.join(*args))
