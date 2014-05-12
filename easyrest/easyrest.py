@@ -61,4 +61,29 @@ class AgaveAPI(object):
 
     def clients_list(self):
         url = self._url('clients/v2')
+        return self.GET(url, auth=self.auth)
+
+    def clients_info(self, client_name):
+        url = self._url('clients/v2', client_name, auth=self.auth)
         return self.GET(url)
+
+    def clients_delete(self, client_name):
+        url = self._url('clients/v2', client_name)
+        return self.DELETE(url, auth=self.auth)
+
+    def token(self, client):
+        url = self._url('token')
+        data = {'grant_type': 'client_credentials',
+                'username': self.user,
+                'password': self.password,
+                'scope': 'PRODUCTION'}
+        client_data = self.clients[client]
+        consumer_key = client_data['response']['consumerKey']
+        consumer_secret = client_data['response']['consumerSecret']
+        auth = requests.auth.HTTPBasicAuth(consumer_key, consumer_secret)
+        resp = self.POST(url, data=data, auth=auth)
+        # use temp, or set writeback=True
+        temp = self.clients[client]
+        temp['token'] = resp
+        self.clients[client] = temp
+        return resp
