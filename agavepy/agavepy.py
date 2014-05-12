@@ -58,7 +58,7 @@ class AgaveAPI(object):
     def load_persistent_data(self, abort_on_error=False):
         try:
             self.clients = shelve.open(self.persistent_data_filename)
-        except BlockingIOError:
+        except OSError:
             if abort_on_error:
                 raise
             self.clients.close()
