@@ -23,7 +23,6 @@ def verb(verb_name):
 
     """
     def _verb(self, *args, **kwargs):
-        kwargs['auth'] = self.auth
         fun = getattr(requests, verb_name)
         resp = fun(*args, **kwargs)
         self.last_response = resp
