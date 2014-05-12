@@ -43,7 +43,7 @@ class AgaveAPI(object):
         self.clients = shelve.open(os.path.expanduser('~/.agave_clients'))
 
     def _url(self, *args):
-        return urllib.parse.urljoin(self.BASE, os.path.join(*args))
+        return urllib.parse.urljoin(self.tenant, os.path.join(*args))
 
     GET = verb('get')
     POST = verb('post')
