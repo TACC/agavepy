@@ -102,3 +102,9 @@ class AgaveAPI(object):
         temp['token'] = resp
         self.clients[client] = temp
         return resp
+
+    def systems_list(self, client):
+        token = self.clients[client]['token']['access_token']
+        url = self._url('systems/v2')
+        return self.GET(
+            url, headers={'Authorization': 'Bearer {}'.format(token)})
