@@ -11,6 +11,7 @@ Very basic wrapper for requests to play with the Agave API.
 """
 
 import os
+import shelve
 import urllib
 
 import requests
@@ -39,6 +40,7 @@ class AgaveAPI(object):
         self.password = password
         self.tenant = tenant or self.BASE
         self.auth = requests.auth.HTTPBasicAuth(self.user, self.password)
+        self.clients = shelve.open(os.path.expanduser('~/.agave_clients'))
 
     def _url(self, *args):
         return urllib.parse.urljoin(self.BASE, os.path.join(*args))
@@ -47,11 +49,15 @@ class AgaveAPI(object):
     POST = verb('post')
     DELETE = verb('delete')
 
-    def clients_create(self, client_name):
+    def clients_create(self, client_name, **kwargs):
         url = self._url('clients/v2')
         data = {'clientName': client_name,
                 'tier': 'Unlimited'}
-        return self.POST(url, data=data)
+        data.update(kwargs)
+        resp = self.POST(url, data=data, auth=self.auth)
+        if resp['status'] == 'success':
+            self.clients[resp['result']['name']] = {'response': resp['result']}
+        return resp
 
     def clients_list(self):
         url = self._url('clients/v2')
