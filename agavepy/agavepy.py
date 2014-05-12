@@ -55,14 +55,8 @@ class AgaveAPI(object):
         os.makedirs(dot_dir, exist_ok=True)
         return dot_dir
 
-    def load_persistent_data(self, abort_on_error=False):
-        try:
-            self.clients = shelve.open(self.persistent_data_filename)
-        except OSError:
-            if abort_on_error:
-                raise
-            self.clients.close()
-            self.load_persistent_data(abort_on_error=True)
+    def load_persistent_data(self):
+        self.clients = shelve.open(self.persistent_data_filename, flag='c')
 
     def _url(self, *args):
         return urllib.parse.urljoin(self.tenant, os.path.join(*args))
