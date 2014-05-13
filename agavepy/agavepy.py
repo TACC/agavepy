@@ -137,8 +137,8 @@ class AgaveAPI(object):
         return self.GET(url, auth=self.auth)
 
     def clients_info(self, client_name):
-        url = self._url('clients/v2', client_name, auth=self.auth)
-        return self.GET(url)
+        url = self._url('clients/v2', client_name)
+        return self.GET(url, auth=self.auth)
 
     def clients_delete(self, client_name):
         url = self._url('clients/v2', client_name)
