@@ -10,6 +10,7 @@ Very basic wrapper for requests to play with the Agave API.
 
 """
 
+import functools
 import json
 import os
 import shelve
@@ -33,6 +34,34 @@ def verb(verb_name):
             raise Exception(resp.text)
         return resp.json()
     return _verb
+
+
+def method(verb):
+    """Make an already authorized method.
+
+    Use as::
+
+        @method('GET')
+        def foo(self, method, arg1, kwarg='bar'):
+            ...
+            method(url, ...)
+
+    and invoke as::
+
+        a_client.foo(arg1, kwarg='')
+
+    """
+
+    def decorator(f):
+        @functools.wraps(f)
+        def wrapper(self, *args, **kwargs):
+            client = kwargs.pop('client', self.default_client)
+            token = self.token(client)
+            header = self.bearer(token)
+            meth = functools.partial(getattr(self, verb), headers=header)
+            return f(self, meth, *args, **kwargs)
+        return wrapper
+    return decorator
 
 
 class AgaveAPI(object):
@@ -148,20 +177,27 @@ class AgaveAPI(object):
 
     # --- Systems ---
 
-    def systems_list(self, client):
-        token = self.token(client)
+    @method('GET')
+    def systems_list(self, method):
         url = self._url('systems/v2')
-        return self.GET(url, headers=self.bearer(token))
+        return method(url)
 
-    def systems_create(self, client, system_data):
-        token = self.token(client)
+    @method('POST')
+    def systems_create(self, method, system_data):
         url = self._url('systems/v2')
         files = {'fileToUpload': json.dumps(system_data)}
-        return self.POST(url, headers=self.bearer(token), files=files)
+        return method(url, files=files)
+
+    @method('PUT')
+    def systems_make_default(self, method, system):
+        url = self._url('systems/v2', system)
+        data = {'action': 'setDefault'}
+        return method(url, data=data)
 
     # --- Files ---
 
-    def listings(self, client, system, path):
-        token = self.token(client)
-        url = self._url('files/v2/listings/system', system, path)
-        return self.GET(url, headers=self.bearer(token))
+    @method('GET')
+    def listings(self, method, path, system=None):
+        url = (self._url('files/v2/listings', path) if system is None
+               else self._url('files/v2/listings/system', system, path))
+        return method(url)
