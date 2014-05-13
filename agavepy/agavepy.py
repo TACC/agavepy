@@ -10,6 +10,7 @@ Very basic wrapper for requests to play with the Agave API.
 
 """
 
+import json
 import os
 import shelve
 import urllib
@@ -103,8 +104,16 @@ class AgaveAPI(object):
         self.clients[client] = temp
         return resp
 
+    def bearer(self, token):
+        return {'Authorization': 'Bearer {}'.format(token)}
+
     def systems_list(self, client):
         token = self.clients[client]['token']['access_token']
         url = self._url('systems/v2')
-        return self.GET(
-            url, headers={'Authorization': 'Bearer {}'.format(token)})
+        return self.GET(url, headers=self.bearer(token))
+
+    def systems_create(self, client, system_data):
+        token = self.clients[client]['token']['access_token']
+        url = self._url('systems/v2')
+        files = {'fileToUpload': json.dumps(system_data)}
+        return self.POST(url, headers=self.bearer(token), files=files)
