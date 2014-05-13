@@ -70,6 +70,7 @@ class AgaveAPI(object):
 
     GET = verb('get')
     POST = verb('post')
+    PUT = verb('put')
     DELETE = verb('delete')
 
     # --- Token ---
