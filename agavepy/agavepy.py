@@ -104,6 +104,8 @@ class AgaveAPI(object):
         return self.POST(url, data=data, auth=auth)
 
     def token(self, client):
+        "Do as possible to get a valid token for this client."
+
         client_data = self.clients[client]
         try:
             token_data = client_data['token']
