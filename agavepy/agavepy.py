@@ -13,6 +13,7 @@ Very basic wrapper for requests to play with the Agave API.
 import json
 import os
 import shelve
+import time
 import urllib
 
 import requests
@@ -63,9 +64,63 @@ class AgaveAPI(object):
     def _url(self, *args):
         return urllib.parse.urljoin(self.tenant, os.path.join(*args))
 
+    def bearer(self, token):
+        return {'Authorization': 'Bearer {}'.format(token)}
+
     GET = verb('get')
     POST = verb('post')
     DELETE = verb('delete')
+
+    # --- Token ---
+
+    def _get_token(self, client):
+        """Request a token by sending credentials."""
+
+        url = self._url('token')
+        data = {'grant_type': 'password',
+                'username': self.user,
+                'password': self.password,
+                'scope': 'PRODUCTION'}
+        client_data = self.clients[client]
+        consumer_key = client_data['response']['consumerKey']
+        consumer_secret = client_data['response']['consumerSecret']
+        auth = requests.auth.HTTPBasicAuth(consumer_key, consumer_secret)
+        return self.POST(url, data=data, auth=auth)
+
+    def _refresh_token(self, client):
+        """Refresh token from cache info."""
+
+        url = self._url('token')
+        client_data = self.clients[client]
+        refresh_token = client_data['token']['refresh_token']
+        data = {'grant_type': 'refresh_token',
+                'scope': 'PRODUCTION',
+                'refresh_token': refresh_token}
+        consumer_key = client_data['response']['consumerKey']
+        consumer_secret = client_data['response']['consumerSecret']
+        auth = requests.auth.HTTPBasicAuth(consumer_key, consumer_secret)
+        return self.POST(url, data=data, auth=auth)
+
+    def token(self, client):
+        client_data = self.clients[client]
+        try:
+            token_data = client_data['token']
+        except KeyError:
+            # we haven't got a token for this client yet
+            # so get a fresh one
+            token_data = self._get_token(client)
+            token_data['created'] = time.time()
+            client_data['token'] = token_data
+            self.clients[client] = client_data
+
+        if time.time() >= token_data['created'] + token_data['expires_in']:
+            token_data = self._refresh_token(client)
+
+        return token_data['access_token']
+
+
+
+    # --- Clients ---
 
     def clients_create(self, client_name, **kwargs):
         url = self._url('clients/v2')
@@ -89,33 +144,15 @@ class AgaveAPI(object):
         url = self._url('clients/v2', client_name)
         return self.DELETE(url, auth=self.auth)
 
-    def token(self, client):
-        url = self._url('token')
-        data = {'grant_type': 'client_credentials',
-                'username': self.user,
-                'password': self.password,
-                'scope': 'PRODUCTION'}
-        client_data = self.clients[client]
-        consumer_key = client_data['response']['consumerKey']
-        consumer_secret = client_data['response']['consumerSecret']
-        auth = requests.auth.HTTPBasicAuth(consumer_key, consumer_secret)
-        resp = self.POST(url, data=data, auth=auth)
-        # use temp, or set writeback=True
-        temp = self.clients[client]
-        temp['token'] = resp
-        self.clients[client] = temp
-        return resp
-
-    def bearer(self, token):
-        return {'Authorization': 'Bearer {}'.format(token)}
+    # --- Systems ---
 
     def systems_list(self, client):
-        token = self.clients[client]['token']['access_token']
+        token = self.token(client)
         url = self._url('systems/v2')
         return self.GET(url, headers=self.bearer(token))
 
     def systems_create(self, client, system_data):
-        token = self.clients[client]['token']['access_token']
+        token = self.token(client)
         url = self._url('systems/v2')
         files = {'fileToUpload': json.dumps(system_data)}
         return self.POST(url, headers=self.bearer(token), files=files)
