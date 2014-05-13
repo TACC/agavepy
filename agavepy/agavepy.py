@@ -28,6 +28,8 @@ def verb(verb_name):
         fun = getattr(requests, verb_name)
         resp = fun(*args, **kwargs)
         self.last_response = resp
+        if not resp.ok:
+            raise Exception(resp.text)
         return resp.json()
     return _verb
 
