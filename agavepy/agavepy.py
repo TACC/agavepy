@@ -64,6 +64,12 @@ def method(verb):
     return decorator
 
 
+def optional_system(system):
+    if system is None:
+        return ''
+    return 'system/{}'.format(system)
+
+
 class AgaveAPI(object):
 
     BASE = 'https://agave.iplantc.org'
@@ -196,8 +202,14 @@ class AgaveAPI(object):
 
     # --- Files ---
 
+
     @method('GET')
     def listings(self, method, path, system=None):
-        url = (self._url('files/v2/listings', path) if system is None
-               else self._url('files/v2/listings/system', system, path))
+        url = self._url('files/v2/listings', optional_system(system), path)
+        print('url is', url)
+        return method(url)
+
+    @method('GET')
+    def pems(self, method, path, system=None):
+        url = self._url('files/v2/pems', optional_system(system), path)
         return method(url)
