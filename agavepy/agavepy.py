@@ -118,8 +118,6 @@ class AgaveAPI(object):
 
         return token_data['access_token']
 
-
-
     # --- Clients ---
 
     def clients_create(self, client_name, **kwargs):
@@ -156,3 +154,10 @@ class AgaveAPI(object):
         url = self._url('systems/v2')
         files = {'fileToUpload': json.dumps(system_data)}
         return self.POST(url, headers=self.bearer(token), files=files)
+
+    # --- Files ---
+
+    def listings(self, client, system, path):
+        token = self.token(client)
+        url = self._url('files/v2/listings/system', system, path)
+        return self.GET(url, headers=self.bearer(token))
