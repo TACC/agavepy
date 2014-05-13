@@ -39,11 +39,12 @@ class AgaveAPI(object):
 
     BASE = 'https://agave.iplantc.org'
 
-    def __init__(self, user, password, tenant=None):
+    def __init__(self, user, password, tenant=None, client=None):
         self.user = user
         self.password = password
         self.tenant = tenant or self.BASE
         self.auth = requests.auth.HTTPBasicAuth(self.user, self.password)
+        self.default_client = client
         self.load_persistent_data()
 
     @property
