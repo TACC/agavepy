@@ -218,3 +218,10 @@ class AgaveAPI(object):
     def pems(self, method, path, system=None):
         url = self._url('files/v2/pems', optional_system(system), path)
         return method(url)
+
+    @method('POST')
+    def pems_update(self, method, path, system=None, **kwargs):
+        data = {'username': 'public', 'read': True}
+        url = self._url('files/v2/pems', optional_system(system), path)
+        return method(url, data=data)
+        
