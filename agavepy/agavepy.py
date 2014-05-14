@@ -188,6 +188,11 @@ class AgaveAPI(object):
         url = self._url('systems/v2')
         return method(url)
 
+    @method('GET')
+    def systems_info(self, method, system):
+        url = self._url('systems/v2', system)
+        return method(url)
+        
     @method('POST')
     def systems_create(self, method, system_data):
         url = self._url('systems/v2')
