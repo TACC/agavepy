@@ -52,9 +52,12 @@ class Swagger(object):
         self.parsed_url = urllib.parse.urlparse(url)
         self.get = (self.file_get if self.parsed_url.scheme == 'file'
                     else self.requests_get)
-
-        # load index.html
-        # for each api, load the json
+        index = self.get('index.html')
+        self.apis = {}
+        for api in index['apis']:
+            path = api['path']
+            name = os.path.basename(path)
+            self.apis[name] = self.get(name)
         
     def file_get(self, path):
         f = open(os.path.join(self.parsed_url.path, path))
