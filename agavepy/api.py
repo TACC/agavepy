@@ -68,7 +68,7 @@ class Swagger(object):
             path = api['path']
             name = os.path.basename(path)
             self.apis[name] = self.get(name)
-        
+
     def file_get(self, path):
         f = open(os.path.join(self.parsed_url.path, path))
         return json.load(f)
@@ -95,3 +95,18 @@ class Swagger(object):
             if parameter['name'] == name:
                 return parameter
         raise Exception('parameter "{}" not found'.format(name))
+
+    def generate_models(self, endpoint):
+        models = self.apis[endpoint]['models']
+
+
+class Model(object):
+
+    def __init__(self, spec):
+        self.spec = spec
+
+    def __call__(self, *args, **kwargs):
+        pass
+
+    def __getattr__(self, attr):
+        pass
