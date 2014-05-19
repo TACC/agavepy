@@ -35,8 +35,22 @@ class Operation(object):
                                                    self.endpoint.endpoint)
         
     def __call__(self, *args, **kwargs):
-        print(args, kwargs)
-        print(self.operation)
+        operation = self.operation['operation']
+        method = operation['method']
+        path = self.operation['path']
+        url = urllib.parse.urljoin(self.endpoint.agave.base, path)
+        parameters = operation['parameters']
+        for parameter in perameters:
+            try:
+                param = kwargs[parameter['name']]
+            except KeyError:
+                try:
+                    param = parameter['defaultValue']
+                except KeyError:
+                    if parameter['required']:
+                        raise Exception('parameter required: {}'.format(parameter['name']))
+                    continue
+        req = requests.Request(method, url)
     
 
 class Swagger(object):
@@ -71,3 +85,11 @@ class Swagger(object):
                     return {'path': url_path,
                             'operation': operation}
         raise Exception('nickname "{}" not found'.format(nickame))
+
+    def get_parameter(self, name, nickname, endpoint):
+        parameters = self.get_nickname(
+            nickname, endpoint)['operation']['parameters']
+        for parameter in parameters:
+            if parameter['name'] == name:
+                return parameter
+        raise Exception('parameter "{}" not found'.format(name))
