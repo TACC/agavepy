@@ -10,7 +10,7 @@ class Agave(object):
     def __init__(self, base, swagger):
         self.base = base
         self.swagger = Swagger(swagger)
-        
+
     def __getattr__(self, endpoint):
         return Endpoint(endpoint, agave=self)
 
@@ -33,14 +33,15 @@ class Operation(object):
         self.swagger = self.endpoint.agave.swagger
         self.operation = self.swagger.get_nickname(self.nickname,
                                                    self.endpoint.endpoint)
-        
+
     def __call__(self, *args, **kwargs):
         operation = self.operation['operation']
         method = operation['method']
         path = self.operation['path']
         url = urllib.parse.urljoin(self.endpoint.agave.base, path)
         parameters = operation['parameters']
-        for parameter in perameters:
+        for parameter in parameters:
+            print('processing', parameter)
             try:
                 param = kwargs[parameter['name']]
             except KeyError:
@@ -50,8 +51,9 @@ class Operation(object):
                     if parameter['required']:
                         raise Exception('parameter required: {}'.format(parameter['name']))
                     continue
+            print('param', param)
         req = requests.Request(method, url)
-    
+
 
 class Swagger(object):
 
