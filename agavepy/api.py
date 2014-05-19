@@ -11,7 +11,6 @@ class Agave(object):
         self.base = base
         self.swagger = Swagger(swagger)
         
-
     def __getattr__(self, endpoint):
         return Endpoint(endpoint, agave=self)
 
@@ -23,27 +22,22 @@ class Endpoint(object):
         self.agave = agave
 
     def __getattr__(self, attr):
-        return Path([attr], endpoint=self)
+        return Operation(attr, endpoint=self)
 
 
-class Path(object):
+class Operation(object):
 
-    def __init__(self, path, endpoint):
-        self.path = path
+    def __init__(self, nickname, endpoint):
+        self.nickname = nickname
         self.endpoint = endpoint
-
-    def __getattr__(self, attr):
-        return Path(self.path + [attr], endpoint=self.endpoint)
-
-    def __getitem__(self, key):
-        return Path(self.path + [key], endpoint=self.endpoint)
-
-    def get(self, *args, **kwargs):
-        pass
-
-    def post(self, *args, **kwargs):
-        pass
+        self.swagger = self.endpoint.agave.swagger
+        self.operation = self.swagger.get_nickname(self.nickname,
+                                                   self.endpoint.endpoint)
         
+    def __call__(self, *args, **kwargs):
+        print(args, kwargs)
+        print(self.operation)
+    
 
 class Swagger(object):
 
@@ -67,4 +61,13 @@ class Swagger(object):
         resp = requests.get(urllib.parse.urljoin(self.url, path))
         if resp.ok:
             return resp.json()
-            
+
+    def get_nickname(self, nickname, endpoint):
+        apis = self.apis[endpoint]['apis']
+        for api in apis:
+            url_path = api['path']
+            for operation in api['operations']:
+                if operation['nickname'] == nickname:
+                    return {'path': url_path,
+                            'operation': operation}
+        raise Exception('nickname "{}" not found'.format(nickame))
