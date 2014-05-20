@@ -121,11 +121,15 @@ class Swagger(object):
                 return parameter
         raise Exception('parameter "{}" not found'.format(name))
 
-    def generate_models(self, endpoint):
+    def generate_models(self):
+        for endpoint in self.apis:
+            self.generate_model(endpoint)
+
+    def generate_model(self, endpoint):
         models = self.apis[endpoint]['models']
         global_dict = globals()
-        for model_name, model in models.items():
-            global_dict[model_name] = Model(model)
+        for model_name, spec in models.items():
+            global_dict[model_name] = ModelGenerator(spec)
 
 
 class ModelGenerator(object):
