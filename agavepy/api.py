@@ -9,8 +9,9 @@ import requests
 
 class Agave(object):
 
-    def __init__(self, base, swagger):
+    def __init__(self, base, token, swagger):
         self.base = base
+        self.token = token
         self.swagger = Swagger(swagger)
 
     def __getattr__(self, endpoint):
@@ -35,6 +36,8 @@ class Operation(object):
         self.swagger = self.endpoint.agave.swagger
         self.operation = self.swagger.get_nickname(self.nickname,
                                                    self.endpoint.endpoint)
+        self.token = self.endpoint.agave.token
+        self.bearer = {'Authorization': 'Bearer {}'.format(self.token)}
 
     def __call__(self, *args, **kwargs):
         operation = self.operation['operation']
