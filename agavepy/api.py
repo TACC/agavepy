@@ -132,14 +132,19 @@ class Swagger(object):
             global_dict[model_name] = ModelGenerator(spec)
 
 
+class Model(object):
+
+    def _to_json(self):
+        return {k: v for k, v in self.__dict__.items()
+                if not k.startswith('_')}
+
+
 class ModelGenerator(object):
 
     def __init__(self, spec):
         self._spec = spec
 
     def __call__(self, *args, **kwargs):
-        class Model(object):
-            pass
         model = Model()
         for key, param_spec in self._spec['properties'].items():
             try:
