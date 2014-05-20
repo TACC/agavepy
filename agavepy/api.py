@@ -42,22 +42,40 @@ class Operation(object):
         path = self.operation['path']
         url = urllib.parse.urljoin(self.endpoint.agave.base, path)
         parameters = operation['parameters']
+
+        params = {}             # query parameters
+        data_dict = {}          # form parameters
+        data_str = {}           # body parameter
+        paths = {}              # path parameters
         for parameter in parameters:
-            print('processing', parameter)
+            name = parameter['name']
+            param_type = parameter['paramType']
             try:
-                param = kwargs.pop(parameter['name'])
+                param = kwargs.pop(name)
             except KeyError:
                 try:
                     param = parameter['defaultValue']
                 except KeyError:
                     if parameter['required']:
-                        raise Exception('parameter required: {}'.format(parameter['name']))
+                        raise Exception('parameter required: {}'.format(name))
                     continue
-            print('param', param)
-
+            if param_type == 'query':
+                params[name] = param
+            if param_type == 'form':
+                data_dict[name] = param
+            if param_type == 'body':
+                data_str = param
+            if param_type == 'path':
+                paths[name] = param
         if kwargs:
             raise Exception('unknown parameters: {}'.format(list(kwargs.keys())))
-        req = requests.Request(method, url)
+        data = data_dict or data_str
+        url = url.format(**paths)
+        print('url =', url)
+        print('data =', data)
+        print('params =', params)
+        req = requests.Request(method, url, data=data, params=params)
+        return req
 
 
 class Swagger(object):
