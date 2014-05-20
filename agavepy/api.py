@@ -126,29 +126,30 @@ class Swagger(object):
             global_dict[model_name] = Model(model)
 
 
-class Model(object):
+class ModelGenerator(object):
 
     def __init__(self, spec):
-        self.spec = spec
+        self._spec = spec
 
     def __call__(self, *args, **kwargs):
-        class _model(object):
+        class Model(object):
             pass
-        model = _model()
-        for key, param_spec in self.spec['properties'].items():
+        model = Model()
+        for key, param_spec in self._spec['properties'].items():
             try:
                 param = kwargs.pop(key)
             except KeyError:
                 if param_spec.get('required', False):
                     raise
                 continue
-            self.check(param, param_spec)
+            self._check(param, param_spec)
             setattr(model, key, param)
         if kwargs:
-            raise Exception('unknown parameter(s): {}'.format(list(kwargs.keys())))
+            raise Exception('unknown parameter(s): {}'
+                            .format(list(kwargs.keys())))
         return model
 
-    def check(self, param, param_spec):
+    def _check(self, param, param_spec):
         """Check that `param` satisfies the spec `param_spec`."""
 
         param_type = param_spec['type']
