@@ -59,6 +59,8 @@ class Operation(object):
                     if parameter['required']:
                         raise Exception('parameter required: {}'.format(name))
                     continue
+            if isinstance(param, Model):
+                param = param._to_json()
             if param_type == 'query':
                 params[name] = param
             if param_type == 'form':
