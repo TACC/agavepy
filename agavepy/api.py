@@ -91,6 +91,7 @@ class Swagger(object):
             path = api['path']
             name = os.path.basename(path)
             self.apis[name] = self.get(name)
+        self.generate_models()
 
     def file_get(self, path):
         f = open(os.path.join(self.parsed_url.path, path))
