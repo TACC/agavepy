@@ -45,7 +45,7 @@ class Operation(object):
         for parameter in parameters:
             print('processing', parameter)
             try:
-                param = kwargs[parameter['name']]
+                param = kwargs.pop(parameter['name'])
             except KeyError:
                 try:
                     param = parameter['defaultValue']
@@ -54,6 +54,9 @@ class Operation(object):
                         raise Exception('parameter required: {}'.format(parameter['name']))
                     continue
             print('param', param)
+
+        if kwargs:
+            raise Exception('unknown parameters: {}'.format(list(kwargs.keys())))
         req = requests.Request(method, url)
 
 
@@ -103,6 +106,7 @@ class Swagger(object):
         global_dict = globals()
         for model_name, model in models.items():
             global_dict[model_name] = Model(model)
+
 
 class Model(object):
 
