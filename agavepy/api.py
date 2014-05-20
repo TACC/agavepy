@@ -47,8 +47,8 @@ class Operation(object):
         parameters = operation['parameters']
 
         params = {}             # query parameters
-        data_dict = {}          # form parameters
-        data_str = {}           # body parameter
+        data_form = {}          # form parameters
+        data_body = {}          # body parameter
         paths = {}              # path parameters
         for parameter in parameters:
             name = parameter['name']
@@ -67,21 +67,27 @@ class Operation(object):
             if param_type == 'query':
                 params[name] = param
             if param_type == 'form':
-                data_dict[name] = param
+                data_form[name] = param
             if param_type == 'body':
-                data_str = param
+                data_body = param
             if param_type == 'path':
                 paths[name] = param
         if kwargs:
             raise Exception('unknown parameters: {}'
                             .format(list(kwargs.keys())))
-        data = data_dict or data_str
-        url = url.format(**paths)
-        print('url =', url)
-        print('data =', data)
-        print('params =', params)
-        req = requests.Request(method, url, data=data, params=params)
+        req = self.build_request(method, url, paths,
+                                 data_form, data_body, params)
         return req
+
+    def build_request(self, method, url, paths, data_form, data_body, params):
+        data = data_form or data_body
+        url = url.format(**paths)
+        meth = getattr(requests, method.lower())
+        req = meth(url, data=data, params=params, headers=self.bearer)
+        if req.ok:
+            return req.json()
+        else:
+            raise Exception(req.text)
 
 
 class Swagger(object):
