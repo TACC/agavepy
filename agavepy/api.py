@@ -109,7 +109,7 @@ class Swagger(object):
                 if operation['nickname'] == nickname:
                     return {'path': url_path,
                             'operation': operation}
-        raise Exception('nickname "{}" not found'.format(nickame))
+        raise Exception('nickname "{}" not found'.format(nickname))
 
     def get_parameter(self, name, nickname, endpoint):
         parameters = self.get_nickname(
