@@ -68,7 +68,8 @@ class Operation(object):
             if param_type == 'path':
                 paths[name] = param
         if kwargs:
-            raise Exception('unknown parameters: {}'.format(list(kwargs.keys())))
+            raise Exception('unknown parameters: {}'
+                            .format(list(kwargs.keys())))
         data = data_dict or data_str
         url = url.format(**paths)
         print('url =', url)
