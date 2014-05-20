@@ -1,4 +1,6 @@
+import collections.abc
 import json
+import numbers
 import os.path
 import urllib.parse
 
@@ -98,7 +100,9 @@ class Swagger(object):
 
     def generate_models(self, endpoint):
         models = self.apis[endpoint]['models']
-
+        global_dict = globals()
+        for model_name, model in models.items():
+            global_dict[model_name] = Model(model)
 
 class Model(object):
 
@@ -106,7 +110,35 @@ class Model(object):
         self.spec = spec
 
     def __call__(self, *args, **kwargs):
-        pass
+        class _model(object):
+            pass
+        model = _model()
+        for key, param_spec in self.spec['properties'].items():
+            try:
+                param = kwargs.pop(key)
+            except KeyError:
+                if param_spec.get('required', False):
+                    raise
+                continue
+            self.check(param, param_spec)
+            setattr(model, key, param)
+        if kwargs:
+            raise Exception('unknown parameter(s): {}'.format(list(kwargs.keys())))
+        return model
 
-    def __getattr__(self, attr):
-        pass
+    def check(self, param, param_spec):
+        """Check that `param` satisfies the spec `param_spec`."""
+
+        param_type = param_spec['type']
+        if param_type == 'string' and 'enum' in param_spec:
+            assert param in param_spec['enum']
+        elif param_type == 'string':
+            assert isinstance(param, str)
+        elif param_type == 'boolean':
+            assert isinstance(param, bool)
+        elif param_type in ('integer', 'number'):
+            assert isinstance(param, numbers.Number)
+        elif param_type == 'array':
+            assert isinstance(param, collections.abc.Sequence)
+        else:
+            raise Exception('wrong parameter type: {}'.format(param))
