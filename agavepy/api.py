@@ -62,8 +62,7 @@ class Operation(object):
                     if parameter['required']:
                         raise Exception('parameter required: {}'.format(name))
                     continue
-            if isinstance(param, Model):
-                param = param._to_json()
+            param = deserialize(param)
             if param_type == 'query':
                 params[name] = param
             if param_type == 'form':
@@ -88,6 +87,17 @@ class Operation(object):
             return req.json()
         else:
             raise Exception(req.text)
+
+
+def deserialize(obj):
+    if isinstance(obj, Model):
+        return {k:deserialize(v)
+                for k, v in obj.__dict__.items() if not k.startswith('_')}
+    if isinstance(obj, str):
+        return obj
+    if isinstance(obj, collections.abc.Sequence):
+        return [deserialize(v) for v in obj]
+    return obj
 
 
 class Swagger(object):
@@ -144,10 +154,7 @@ class Swagger(object):
 
 
 class Model(object):
-
-    def _to_json(self):
-        return {k: v for k, v in self.__dict__.items()
-                if not k.startswith('_')}
+    pass
 
 
 class ModelGenerator(object):
