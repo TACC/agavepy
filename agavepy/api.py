@@ -62,13 +62,13 @@ class Operation(object):
                     if parameter['required']:
                         raise Exception('parameter required: {}'.format(name))
                     continue
-            param = deserialize(param)
+            param = serialize(param)
             if param_type == 'query':
                 params[name] = param
             if param_type == 'form':
                 data_form[name] = param
             if param_type == 'body':
-                data_body = param
+                data_body = param if isinstance(param, str) else str(param)
             if param_type == 'path':
                 paths[name] = param
         if kwargs:
@@ -76,17 +76,35 @@ class Operation(object):
                             .format(list(kwargs.keys())))
         req = self.build_request(method, url, paths,
                                  data_form, data_body, params)
-        return req
+        if req.ok:
+            response_model = self.swagger.get_model(
+                self.operation['operation']['type'], self.endpoint.endpoint)
+            return_type = response_model['properties']['result']
+            return self.deserialize(req.json()['result'],
+                                    return_type=return_type)
+        else:
+            raise Exception(req.text)
 
     def build_request(self, method, url, paths, data_form, data_body, params):
         data = data_form or data_body
         url = url.format(**paths)
         meth = getattr(requests, method.lower())
-        req = meth(url, data=data, params=params, headers=self.bearer)
-        if req.ok:
-            return req.json()
+        return meth(url, data=data, params=params, headers=self.bearer)
+
+    def deserialize(self, dic, return_type):
+        """dict -> Model"""
+
+        if return_type.get('type', None) == 'array':
+            elem_type = self.swagger.get_model(return_type['items']['$ref'],
+                                               self.endpoint.endpoint)
+            return [self.deserialize(elem, elem_type) for elem in dic]
+        if return_type.get('type', None) == 'string':
+            assert isinstance(dic, str)
+            return dic
         else:
-            raise Exception(req.text)
+            del dic['_links']
+            return ModelGenerator(return_type)(**dic)
+
 
 def serialize(obj):
     """Model -> dict"""
