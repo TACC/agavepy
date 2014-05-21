@@ -104,6 +104,9 @@ class Operation(object):
         if return_type['type'] == 'integer':
             assert isinstance(dic, numbers.Number)
             return dic
+        if return_type['type'] == 'boolean':
+            assert isinstance(dic, bool)
+            return dic
         else:
             try:
                 del dic['_links']
