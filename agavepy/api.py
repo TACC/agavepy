@@ -152,6 +152,9 @@ class Swagger(object):
         for model_name, spec in models.items():
             global_dict[model_name] = ModelGenerator(spec)
 
+    def get_model(self, name, endpoint):
+        return self.apis[endpoint]['models'][name]
+
 
 class Model(object):
     pass
