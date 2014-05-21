@@ -95,8 +95,9 @@ class Operation(object):
         """dict -> Model"""
 
         if return_type['type'] == 'array':
-            elem_type = {'type': return_type['items']['$ref']}
-            return [self.deserialize(elem, elem_type)
+            items = return_type['items']
+            items_type = items.get('type', items.get('$ref'))
+            return [self.deserialize(elem, {'type': items_type})
                     for elem in dic]
         if return_type['type'] == 'string':
             assert isinstance(dic, str) or dic is None
