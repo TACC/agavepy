@@ -88,15 +88,16 @@ class Operation(object):
         else:
             raise Exception(req.text)
 
+def serialize(obj):
+    """Model -> dict"""
 
-def deserialize(obj):
     if isinstance(obj, Model):
-        return {k:deserialize(v)
+        return {k: serialize(v)
                 for k, v in obj.__dict__.items() if not k.startswith('_')}
     if isinstance(obj, str):
         return obj
     if isinstance(obj, collections.abc.Sequence):
-        return [deserialize(v) for v in obj]
+        return [serialize(v) for v in obj]
     return obj
 
 
