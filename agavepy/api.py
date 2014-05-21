@@ -164,6 +164,7 @@ class ModelGenerator(object):
 
     def __call__(self, *args, **kwargs):
         model = Model()
+        model._spec = self._spec
         for key, param_spec in self._spec['properties'].items():
             try:
                 param = kwargs.pop(key)
