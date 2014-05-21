@@ -94,16 +94,21 @@ class Operation(object):
     def deserialize(self, dic, return_type):
         """dict -> Model"""
 
-        if return_type.get('type', None) == 'array':
-            elem_type = self.swagger.get_model(return_type['items']['$ref'],
-                                               self.endpoint.endpoint)
-            return [self.deserialize(elem, elem_type) for elem in dic]
-        if return_type.get('type', None) == 'string':
-            assert isinstance(dic, str)
+        if return_type['type'] == 'array':
+            elem_type = {'type': return_type['items']['$ref']}
+            return [self.deserialize(elem, elem_type)
+                    for elem in dic]
+        if return_type['type'] == 'string':
+            assert isinstance(dic, str) or dic is None
+            return dic
+        if return_type['type'] == 'integer':
+            assert isinstance(dic, numbers.Number)
             return dic
         else:
             del dic['_links']
-            return ModelGenerator(return_type)(**dic)
+            model_spec = self.swagger.get_model(return_type['type'],
+                                                self.endpoint.endpoint)
+            return ModelGenerator(model_spec['properties'])(**dic)
 
 
 def serialize(obj):
@@ -169,7 +174,7 @@ class Swagger(object):
         models = self.apis[endpoint]['models']
         global_dict = globals()
         for model_name, spec in models.items():
-            global_dict[model_name] = ModelGenerator(spec)
+            global_dict[model_name] = ModelGenerator(spec['properties'])
 
     def get_model(self, name, endpoint):
         return self.apis[endpoint]['models'][name]
@@ -187,7 +192,7 @@ class ModelGenerator(object):
     def __call__(self, *args, **kwargs):
         model = Model()
         model._spec = self._spec
-        for key, param_spec in self._spec['properties'].items():
+        for key, param_spec in self._spec.items():
             try:
                 param = kwargs.pop(key)
             except KeyError:
@@ -208,7 +213,7 @@ class ModelGenerator(object):
         if param_type == 'string' and 'enum' in param_spec:
             assert param in param_spec['enum']
         elif param_type == 'string':
-            assert isinstance(param, str)
+            assert isinstance(param, str) or param is None
         elif param_type == 'boolean':
             assert isinstance(param, bool)
         elif param_type in ('integer', 'number'):
