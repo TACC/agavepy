@@ -105,10 +105,15 @@ class Operation(object):
             assert isinstance(dic, numbers.Number)
             return dic
         else:
-            del dic['_links']
-            model_spec = self.swagger.get_model(return_type['type'],
-                                                self.endpoint.endpoint)
-            return ModelGenerator(model_spec['properties'])(**dic)
+            try:
+                del dic['_links']
+            except KeyError:
+                pass
+            model_spec = self.swagger.get_model(
+                return_type['type'], self.endpoint.endpoint)['properties']
+            deserialized_dic = {k: self.deserialize(dic[k], model_spec[k])
+                                for k in dic}
+            return ModelGenerator(model_spec)(**deserialized_dic)
 
 
 def serialize(obj):
