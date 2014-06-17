@@ -239,3 +239,15 @@ class AgaveAPI(object):
         data = {'username': 'public', 'read': True}
         url = self._url('files/v2/pems', optional_system(system), path)
         return method(url, data=data)
+
+    # --- Apps ---
+
+    @method('GET')
+    def apps_list(self, method, **kwargs):
+        url = self._url('apps/v2/')
+        return method(url, params=kwargs)
+
+    @method('POST')
+    def apps_create(self, method, app_data):
+        url = self._url('apps/v2/')
+        return method(url, data=json.dumps(app_data))
