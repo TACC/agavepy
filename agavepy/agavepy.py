@@ -178,8 +178,8 @@ class AgaveAPI(object):
             self.clients[resp['result']['name']] = {'response': resp['result']}
         return resp
 
-    def clients_list(self):
-        url = self._url('clients/v2')
+    def clients_list(self, **kwargs):
+        url = self._url('clients/v2', **kwargs)
         return self.GET(url, auth=self.auth)
 
     def clients_info(self, client_name):
@@ -193,9 +193,9 @@ class AgaveAPI(object):
     # --- Systems ---
 
     @method('GET')
-    def systems_list(self, method):
+    def systems_list(self, method, **kwargs):
         url = self._url('systems/v2')
-        return method(url)
+        return method(url, params=kwargs)
 
     @method('POST')
     def systems_add(self, method, filename):
