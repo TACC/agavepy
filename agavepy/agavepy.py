@@ -226,7 +226,6 @@ class AgaveAPI(object):
     @method('GET')
     def listings(self, method, path, system=None):
         url = self._url('files/v2/listings', optional_system(system), path)
-        print('url is', url)
         return method(url)
 
     @method('GET')
