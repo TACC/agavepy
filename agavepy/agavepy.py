@@ -250,4 +250,5 @@ class AgaveAPI(object):
     @method('POST')
     def apps_create(self, method, app_data):
         url = self._url('apps/v2/')
-        return method(url, data=json.dumps(app_data))
+        return method(url,
+                      files={'fileToUpload': json.dumps(app_data)})
