@@ -57,8 +57,9 @@ def method(verb):
         def wrapper(self, *args, **kwargs):
             client = kwargs.pop('client', self.default_client)
             token = self.token(client)
-            header = self.bearer(token)
-            meth = functools.partial(getattr(self, verb), headers=header)
+            headers = kwargs.pop('headers', {})
+            headers.update(self.bearer(token))
+            meth = functools.partial(getattr(self, verb), headers=headers)
             return f(self, meth, *args, **kwargs)
         return wrapper
     return decorator
