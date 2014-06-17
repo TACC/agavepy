@@ -157,6 +157,15 @@ class AgaveAPI(object):
 
         return token_data['access_token']
 
+    def reset_token(self, client):
+        try:
+            client_data =  self.clients[client]
+            del client_data['token']
+            self.clients[client] = client_data
+        except KeyError:
+            pass
+        return self.token(client)
+
     # --- Clients ---
 
     def clients_create(self, client_name, **kwargs):
