@@ -1,3 +1,4 @@
+from collections import Mapping, Sequence
 from functools import wraps
 import urlparse
 
@@ -124,4 +125,21 @@ class Wrapper(object):
     def __call__(self, *args, **kwargs):
         resp = self.obj(*args, **kwargs)
         resp.raise_for_status()
-        return resp.json()
+        return wrap(resp.json()['result'])
+
+
+def wrap(obj):
+    if isinstance(obj, basestring):
+        return obj
+    if isinstance(obj, Mapping):
+        return AttrDict({key:wrap(value) for key, value in obj.items()})
+    if isinstance(obj, Sequence):
+        return [wrap(item) for item in obj]
+    return obj
+
+
+class AttrDict(dict):
+
+    def __getattr__(self, key):
+        value = self[key]
+        return value
