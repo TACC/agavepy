@@ -141,5 +141,4 @@ def wrap(obj):
 class AttrDict(dict):
 
     def __getattr__(self, key):
-        value = self[key]
-        return value
+        return self[key]
