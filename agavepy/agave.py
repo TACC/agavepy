@@ -108,3 +108,20 @@ class Agave(object):
             auth(*args_values)
             return SwaggerClient(
                 self.resources, http_client=http_client)
+
+    def __getattr__(self, key):
+        return Wrapper(getattr(self.all, key))
+
+
+class Wrapper(object):
+
+    def __init__(self, obj):
+        self.obj = obj
+
+    def __getattr__(self, attr):
+        return Wrapper(getattr(self.obj, attr))
+
+    def __call__(self, *args, **kwargs):
+        resp = self.obj(*args, **kwargs)
+        resp.raise_for_status()
+        return resp.json()
