@@ -6,6 +6,7 @@ import requests
 
 from swaggerpy.client import SwaggerClient
 from swaggerpy.http_client import SynchronousHttpClient
+from swaggerpy.processors import SwaggerProcessor
 
 
 def json_response(f):
@@ -108,7 +109,8 @@ class Agave(object):
             auth = getattr(http_client, 'set_{}'.format(auth_type))
             auth(*args_values)
             return SwaggerClient(
-                self.resources, http_client=http_client)
+                self.resources, http_client=http_client,
+                extra_processors=[AgaveProcessor()])
 
     def __getattr__(self, key):
         return Wrapper(getattr(self.all, key))
@@ -142,3 +144,13 @@ class AttrDict(dict):
 
     def __getattr__(self, key):
         return self[key]
+
+
+class AgaveProcessor(SwaggerProcessor):
+
+    def process_property(self, resources, resource, model, prop, context):
+        if prop.get('format', None) == 'date-time':
+            pass
+
+    def process_model(self, resources, resource, model, context):
+        pass
