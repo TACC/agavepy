@@ -113,31 +113,52 @@ class Agave(object):
                 extra_processors=[AgaveProcessor()])
 
     def __getattr__(self, key):
-        return Wrapper(getattr(self.all, key))
+        resource = getattr(self.all, key)
+        return Resource(resource,
+                        models=resource.json['api_declaration']['models'])
 
 
-class Wrapper(object):
+class Resource(object):
 
-    def __init__(self, obj):
+    def __init__(self, obj, models):
         self.obj = obj
+        self.models = models
 
     def __getattr__(self, attr):
-        return Wrapper(getattr(self.obj, attr))
+        operation = getattr(self.obj, attr)
+        return Operation(operation, operation.json['type'], self.models)
+
+
+class Operation(object):
+
+    def __init__(self, operation, return_type, models):
+        self.operation = operation
+        self.return_type = return_type
+        self.models = models
 
     def __call__(self, *args, **kwargs):
-        resp = self.obj(*args, **kwargs)
+        resp = self.operation(*args, **kwargs)
         resp.raise_for_status()
-        return wrap(resp.json()['result'])
+        return self.post_process(resp.json()['result'], self.return_type)
 
-
-def wrap(obj):
-    if isinstance(obj, basestring):
+    def post_process(self, obj, return_type):
+        if return_type is None:
+            return obj
+        if isinstance(obj, basestring):
+            if return_type.get('format', None) == 'date-time':
+                return obj + '---datetime'
+            return obj
+        if isinstance(obj, Mapping):
+            model = self.models[return_type]['properties']
+            return AttrDict({key:self.post_process(value, model.get(key))
+                             for key, value in obj.items()})
+        if isinstance(obj, Sequence):
+            result_type = self.models[return_type]['properties']['result']
+            if result_type['type'] != 'array':
+                raise AgaveError('expected an array')
+            return [self.post_process(item, result_type['items']['$ref'])
+                    for item in obj]
         return obj
-    if isinstance(obj, Mapping):
-        return AttrDict({key:wrap(value) for key, value in obj.items()})
-    if isinstance(obj, Sequence):
-        return [wrap(item) for item in obj]
-    return obj
 
 
 class AttrDict(dict):
