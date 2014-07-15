@@ -88,7 +88,7 @@ class Agave(object):
     def clients_ari(self):
         # If there is enough information to establish HTTP basic auth,
         # then create a 'clients' resource object
-        self.clients = self.resource(
+        self._clients = self.resource(
             'basic_auth', 'host', 'username', 'password')
 
     def full_ari(self):
@@ -114,7 +114,8 @@ class Agave(object):
                 extra_processors=[AgaveProcessor()])
 
     def __getattr__(self, key):
-        resource = getattr(self.all, key)
+        base = self._clients if key == 'clients' else self.all
+        resource = getattr(base, key)
         return Resource(resource,
                         models=resource.json['api_declaration']['models'])
 
