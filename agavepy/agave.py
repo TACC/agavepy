@@ -165,6 +165,9 @@ class Operation(object):
                 for elem in obj]
 
     def process_string(self, obj, return_type):
+        if obj is None:
+            # why is agave returning null for a string type?
+            return obj
         if return_type.get('format') == 'date-time':
             return dateutil.parser.parse(obj)
         return obj
