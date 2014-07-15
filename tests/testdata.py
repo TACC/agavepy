@@ -138,7 +138,7 @@ class TestData(object):
         """
         Example job defined inline.
         """
-        test_job = JobRequest()
+        test_job = a.AttrDict()
         test_job.name = self.local_data['app_name']
         test_job.appId = '{}-{}'.format(self.local_data['app_name'],
                                         self.local_data['app_version'])
