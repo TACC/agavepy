@@ -10,13 +10,16 @@ class TestData(object):
     def __init__(self, credentials):
         self.local_data = credentials
 
+    def file_to_json(self, filename):
+        return json.load(open(filename))
+
     def get_test_storage_system(self):
         """
         Example storage system read from an external file.
         """
         storage = self.file_to_json('test-storage.nebula.tacc.json')
         storage['id'] = self.local_data['storage']
-        return self.api_client.deserialize(storage, 'SystemRequest')
+        return storage
 
     def get_test_compute_system(self):
         """
@@ -24,7 +27,7 @@ class TestData(object):
         """
         compute = self.file_to_json('test-compute.nebula.tacc.json')
         compute['id'] = self.local_data['execution']
-        return self.api_client.deserialize(compute, 'SystemRequest')
+        return compute
 
     def get_test_app(self):
         """

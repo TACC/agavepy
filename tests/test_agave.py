@@ -29,6 +29,14 @@ def test_app(credentials):
 def test_job(credentials):
     return testdata.TestData(credentials).get_test_job()
 
+@pytest.fixture(scope='session')
+def test_compute_system(credentials):
+    return testdata.TestData(credentials).get_test_compute_system()
+
+@pytest.fixture(scope='session')
+def test_storage_system(credentials):
+    return testdata.TestData(credentials).get_test_storage_system()
+
 def validate_app(app):
     assert app.id
     assert app.executionSystem
@@ -100,3 +108,40 @@ def test_list_jobs(agave):
 def test_submit_job(agave, test_job):
     job = agave.jobs.submit(body=test_job)
     validate_job(job)
+
+def validate_system(system):
+    assert type(system.public) is bool
+    assert system.name
+    assert system.status
+    assert system.type
+
+def test_list_systems(agave):
+    systems = agave.systems.list()
+    for system in systems:
+        validate_system(system)
+
+def test_list_public_systems(agave):
+    systems = agave.systems.list(publicOnly=True)
+    for system in systems:
+        validate_system(system)
+        assert system.public
+
+def test_list_private_systems(agave):
+    systems = agave.systems.list(privateOnly=True)
+    for system in systems:
+        validate_system(system)
+        assert not system.public
+
+def test_list_default_systems(agave):
+    systems = agave.systems.list(default=True)
+    for system in systems:
+        validate_system(system)
+        assert system.default
+
+def test_add_compute_system(agave, test_compute_system):
+    system = agave.systems.add(body=test_compute_system)
+    validate_system(system)
+
+def test_add_storage_system(agave, test_storage_system):
+    system = agave.systems.add(body=test_storage_system)
+    validate_system(system)
