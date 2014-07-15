@@ -149,7 +149,7 @@ class Operation(object):
     def post_process(self, obj, return_type):
         if return_type is None:
             return self.process_untyped(obj)
-        type_name = return_type['type']
+        type_name = return_type['type'].lower()
         if type_name in self.PRIMITIVE_TYPES:
             f = getattr(self, 'process_{}'.format(type_name))
             return f(obj, return_type)
