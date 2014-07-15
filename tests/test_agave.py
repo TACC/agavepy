@@ -7,8 +7,11 @@ import agavepy.agave as a
 import testdata
 
 @pytest.fixture(scope='session')
-def agave(request):
-    credentials = json.load(open('test_credentials.json'))
+def credentials():
+    return json.load(open('test_credentials.json'))
+
+@pytest.fixture(scope='session')
+def agave(credentials):
     aga = a.Agave(resources=credentials['resources'],
                   username=credentials['username'],
                   password=credentials['password'],
@@ -19,11 +22,14 @@ def agave(request):
     return aga
 
 @pytest.fixture(scope='session')
-def test_app():
-    credentials = json.load(open('test_credentials.json'))
+def test_app(credentials):
     return testdata.TestData(credentials).get_test_app()
 
-def validate(app):
+@pytest.fixture(scope='session')
+def test_job(credentials):
+    return testdata.TestData(credentials).get_test_job()
+
+def validate_app(app):
     assert app.id
     assert app.executionSystem
     assert type(app.lastModified) is datetime.datetime
