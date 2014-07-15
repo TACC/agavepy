@@ -2,6 +2,7 @@ from collections import Mapping, Sequence
 from functools import wraps
 import urlparse
 
+import dateutil.parser
 import requests
 
 from swaggerpy.client import SwaggerClient
@@ -146,7 +147,7 @@ class Operation(object):
             return obj
         if isinstance(obj, basestring):
             if return_type.get('format', None) == 'date-time':
-                return obj + '---datetime'
+                return dateutil.parser.parse(obj)
             return obj
         if isinstance(obj, Mapping):
             model = self.models[return_type]['properties']
