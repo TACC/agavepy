@@ -134,7 +134,7 @@ class Resource(object):
 
 class Operation(object):
 
-    PRIMITIVE_TYPES = ['array', 'string', 'integer', 'boolean']
+    PRIMITIVE_TYPES = ['array', 'string', 'integer', 'int', 'boolean']
 
     def __init__(self, operation, return_type, models):
         self.operation = operation
@@ -174,6 +174,8 @@ class Operation(object):
 
     def process_integer(self, obj, return_type):
         return obj
+
+    process_int = process_integer
 
     def process_boolean(self, obj, return_type):
         return obj
