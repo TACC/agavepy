@@ -128,10 +128,13 @@ class Resource(object):
 
     def __getattr__(self, attr):
         operation = getattr(self.obj, attr)
-        return Operation(operation, operation.json['type'], self.models)
+        return_type = operation.json
+        return Operation(operation, return_type, self.models)
 
 
 class Operation(object):
+
+    PRIMITIVE_TYPES = ['array', 'string', 'integer', 'boolean']
 
     def __init__(self, operation, return_type, models):
         self.operation = operation
@@ -141,26 +144,42 @@ class Operation(object):
     def __call__(self, *args, **kwargs):
         resp = self.operation(*args, **kwargs)
         resp.raise_for_status()
-        return self.post_process(resp.json()['result'], self.return_type)
+        return self.post_process(resp.json(), self.return_type)['result']
 
     def post_process(self, obj, return_type):
         if return_type is None:
-            return obj
-        if isinstance(obj, basestring):
-            if return_type.get('format', None) == 'date-time':
-                return dateutil.parser.parse(obj)
-            return obj
-        if isinstance(obj, Mapping):
-            model = self.models[return_type]['properties']
-            return AttrDict({key:self.post_process(value, model.get(key))
-                             for key, value in obj.items()})
-        if isinstance(obj, Sequence):
-            result_type = self.models[return_type]['properties']['result']
-            if result_type['type'] != 'array':
-                raise AgaveError('expected an array')
-            return [self.post_process(item, result_type['items']['$ref'])
-                    for item in obj]
+            return self.process_untyped(obj)
+        type_name = return_type['type']
+        if type_name in self.PRIMITIVE_TYPES:
+            f = getattr(self, 'process_{}'.format(type_name))
+            return f(obj, return_type)
+        return self.process_model(obj, return_type)
+
+    def process_untyped(self, obj):
         return obj
+
+    def process_array(self, obj, return_type):
+        items = return_type['items']
+        items_type = items.get('type', items.get('$ref'))
+        return [self.post_process(elem, {'type': items_type})
+                for elem in obj]
+
+    def process_string(self, obj, return_type):
+        if return_type.get('format') == 'date-time':
+            return dateutil.parser.parse(obj)
+        return obj
+
+    def process_integer(self, obj, return_type):
+        return obj
+
+    def process_boolean(self, obj, return_type):
+        return obj
+
+    def process_model(self, obj, return_type):
+        model_name = return_type['type']
+        model_spec = self.models[model_name]['properties']
+        return AttrDict({k: self.post_process(obj[k], model_spec.get(k))
+                         for k in obj})
 
 
 class AttrDict(dict):
