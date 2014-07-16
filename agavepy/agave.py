@@ -35,11 +35,7 @@ class Token(object):
 
         self.token_url = urlparse.urljoin(self.api_server, 'token')
 
-    def create(self):
-        data = {'grant_type': 'password',
-                'username': self.username,
-                'password': self.password,
-                'scope': 'PRODUCTION'}
+    def _token(self, data):
         auth = requests.auth.HTTPBasicAuth(self.api_key, self.api_secret)
         resp = requests.post(self.token_url, data=data, auth=auth)
         resp.raise_for_status()
@@ -49,6 +45,19 @@ class Token(object):
         self.parent._token = token
         self.parent.refresh_aris()
         return token
+
+    def create(self):
+        data = {'grant_type': 'password',
+                'username': self.username,
+                'password': self.password,
+                'scope': 'PRODUCTION'}
+        return self._token(data)
+
+    def refresh(self):
+        data = {'grant_type': 'refresh_token',
+                'scope': 'PRODUCTION',
+                'refresh_token': self.token_info['refresh_token']}
+        return self._token(data)
 
 
 class AgaveError(Exception):
