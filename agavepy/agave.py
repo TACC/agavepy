@@ -120,29 +120,25 @@ class Agave(object):
                 extra_processors=[AgaveProcessor()])
 
     def __getattr__(self, key):
-        base = self._clients if key == 'clients' else self.all
-        resource = getattr(base, key)
-        return Resource(resource,
-                        models=resource.json['api_declaration']['models'])
+        return Resource(key, client=self)
 
 
 class Resource(object):
 
-    def __init__(self, obj, models):
-        self.obj = obj
-        self.models = models
+    def __init__(self, resource, client):
+        self.resource = resource
+        self.client = client
 
     def __getattr__(self, attr):
-        operation = getattr(self.obj, attr)
-        return_type = operation.json
-        return Operation(operation, return_type, self.models)
+        return Operation(self.resource, attr, client=self.client)
 
 
 class Operation(object):
 
     PRIMITIVE_TYPES = ['array', 'string', 'integer', 'int', 'boolean']
 
-    def __init__(self, operation, return_type, models):
+    def __init__(self, resource, operation, client):
+        self.resource = resource
         self.operation = operation
         self.return_type = return_type
         self.models = models
