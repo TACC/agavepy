@@ -145,3 +145,13 @@ def test_add_compute_system(agave, test_compute_system):
 def test_add_storage_system(agave, test_storage_system):
     system = agave.systems.add(body=test_storage_system)
     validate_system(system)
+
+def test_token_access(agave, credentials):
+    token = agave.token.refresh()
+    token_client = a.Agave(
+        resources=credentials['resources'],
+        api_server=credentials['apiserver'],
+        token=token)
+    apps = token_client.apps.list()
+    for app in apps:
+        validate_app(app)
