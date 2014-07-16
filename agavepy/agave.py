@@ -87,11 +87,14 @@ class Agave(object):
             setattr(self, attr, value)
 
         self.host = urlparse.urlsplit(self.api_server).netloc
+        self.token = Token(
+            self.username, self.password,
+            self.api_server, self.api_key, self.api_secret,
+            self)
         self.refresh_aris()
 
     def refresh_aris(self):
         self.clients_ari()
-        self.token_ari()
         self.full_ari()
 
     def clients_ari(self):
@@ -105,12 +108,6 @@ class Agave(object):
         # bearer token
         self.all = self.resource(
             'token', 'host', '_token')
-
-    def token_ari(self):
-        self.token = Token(
-            self.username, self.password,
-            self.api_server, self.api_key, self.api_secret,
-            self)
 
     def resource(self, auth_type, *args):
         args_values = [getattr(self, arg) for arg in args]
