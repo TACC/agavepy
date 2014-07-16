@@ -1,4 +1,5 @@
 from collections import Mapping, Sequence
+import xml.etree.ElementTree as ET
 from functools import wraps
 import urlparse
 
@@ -140,12 +141,59 @@ class Operation(object):
     def __init__(self, resource, operation, client):
         self.resource = resource
         self.operation = operation
-        self.return_type = return_type
-        self.models = models
+        self.client = client
+
+        self.models = self.get_models()
+        self.return_type = self.get_return_type()
+
+    def get_base(self):
+        """Get the base ari for this resource."""
+
+        return (self.client._clients if self.resource == 'clients'
+                else self.client.all)
+
+    def get_operation(self):
+        base = self.get_base()
+        return getattr(getattr(base, self.resource), self.operation)
+
+    def get_models(self):
+        """Get JSON with all the models declarations."""
+
+        base = self.get_base()
+        return getattr(base, self.resource).json['api_declaration']['models']
+
+    def get_return_type(self):
+        """Get JSON with the return type for this operation."""
+
+        return self.get_operation().json
+
+    def _with_refresh(self, f, *args, **kwargs):
+        """Call function ``f`` and refresh token if needed."""
+
+        try:
+            return f(*args, **kwargs)
+        except requests.exceptions.HTTPError as exc:
+            try:
+                code = ET.fromstring(exc.response.text)[0].text
+            except Exception:
+                # Any error here means the response was no XML
+                # Re-raise it, as it's not a expired token
+                raise exc
+            # only catch 'token expired' exception
+            if code != '900903':
+                raise
+            self.client.token.refresh()
+            return f(*args, **kwargs)
 
     def __call__(self, *args, **kwargs):
-        resp = self.operation(*args, **kwargs)
-        resp.raise_for_status()
+
+        def operation():
+            f = self.get_operation()
+            resp = f(*args, **kwargs)
+            resp.raise_for_status()
+            return resp
+
+        resp = self._with_refresh(operation)
         return self.post_process(resp.json(), self.return_type)['result']
 
     def post_process(self, obj, return_type):
