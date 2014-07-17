@@ -177,9 +177,10 @@ class Operation(object):
                 code = ET.fromstring(exc.response.text)[0].text
             except Exception:
                 # Any error here means the response was no XML
-                # Re-raise it, as it's not a expired token
+                # Re-raise it, as it's not an expired token
                 raise exc
             # only catch 'token expired' exception
+            # other codes may mean a different error
             if code != '900903':
                 raise
             self.client.token.refresh()
