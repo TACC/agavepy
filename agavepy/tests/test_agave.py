@@ -22,7 +22,7 @@ def agave(credentials):
                   api_server=credentials['apiserver'],
                   api_key=credentials['apikey'],
                   api_secret=credentials['apisecret'],
-                  verify=True)
+                  verify=credentials.get('certs_verify', True))
     aga.token.create()
     return aga
 
