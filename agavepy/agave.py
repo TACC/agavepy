@@ -68,20 +68,22 @@ class AgaveError(Exception):
 class Agave(object):
 
     PARAMS = [
-        # param name, mandatory?, attr name
-        ('username', False, 'username'),
-        ('password', False, 'password'),
-        ('api_server', True, 'api_server'),
-        ('api_key', False, 'api_key'),
-        ('api_secret', False, 'api_secret'),
-        ('token', False, '_token'),
-        ('resources', True, 'resources')
+        # param name, mandatory?, attr_name, default
+        ('username', False, 'username', None),
+        ('password', False, 'password', None),
+        ('api_server', True, 'api_server', None),
+        ('api_key', False, 'api_key', None),
+        ('api_secret', False, 'api_secret', None),
+        ('token', False, '_token', None),
+        ('resources', True, 'resources', None),
+        ('verify', False, 'verify', True)
     ]
 
     def __init__(self, **kwargs):
-        for param, mandatory, attr in self.PARAMS:
+        for param, mandatory, attr, default in self.PARAMS:
             try:
-                value = kwargs[param] if mandatory else kwargs.get(param, None)
+                value = (kwargs[param] if mandatory
+                         else kwargs.get(param, default))
             except KeyError:
                 raise AgaveError(
                     'parameter "{}" is mandatory'.format(param))
