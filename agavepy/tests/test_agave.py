@@ -1,14 +1,18 @@
 import datetime
 import json
+import os
 
 import pytest
 
 import agavepy.agave as a
 import testdata
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+
 @pytest.fixture(scope='session')
 def credentials():
-    return json.load(open('test_credentials.json'))
+    return json.load(open(
+        os.path.join(HERE, 'test_credentials.json')))
 
 @pytest.fixture(scope='session')
 def agave(credentials):
@@ -17,7 +21,8 @@ def agave(credentials):
                   password=credentials['password'],
                   api_server=credentials['apiserver'],
                   api_key=credentials['apikey'],
-                  api_secret=credentials['apisecret'])
+                  api_secret=credentials['apisecret'],
+                  verify=True)
     aga.token.create()
     return aga
 

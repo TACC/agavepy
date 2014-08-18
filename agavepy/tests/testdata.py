@@ -1,9 +1,11 @@
 __author__ = 'jstubbs'
 
 import json
+import os
 
 import agavepy.agave as a
 
+HERE = os.path.dirname(os.path.abspath(__file__))
 
 class TestData(object):
 
@@ -11,7 +13,7 @@ class TestData(object):
         self.local_data = credentials
 
     def file_to_json(self, filename):
-        return json.load(open(filename))
+        return json.load(open(os.path.join(HERE, filename)))
 
     def get_test_storage_system(self):
         """
