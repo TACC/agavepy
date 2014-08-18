@@ -24,7 +24,7 @@ class Token(object):
 
     def __init__(self,
                  username, password,
-                 api_server, api_key, api_secret,
+                 api_server, api_key, api_secret, verify,
                  parent):
         self.username = username
         self.password = password
@@ -33,12 +33,14 @@ class Token(object):
         self.api_secret = api_secret
         # Agave object that created this token
         self.parent = parent
+        self.verify = verify
 
         self.token_url = urlparse.urljoin(self.api_server, 'token')
 
     def _token(self, data):
         auth = requests.auth.HTTPBasicAuth(self.api_key, self.api_secret)
-        resp = requests.post(self.token_url, data=data, auth=auth)
+        resp = requests.post(self.token_url, data=data, auth=auth,
+                             verify=self.verify)
         resp.raise_for_status()
         self.token_info = resp.json()
         token = self.token_info['access_token']
@@ -93,6 +95,7 @@ class Agave(object):
         self.token = Token(
             self.username, self.password,
             self.api_server, self.api_key, self.api_secret,
+            self.verify,
             self)
         self.refresh_aris()
 
