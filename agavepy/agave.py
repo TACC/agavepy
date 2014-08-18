@@ -118,7 +118,7 @@ class Agave(object):
     def resource(self, auth_type, *args):
         args_values = [getattr(self, arg) for arg in args]
         if all(args_values):
-            http_client = SynchronousHttpClient()
+            http_client = SynchronousHttpClient(verify=self.verify)
             auth = getattr(http_client, 'set_{}'.format(auth_type))
             auth(*args_values)
             return SwaggerClient(
