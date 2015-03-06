@@ -138,7 +138,7 @@ def test_list_private_systems(agave):
         assert not system.public
 
 def test_list_default_systems(agave):
-    systems = agave.systems.list(default=True)
+    systems = agave.systems.list(defaultOnly=True)
     for system in systems:
         validate_system(system)
         assert system.default
