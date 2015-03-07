@@ -35,7 +35,7 @@ setup(
     long_description=readme,
     author='Joe Stubbs, Walter Moreira',
     author_email='jstubbs@tacc.utexas.edu, wmoreira@tacc.utexas.edu',
-    url='https://github.com/waltermoreira/agavepy',
+    url='https://bitbucket.org/taccaci/agavepy',
     packages=[
         'agavepy',
         'agavepy.swaggerpy'
