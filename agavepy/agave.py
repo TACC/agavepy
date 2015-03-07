@@ -2,9 +2,13 @@ from collections import Mapping, Sequence
 import xml.etree.ElementTree as ET
 from functools import wraps
 import urlparse
+import os
 
 import dateutil.parser
 import requests
+
+import sys
+sys.path.insert(0, os.path.dirname(__file__))
 
 from swaggerpy.client import SwaggerClient
 from swaggerpy.http_client import SynchronousHttpClient

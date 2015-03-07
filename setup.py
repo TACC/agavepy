@@ -38,6 +38,7 @@ setup(
     url='https://github.com/waltermoreira/agavepy',
     packages=[
         'agavepy',
+        'agavepy.swaggerpy'
     ],
     package_dir={'agavepy': 'agavepy'},
     include_package_data=True,
