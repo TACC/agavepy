@@ -1,4 +1,3 @@
-from collections import Mapping, Sequence
 import xml.etree.ElementTree as ET
 from functools import wraps
 import urlparse
