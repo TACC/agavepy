@@ -2,7 +2,19 @@
 AgavePy
 =======
 
-A very basic object to interact with the `Agave API`_.
+A simple Python binding for the `Agave API`_.
+
+
+Installation
+------------
+
+Install from PyPI::
+
+    pip install agavepy
+
+
+Quickstart
+----------
 
 
 .. _Agave API: http://agaveapi.co/
