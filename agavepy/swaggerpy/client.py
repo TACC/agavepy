@@ -11,6 +11,7 @@ import os.path
 import re
 import urllib
 import swaggerpy
+from numbers import Real
 
 from swaggerpy.http_client import SynchronousHttpClient
 from swaggerpy.processors import WebsocketProcessor, SwaggerProcessor
@@ -46,6 +47,12 @@ class Operation(object):
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, self.json['nickname'])
 
+    def file_like(self, obj):
+        """Try to decide if we should put this object in multipart."""
+
+        primitives = (basestring, Real)
+        return not isinstance(obj, primitives)
+
     def __call__(self, **kwargs):
         """Invoke ARI operation.
 
@@ -58,6 +65,9 @@ class Operation(object):
         params = {}
         data = {}
         headers = {}
+        files = {}
+        accepts_multipart = ('multipart/form-data' in
+                             self.json.get('consumes', []))
         for param in self.json.get('parameters', []):
             pname = param['name']
             value = kwargs.get(pname)
@@ -72,7 +82,10 @@ class Operation(object):
                 elif param_type == 'query':
                     params[pname] = value
                 elif param_type == 'form':
-                    data = value
+                    if accepts_multipart and self.file_like(value):
+                        files[pname] = value
+                    else:
+                        data[pname] = value
                 elif param_type == 'body':
                     data = (value if isinstance(value, basestring)
                             else json.dumps(value))
@@ -98,7 +111,8 @@ class Operation(object):
             return self.http_client.ws_connect(uri, params=params)
         else:
             return self.http_client.request(
-                method, uri, params=params, data=data, headers=headers)
+                method, uri, params=params,
+                data=data, headers=headers, files=files)
 
 
 class Resource(object):
