@@ -30,7 +30,7 @@ readme = open('README.rst').read()
 
 setup(
     name='agavepy',
-    version='0.1',
+    version='0.1.1',
     description='SDK for Agave',
     long_description=readme,
     author='Joe Stubbs, Walter Moreira',
