@@ -185,8 +185,13 @@ class Operation(object):
                 code = ET.fromstring(exc.response.text)[0].text
             except Exception:
                 # Any error here means the response was no XML
-                # Re-raise it, as it's not an expired token
-                raise exc
+                try:
+                    # Try to see if it's a json response, and if so, return it
+                    exc.response.json()
+                    return exc.response
+                except Exception:
+                    # Re-raise it, as it's not an expired token
+                    raise exc
             # only catch 'token expired' exception
             # other codes may mean a different error
             if code != '900903':
@@ -203,7 +208,13 @@ class Operation(object):
             return resp
 
         resp = self._with_refresh(operation)
-        return self.post_process(resp.json(), self.return_type)['result']
+        if resp.ok:
+            return self.post_process(resp.json(), self.return_type)['result']
+        else:
+            # if the response is not 2xx return the unprocessed json rather
+            # than raising an exception, since the return json contains
+            # the error message
+            return resp.json()
 
     def post_process(self, obj, return_type):
         if return_type is None:
