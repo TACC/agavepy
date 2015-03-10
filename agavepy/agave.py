@@ -23,6 +23,15 @@ def json_response(f):
     return _f
 
 
+def recover(name):
+    """Try to recover api keys for client ``name``.
+
+    :type name: str
+    :rtype: (str, str)
+    """
+    # TODO
+
+
 class Token(object):
 
     def __init__(self,
@@ -77,6 +86,7 @@ class Agave(object):
         ('username', False, 'username', None),
         ('password', False, 'password', None),
         ('api_server', True, 'api_server', None),
+        ('client_name', False, 'client_name', None),
         ('api_key', False, 'api_key', None),
         ('api_secret', False, 'api_secret', None),
         ('token', False, '_token', None),
@@ -95,6 +105,11 @@ class Agave(object):
             setattr(self, attr, value)
 
         self.host = urlparse.urlsplit(self.api_server).netloc
+        # If we are given a client name and no keys, then try to retrieve
+        # them from a persistent file.
+        if (self.client_name is not None
+                and self.api_key is None and self.api_secret is None):
+            self.api_key, self.api_secret = recover(self.client_name)
         self.token = Token(
             self.username, self.password,
             self.api_server, self.api_key, self.api_secret,
@@ -209,7 +224,10 @@ class Operation(object):
 
         resp = self._with_refresh(operation)
         if resp.ok:
-            return self.post_process(resp.json(), self.return_type)['result']
+            checked = self.post_process(resp.json(),
+                                        self.return_type)['result']
+            # if operation is clients.create, save name TODO
+            return checked
         else:
             # if the response is not 2xx return the unprocessed json rather
             # than raising an exception, since the return json contains
