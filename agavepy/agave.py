@@ -115,6 +115,8 @@ class Agave(object):
             self.api_server, self.api_key, self.api_secret,
             self.verify,
             self)
+        self._clients = None
+        self.all = None
         self.refresh_aris()
 
     def refresh_aris(self):
@@ -218,9 +220,9 @@ class Operation(object):
 
         def operation():
             f = self.get_operation()
-            resp = f(*args, **kwargs)
-            resp.raise_for_status()
-            return resp
+            response = f(*args, **kwargs)
+            response.raise_for_status()
+            return response
 
         resp = self._with_refresh(operation)
         if resp.ok:
