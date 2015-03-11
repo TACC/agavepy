@@ -1,7 +1,9 @@
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ElementTree
 from functools import wraps
 import urlparse
 import os
+import shelve
+from contextlib import closing
 
 import dateutil.parser
 import requests
@@ -23,13 +25,26 @@ def json_response(f):
     return _f
 
 
+def save(client, key, secret):
+    """
+
+    :type client: str
+    :type key: str
+    :type secret: str
+    :rtype: None
+    """
+    with closing(shelve.open(os.path.expanduser('~/.agavepy'))) as agavepyrc:
+        agavepyrc[client] = (key, secret)
+
+
 def recover(name):
     """Try to recover api keys for client ``name``.
 
     :type name: str
     :rtype: (str, str)
     """
-    # TODO
+    agavepyrc = shelve.open(os.path.expanduser('~/.agavepy'))
+    return agavepyrc[name]
 
 
 class Token(object):
@@ -110,12 +125,10 @@ class Agave(object):
         if (self.client_name is not None
                 and self.api_key is None and self.api_secret is None):
             self.api_key, self.api_secret = recover(self.client_name)
-        self.token = Token(
-            self.username, self.password,
-            self.api_server, self.api_key, self.api_secret,
-            self.verify,
-            self)
-        self._clients = None
+        self.token = None
+        if self.api_key is not None and self.api_secret is not None:
+            self.set_client(self.api_key, self.api_secret)
+        self.clients_resource = None
         self.all = None
         self.refresh_aris()
 
@@ -126,7 +139,7 @@ class Agave(object):
     def clients_ari(self):
         # If there is enough information to establish HTTP basic auth,
         # then create a 'clients' resource object
-        self._clients = self.resource(
+        self.clients_resource = self.resource(
             'basic_auth', 'host', 'username', 'password')
 
     def full_ari(self):
@@ -144,6 +157,23 @@ class Agave(object):
             return SwaggerClient(
                 self.resources, http_client=http_client,
                 extra_processors=[AgaveProcessor()])
+
+    def set_client(self, key, secret):
+        """
+
+        :type key: str
+        :type secret: str
+        :rtype: None
+        """
+        self.api_key = key
+        self.api_secret = secret
+        self.token = Token(
+            self.username, self.password,
+            self.api_server, self.api_key, self.api_secret,
+            self.verify,
+            self)
+        self.token.create()
+        self.refresh_aris()
 
     def __getattr__(self, key):
         return Resource(key, client=self)
@@ -174,7 +204,7 @@ class Operation(object):
     def get_base(self):
         """Get the base ari for this resource."""
 
-        return (self.client._clients if self.resource == 'clients'
+        return (self.client.clients_resource if self.resource == 'clients'
                 else self.client.all)
 
     def get_operation(self):
@@ -199,7 +229,7 @@ class Operation(object):
             return f(*args, **kwargs)
         except requests.exceptions.HTTPError as exc:
             try:
-                code = ET.fromstring(exc.response.text)[0].text
+                code = ElementTree.fromstring(exc.response.text)[0].text
             except Exception:
                 # Any error here means the response was no XML
                 try:
@@ -226,10 +256,16 @@ class Operation(object):
 
         resp = self._with_refresh(operation)
         if resp.ok:
-            checked = self.post_process(resp.json(),
-                                        self.return_type)['result']
-            # if operation is clients.create, save name TODO
-            return checked
+            result = self.post_process(resp.json(),
+                                       self.return_type)['result']
+            # if operation is clients.create, save name
+            if self.resource == 'clients' and self.operation == 'create':
+                save(result['name'],
+                     result['consumerKey'],
+                     result['consumerSecret'])
+                self.client.set_client(result['consumerKey'],
+                                       result['consumerSecret'])
+            return result
         else:
             # if the response is not 2xx return the unprocessed json rather
             # than raising an exception, since the return json contains
