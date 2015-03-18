@@ -23,7 +23,6 @@ your tenant:
 
    >>> from agavepy.agave import Agave
    >>> my_agave = Agave(api_server='https://agave.iplantc.org',
-   ...                  resources='https://agave.iplantc.org/docs/v2/resources/',
    ...                  username='myusername', password='mypassword')
 
 Once the object is instantiated, interact with it according to the
