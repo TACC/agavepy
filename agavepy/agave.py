@@ -44,8 +44,10 @@ def recover(name):
     :type name: str
     :rtype: (str, str)
     """
-    agavepyrc = shelve.open(os.path.expanduser('~/.agavepy'))
-    return agavepyrc[name]
+    with closing(shelve.open(os.path.expanduser('~/.agavepy'))) as agavepyrc:
+        return agavepyrc[name]
+
+
 def load_resource(api_server):
     """Load a default resource file.
 
