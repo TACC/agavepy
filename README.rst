@@ -33,13 +33,7 @@ For example, create a new client with:
 
 .. code-block:: pycon
 
-   >>> my_client = my_agave.clients.create(...)
-
-Create a token with:
-
-.. code-block:: pycon
-
-   >>> my_agave.token.create()
+   >>> my_agave.clients.create(body={'clientName': 'my_client'})
 
 Access any endpoint with:
 
@@ -47,6 +41,8 @@ Access any endpoint with:
 
    >>> my_agave.systems.list()
    >>> my_agave.jobs.manage(...)
+
+Once a client is created, it is used by default to access the API.
 
 
 .. _Agave API: http://agaveapi.co/
