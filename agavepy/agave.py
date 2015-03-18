@@ -4,6 +4,7 @@ import urlparse
 import os
 import shelve
 from contextlib import closing
+import json
 
 import dateutil.parser
 import requests
@@ -45,6 +46,15 @@ def recover(name):
     """
     agavepyrc = shelve.open(os.path.expanduser('~/.agavepy'))
     return agavepyrc[name]
+def load_resource(api_server):
+    """Load a default resource file.
+
+    :type api_server: str
+    :rtype: dict
+    """
+    rsrcs = json.load(
+        open(os.path.join(os.path.dirname(__file__), '../resources.json')))
+    return rsrcs
 
 
 class Token(object):
@@ -105,7 +115,7 @@ class Agave(object):
         ('api_key', False, 'api_key', None),
         ('api_secret', False, 'api_secret', None),
         ('token', False, '_token', None),
-        ('resources', True, 'resources', None),
+        ('resources', False, 'resources', None),
         ('verify', False, 'verify', True)
     ]
 
@@ -119,6 +129,8 @@ class Agave(object):
                     'parameter "{}" is mandatory'.format(param))
             setattr(self, attr, value)
 
+        if self.resources is None:
+            self.resources = load_resource(self.api_server)
         self.host = urlparse.urlsplit(self.api_server).netloc
         # If we are given a client name and no keys, then try to retrieve
         # them from a persistent file.
