@@ -2217,6 +2217,14 @@
                                         "type": "string",
                                         "paramType": "form",
                                         "name": "urlToIngest"
+                                    },
+                                    {
+                                        "description": "The file object to import.",
+                                        "name": "fileToUpload",
+                                        "paramType": "form",
+                                        "dataType": "file",
+                                        "type": "void",
+                                        "required": false
                                     }
                                 ],
                                 "type": "SingleRemoteFileResponse",
