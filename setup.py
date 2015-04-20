@@ -27,6 +27,7 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 readme = open('README.rst').read()
+requires = [pkg.split('==')[0] for pkg in open('requirements.txt').readlines()]
 
 setup(
     name='agavepy',
@@ -42,8 +43,7 @@ setup(
     ],
     package_dir={'agavepy': 'agavepy'},
     include_package_data=True,
-    install_requires=[
-    ],
+    install_requires=requires,
     license="MIT",
     zip_safe=False,
     keywords='',
