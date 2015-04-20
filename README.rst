@@ -69,4 +69,7 @@ in the user's .agavpy file, in which case just passing the client_name will suff
 License
 =======
 
-MIT
+Agavepy is licensed under the MIT license.
+
+Swaggerpy is copyright of Digium, Inc., and licensed under BSD 3-Clause License.
+
