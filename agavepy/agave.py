@@ -192,6 +192,12 @@ class Agave(object):
     def __getattr__(self, key):
         return Resource(key, client=self)
 
+    def __dir__(self):
+        base = self.clients_resource.resources.keys()
+        if self.all is not None:
+            base.extend(self.all.resources.keys())
+        return list(set(base))
+
 
 class Resource(object):
 
@@ -201,6 +207,9 @@ class Resource(object):
 
     def __getattr__(self, attr):
         return Operation(self.resource, attr, client=self.client)
+
+    def __dir__(self):
+        return self.client.all.resources[self.resource].operations.keys()
 
 
 class Operation(object):
