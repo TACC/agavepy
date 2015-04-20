@@ -18,18 +18,18 @@
             "grantTypes": {
                 "implicit": {
                     "loginEndpoint": {
-                        "url": "https://dev.agave.tacc.utexas.edu/login"
+                        "url": "https://agave.iplantc.org/login"
                     },
                     "tokenName": "access_token"
                 },
                 "authorization_code": {
                     "tokenRequestEndpoint": {
-                        "url": "https://dev.agave.tacc.utexas.edu/authorize",
+                        "url": "https://agave.iplantc.org/authorize",
                         "clientSecretName": "client_secret",
                         "clientIdName": "client_id"
                     },
                     "tokenEndpoint": {
-                        "url": "https://dev.agave.tacc.utexas.edu/token",
+                        "url": "https://agave.iplantc.org/token",
                         "tokenName": "access_code"
                     }
                 }
@@ -489,7 +489,7 @@
                         "name": ""
                     }
                 },
-                "basePath": "https://dev.agave.tacc.utexas.edu",
+                "basePath": "https://agave.iplantc.org",
                 "resourcePath": "/clients/v2",
                 "apiVersion": "2.0.0-SNAPSHOT-r1dc40"
             },
@@ -1452,7 +1452,7 @@
                         "name": ""
                     }
                 },
-                "basePath": "https://dev.agave.tacc.utexas.edu",
+                "basePath": "https://agave.iplantc.org",
                 "apis": [
                     {
                         "operations": [
@@ -2067,6 +2067,14 @@
                                         "type": "string",
                                         "paramType": "form",
                                         "name": "urlToIngest"
+                                    },
+                                    {
+                                        "description": "The file object to import.",
+                                        "name": "fileToUpload",
+                                        "paramType": "form",
+                                        "dataType": "file",
+                                        "type": "void",
+                                        "required": false
                                     }
                                 ],
                                 "type": "SingleRemoteFileResponse",
@@ -2840,7 +2848,7 @@
                         "name": ""
                     }
                 },
-                "basePath": "https://dev.agave.tacc.utexas.edu",
+                "basePath": "https://agave.iplantc.org",
                 "resourcePath": "/files/v2",
                 "apiVersion": "2.0.0-SNAPSHOT-r1dc40"
             },
@@ -4024,7 +4032,7 @@
                         "name": ""
                     }
                 },
-                "basePath": "https://dev.agave.tacc.utexas.edu",
+                "basePath": "https://agave.iplantc.org",
                 "resourcePath": "/jobs/v2",
                 "apiVersion": "2.0.0-SNAPSHOT-r1dc40"
             },
@@ -5370,7 +5378,7 @@
                         "name": ""
                     }
                 },
-                "basePath": "https://dev.agave.tacc.utexas.edu",
+                "basePath": "https://agave.iplantc.org",
                 "resourcePath": "/meta/v2",
                 "apiVersion": "2.0.0-SNAPSHOT-r1dc40"
             },
@@ -6072,7 +6080,7 @@
                         "name": ""
                     }
                 },
-                "basePath": "https://dev.agave.tacc.utexas.edu",
+                "basePath": "https://agave.iplantc.org",
                 "resourcePath": "/monitors/v2",
                 "apiVersion": "2.0.0-SNAPSHOT-r1dc40"
             },
@@ -6476,7 +6484,7 @@
                         "name": ""
                     }
                 },
-                "basePath": "https://dev.agave.tacc.utexas.edu",
+                "basePath": "https://agave.iplantc.org",
                 "resourcePath": "/notifications/v2",
                 "apiVersion": "2.0.0-SNAPSHOT-r1dc40"
             },
@@ -6507,7 +6515,7 @@
                             {
                                 "parameters": [
                                     {
-                                        "defaultValue": "{\n\t\"url\": \"https://dev.agave.tacc.utexas.edu/files/v2/media/system/demo.storage.example.com/wc-1.00/picksumipsum.txt\",\n\t\"method\": \"GET\",\n\t\"maxUses\": 25,\n\t\"lifetime\": 3600,\n\t\"noauth\": false\n}",
+                                        "defaultValue": "{\n\t\"url\": \"https://agave.iplantc.org/files/v2/media/system/demo.storage.example.com/wc-1.00/picksumipsum.txt\",\n\t\"method\": \"GET\",\n\t\"maxUses\": 25,\n\t\"lifetime\": 3600,\n\t\"noauth\": false\n}",
                                         "description": "The PostIt to create.",
                                         "allowMultiple": false,
                                         "required": true,
@@ -6713,7 +6721,7 @@
                         "name": ""
                     }
                 },
-                "basePath": "https://dev.agave.tacc.utexas.edu",
+                "basePath": "https://agave.iplantc.org",
                 "resourcePath": "/postits/v2",
                 "apiVersion": "2.0.0-SNAPSHOT-r1dc40"
             },
@@ -7390,7 +7398,7 @@
                         "name": ""
                     }
                 },
-                "basePath": "https://dev.agave.tacc.utexas.edu",
+                "basePath": "https://agave.iplantc.org",
                 "resourcePath": "/profiles/v2",
                 "apiVersion": "2.0.0-SNAPSHOT-r1dc40"
             },
@@ -8951,7 +8959,7 @@
                         "name": ""
                     }
                 },
-                "basePath": "https://dev.agave.tacc.utexas.edu",
+                "basePath": "https://agave.iplantc.org",
                 "resourcePath": "/systems/v2",
                 "apiVersion": "2.0.0-SNAPSHOT-r1dc40"
             },
@@ -9284,14 +9292,14 @@
                         "name": ""
                     }
                 },
-                "basePath": "https://dev.agave.tacc.utexas.edu",
+                "basePath": "https://agave.iplantc.org",
                 "resourcePath": "/transforms/v2",
                 "apiVersion": "2.0.0-SNAPSHOT-r1dc40"
             },
             "name": "transforms"
         }
     ],
-    "url": "https://dev.agave.tacc.utexas.edu/",
+    "url": "https://agave.iplantc.org/",
     "produces": [
         "application/json"
     ],
