@@ -49,7 +49,7 @@ To make use of an existing client, pass the client's credentials into the Agave 
 
    >>> from agavepy.agave import Agave
    >>> my_agave = Agave(api_server='https://agave.iplantc.org',
-   ...                  username='myusername', password='mypassword', client_name='my_client', api_key='123', api_sectret='abc')
+   ...                  username='myusername', password='mypassword', client_name='my_client', api_key='123', api_secret='abc')
 
 Alternatively, the SDK will attempt to recover the client credentials from the client name if they are stored
 in the user's .agavpy file, in which case just passing the client_name will suffice:
