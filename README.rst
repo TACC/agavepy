@@ -52,7 +52,7 @@ To make use of an existing client, pass the client's credentials into the Agave 
    ...                  username='myusername', password='mypassword', client_name='my_client', api_key='123', api_secret='abc')
 
 Alternatively, the SDK will attempt to recover the client credentials from the client name if they are stored
-in the user's .agavpy file, in which case just passing the client_name will suffice:
+in the user's ``.agavepy`` file, in which case just passing the ``client_name`` will suffice:
 
 .. code-block:: pycon
 
@@ -71,5 +71,5 @@ License
 
 Agavepy is licensed under the MIT license.
 
-Swaggerpy is copyright of Digium, Inc., and licensed under BSD 3-Clause License.
+Swagger.py is copyright of Digium, Inc., and licensed under BSD 3-Clause License.
 
