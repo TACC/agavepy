@@ -27,7 +27,7 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 readme = open('README.rst').read()
-requires = [pkg.split('==')[0] for pkg in open('requirements.txt').readlines()]
+requires = [pkg for pkg in open('requirements.txt').readlines()]
 
 setup(
     name='agavepy',
