@@ -42,7 +42,7 @@ setup(
         'agavepy.swaggerpy'
     ],
     package_dir={'agavepy': 'agavepy'},
-    include_package_data=True,
+    package_data={'agavepy': ['resources.json']},
     install_requires=requires,
     license="MIT",
     zip_safe=False,

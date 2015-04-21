@@ -55,7 +55,7 @@ def load_resource(api_server):
     :rtype: dict
     """
     rsrcs = json.load(
-        open(os.path.join(os.path.dirname(__file__), '../resources.json')))
+        open(os.path.join(os.path.dirname(__file__), 'resources.json')))
     return rsrcs
 
 
