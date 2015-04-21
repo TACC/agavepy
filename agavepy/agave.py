@@ -209,7 +209,11 @@ class Resource(object):
         return Operation(self.resource, attr, client=self.client)
 
     def __dir__(self):
-        return self.client.all.resources[self.resource].operations.keys()
+        base = self.client.clients_resource.resources[self.resource].operations.keys()
+        if self.client.all is not None:
+            base.extend(
+                self.client.all.resources[self.resource].operations.keys())
+        return base
 
 
 class Operation(object):
