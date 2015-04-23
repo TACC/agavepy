@@ -6,7 +6,7 @@ A simple Python binding for the `Agave API`_.
 
 
 Installation
-------------
+============
 
 Install from PyPI_::
 
@@ -14,7 +14,7 @@ Install from PyPI_::
 
 
 Quickstart
-----------
+==========
 
 The first step is to create an ``agave`` Python object pointing to
 your tenant:
