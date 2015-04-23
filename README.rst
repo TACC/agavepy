@@ -93,3 +93,8 @@ License
 Agavepy is licensed under the MIT license.
 
 Swagger.py is copyright of Digium, Inc., and licensed under BSD 3-Clause License.
+
+.. _Docker: https://docs.docker.com/installation/#installation
+.. _docker-compose: https://docs.docker.com/compose/install/
+.. _Jupyter: http://ipython.org/
+
