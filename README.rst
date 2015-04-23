@@ -66,10 +66,30 @@ in the user's ``.agavepy`` file, in which case just passing the ``client_name`` 
 .. _PyPI: https://pypi.python.org/pypi
 
 
+Using agavepy in Docker
+========================
+
+This repository includes a ``Dockerfile`` and a ``docker-compose.yml``
+file, which allows a zero installation version of ``agavepy``.
+
+The only requirement is Docker_ and `docker-compose`_, most likely
+already installed in your system.
+
+Then, clone this repository and execute ``docker-compose`` as follows:
+
+.. code-block:: bash
+
+   $ cd agavepy
+   $ docker-compose up
+
+Navigate to http://localhost:8888 and access the Jupyter_ notebook
+with password ``agavepy``.  The notebook ``Example.ipynb`` contains a
+full example of use.
+
+
 License
 =======
 
 Agavepy is licensed under the MIT license.
 
 Swagger.py is copyright of Digium, Inc., and licensed under BSD 3-Clause License.
-

@@ -1,0 +1,11 @@
+---
+
+agavepy:
+  build: .
+  ports:
+    - "8888:8888"
+  environment:
+    PASSWORD: agavepy
+    USE_HTTP: 1
+  volumes:
+    - .:/notebooks/local
