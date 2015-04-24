@@ -264,7 +264,7 @@ class Operation(object):
                     raise exc
             # only catch 'token expired' exception
             # other codes may mean a different error
-            if code != '900903':
+            if code not in ['900903', '900904']:
                 raise
             self.client.token.refresh()
             return f(*args, **kwargs)
