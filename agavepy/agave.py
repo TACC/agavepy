@@ -283,6 +283,10 @@ class Operation(object):
 
         resp = self._with_refresh(operation)
         if resp.ok:
+            # if response is raw file, return it directly
+            if self.resource == 'files' and (self.operation == 'download'
+                                             or self.operation == 'downloadFromDefaultSystem'):
+                return resp
             result = self.post_process(resp.json(),
                                        self.return_type)['result']
             # if operation is clients.create, save name
