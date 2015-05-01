@@ -16,8 +16,7 @@ def credentials():
 
 @pytest.fixture(scope='session')
 def agave(credentials):
-    aga = a.Agave(resources=credentials['resources'],
-                  username=credentials['username'],
+    aga = a.Agave(username=credentials['username'],
                   password=credentials['password'],
                   api_server=credentials['apiserver'],
                   api_key=credentials['apikey'],
@@ -138,7 +137,7 @@ def test_list_private_systems(agave):
         assert not system.public
 
 def test_list_default_systems(agave):
-    systems = agave.systems.list(defaultOnly=True)
+    systems = agave.systems.list(default=True)
     for system in systems:
         validate_system(system)
         assert system.default
