@@ -6,6 +6,7 @@ import shelve
 from contextlib import closing
 import json
 
+import jinja2
 import dateutil.parser
 import requests
 
@@ -16,6 +17,7 @@ from swaggerpy.client import SwaggerClient
 from swaggerpy.http_client import SynchronousHttpClient
 from swaggerpy.processors import SwaggerProcessor
 
+HERE = os.path.dirname(os.path.abspath((__file__)))
 
 def json_response(f):
     @wraps(f)
@@ -54,9 +56,18 @@ def load_resource(api_server):
     :type api_server: str
     :rtype: dict
     """
-    rsrcs = json.load(
-        open(os.path.join(os.path.dirname(__file__), 'resources.json')))
+    conf = ConfigGen('resources.json.j2')
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader(HERE), trim_blocks=True, lstrip_blocks=True)
+    rsrcs = json.loads(conf.compile({'api_server_base': urlparse.urlparse(api_server).netloc}, env))
     return rsrcs
+
+class ConfigGen(object):
+    def __init__(self, template_str):
+        self.template_str = template_str
+
+    def compile(self, configs, env):
+        template = env.get_template(self.template_str)
+        return template.render(configs)
 
 
 class Token(object):
