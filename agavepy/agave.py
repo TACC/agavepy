@@ -37,7 +37,7 @@ def save(client, key, secret):
     :rtype: None
     """
     with closing(shelve.open(os.path.expanduser('~/.agavepy'))) as agavepyrc:
-        agavepyrc[client] = (key, secret)
+        agavepyrc[str(client)] = (key, secret)
 
 
 def recover(name):
@@ -47,7 +47,7 @@ def recover(name):
     :rtype: (str, str)
     """
     with closing(shelve.open(os.path.expanduser('~/.agavepy'))) as agavepyrc:
-        return agavepyrc[name]
+        return agavepyrc[str(name)]
 
 
 def load_resource(api_server):
