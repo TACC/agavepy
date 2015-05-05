@@ -17,7 +17,8 @@ from swaggerpy.client import SwaggerClient
 from swaggerpy.http_client import SynchronousHttpClient
 from swaggerpy.processors import SwaggerProcessor
 
-HERE = os.path.dirname(os.path.abspath((__file__)))
+HERE = os.path.dirname(os.path.abspath(__file__))
+
 
 def json_response(f):
     @wraps(f)
@@ -57,9 +58,12 @@ def load_resource(api_server):
     :rtype: dict
     """
     conf = ConfigGen('resources.json.j2')
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader(HERE), trim_blocks=True, lstrip_blocks=True)
-    rsrcs = json.loads(conf.compile({'api_server_base': urlparse.urlparse(api_server).netloc}, env))
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader(HERE),
+                             trim_blocks=True, lstrip_blocks=True)
+    rsrcs = json.loads(conf.compile(
+        {'api_server_base': urlparse.urlparse(api_server).netloc}, env))
     return rsrcs
+
 
 class ConfigGen(object):
     def __init__(self, template_str):
@@ -220,7 +224,8 @@ class Resource(object):
         return Operation(self.resource, attr, client=self.client)
 
     def __dir__(self):
-        base = self.client.clients_resource.resources[self.resource].operations.keys()
+        clients = self.client.clients_resource.resources
+        base = clients[self.resource].operations.keys()
         if self.client.all is not None:
             base.extend(
                 self.client.all.resources[self.resource].operations.keys())
@@ -295,8 +300,9 @@ class Operation(object):
         resp = self._with_refresh(operation)
         if resp.ok:
             # if response is raw file, return it directly
-            if self.resource == 'files' and (self.operation == 'download'
-                                             or self.operation == 'downloadFromDefaultSystem'):
+            if (self.resource == 'files' and
+                    (self.operation == 'download'
+                     or self.operation == 'downloadFromDefaultSystem')):
                 return resp
             result = self.post_process(resp.json(),
                                        self.return_type)['result']
