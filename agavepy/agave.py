@@ -64,6 +64,30 @@ def load_resource(api_server):
         {'api_server_base': urlparse.urlparse(api_server).netloc}, env))
     return rsrcs
 
+def with_refresh(client, f, *args, **kwargs):
+    """Call function ``f`` and refresh token if needed."""
+
+    try:
+        return f(*args, **kwargs)
+    except requests.exceptions.HTTPError as exc:
+        try:
+            code = ElementTree.fromstring(exc.response.text)[0].text
+        except Exception:
+            # Any error here means the response was no XML
+            try:
+                # Try to see if it's a json response, and if so, return it
+                exc.response.json()
+                return exc.response
+            except Exception:
+                # Re-raise it, as it's not an expired token
+                raise exc
+        # only catch 'token expired' exception
+        # other codes may mean a different error
+        if code not in ['900903', '900904']:
+            raise
+        client.token.refresh()
+        return f(*args, **kwargs)
+
 
 class ConfigGen(object):
     def __init__(self, template_str):
@@ -204,6 +228,16 @@ class Agave(object):
         self.token.create()
         self.refresh_aris()
 
+    def geturl(self, url):
+        """Make get request to url using the client access token and retry if token has expired.
+        :param url: str
+        :return:
+        """
+        f = requests.get
+        return with_refresh(self.client, f, url,
+                            headers={'Authorization': 'Bearer ' + self.token.token_info['access_token']},
+                            verify=self.verify)
+
     def __getattr__(self, key):
         return Resource(key, client=self)
 
@@ -265,30 +299,6 @@ class Operation(object):
 
         return self.get_operation().json
 
-    def _with_refresh(self, f, *args, **kwargs):
-        """Call function ``f`` and refresh token if needed."""
-
-        try:
-            return f(*args, **kwargs)
-        except requests.exceptions.HTTPError as exc:
-            try:
-                code = ElementTree.fromstring(exc.response.text)[0].text
-            except Exception:
-                # Any error here means the response was no XML
-                try:
-                    # Try to see if it's a json response, and if so, return it
-                    exc.response.json()
-                    return exc.response
-                except Exception:
-                    # Re-raise it, as it's not an expired token
-                    raise exc
-            # only catch 'token expired' exception
-            # other codes may mean a different error
-            if code not in ['900903', '900904']:
-                raise
-            self.client.token.refresh()
-            return f(*args, **kwargs)
-
     def __call__(self, *args, **kwargs):
 
         def operation():
@@ -297,7 +307,7 @@ class Operation(object):
             response.raise_for_status()
             return response
 
-        resp = self._with_refresh(operation)
+        resp = with_refresh(self.client, operation)
         if resp.ok:
             # if response is raw file, return it directly
             if (self.resource == 'files' and
