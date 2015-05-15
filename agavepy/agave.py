@@ -266,6 +266,10 @@ class Resource(object):
         return base
 
 
+class AgaveException(Exception):
+    pass
+
+
 class Operation(object):
 
     PRIMITIVE_TYPES = ['array', 'string', 'integer', 'int', 'boolean']
@@ -328,7 +332,7 @@ class Operation(object):
             # if the response is not 2xx return the unprocessed json rather
             # than raising an exception, since the return json contains
             # the error message
-            return resp.json()
+            raise AgaveException(resp.json())
 
     def post_process(self, obj, return_type):
         if return_type is None:
