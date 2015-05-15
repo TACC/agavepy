@@ -19,16 +19,19 @@ class TestData(object):
         """
         Example storage system read from an external file.
         """
-        storage = self.file_to_json('test-storage.nebula.tacc.json')
+        storage = self.file_to_json('test-storage-eod.json')
         storage['id'] = self.local_data['storage']
+        storage['storage']['auth']['password'] = self.local_data['storage_password']
         return storage
 
     def get_test_compute_system(self):
         """
         Example compute system defined inline.
         """
-        compute = self.file_to_json('test-compute.nebula.tacc.json')
+        compute = self.file_to_json('test-compute-eod.json')
         compute['id'] = self.local_data['execution']
+        compute['login']['auth']['password'] = self.local_data['execution_password']
+        compute['storage']['auth']['password'] = self.local_data['storage_password']
         return compute
 
     def get_test_app(self):
@@ -139,6 +142,14 @@ class TestData(object):
 
         return test_app
 
+    def get_test_app_from_file(self):
+        app = self.file_to_json('test-app-eod.json')
+        app['name'] += self.local_data['app_name'] + '_'
+        app['executionSystem'] = self.local_data['execution']
+        app['deploymentSystem'] = self.local_data['storage']
+        return app
+
+
     def get_test_job(self):
         """
         Example job defined inline.
@@ -155,7 +166,7 @@ class TestData(object):
         """
         Example job request read in from an external file.
         """
-        filename = '{}-{}-job.json'.format(self.local_data['app_name'],
-                                           self.local_data['app_version'])
-        return self.api_client.deserialize(self.file_to_json(filename),
-                                           'JobRequest')
+        test_app = self.get_test_app_from_file()
+        job = self.file_to_json('test-job-eod.json')
+        job['appId'] = test_app['name'] + '-' + test_app['version']
+        return job
