@@ -3,6 +3,7 @@ import json
 import os
 
 import pytest
+import requests
 
 import agavepy.agave as a
 import testdata
@@ -27,11 +28,11 @@ def agave(credentials):
 
 @pytest.fixture(scope='session')
 def test_app(credentials):
-    return testdata.TestData(credentials).get_test_app()
+    return testdata.TestData(credentials).get_test_app_from_file()
 
 @pytest.fixture(scope='session')
 def test_job(credentials):
-    return testdata.TestData(credentials).get_test_job()
+    return testdata.TestData(credentials).get_test_job_from_file()
 
 @pytest.fixture(scope='session')
 def test_compute_system(credentials):
@@ -48,6 +49,33 @@ def validate_app(app):
     assert app.name
     assert type(app.revision) is int and app.revision > 0
     assert app.version
+
+def test_add_compute_system(agave, test_compute_system):
+    system = agave.systems.add(body=test_compute_system)
+    # set system as default for subsequent testing
+    url = agave.api_server + '/systems/v2/' + test_compute_system['id']
+    try:
+        rsp = requests.put(url, data={'action':'setDefault'},
+                           headers={'Authorization': 'Bearer ' + agave.token.token_info['access_token']},
+                           verify=agave.verify)
+    except requests.exceptions.HTTPError as exc:
+        print "Error trying to set compute system as default:", str(exc)
+        raise exc
+    validate_system(system)
+
+def test_add_storage_system(agave, test_storage_system):
+    system = agave.systems.add(body=test_storage_system)
+    # set system as default for subsequent testing
+    url = agave.api_server + '/systems/v2/' + test_storage_system['id']
+    try:
+        rsp = requests.put(url, data={'action':'setDefault'},
+                       headers={'Authorization': 'Bearer ' + agave.token.token_info['access_token']},
+                       verify=agave.verify)
+    except requests.exceptions.HTTPError as exc:
+        print "Error trying to set storage system as default:", str(exc)
+        raise exc
+    validate_system(system)
+
 
 def test_list_apps(agave):
     apps = agave.apps.list()
@@ -140,22 +168,13 @@ def test_list_default_systems(agave):
     systems = agave.systems.list(default=True)
     for system in systems:
         validate_system(system)
-        assert system.default
-
-def test_add_compute_system(agave, test_compute_system):
-    system = agave.systems.add(body=test_compute_system)
-    validate_system(system)
-
-def test_add_storage_system(agave, test_storage_system):
-    system = agave.systems.add(body=test_storage_system)
-    validate_system(system)
+        assert not system.get('default')
 
 def test_token_access(agave, credentials):
     token = agave.token.refresh()
-    token_client = a.Agave(
-        resources=credentials['resources'],
-        api_server=credentials['apiserver'],
-        token=token)
+    token_client = a.Agave(api_server=credentials['apiserver'],
+                           token=token,
+                           verify=credentials.get('verify_certs', True))
     apps = token_client.apps.list()
     for app in apps:
         validate_app(app)
