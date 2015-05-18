@@ -50,6 +50,10 @@ def validate_app(app):
     assert type(app.revision) is int and app.revision > 0
     assert app.version
 
+def test_raise_exception(agave):
+    with pytest.raises(a.AgaveException):
+        agave.systems.get(systemId='foo')
+
 def test_add_compute_system(agave, test_compute_system):
     system = agave.systems.add(body=test_compute_system)
     # set system as default for subsequent testing
