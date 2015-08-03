@@ -103,7 +103,7 @@ class Token(object):
     def __init__(self,
                  username, password,
                  api_server, api_key, api_secret, verify,
-                 parent):
+                 parent, _token=None, _refresh_token=None):
         self.username = username
         self.password = password
         self.api_server = api_server
@@ -112,6 +112,10 @@ class Token(object):
         # Agave object that created this token
         self.parent = parent
         self.verify = verify
+        if _token and _refresh_token:
+            self.token_info = {'access_token': _token,
+                               'refresh_token': _refresh_token}
+            self.parent._token = _token
 
         self.token_url = urlparse.urljoin(self.api_server, 'token')
 
@@ -156,6 +160,7 @@ class Agave(object):
         ('api_key', False, 'api_key', None),
         ('api_secret', False, 'api_secret', None),
         ('token', False, '_token', None),
+        ('refresh_token', False, '_refresh_token', None),
         ('resources', False, 'resources', None),
         ('verify', False, 'verify', True)
     ]
@@ -224,8 +229,11 @@ class Agave(object):
             self.username, self.password,
             self.api_server, self.api_key, self.api_secret,
             self.verify,
-            self)
-        self.token.create()
+            self, self._token, self._refresh_token)
+        if self._token and self._refresh_token:
+            pass
+        else:
+            self.token.create()
         self.refresh_aris()
 
     def geturl(self, url):
