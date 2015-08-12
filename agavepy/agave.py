@@ -155,6 +155,8 @@ class Agave(object):
         # param name, mandatory?, attr_name, default
         ('username', False, 'username', None),
         ('password', False, 'password', None),
+        ('jwt', False, 'jwt', None),
+        ('jwt_header_name', False, 'header_name', None),
         ('api_server', True, 'api_server', None),
         ('client_name', False, 'client_name', None),
         ('api_key', False, 'api_key', None),
@@ -178,13 +180,17 @@ class Agave(object):
         if self.resources is None:
             self.resources = load_resource(self.api_server)
         self.host = urlparse.urlsplit(self.api_server).netloc
+        # If we are passed a JWT directly, we can bypass all OAuth-related tasks
+        if self.jwt:
+            if not self.header_name:
+                raise AgaveError("The jwt header name is required to use the jwt authenticator.")
         # If we are given a client name and no keys, then try to retrieve
         # them from a persistent file.
         if (self.client_name is not None
                 and self.api_key is None and self.api_secret is None):
             self.api_key, self.api_secret = recover(self.client_name)
         self.token = None
-        if self.api_key is not None and self.api_secret is not None:
+        if self.api_key is not None and self.api_secret is not None and self.jwt is None:
             self.set_client(self.api_key, self.api_secret)
         self.clients_resource = None
         self.all = None
@@ -192,7 +198,12 @@ class Agave(object):
 
     def refresh_aris(self):
         self.clients_ari()
-        self.full_ari()
+        # the resources are defined with a different authenticator in case a jwt is passed in, hence
+        # we need to refresh using a different method
+        if self.jwt:
+            self.jwt_ari()
+        else:
+            self.full_ari()
 
     def clients_ari(self):
         # If there is enough information to establish HTTP basic auth,
@@ -206,11 +217,17 @@ class Agave(object):
         self.all = self.resource(
             'token', 'host', '_token')
 
+    def jwt_ari(self):
+        # If a jwt is passed in, create a resource object with the header_name and jwt token:
+        self.all = self.resource('jwt', 'host', 'header_name', 'jwt')
+
     def resource(self, auth_type, *args):
         args_values = [getattr(self, arg) for arg in args]
         if all(args_values):
             http_client = SynchronousHttpClient(verify=self.verify)
             auth = getattr(http_client, 'set_{}'.format(auth_type))
+            # auth method will be one of: set_basic_auth, set_token, set_jwt depending on params passed to
+            # constructor.
             auth(*args_values)
             return SwaggerClient(
                 self.resources, http_client=http_client,
