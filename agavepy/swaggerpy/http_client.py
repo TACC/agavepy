@@ -153,6 +153,15 @@ class TokenAuthenticator(Authenticator):
     def apply(self, request):
         request.headers['Authorization'] = 'Bearer {}'.format(self.token)
 
+class JwtAuthenticator(Authenticator):
+
+    def __init__(self, host, header_name, jwt):
+        super(JwtAuthenticator, self).__init__(host)
+        self.jwt = jwt
+        self.header_name = header_name
+
+    def apply(self, request):
+        request.headers[self.header_name] = self.jwt
 
 # noinspection PyDocstring
 class SynchronousHttpClient(HttpClient):
@@ -180,6 +189,9 @@ class SynchronousHttpClient(HttpClient):
     def set_token(self, host, token):
         self.authenticator = TokenAuthenticator(
             host=host, token=token)
+
+    def set_jwt(self, host, header_name, jwt):
+        self.authenticator = JwtAuthenticator(host, header_name, jwt)
 
     def request(self, method, url, params=None, data=None,
                 headers=None, files=None):
