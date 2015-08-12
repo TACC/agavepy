@@ -85,9 +85,27 @@ in the user's ``.agavepy`` file, in which case just passing the ``client_name`` 
    ...                  username='myusername', password='mypassword', client_name='my_client')
 
 
+You can also generate client from an access and refresh token to avoid needing end user credentials. By passing the access and refresh tokens, the sdk client will be able to automatically refresh tokens as needed.
+
+.. code-block:: pycon
+
+    >>> ag = Agave(token='76fb5ee42b3e9f25a5ba9069be522', refresh_token='e193fc952954a08b7c8b5766b846d74', 
+    ...            api_key='pEN_w4cPMqWpuVFfHblHF6KYniMa', api_secret='', 
+    ...            api_server='https://dev.tenants.staging.agaveapi.co', client_name='test', verify=False)
+
+
+Finally, a client can be generated directly from a JWT in order to bypass the API Gateway and enable direct interaction with the Agave services. Note that the ``api_server`` parameter should point directly at the Agave services, and the ``jwt_header_name`` should reflect the tenant you wish to interact with.
+
+.. code-block:: pycon
+
+    >>> ag = Agave(jwt=jwt, jwt_header_name='X-JWT-Assertion-dev_staging',         
+    ...            api_server='https://agave-core-staging.tacc.utexas.edu', verify=False)
+
 
 .. _Agave API: http://agaveapi.co/
 .. _PyPI: https://pypi.python.org/pypi
+
+
 
 
 License
