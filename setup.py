@@ -31,7 +31,7 @@ requires = [pkg for pkg in open('requirements.txt').readlines()]
 
 setup(
     name='agavepy',
-    version='0.2',
+    version='0.2.1',
     description='SDK for Agave',
     long_description=readme,
     author='Joe Stubbs, Walter Moreira',
@@ -42,7 +42,7 @@ setup(
         'agavepy.swaggerpy'
     ],
     package_dir={'agavepy': 'agavepy'},
-    package_data={'agavepy': ['resources.json']},
+    package_data={'agavepy': ['resources.json', 'resources.json.j2']},
     install_requires=requires,
     license="MIT",
     zip_safe=False,
