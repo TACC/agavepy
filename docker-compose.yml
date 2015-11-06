@@ -14,4 +14,4 @@ agavepy:
     USE_HTTP: 1
   volumes:
     # Mount the current directory to make persistent change possible
-    - .:/notebooks/local
+    - ./notebooks:/notebooks
