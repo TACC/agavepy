@@ -1,9 +1,9 @@
-FROM ipython/notebook
+FROM jupyter/scipy-notebook
 
 COPY . /agavepy
 WORKDIR /agavepy
-RUN pip install -r requirements.txt
-RUN python setup.py develop
+RUN /opt/conda/envs/python2/bin/pip install -r requirements.txt
+RUN /opt/conda/envs/python2/bin/python setup.py develop
 
 ENV AGAVE_HOST ""
 
