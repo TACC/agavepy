@@ -1,5 +1,6 @@
 FROM jupyter/scipy-notebook
 
+USER root
 COPY . /agavepy
 WORKDIR /agavepy
 RUN /opt/conda/envs/python2/bin/pip install -r requirements.txt
