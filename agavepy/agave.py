@@ -196,6 +196,56 @@ class Agave(object):
         self.all = None
         self.refresh_aris()
 
+    def to_dict(self):
+        """Return a dictionary representing this client."""
+        return {attr: getattr(self, attr) for _, _, attr, _ in self.PARAMS if not attr in ['resources', '_token', '_refresh_token', 'header_name', 'jwt']}
+
+    @classmethod
+    def _read_clients(cls):
+        """Read clients from the .agpy file."""
+        with open(os.path.expanduser('~/.agpy')) as agpy:
+            return json.loads(agpy.read())
+
+    @classmethod
+    def _restore_client(cls, **kwargs):
+        """Restore a client from a specific attr."""
+        clients = Agave._read_clients()
+        if len(clients) == 0:
+            raise AgaveError("No clients found.")
+        if len(kwargs.items()) == 0:
+            return Agave(**clients[0])
+        for k, v in kwargs.items():
+            for client in clients:
+                if client.get(k) == v:
+                    return Agave(**client)
+        raise AgaveError("No matching client found.")
+
+    @classmethod
+    def restore(cls, api_key=None, client_name=None, tenant_id=None):
+        """Public API to restore an agave client from a file."""
+        if api_key:
+            return Agave._restore_client(api_key=api_key)
+        elif client_name:
+            return Agave._restore_client(client_name=client_name)
+        elif tenant_id:
+            return Agave._restore_client(tenant_id=tenant_id)
+        else:
+            return Agave._restore_client()
+
+    def _write_client(self):
+        """Update the .agpy file with the description of a client."""
+        clients = Agave._read_clients()
+        new_clients = []
+        for client in clients:
+            if client.get('api_key') == self.api_key or client.get('client_name') == self.client_name:
+                new_clients.append(self.to_dict())
+            else:
+                new_clients.append(client)
+        with open(os.path.expanduser('~/.agpy'), 'w') as agpy:
+            agpy.write(json.dumps(clients))
+            # for client in new_clients:
+            #     agpy.write(json.dumps(client))
+
     def refresh_aris(self):
         self.clients_ari()
         # the resources are defined with a different authenticator in case a jwt is passed in, hence
