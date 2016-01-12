@@ -70,11 +70,11 @@ class Operation(object):
                              self.json.get('consumes', []))
         for param in self.json.get('parameters', []):
             pname = param['name']
+            ptype = param['type']
             value = kwargs.get(pname)
             # Turn list params into comma separated values
             if isinstance(value, list):
                 value = ",".join(value)
-
             if value:
                 param_type = param['paramType']
                 if param_type == 'path':
@@ -94,6 +94,8 @@ class Operation(object):
                     raise AssertionError(
                         "Unsupported paramType %s" %
                         param_type)
+                del kwargs[pname]
+            elif ptype == 'boolean' and kwargs.has_key(pname):
                 del kwargs[pname]
             else:
                 if param['required']:
