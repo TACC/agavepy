@@ -176,7 +176,6 @@ class Agave(object):
                 raise AgaveError(
                     'parameter "{}" is mandatory'.format(param))
             setattr(self, attr, value)
-
         if self.resources is None:
             self.resources = load_resource(self.api_server)
         self.host = urlparse.urlsplit(self.api_server).netloc
@@ -198,7 +197,12 @@ class Agave(object):
 
     def to_dict(self):
         """Return a dictionary representing this client."""
-        return {attr: getattr(self, attr) for _, _, attr, _ in self.PARAMS if not attr in ['resources', '_token', '_refresh_token', 'header_name', 'jwt']}
+        d = {}
+        if hasattr(self, 'token') and hasattr(self.token, 'token_info'):
+            d = {'token': self.token.token_info.get('access_token'),
+                 'refresh_token': self.token.token_info.get('refresh_token')}
+        return d.update({attr: getattr(self, attr) for _, _, attr, _ in self.PARAMS \
+                         if not attr in ['resources', '_token', '_refresh_token', 'header_name', 'jwt', 'password']})
 
     @classmethod
     def _read_clients(cls):
@@ -317,7 +321,9 @@ class Agave(object):
         return Resource(key, client=self)
 
     def __dir__(self):
-        base = self.clients_resource.resources.keys()
+        base = []
+        if hasattr(self, 'clients_resource') and hasattr(self.clients_resource, 'resources'):
+            base.extend(self.clients_resource.resources.keys())
         if self.all is not None:
             base.extend(self.all.resources.keys())
         return list(set(base))
@@ -333,8 +339,11 @@ class Resource(object):
         return Operation(self.resource, attr, client=self.client)
 
     def __dir__(self):
-        clients = self.client.clients_resource.resources
-        base = clients[self.resource].operations.keys()
+        if hasattr(self, 'clients_resource') and hasattr(self.clients_resource, 'resources'):
+            clients = self.client.clients_resource.resources
+            base = clients[self.resource].operations.keys()
+        else:
+            base = []
         if self.client.all is not None:
             base.extend(
                 self.client.all.resources[self.resource].operations.keys())
