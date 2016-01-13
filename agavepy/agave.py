@@ -205,9 +205,20 @@ class Agave(object):
                          if not attr in ['resources', '_token', '_refresh_token', 'header_name', 'jwt', 'password']})
 
     @classmethod
+    def agpy_path(self):
+        """Return path to .agpy file"""
+        places = [os.path.expanduser('~/.agpy'),
+                  '/etc/.agpy',
+                  '/root/.agpy',
+                  '/.agpy']
+        for place in places:
+            if os.path.exists(place):
+                return place
+
+    @classmethod
     def _read_clients(cls):
         """Read clients from the .agpy file."""
-        with open(os.path.expanduser('~/.agpy')) as agpy:
+        with open(Agave.agpy_path()) as agpy:
             return json.loads(agpy.read())
 
     @classmethod
@@ -245,10 +256,8 @@ class Agave(object):
                 new_clients.append(self.to_dict())
             else:
                 new_clients.append(client)
-        with open(os.path.expanduser('~/.agpy'), 'w') as agpy:
+        with open(Agave.agpy_path(), 'w') as agpy:
             agpy.write(json.dumps(clients))
-            # for client in new_clients:
-            #     agpy.write(json.dumps(client))
 
     def refresh_aris(self):
         self.clients_ari()
