@@ -26,7 +26,7 @@ Then, clone this repository and execute ``docker-compose`` as follows:
 
 .. code-block:: bash
 
-   $ git clone https://bitbucket.org/taccaci/agavepy.git
+   $ git clone https://github.com/TACC/agavepy.git
    $ cd agavepy
    $ docker-compose build
    $ docker-compose up

@@ -31,18 +31,19 @@ requires = [pkg for pkg in open('requirements.txt').readlines()]
 
 setup(
     name='agavepy',
-    version='0.2.1',
+    version='0.3.3',
     description='SDK for Agave',
     long_description=readme,
     author='Joe Stubbs, Walter Moreira',
     author_email='jstubbs@tacc.utexas.edu, wmoreira@tacc.utexas.edu',
-    url='https://bitbucket.org/taccaci/agavepy',
+    url='https://github.com/TACC/agavepy',
     packages=[
         'agavepy',
         'agavepy.swaggerpy'
     ],
     package_dir={'agavepy': 'agavepy'},
     package_data={'agavepy': ['resources.json', 'resources.json.j2']},
+    data_files=[('', ['requirements.txt'])],
     install_requires=requires,
     license="MIT",
     zip_safe=False,
