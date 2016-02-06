@@ -66,17 +66,22 @@ def load_resource(api_server):
 
 def with_refresh(client, f, *args, **kwargs):
     """Call function ``f`` and refresh token if needed."""
-
     try:
         return f(*args, **kwargs)
     except requests.exceptions.HTTPError as exc:
         try:
+            # Old versions of APIM return errors in XML:
             code = ElementTree.fromstring(exc.response.text)[0].text
         except Exception:
-            # Any error here means the response was no XML
+            # Any error here means the response was not XML.
             try:
-                # Try to see if it's a json response, and if so, return it
-                exc.response.json()
+                # Try to see if it's a json response,
+                exc_json = exc.response.json()
+                # if so, check if it is an expired token error (new versions of APIM return JSON errors):
+                if 'Invalid Credentials' in exc_json.get('fault').get('message'):
+                    client.token.refresh()
+                    return f(*args, **kwargs)
+                #  otherwise, return the JSON
                 return exc.response
             except Exception:
                 # Re-raise it, as it's not an expired token
