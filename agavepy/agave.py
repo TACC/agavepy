@@ -416,8 +416,8 @@ class Operation(object):
                     (self.operation == 'download'
                      or self.operation == 'downloadFromDefaultSystem')):
                 return resp
-            result = self.post_process(resp.json(),
-                                       self.return_type)['result']
+            processed = self.post_process(resp.json(), self.return_type)
+            result = processed['result'] if 'result' in processed else None
             # if operation is clients.create, save name
             if self.resource == 'clients' and self.operation == 'create':
                 save(result['name'],
