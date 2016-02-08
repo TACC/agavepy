@@ -1,3 +1,14 @@
+# agavepy test suite.
+#
+# To run the tests:
+# 1. create a file, test_credentials.json, in the tests directory with credentials for accessing a tenant (see the ex).
+#    Make sure to update: storage, storage_key, execution and execution_key and app_name
+#
+# 2. update the test-storage.json, test-compute.json, test-app.json and test-job.json
+#
+# 3. run with py.test from the cwd.
+#
+
 import datetime
 import json
 import os
@@ -50,9 +61,40 @@ def validate_app(app):
     assert type(app.revision) is int and app.revision > 0
     assert app.version
 
-def test_raise_exception(agave):
-    with pytest.raises(a.AgaveException):
-        agave.systems.get(systemId='foo')
+def validate_client(client):
+    pass
+    # todo - this should turned back on when the clients service is working again.
+    # assert client.consumerKey
+
+def validate_file(file):
+    assert file.format
+    assert type(file.lastModified) is datetime.datetime
+    assert type(file.length) is int
+    assert file.mimeType
+    assert file.name
+    assert file.path
+    assert file.system
+
+def validate_job(job):
+    assert job.appId
+    if 'endTime' in job:
+        assert job.endTime is None or  type(job.endTime) is datetime.datetime
+    assert job.executionSystem
+    assert job.id
+    assert job.name
+    assert job.owner
+    if 'startTime' in job:
+        assert job.startTime is None or type(job.startTime) is datetime.datetime
+    assert job.status
+
+def validate_system(system):
+    assert type(system.public) is bool
+    assert system.name
+    assert system.status
+    assert system.type
+
+def validate_profile(prof, user):
+    assert prof.username == user
 
 def test_add_compute_system(agave, test_compute_system):
     system = agave.systems.add(body=test_compute_system)
@@ -63,7 +105,7 @@ def test_add_compute_system(agave, test_compute_system):
                            headers={'Authorization': 'Bearer ' + agave.token.token_info['access_token']},
                            verify=agave.verify)
     except requests.exceptions.HTTPError as exc:
-        print "Error trying to set compute system as default:", str(exc)
+        print "Error trying to register compute system:", str(exc)
         raise exc
     validate_system(system)
 
@@ -79,7 +121,6 @@ def test_add_storage_system(agave, test_storage_system):
         print "Error trying to set storage system as default:", str(exc)
         raise exc
     validate_system(system)
-
 
 def test_list_apps(agave):
     apps = agave.apps.list()
@@ -102,39 +143,15 @@ def test_add_app(agave, test_app):
     app = agave.apps.add(body=test_app)
     validate_app(app)
 
-def validate_client(client):
-    assert client.consumerKey
-
 def test_list_clients(agave):
     clients = agave.clients.list()
     for client in clients:
         validate_client(client)
 
-def validate_file(file):
-    assert file.format
-    assert type(file.lastModified) is datetime.datetime
-    assert type(file.length) is int
-    assert file.mimeType
-    assert file.name
-    assert file.path
-    assert file.system
-
-def test_list_files(agave, credentials):
-    files = agave.files.listOnDefaultSystem(filePath=credentials['username'])
+def test_list_files(agave, credentials, test_storage_system):
+    files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
     for file in files:
         validate_file(file)
-
-def validate_job(job):
-    assert job.appId
-    if 'endTime' in job:
-        assert job.endTime is None or  type(job.endTime) is datetime.datetime
-    assert job.executionSystem
-    assert job.id
-    assert job.name
-    assert job.owner
-    if 'startTime' in job:
-        assert job.startTime is None or type(job.startTime) is datetime.datetime
-    assert job.status
 
 def test_list_jobs(agave):
     jobs = agave.jobs.list()
@@ -145,11 +162,13 @@ def test_submit_job(agave, test_job):
     job = agave.jobs.submit(body=test_job)
     validate_job(job)
 
-def validate_system(system):
-    assert type(system.public) is bool
-    assert system.name
-    assert system.status
-    assert system.type
+def test_get_profile(agave, credentials):
+    prof = agave.profiles.get()
+    validate_profile(prof, credentials['username'])
+
+def test_list_profiles(agave, credentials):
+    prof = agave.profiles.listByUsername(username='me')
+    validate_profile(prof, credentials['username'])
 
 def test_list_systems(agave):
     systems = agave.systems.list()
@@ -157,13 +176,13 @@ def test_list_systems(agave):
         validate_system(system)
 
 def test_list_public_systems(agave):
-    systems = agave.systems.list(publicOnly=True)
+    systems = agave.systems.list(public=True)
     for system in systems:
         validate_system(system)
         assert system.public
 
 def test_list_private_systems(agave):
-    systems = agave.systems.list(privateOnly=True)
+    systems = agave.systems.list(public=False)
     for system in systems:
         validate_system(system)
         assert not system.public
@@ -172,7 +191,7 @@ def test_list_default_systems(agave):
     systems = agave.systems.list(default=True)
     for system in systems:
         validate_system(system)
-        assert not system.get('default')
+        assert system.get('default')
 
 def test_token_access(agave, credentials):
     token = agave.token.refresh()
