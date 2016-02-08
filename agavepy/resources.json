@@ -7461,15 +7461,7 @@
                                         "required": false,
                                         "type": "boolean",
                                         "paramType": "query",
-                                        "name": "publicOnly"
-                                    },
-                                    {
-                                        "description": "Should only private available systems be returned",
-                                        "allowMultiple": false,
-                                        "required": false,
-                                        "type": "boolean",
-                                        "paramType": "query",
-                                        "name": "privateOnly"
+                                        "name": "public"
                                     }
                                 ],
                                 "nickname": "list",
