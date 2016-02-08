@@ -32,7 +32,7 @@ Then, clone this repository and execute ``docker-compose`` as follows:
    $ docker-compose up
 
 (a bug in ``docker-compose`` is preventing to run just ``up``. The steps ``build`` and ``up`` have to be done separately.)
-Navigate to http://localhost:8888 and access the Jupyter_ notebook
+Navigate to http://localhost:9999 and access the Jupyter_ notebook
 with password ``agavepy``.  The notebook ``Example.ipynb`` contains a
 full example of use.
 
