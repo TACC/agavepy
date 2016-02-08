@@ -6795,12 +6795,46 @@
                                         "code": 500
                                     }
                                 ],
+                                "summary": "List user profiles",
+                                "nickname": "list",
+                                "method": "GET"
+                            }
+                        ],
+                        "path": "/profiles/v2",
+                        "description": "Retrieve a (paginated) list of profiles.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [],
+                                "type": "SingleProfileResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies an invalid username format",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The user profile cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the profile database",
+                                        "code": 500
+                                    }
+                                ],
                                 "summary": "Find authenticated user profile",
                                 "nickname": "get",
                                 "method": "GET"
                             }
                         ],
-                        "path": "/profiles/v2/",
+                        "path": "/profiles/v2/me",
                         "description": "Retrieve the profile of the requesting user.",
                         "has_websocket": false
                     },
@@ -6817,7 +6851,7 @@
                                         "name": "username"
                                     }
                                 ],
-                                "type": "MultipleProfileResponse",
+                                "type": "SingleProfileResponse",
                                 "notes": "Internal users will not be returned",
                                 "is_websocket": false,
                                 "responseMessages": [
@@ -7422,7 +7456,7 @@
                                 "items": {
                                     "$ref": "Profile"
                                 },
-                                "type": "List",
+                                "type": "array",
                                 "description": "response body",
                                 "name": "result"
                             }
