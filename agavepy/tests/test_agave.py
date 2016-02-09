@@ -181,6 +181,12 @@ def test_list_public_systems(agave):
         validate_system(system)
         assert system.public
 
+def test_list_default_systems(agave):
+    systems = agave.systems.list(default=True)
+    for system in systems:
+        validate_system(system)
+        assert system.default
+
 def test_list_private_systems(agave):
     systems = agave.systems.list(public=False)
     for system in systems:
@@ -192,6 +198,9 @@ def test_list_default_systems(agave):
     for system in systems:
         validate_system(system)
         assert system.get('default')
+
+def test_list_metadata(agave):
+    md = agave.meta.listMetadata(q = "{'name': 'foo'}")
 
 def test_token_access(agave, credentials):
     token = agave.token.refresh()
