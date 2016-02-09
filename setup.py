@@ -31,7 +31,7 @@ requires = [pkg for pkg in open('requirements.txt').readlines()]
 
 setup(
     name='agavepy',
-    version='0.3.4',
+    version='0.3.5',
     description='SDK for Agave',
     long_description=readme,
     author='Joe Stubbs, Walter Moreira',

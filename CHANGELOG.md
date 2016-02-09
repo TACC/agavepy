@@ -1,6 +1,24 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.3.5 - 2016-02-09
+### Added
+- async.py, module with convenience class for handling.
+- significant increase in tests.
+
+### Changed
+- Fixed issue where boolean parameters were being ignored.
+- Fixed issues in the Notification model preventing basic use of that service.
+- Fixed issues in the Profile model preventing basic use of that service.
+- Fixed issues in the Metadata model preventing basic use of that service.
+- Fixed issue with public/private parameter definition for systems.
+- Fixed issue where error was returned if services (properly) returned an empty response.
+
+
+### Removed
+- No change.
+
+
 ## 0.3.4 - 2016-02-04
 ### Added
 - No change
