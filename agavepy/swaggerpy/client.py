@@ -75,7 +75,7 @@ class Operation(object):
             # Turn list params into comma separated values
             if isinstance(value, list):
                 value = ",".join(value)
-            if value:
+            if value is not None:
                 param_type = param['paramType']
                 if param_type == 'path':
                     uri = uri.replace('{%s}' % pname, str(value))
