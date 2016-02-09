@@ -12,11 +12,13 @@
 import datetime
 import json
 import os
+import time
 
 import pytest
 import requests
 
 import agavepy.agave as a
+from agavepy.async import AgaveAsyncResponse
 import testdata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -96,6 +98,15 @@ def validate_system(system):
 def validate_profile(prof, user):
     assert prof.username == user
 
+def validate_meta(md, name, value):
+    assert md.name == name
+    assert md.value == value
+
+def validate_monitor(m):
+    assert m.id
+    assert m.target
+    assert m.frequency
+
 def test_add_compute_system(agave, test_compute_system):
     system = agave.systems.add(body=test_compute_system)
     # set system as default for subsequent testing
@@ -148,10 +159,33 @@ def test_list_clients(agave):
     for client in clients:
         validate_client(client)
 
-def test_list_files(agave, credentials, test_storage_system):
+def test_list_files(agave, credentials):
     files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
     for file in files:
         validate_file(file)
+
+def test_upload_file(agave, credentials):
+    rsp = agave.files.importData(systemId=credentials['storage'],
+                                 filePath=credentials['storage_user'],
+                                 fileToUpload=open('test_file_upload_python_sdk', 'rb'))
+    arsp = AgaveAsyncResponse(agave, rsp)
+    status = arsp.result(timeout=120)
+    assert status == 'COMPLETE'
+
+def test_list_uploaded_file(agave, credentials):
+    files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
+    for f in files:
+        if 'test_file_upload_python_sdk' in f.path:
+            break
+    else:
+        assert False
+
+def test_delete_uploaded_file(agave, credentials):
+    agave.files.delete(systemId=credentials['storage'],
+                       filePath='{}/test_file_upload_python_sdk'.format(credentials['storage_user']))
+    # make sure file isn't still there:
+    files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
+    assert 'test_file_upload_python_sdk' not in [f.path for f in files]
 
 def test_list_jobs(agave):
     jobs = agave.jobs.list()
@@ -200,7 +234,145 @@ def test_list_default_systems(agave):
         assert system.get('default')
 
 def test_list_metadata(agave):
-    md = agave.meta.listMetadata(q = "{'name': 'foo'}")
+    md = agave.meta.listMetadata()
+    assert len(md) > 0
+
+def test_list_metadata_with_query(agave):
+    md = agave.meta.listMetadata(q = "{'name': 'fooy'}")
+    assert len(md) == 0
+
+def test_add_list_delete_metadata(agave):
+    # add a new one
+    name = 'python-sdk-test-metadata'
+    value = 'test value'
+    d = {'name': name,
+         'value': value}
+    md = agave.meta.addMetadata(body=json.dumps(d))
+    validate_meta(md, name, value)
+    # find it in the list:
+    mds = agave.meta.listMetadata(q = '')
+    for md in mds:
+        if md.name == 'python-sdk-test-metadata' and \
+        md.value == 'test value':
+            uuid = md.uuid
+            break
+    else:
+        assert False
+    # delete it
+    md = agave.meta.deleteMetadata(uuid=uuid)
+    # make sure it's really gone
+    mds = agave.meta.listMetadata(q = '')
+    assert not uuid in [md.uuid for md in mds]
+
+def test_list_monitors(agave):
+    ms = agave.monitors.list()
+    for m in ms:
+        validate_monitor(m)
+
+def test_add_monitor(agave, credentials):
+    body = {'active': True,
+            'target': credentials['storage'],
+            }
+    m = agave.monitors.add(body=json.dumps(body))
+    validate_monitor(m)
+    # check monitor is in listing
+    ms = agave.monitors.list()
+    for m in ms:
+        if m.target == credentials['storage']:
+            break
+    else:
+        assert False
+
+def test_delete_monitor(agave, credentials):
+    # get monitor id from listing:
+    ms = agave.monitors.list()
+    for m in ms:
+        if m.target == credentials['storage']:
+            id = m.id
+            break
+    else:
+        assert False
+    agave.monitors.delete(monitorId=id)
+    # make sure it is gone
+    ms = agave.monitors.list()
+    for m in ms:
+        if m.target == credentials['storage']:
+            assert False
+
+def validate_notification(n):
+    assert n.id
+    assert n.event
+    assert n.url
+
+def test_list_notification(agave, credentials):
+    # get uuid of storage system
+    stor = agave.systems.get(systemId=credentials['storage'])
+    assert stor.uuid
+    ns = agave.notifications.list(associatedUuid=stor.uuid)
+    for n in ns:
+        validate_notification(n)
+
+def test_create_notification(agave, credentials):
+    # get uuid of storage system
+    stor = agave.systems.get(systemId=credentials['storage'])
+    assert stor.uuid
+    body = {"associatedUuid": stor.uuid,
+            "event": "*",
+            "persistent": True,
+            "url": "jstubbs@tacc.utexas.edu"
+    }
+    n = agave.notifications.add(body=json.dumps(body))
+    validate_notification(n)
+    # make sure it's there
+    ns = agave.notifications.list(associatedUuid=stor.uuid)
+    for nt in ns:
+        if nt.id == n.id:
+            break
+    else:
+        assert False
+
+def test_delete_notification(agave, credentials):
+    # get uuid of storage system
+    stor = agave.systems.get(systemId=credentials['storage'])
+    assert stor.uuid
+    # list notifications
+    ns = agave.notifications.list(associatedUuid=stor.uuid)
+    assert len(ns) > 0
+    id = ns[0].id
+    agave.notifications.delete(uuid=id)
+    # make sure it's actually gone
+    ns = agave.notifications.list(associatedUuid=stor.uuid)
+    for n in ns:
+        if n.id == id:
+            assert False
+
+def test_notification_to_url(agave, credentials, test_storage_system):
+    # first, create a request bin
+    base_url = 'http://requestb.in/api/v1/bins'
+    rsp = requests.post(base_url)
+    bin_name = rsp.json().get('name')
+    bin_url = '{}/{}'.format(base_url, bin_name)
+    # create notification
+     # get uuid of storage system
+    stor = agave.systems.get(systemId=credentials['storage'])
+    assert stor.uuid
+    body = {"associatedUuid": stor.uuid,
+            "event": "*",
+            "persistent": True,
+            "url": bin_url
+    }
+    n = agave.notifications.add(body=json.dumps(body))
+    # wait for notification to be propagated
+    time.sleep(3)
+    # update the system:
+    agave.systems.add(body=test_storage_system)
+    # wait for notification to be sent
+    # time.sleep(18)
+    # # check for a notification
+    # rsp = requests.get('{}/requests'.format(bin_url))
+    # assert len(rsp.json()) > 0
+    # delete the notification
+    agave.notifications.delete(uuid=n.id)
 
 def test_token_access(agave, credentials):
     token = agave.token.refresh()
