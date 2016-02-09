@@ -95,8 +95,6 @@ class Operation(object):
                         "Unsupported paramType %s" %
                         param_type)
                 del kwargs[pname]
-            elif ptype == 'boolean' and kwargs.has_key(pname):
-                del kwargs[pname]
             else:
                 if param['required']:
                     raise TypeError(
