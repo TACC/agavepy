@@ -4079,7 +4079,7 @@
                                     {
                                         "description": "The query to perform. Traditional MongoDB queries are supported",
                                         "allowMultiple": false,
-                                        "required": true,
+                                        "required": false,
                                         "type": "string",
                                         "paramType": "query",
                                         "name": "q"
@@ -6413,7 +6413,8 @@
                                 "name": "success"
                             },
                             "created": {
-                                "type": "datetime",
+                                "type": "string",
+                                "format": "date-time",
                                 "description": "A timestamp indicating when this notification was created in the notification store.",
                                 "name": "created"
                             },
@@ -6434,7 +6435,8 @@
                                 "format": "int32"
                             },
                             "lastSent": {
-                                "type": "datetime",
+                                "type": "string",
+                                "format": "date-time",
                                 "description": "A timestamp indicating the last time this notification was sent.",
                                 "name": "lastSent"
                             },
