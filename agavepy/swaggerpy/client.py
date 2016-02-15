@@ -60,7 +60,11 @@ class Operation(object):
         :return: Implementation specific response or WebSocket connection
         """
         log.info("%s?%r" % (self.json['nickname'], urllib.urlencode(kwargs)))
-        method = self.json['method']
+        # http method must be native string (for Python 2.x, bytes). This must be done to prevent errors when trying to
+        # upload binary data because when unicode is passed, the concatenated request string gets decoded using the
+        # default encoding (ASCII) and that breaks on binary data. See the bottom of this thread:
+        # https://github.com/kennethreitz/requests/issues/1252
+        method = str(self.json['method'])
         uri = self.uri
         params = {}
         data = {}
