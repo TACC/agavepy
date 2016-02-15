@@ -172,6 +172,14 @@ def test_upload_file(agave, credentials):
     status = arsp.result(timeout=120)
     assert status == 'COMPLETE'
 
+def test_upload_binary_file(agave, credentials):
+    rsp = agave.files.importData(systemId=credentials['storage'],
+                                 filePath=credentials['storage_user'],
+                                 fileToUpload=open('test_upload_python_sdk_g_art.mov', 'rb'))
+    arsp = AgaveAsyncResponse(agave, rsp)
+    status = arsp.result(timeout=120)
+    assert status == 'COMPLETE'
+
 def test_list_uploaded_file(agave, credentials):
     files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
     for f in files:
@@ -180,12 +188,22 @@ def test_list_uploaded_file(agave, credentials):
     else:
         assert False
 
-def test_delete_uploaded_file(agave, credentials):
-    agave.files.delete(systemId=credentials['storage'],
-                       filePath='{}/test_file_upload_python_sdk'.format(credentials['storage_user']))
-    # make sure file isn't still there:
+def test_list_uploaded_binary_file(agave, credentials):
     files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
-    assert 'test_file_upload_python_sdk' not in [f.path for f in files]
+    for f in files:
+        if 'test_upload_python_sdk_g_art.mov' in f.path:
+            break
+    else:
+        assert False
+
+def test_delete_uploaded_files(agave, credentials):
+    uploaded_files = ['test_file_upload_python_sdk', 'test_upload_python_sdk_g_art.mov']
+    for f in uploaded_files:
+        agave.files.delete(systemId=credentials['storage'],
+                           filePath='{}/{}'.format(credentials['storage_user'], f))
+        # make sure file isn't still there:
+        files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
+        assert f not in [fl.path for fl in files]
 
 def test_list_jobs(agave):
     jobs = agave.jobs.list()
