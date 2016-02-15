@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.3.6 - 2016-02-15
+### Added
+- No change
+
+### Changed
+- Fixed bug uploading binary files.
+
+### Removed
+- No change.
+
+
 ## 0.3.5 - 2016-02-09
 ### Added
 - async.py, module with convenience class for handling.
