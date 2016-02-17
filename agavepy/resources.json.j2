@@ -2666,14 +2666,6 @@
                                         "name": "filePath"
                                     },
                                     {
-                                        "description": "The unique id of the system on which the data resides.",
-                                        "allowMultiple": false,
-                                        "required": true,
-                                        "type": "string",
-                                        "paramType": "path",
-                                        "name": "systemId"
-                                    },
-                                    {
                                         "defaultValue": 250,
                                         "description": "The max number of results.",
                                         "format": "int32",
@@ -2759,6 +2751,14 @@
                                         "name": "limit"
                                     },
                                     {
+                                        "description": "The unique id of the system on which the data resides.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "systemId"
+                                    },
+                                    {
                                         "defaultValue": 0,
                                         "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
                                         "format": "int32",
@@ -2821,6 +2821,14 @@
                                         "type": "string",
                                         "paramType": "path",
                                         "name": "filePath"
+                                    },
+                                    {
+                                        "description": "The unique id of the system on which the data resides.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "systemId"
                                     }
                                 ],
                                 "nickname": "deletePermissions",
