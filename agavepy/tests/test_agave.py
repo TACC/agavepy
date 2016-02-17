@@ -107,6 +107,12 @@ def validate_monitor(m):
     assert m.target
     assert m.frequency
 
+def validate_file_pem(pem):
+    assert pem.permission
+    assert 'execute' in pem.permission
+    assert 'read' in pem.permission
+    assert 'write' in pem.permission
+
 def test_add_compute_system(agave, test_compute_system):
     system = agave.systems.add(body=test_compute_system)
     # set system as default for subsequent testing
@@ -163,6 +169,17 @@ def test_list_files(agave, credentials):
     files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
     for file in files:
         validate_file(file)
+
+def test_list_file_pems(agave, credentials):
+    pems = agave.files.listPermissions(filePath=credentials['storage_user'], systemId=credentials['storage'])
+    for pem in pems:
+        validate_file_pem(pem)
+
+def test_update_file_pems(agave, credentials):
+    body = {'permission': 'READ', 'recursive': False, 'username': credentials['storage_user']}
+    rsp = agave.files.updatePermissions(systemId=credentials['storage'],
+                                        filePath=credentials['storage_user'],
+                                        body=body)
 
 def test_upload_file(agave, credentials):
     rsp = agave.files.importData(systemId=credentials['storage'],
