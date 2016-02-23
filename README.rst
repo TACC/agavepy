@@ -111,7 +111,7 @@ Finally, a client can be generated directly from a JWT in order to bypass the AP
 License
 =======
 
-Agavepy is licensed under the MIT license.
+Agavepy is licensed under the BSD license.
 
 Swagger.py is copyright of Digium, Inc., and licensed under BSD 3-Clause License.
 
