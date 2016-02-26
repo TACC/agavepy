@@ -1,6 +1,20 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.3.8 - 2016-02-26
+### Added
+- Additional test coverage.
+
+### Changed
+- Fix geturl in case client is constructed with only an access token.
+- Fixed status values in async module to align with Agave.
+- Modified the test suite so that it can be run with different combinations of credentials.
+
+### Removed
+- No change.
+
+
+
 ## 0.3.7 - 2016-02-17
 ### Added
 - Additional test coverage for files permissions.
