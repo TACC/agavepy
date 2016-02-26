@@ -38,15 +38,12 @@ class AgaveAsyncResponse(object):
             raise Error("Error updating status: " + str(rsp))
         # if the transfer ever completed, we'll call it good:
         if len([x for x in result if 'COMPLETE' in x['status']]) > 0:
-            self.status = 'COMPLETE'
+            self.status = 'FINISHED'
         # jobs end in 'finished' status
         elif len([x for x in result if 'FINISHED' in x['status']]) > 0:
-            self.status = 'COMPLETE'
+            self.status = 'FINISHED'
         # job ended in 'failed' status
         elif len([x for x in result if 'FAILED' in x['status']]) > 0:
-            self.status = 'FAILED'
-        # job ended in 'failed' status
-        elif len([x for x in result if 'STAGING_FAILED' in x['status']]) > 0:
             self.status = 'FAILED'
         else:
             # sort on creation time of the history object
@@ -54,7 +51,7 @@ class AgaveAsyncResponse(object):
             self.status = result[0].get('status')
 
     def _is_done(self):
-        return self.status == 'COMPLETE' or self.status == 'FAILED'
+        return self.status == 'FINISHED' or self.status == 'FAILED'
 
     def done(self):
         """Return True if the call was successfully cancelled or finished running."""
