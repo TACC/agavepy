@@ -315,7 +315,7 @@ class Agave(object):
             self.api_server, self.api_key, self.api_secret,
             self.verify,
             self, self._token, self._refresh_token)
-        if self._token and self._refresh_token:
+        if self._token:
             pass
         else:
             self.token.create()
@@ -328,7 +328,7 @@ class Agave(object):
         """
         f = requests.get
         return with_refresh(self.client, f, url,
-                            headers={'Authorization': 'Bearer ' + self.token.token_info['access_token']},
+                            headers={'Authorization': 'Bearer ' + self._token},
                             verify=self.verify)
 
     def __getattr__(self, key):
