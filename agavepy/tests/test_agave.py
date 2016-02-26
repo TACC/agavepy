@@ -25,18 +25,21 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 @pytest.fixture(scope='session')
 def credentials():
+    credentials_file = os.environ.get('creds', 'test_credentials.json')
+    print "Using: {}".format(credentials_file)
     return json.load(open(
-        os.path.join(HERE, 'test_credentials.json')))
+        os.path.join(HERE, credentials_file)))
 
 @pytest.fixture(scope='session')
 def agave(credentials):
-    aga = a.Agave(username=credentials['username'],
-                  password=credentials['password'],
-                  api_server=credentials['apiserver'],
-                  api_key=credentials['apikey'],
-                  api_secret=credentials['apisecret'],
+    aga = a.Agave(username=credentials.get('username'),
+                  password=credentials.get('password'),
+                  api_server=credentials.get('apiserver'),
+                  api_key=credentials.get('apikey'),
+                  api_secret=credentials.get('apisecret'),
+                  token=credentials.get('token'),
+                  refresh_token=credentials.get('refresh_token'),
                   verify=credentials.get('verify_certs', True))
-    aga.token.create()
     return aga
 
 @pytest.fixture(scope='session')
@@ -119,7 +122,7 @@ def test_add_compute_system(agave, test_compute_system):
     url = agave.api_server + '/systems/v2/' + test_compute_system['id']
     try:
         rsp = requests.put(url, data={'action':'setDefault'},
-                           headers={'Authorization': 'Bearer ' + agave.token.token_info['access_token']},
+                           headers={'Authorization': 'Bearer ' + agave._token},
                            verify=agave.verify)
     except requests.exceptions.HTTPError as exc:
         print "Error trying to register compute system:", str(exc)
@@ -132,7 +135,7 @@ def test_add_storage_system(agave, test_storage_system):
     url = agave.api_server + '/systems/v2/' + test_storage_system['id']
     try:
         rsp = requests.put(url, data={'action':'setDefault'},
-                       headers={'Authorization': 'Bearer ' + agave.token.token_info['access_token']},
+                       headers={'Authorization': 'Bearer ' + agave._token},
                        verify=agave.verify)
     except requests.exceptions.HTTPError as exc:
         print "Error trying to set storage system as default:", str(exc)
@@ -160,7 +163,10 @@ def test_add_app(agave, test_app):
     app = agave.apps.add(body=test_app)
     validate_app(app)
 
-def test_list_clients(agave):
+def test_list_clients(agave, credentials):
+    if not credentials.get('username') or not credentials.get('password'):
+        print "Skipping test_list_clients"
+        return
     clients = agave.clients.list()
     for client in clients:
         validate_client(client)
@@ -187,7 +193,7 @@ def test_upload_file(agave, credentials):
                                  fileToUpload=open('test_file_upload_python_sdk', 'rb'))
     arsp = AgaveAsyncResponse(agave, rsp)
     status = arsp.result(timeout=120)
-    assert status == 'COMPLETE'
+    assert status == 'FINISHED'
 
 def test_upload_binary_file(agave, credentials):
     rsp = agave.files.importData(systemId=credentials['storage'],
@@ -195,7 +201,7 @@ def test_upload_binary_file(agave, credentials):
                                  fileToUpload=open('test_upload_python_sdk_g_art.mov', 'rb'))
     arsp = AgaveAsyncResponse(agave, rsp)
     status = arsp.result(timeout=120)
-    assert status == 'COMPLETE'
+    assert status == 'FINISHED'
 
 def test_list_uploaded_file(agave, credentials):
     files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
@@ -231,13 +237,21 @@ def test_submit_job(agave, test_job):
     job = agave.jobs.submit(body=test_job)
     validate_job(job)
 
+def test_geturl(agave):
+    job = agave.jobs.list()[0]
+    url = job._links['self']['href']
+    job_rsp = agave.geturl(url)
+    assert job_rsp.json().get('result').get('id') is not None
+
 def test_get_profile(agave, credentials):
     prof = agave.profiles.get()
-    validate_profile(prof, credentials['username'])
+    if credentials.get('username'):
+        validate_profile(prof, credentials['username'])
 
 def test_list_profiles(agave, credentials):
     prof = agave.profiles.listByUsername(username='me')
-    validate_profile(prof, credentials['username'])
+    if credentials.get('username'):
+        validate_profile(prof, credentials['username'])
 
 def test_list_systems(agave):
     systems = agave.systems.list()
@@ -410,6 +424,10 @@ def test_notification_to_url(agave, credentials, test_storage_system):
     agave.notifications.delete(uuid=n.id)
 
 def test_token_access(agave, credentials):
+    # only run test when constructing the client with a refresh token
+    if not hasattr(agave.token, 'token_info') or agave.token.token_info.get('refresh_token') is None:
+        print "Skipping test_token_access."
+        return
     token = agave.token.refresh()
     token_client = a.Agave(api_server=credentials['apiserver'],
                            token=token,
