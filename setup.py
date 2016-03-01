@@ -45,7 +45,7 @@ setup(
     package_data={'agavepy': ['resources.json', 'resources.json.j2']},
     data_files=[('', ['requirements.txt'])],
     install_requires=requires,
-    license="MIT",
+    license="BSD",
     zip_safe=False,
     keywords='',
     classifiers=[
