@@ -4198,10 +4198,13 @@
                                 "name": "message"
                             },
                             "result": {
-                                "type": "PermissionListing",
+                                "items": {
+                                    "$ref": "Permission"
+                                },
+                                "type": "array",
+                                "description": "response body",
                                 "name": "result"
-                            }
-                        },
+                            }                        },
                         "id": "JobPermissionResponse",
                         "name": ""
                     },
@@ -8258,11 +8261,11 @@
                                         "name": "offset"
                                     }
                                 ],
-                                "nickname": "listRolesForUser",
+                                "nickname": "getRoleForUser",
                                 "notes": "Users must have ADMIN role or greater on a system to view its roles.",
                                 "is_websocket": false,
                                 "summary": "Get a specific user's roles on this system.",
-                                "type": "MultipleSystemRoleResponse",
+                                "type": "SingleSystemRoleResponse",
                                 "method": "GET"
                             },
                             {
@@ -8746,7 +8749,6 @@
                     "SystemRole": {
                         "properties": {
                             "username": {
-                                "required": true,
                                 "type": "string",
                                 "description": "The username of the api user granted this role.",
                                 "name": "username"
@@ -8760,8 +8762,7 @@
                                 ],
                                 "type": "string",
                                 "description": "The role granted this user.",
-                                "name": "role",
-                                "required": true
+                                "name": "role"
                             }
                         },
                         "id": "SystemRole",
@@ -9380,6 +9381,27 @@
                             }
                         },
                         "id": "MultipleSystemRoleResponse",
+                        "name": ""
+                    },
+                    "SingleSystemRoleResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "SystemRole",
+                                "description": "The user's role for this system",
+                                "name": "result"
+                            }
+                        },
+                        "id": "SingleSystemRoleResponse",
                         "name": ""
                     },
                     "StoredCredential": {
