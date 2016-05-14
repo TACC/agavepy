@@ -1,6 +1,22 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.3.9 - 2016-05-13
+### Added
+- Added support for token_callback on Agave object, to be called any time a token is refreshed.
+- Added support for passing a headers object to any agavepy operation.
+- Added support for search parameter to all get operations.
+- Added support for passing a notifications object to the
+- Added convenience method download_uri on the Agave client to download an agave URL or jobs output URL to an
+absolute path on the local file system.
+
+### Changed
+- Fixed issues with permissions and roles definitions in swagger resources file.
+
+### Removed
+- No change.
+
+
 ## 0.3.8 - 2016-02-26
 ### Added
 - Additional test coverage.
