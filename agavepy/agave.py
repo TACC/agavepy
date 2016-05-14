@@ -5,6 +5,7 @@ import os
 import shelve
 from contextlib import closing
 import json
+import time
 
 import jinja2
 import dateutil.parser
@@ -130,6 +131,14 @@ class Token(object):
                              verify=self.verify)
         resp.raise_for_status()
         self.token_info = resp.json()
+        try:
+            expires_in = int(self.token_info.get('expires_in'))
+        except ValueError:
+            expires_in = 3600
+        created_at = int(time.time())
+        self.token_info['created_at'] = created_at
+        self.token_info['expiration'] = created_at + expires_in
+        self.token_info['expires_at'] = time.ctime(created_at + expires_in)
         token = self.token_info['access_token']
         # Notify parent that a token was created
         self.parent._token = token
