@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 - Added support for token_callback on Agave object, to be called any time a token is refreshed.
 - Added support for passing a headers object to any agavepy operation.
 - Added support for search parameter to all get operations.
-- Added support for passing a notifications object to the
+- Added support for passing a notifications to the files.importData operation.
 - Added convenience method download_uri on the Agave client to download an agave URL or jobs output URL to an
 absolute path on the local file system.
 
