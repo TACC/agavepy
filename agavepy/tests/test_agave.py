@@ -6,8 +6,17 @@
 #
 # 2. update the test-storage.json, test-compute.json, test-app.json and test-job.json
 #
-# 3. run with py.test from the cwd.
+# 3. To run the tests, use the following from the tests directory with the requrements.txt installed (or activate a
+#    virtualenv with the requirements):
 #
+#    py.test                            -- Run all tests
+#    py.test test_agave.py::<test_name> -- Run a single test whose name is <test_name>
+#    py.test -k <string>                -- Run all tests with <string> in the name.
+#
+#    Examples:
+#    py.test test_agave.py::test_list_single_job_many_times
+#    py.test -k jobs
+
 
 import datetime
 import json
@@ -195,6 +204,25 @@ def test_upload_file(agave, credentials):
     status = arsp.result(timeout=120)
     assert status == 'FINISHED'
 
+def test_download_file(agave, credentials):
+    rsp = agave.files.download(systemId=credentials['storage'],
+                               filePath='{}/test_file_upload_python_sdk'.format(credentials['storage_user']))
+    assert rsp.status_code == 200
+
+def test_download_file_range(agave, credentials):
+    rsp = agave.files.download(systemId=credentials['storage'],
+                               filePath='{}/test_file_upload_python_sdk'.format(credentials['storage_user']),
+                               headers={'range': 'bytes=1-5'}
+                               )
+    assert rsp.status_code == 200
+
+# def test_transfer_file(agave, credentials):
+#     agave.files.importData(systemId=credentials['storage'],
+#                            filePath=credentials['storage_user'],
+#                            fileName='test_file_upload_python_sdk',
+#                            urlToIngest='agave://{}/{}/test_dest_transfer_python_sdk'.format(credentials['storage'],
+#                                                               credentials['storage_user']))
+
 def test_upload_binary_file(agave, credentials):
     rsp = agave.files.importData(systemId=credentials['storage'],
                                  filePath=credentials['storage_user'],
@@ -202,6 +230,30 @@ def test_upload_binary_file(agave, credentials):
     arsp = AgaveAsyncResponse(agave, rsp)
     status = arsp.result(timeout=120)
     assert status == 'FINISHED'
+
+def test_download_agave_uri(agave, credentials):
+    remote_path = '{}/test_file_upload_python_sdk'.format(credentials['storage_user'])
+    local_path = os.path.join(HERE, 'local_test_download')
+    uri = 'agave://{}/{}'.format(credentials['storage'], remote_path)
+    rsp = agave.download_uri(uri, local_path)
+    assert os.path.exists(local_path)
+    os.remove(local_path)
+
+def test_download_job_output_listings_uri(agave):
+    local_path = os.path.join(HERE, 'local_test_download_job')
+    # todo - update to make tenant-agnostic.
+    uri = 'https://public.agaveapi.co/jobs/v2/412474231577973221-242ac113-0001-007/outputs/listings/algebra/sum/data/out.txt'
+    agave.download_uri(uri, local_path)
+    assert os.path.exists(local_path)
+    os.remove(local_path)
+
+def test_download_job_output_media_uri(agave):
+    local_path = os.path.join(HERE, 'local_test_download_job')
+    # todo - update to make tenant-agnostic.
+    uri = 'https://public.agaveapi.co/jobs/v2/412474231577973221-242ac113-0001-007/outputs/media/algebra/sum/data/out.txt'
+    agave.download_uri(uri, local_path)
+    assert os.path.exists(local_path)
+    os.remove(local_path)
 
 def test_list_uploaded_file(agave, credentials):
     files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
@@ -233,9 +285,54 @@ def test_list_jobs(agave):
     for job in jobs:
         validate_job(job)
 
+def test_list_jobs_multiple(agave):
+    for i in range(1, 15):
+        jobs = agave.jobs.list()
+        for job in jobs:
+            validate_job(job)
+
+def test_list_single_job_many_times(agave):
+    jobs = agave.jobs.list()
+    job = jobs[0]
+    for i in range(1, 15):
+        agave.jobs.get(jobId=job.id)
+
+def test_search_jobs(agave):
+    # get the id of the first job from the full list
+    id = agave.jobs.list()[0].id
+    # use the search to filter for it:
+    jobs = agave.jobs.list(search={'id.like': id})
+    assert len(jobs) == 1
+
+def validate_pem(pem):
+    assert pem.username
+    assert pem.permission
+
+def test_list_job_permissions(agave):
+    job = agave.jobs.list()[0]
+    pems = agave.jobs.listPermissions(jobId=job.id)
+    for pem in pems:
+        validate_pem(pem)
+
 def test_submit_job(agave, test_job):
     job = agave.jobs.submit(body=test_job)
     validate_job(job)
+    # create an async object
+    arsp = AgaveAsyncResponse(agave, job)
+    # block until job finishes with a timeout of 3 minutes.
+    assert arsp.result(180) == 'FINISHED'
+
+def test_submit_archive_job(agave, test_job, credentials):
+    test_job['archive'] = True
+    test_job['archiveSystem'] = credentials['storage']
+    job = agave.jobs.submit(body=test_job)
+    validate_job(job)
+    # create an async object
+    arsp = AgaveAsyncResponse(agave, job)
+    # block until job finishes with a timeout of 3 minutes.
+    assert arsp.result(180) == 'FINISHED'
+    # now check that the result was archived
+
 
 def test_geturl(agave):
     job = agave.jobs.list()[0]
@@ -281,6 +378,19 @@ def test_list_default_systems(agave):
     for system in systems:
         validate_system(system)
         assert system.get('default')
+
+def validate_role(role):
+    assert role.username
+    assert role.role
+
+def test_list_system_roles(agave, credentials):
+    roles = agave.systems.listRoles(systemId=credentials['storage'])
+    for role in roles:
+        validate_role(role)
+
+def test_get_system_role_for_user(agave, credentials):
+    role = agave.systems.getRoleForUser(systemId=credentials['storage'], username=credentials['username'])
+    validate_role(role)
 
 def test_list_metadata(agave):
     md = agave.meta.listMetadata()
@@ -347,6 +457,24 @@ def test_delete_monitor(agave, credentials):
     for m in ms:
         if m.target == credentials['storage']:
             assert False
+
+def validate_postit(postit):
+    assert postit.url
+    assert postit.method
+
+def test_create_postit(agave, credentials):
+    body = {'url':'{}/systems/v2'.format(credentials['apiserver']),
+            'maxUses': 2,
+            'noauth': False,
+            'method': 'GET'
+    }
+    agave.postits.create(body=body)
+
+
+def test_list_postits(agave):
+    postits = agave.postits.list()
+    for postit in postits:
+        validate_postit(postit)
 
 def validate_notification(n):
     assert n.id
@@ -422,6 +550,32 @@ def test_notification_to_url(agave, credentials, test_storage_system):
     # assert len(rsp.json()) > 0
     # delete the notification
     agave.notifications.delete(uuid=n.id)
+
+token_callback_calls = 0
+
+def test_token_callback(agave, credentials):
+
+    def sample_token_callback(**kwargs):
+        global token_callback_calls
+        token_callback_calls += 1
+        assert kwargs['access_token']
+        assert kwargs['refresh_token']
+        assert kwargs['created_at']
+        assert kwargs['expires_at']
+
+    # create a client with a token callback:
+    ag = a.Agave(username=credentials.get('username'),
+                  password=credentials.get('password'),
+                  api_server=credentials.get('apiserver'),
+                  api_key=credentials.get('apikey'),
+                  api_secret=credentials.get('apisecret'),
+                  verify=credentials.get('verify_certs', True),
+                  token_callback=sample_token_callback)
+    # once created, let's force a refresh
+    ag.token.refresh()
+    global token_callback_calls
+    assert token_callback_calls >= 1
+
 
 def test_token_access(agave, credentials):
     # only run test when constructing the client with a refresh token
