@@ -133,6 +133,8 @@ class Token(object):
         token = self.token_info['access_token']
         # Notify parent that a token was created
         self.parent._token = token
+        if self.parent.token_callback:
+            self.parent.token_callback(**self.token_info)
         self.parent.refresh_aris()
         return token
 
@@ -169,7 +171,8 @@ class Agave(object):
         ('token', False, '_token', None),
         ('refresh_token', False, '_refresh_token', None),
         ('resources', False, 'resources', None),
-        ('verify', False, 'verify', True)
+        ('verify', False, 'verify', True),
+        ('token_callback', False, 'token_callback', None)
     ]
 
     def __init__(self, **kwargs):
@@ -184,6 +187,8 @@ class Agave(object):
         if self.resources is None:
             self.resources = load_resource(self.api_server)
         self.host = urlparse.urlsplit(self.api_server).netloc
+        if self.token_callback and not hasattr(self.token_callback, '__call__'):
+            raise AgaveError('token_callback must be callable.')
         # If we are passed a JWT directly, we can bypass all OAuth-related tasks
         if self.jwt:
             if not self.header_name:
