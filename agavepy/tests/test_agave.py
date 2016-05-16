@@ -190,6 +190,15 @@ def test_list_file_pems(agave, credentials):
     for pem in pems:
         validate_file_pem(pem)
 
+def test_add_file_permissions(agave, credentials):
+    body = {'permission': 'ALL',
+            'recursive': True,
+            'username': 'jstubbs'}
+    pems = agave.files.updatePermissions(systemId=credentials['storage'],
+                                         filePath=credentials['storage_user'], body=body)
+    for pem in pems:
+        validate_pem(pem)
+
 def test_update_file_pems(agave, credentials):
     body = {'permission': 'READ', 'recursive': False, 'username': credentials['storage_user']}
     rsp = agave.files.updatePermissions(systemId=credentials['storage'],
