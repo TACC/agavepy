@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ElementTree
 from functools import wraps
 import urlparse
+import urllib
 import os
 import shelve
 from contextlib import closing
@@ -128,7 +129,7 @@ class Token(object):
     def _token(self, data):
         auth = requests.auth.HTTPBasicAuth(self.api_key, self.api_secret)
         resp = requests.post(self.token_url, data=data, auth=auth,
-                             verify=self.verify)
+                             verify=self.verify, proxies=self.parent.proxies)
         resp.raise_for_status()
         self.token_info = resp.json()
         try:
@@ -181,7 +182,8 @@ class Agave(object):
         ('refresh_token', False, '_refresh_token', None),
         ('resources', False, 'resources', None),
         ('verify', False, 'verify', True),
-        ('token_callback', False, 'token_callback', None)
+        ('token_callback', False, 'token_callback', None),
+        ('proxies', False, 'proxies', urllib.getproxies())
     ]
 
     def __init__(self, **kwargs):
@@ -343,7 +345,8 @@ class Agave(object):
         f = requests.get
         return with_refresh(self.client, f, url,
                             headers={'Authorization': 'Bearer ' + self._token},
-                            verify=self.verify)
+                            verify=self.verify,
+                            proxies=self.proxies)
 
     def download_uri(self, uri, local_path):
         """Convenience method to download an agave URL or jobs output URL to an
@@ -366,7 +369,8 @@ class Agave(object):
         with open(local_path, 'wb') as loc:
             rsp = with_refresh(self.client, f, download_url,
                                headers={'Authorization': 'Bearer ' + self.token.token_info['access_token']},
-                               verify=self.verify)
+                               verify=self.verify,
+                               proxies=self.proxies)
             rsp.raise_for_status()
             if type(rsp) == dict:
                 raise AgaveError("Error downloading file at URI: {}, Response: {}".format(uri, rsp))
@@ -454,6 +458,7 @@ class Operation(object):
             response.raise_for_status()
             return response
 
+        kwargs['proxies'] = self.client.proxies
         resp = with_refresh(self.client, operation)
         if resp.ok:
             # if response is raw file, return it directly

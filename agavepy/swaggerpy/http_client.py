@@ -194,7 +194,7 @@ class SynchronousHttpClient(HttpClient):
         self.authenticator = JwtAuthenticator(host, header_name, jwt)
 
     def request(self, method, url, params=None, data=None,
-                headers=None, files=None):
+                headers=None, files=None, proxies=None):
         """Requests based implementation.
 
         :return: Requests response
@@ -205,7 +205,7 @@ class SynchronousHttpClient(HttpClient):
             headers=headers, files=files)
         self.apply_authentication(req)
         return self.session.send(self.session.prepare_request(req),
-                                 verify=self.verify)
+                                 verify=self.verify, proxies=proxies)
 
     def ws_connect(self, url, params=None):
         """Websocket-client based implementation.

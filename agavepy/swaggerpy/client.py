@@ -70,6 +70,7 @@ class Operation(object):
         data = {}
         headers = {}
         files = {}
+        proxies = kwargs.pop('proxies')
         # allow passing custom headers
         if kwargs.get('headers'):
             try:
@@ -132,7 +133,7 @@ class Operation(object):
         else:
             return self.http_client.request(
                 method, uri, params=params,
-                data=data, headers=headers, files=files)
+                data=data, headers=headers, files=files, proxies=proxies)
 
 
 class Resource(object):
