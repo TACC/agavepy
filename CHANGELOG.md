@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.3.10 - 2016-05-17
+### Added
+- Added support for http proxies.
+
+### Changed
+- No change.
+
+### Removed
+- No change.
+
+
 ## 0.3.9 - 2016-05-13
 ### Added
 - Added support for token_callback on Agave object, to be called any time a token is refreshed.
