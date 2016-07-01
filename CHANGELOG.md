@@ -1,6 +1,18 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+
+## 0.3.11 - 2016-07-01
+### Added
+- Added support for enabling and disabling systems.
+
+### Changed
+- Fixed `path` parameter for files.manage operations.
+
+### Removed
+- No change.
+
+
 ## 0.3.10 - 2016-05-17
 ### Added
 - Added support for http proxies.
