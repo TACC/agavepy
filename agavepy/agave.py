@@ -110,12 +110,13 @@ class Token(object):
     def __init__(self,
                  username, password,
                  api_server, api_key, api_secret, verify,
-                 parent, _token=None, _refresh_token=None):
+                 parent, _token=None, _refresh_token=None, token_username=None):
         self.username = username
         self.password = password
         self.api_server = api_server
         self.api_key = api_key
         self.api_secret = api_secret
+        self.token_username = token_username
         # Agave object that created this token
         self.parent = parent
         self.verify = verify
@@ -143,6 +144,13 @@ class Token(object):
         token = self.token_info['access_token']
         # Notify parent that a token was created
         self.parent._token = token
+        # try to persist the token data
+        try:
+            self.parent._write_client()
+        except Exception as e:
+            # writing the cache file cannot block use.
+            raise e
+            pass
         if self.parent.token_callback:
             self.parent.token_callback(**self.token_info)
         self.parent.refresh_aris()
@@ -153,6 +161,9 @@ class Token(object):
                 'username': self.username,
                 'password': self.password,
                 'scope': 'PRODUCTION'}
+        if self.token_username:
+            data['grant_type'] = 'admin_password'
+            data['token_username'] = self.token_username
         return self._token(data)
 
     def refresh(self):
@@ -172,6 +183,7 @@ class Agave(object):
         # param name, mandatory?, attr_name, default
         ('username', False, 'username', None),
         ('password', False, 'password', None),
+        ('token_username', False, 'token_username', None),
         ('jwt', False, 'jwt', None),
         ('jwt_header_name', False, 'header_name', None),
         ('api_server', True, 'api_server', None),
@@ -222,8 +234,9 @@ class Agave(object):
         if hasattr(self, 'token') and hasattr(self.token, 'token_info'):
             d = {'token': self.token.token_info.get('access_token'),
                  'refresh_token': self.token.token_info.get('refresh_token')}
-        return d.update({attr: getattr(self, attr) for _, _, attr, _ in self.PARAMS \
+        d.update({attr: getattr(self, attr) for _, _, attr, _ in self.PARAMS \
                          if not attr in ['resources', '_token', '_refresh_token', 'header_name', 'jwt', 'password']})
+        return d
 
     @classmethod
     def agpy_path(self):
@@ -278,7 +291,7 @@ class Agave(object):
             else:
                 new_clients.append(client)
         with open(Agave.agpy_path(), 'w') as agpy:
-            agpy.write(json.dumps(clients))
+            agpy.write(json.dumps(new_clients))
 
     def refresh_aris(self):
         self.clients_ari()
@@ -330,7 +343,7 @@ class Agave(object):
             self.username, self.password,
             self.api_server, self.api_key, self.api_secret,
             self.verify,
-            self, self._token, self._refresh_token)
+            self, self._token, self._refresh_token, self.token_username)
         if self._token:
             pass
         else:
