@@ -149,7 +149,6 @@ class Token(object):
             self.parent._write_client()
         except Exception as e:
             # writing the cache file cannot block use.
-            raise e
             pass
         if self.parent.token_callback:
             self.parent.token_callback(**self.token_info)
@@ -235,7 +234,7 @@ class Agave(object):
             d = {'token': self.token.token_info.get('access_token'),
                  'refresh_token': self.token.token_info.get('refresh_token')}
         d.update({attr: getattr(self, attr) for _, _, attr, _ in self.PARAMS \
-                         if not attr in ['resources', '_token', '_refresh_token', 'header_name', 'jwt', 'password']})
+                         if not attr in ['resources', '_token', '_refresh_token', 'header_name', 'jwt', 'password', 'token_callback']})
         return d
 
     @classmethod
