@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 
 
+## 0.3.12 - 2016-08-29
+### Added
+- Added support for v2 of admin_password grant (role-based version).
+
+### Changed
+- Fixed issue with persisting existing clients to cache file.
+
+### Removed
+- No change.
+
+
 ## 0.3.11 - 2016-07-01
 ### Added
 - Added support for enabling and disabling systems.
