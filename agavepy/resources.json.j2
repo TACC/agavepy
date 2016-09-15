@@ -4553,6 +4553,14 @@
                                         "type": "integer",
                                         "paramType": "query",
                                         "name": "offset"
+                                    },
+                                    {
+                                        "defaultValue": true,
+                                        "description": "If false, implicit permissions are ignored and only records to which the user has explicit permissions are returned",
+                                        "required": false,
+                                        "type": "boolean",
+                                        "paramType": "query",
+                                        "name": "privileged"
                                     }
                                 ],
                                 "type": "MultipleMetadataResponse",
