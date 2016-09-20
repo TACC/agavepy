@@ -6,7 +6,7 @@
 #
 # 2. update the test-storage.json, test-compute.json, test-app.json and test-job.json
 #
-# 3. To run the tests, use the following from the tests directory with the requrements.txt installed (or activate a
+# 3. To run the tests, use the following from the tests directory with the requirements.txt installed (or activate a
 #    virtualenv with the requirements):
 #
 #    py.test                            -- Run all tests
@@ -197,7 +197,7 @@ def test_add_file_permissions(agave, credentials):
     pems = agave.files.updatePermissions(systemId=credentials['storage'],
                                          filePath=credentials['storage_user'], body=body)
     for pem in pems:
-        validate_pem(pem)
+        validate_file_pem(pem)
 
 def test_update_file_pems(agave, credentials):
     body = {'permission': 'READ', 'recursive': False, 'username': credentials['storage_user']}
@@ -249,16 +249,23 @@ def test_download_agave_uri(agave, credentials):
     os.remove(local_path)
 
 def test_download_job_output_listings_uri(agave):
-    local_path = os.path.join(HERE, 'local_test_download_job')
+    # this test currently does not work on other tenants.
     # todo - update to make tenant-agnostic.
+    if 'public.agaveapi.co' not in agave.api_server:
+        return
+    local_path = os.path.join(HERE, 'local_test_download_job')
     uri = 'https://public.agaveapi.co/jobs/v2/412474231577973221-242ac113-0001-007/outputs/listings/algebra/sum/data/out.txt'
     agave.download_uri(uri, local_path)
     assert os.path.exists(local_path)
     os.remove(local_path)
 
 def test_download_job_output_media_uri(agave):
-    local_path = os.path.join(HERE, 'local_test_download_job')
+    # this test currently does not work on other tenants.
     # todo - update to make tenant-agnostic.
+    if 'public.agaveapi.co' not in agave.api_server:
+        return
+    local_path = os.path.join(HERE, 'local_test_download_job')
+
     uri = 'https://public.agaveapi.co/jobs/v2/412474231577973221-242ac113-0001-007/outputs/media/algebra/sum/data/out.txt'
     agave.download_uri(uri, local_path)
     assert os.path.exists(local_path)
@@ -288,6 +295,14 @@ def test_delete_uploaded_files(agave, credentials):
         # make sure file isn't still there:
         files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
         assert f not in [fl.path for fl in files]
+
+def test_submit_job(agave, test_job):
+    job = agave.jobs.submit(body=test_job)
+    validate_job(job)
+    # create an async object
+    arsp = AgaveAsyncResponse(agave, job)
+    # block until job finishes with a timeout of 3 minutes.
+    assert arsp.result(180) == 'FINISHED'
 
 def test_list_jobs(agave):
     jobs = agave.jobs.list()
@@ -322,14 +337,6 @@ def test_list_job_permissions(agave):
     pems = agave.jobs.listPermissions(jobId=job.id)
     for pem in pems:
         validate_pem(pem)
-
-def test_submit_job(agave, test_job):
-    job = agave.jobs.submit(body=test_job)
-    validate_job(job)
-    # create an async object
-    arsp = AgaveAsyncResponse(agave, job)
-    # block until job finishes with a timeout of 3 minutes.
-    assert arsp.result(180) == 'FINISHED'
 
 def test_submit_archive_job(agave, test_job, credentials):
     test_job['archive'] = True
@@ -405,8 +412,8 @@ def test_list_metadata(agave):
     md = agave.meta.listMetadata()
     assert len(md) > 0
 
-def test_list_metadata_with_query(agave):
-    md = agave.meta.listMetadata(q = "{'name': 'fooy'}")
+def test_list_metadata_with_query_empty(agave):
+    md = agave.meta.listMetadata(q = "{'name': 'foofymcfoofoo'}")
     assert len(md) == 0
 
 def test_add_list_delete_metadata(agave):
@@ -490,6 +497,44 @@ def validate_notification(n):
     assert n.event
     assert n.url
 
+# def test_create_notification_to_email(agave, credentials):
+# todo - replace with a "fake email"
+#     # get uuid of storage system
+#     stor = agave.systems.get(systemId=credentials['storage'])
+#     assert stor.uuid
+#     body = {"associatedUuid": stor.uuid,
+#             "event": "*",
+#             "persistent": True,
+#             "url": "jstubbs@tacc.utexas.edu"
+#     }
+#     n = agave.notifications.add(body=json.dumps(body))
+#     validate_notification(n)
+#     # make sure it's there
+#     ns = agave.notifications.list(associatedUuid=stor.uuid)
+#     for nt in ns:
+#         if nt.id == n.id:
+#             break
+#     else:
+#         assert False
+
+def test_create_notification_to_url(agave, credentials, test_storage_system):
+    # first, create a request bin
+    base_url = 'http://requestb.in/api/v1/bins'
+    rsp = requests.post(base_url)
+    bin_name = rsp.json().get('name')
+    bin_url = '{}/{}'.format(base_url, bin_name)
+    # create notification
+     # get uuid of storage system
+    stor = agave.systems.get(systemId=credentials['storage'])
+    assert stor.uuid
+    body = {"associatedUuid": stor.uuid,
+            "event": "*",
+            "persistent": True,
+            "url": bin_url
+    }
+    n = agave.notifications.add(body=json.dumps(body))
+
+
 def test_list_notification(agave, credentials):
     # get uuid of storage system
     stor = agave.systems.get(systemId=credentials['storage'])
@@ -498,24 +543,6 @@ def test_list_notification(agave, credentials):
     for n in ns:
         validate_notification(n)
 
-def test_create_notification(agave, credentials):
-    # get uuid of storage system
-    stor = agave.systems.get(systemId=credentials['storage'])
-    assert stor.uuid
-    body = {"associatedUuid": stor.uuid,
-            "event": "*",
-            "persistent": True,
-            "url": "jstubbs@tacc.utexas.edu"
-    }
-    n = agave.notifications.add(body=json.dumps(body))
-    validate_notification(n)
-    # make sure it's there
-    ns = agave.notifications.list(associatedUuid=stor.uuid)
-    for nt in ns:
-        if nt.id == n.id:
-            break
-    else:
-        assert False
 
 def test_delete_notification(agave, credentials):
     # get uuid of storage system
@@ -552,6 +579,7 @@ def test_notification_to_url(agave, credentials, test_storage_system):
     time.sleep(3)
     # update the system:
     agave.systems.add(body=test_storage_system)
+    # TODO - this check is not working.
     # wait for notification to be sent
     # time.sleep(18)
     # # check for a notification
@@ -586,15 +614,23 @@ def test_token_callback(agave, credentials):
     assert token_callback_calls >= 1
 
 
-def test_token_access(agave, credentials):
-    # only run test when constructing the client with a refresh token
-    if not hasattr(agave.token, 'token_info') or agave.token.token_info.get('refresh_token') is None:
-        print "Skipping test_token_access."
-        return
-    token = agave.token.refresh()
+def test_token_access(credentials):
+    # create a fresh client
+    ag = a.Agave(username=credentials.get('username'),
+                 password=credentials.get('password'),
+                 api_server=credentials.get('apiserver'),
+                 api_key=credentials.get('apikey'),
+                 api_secret=credentials.get('apisecret'),
+                 token=credentials.get('token'),
+                 refresh_token=credentials.get('refresh_token'),
+                 verify=credentials.get('verify_certs', True))
+    # force a token refresh
+    token = ag.token.refresh()
+    # now, create a new client using just the token
     token_client = a.Agave(api_server=credentials['apiserver'],
                            token=token,
                            verify=credentials.get('verify_certs', True))
+    # make sure the new client works
     apps = token_client.apps.list()
     for app in apps:
         validate_app(app)
