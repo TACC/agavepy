@@ -1,0 +1,14 @@
+# Simple docker image for running the agavepy test suite.
+# Image: jstubbs/agavepy_testrunner
+# To use this image, mount test_credentials.json to /agavepy/agavepy/test_credentials.json
+
+from python:2
+
+RUN virtualenv ag
+
+RUN git clone https://github.com/TACC/agavepy.git /agavepy
+
+ADD cmd.sh /cmd.sh
+RUN chmod +x /cmd.sh
+
+CMD ["./cmd.sh"]
