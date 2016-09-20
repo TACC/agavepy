@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 
 
+## 0.3.13 - 2016-09-20
+### Added
+- Added support for unprivileged metadata queries.
+
+### Changed
+- Improvements to test suite, including a Docker image for portability.
+
+### Removed
+- No change.
+
+
 ## 0.3.12 - 2016-08-29
 ### Added
 - Added support for v2 of admin_password grant (role-based version).
