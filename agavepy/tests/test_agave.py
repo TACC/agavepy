@@ -437,7 +437,37 @@ def test_add_list_delete_metadata(agave):
     md = agave.meta.deleteMetadata(uuid=uuid)
     # make sure it's really gone
     mds = agave.meta.listMetadata(q = '')
-    assert not uuid in [md.uuid for md in mds]
+    assert uuid not in [md.uuid for md in mds]
+
+def test_metadata_admin_pems(agave, credentials):
+    # first, lets add a new metadata using the normal user's client
+    name = 'python-sdk-test-metadata-admin-pems'
+    value = 'test value'
+    d = {'name': name,
+         'value': value}
+    md = agave.meta.addMetadata(body=json.dumps(d))
+    uuid = md.uuid
+    # let's make sure it is there
+    md2 = agave.meta.listMetadata(q=json.dumps({'name': name}))
+    assert uuid in [md.uuid for md in md2]
+    # now, create a new client representing the admin
+    ag = a.Agave(username=credentials.get('admin_username'),
+                 password=credentials.get('admin_password'),
+                 api_server=credentials.get('apiserver'),
+                 api_key=credentials.get('apikey'),
+                 api_secret=credentials.get('apisecret'),
+                 token=credentials.get('token'),
+                 refresh_token=credentials.get('refresh_token'),
+                 verify=credentials.get('verify_certs', True))
+    # let's check that the admin can see our metadata
+    md2 = ag.meta.listMetadata(q=json.dumps({'name': name}))
+    assert uuid in [md.uuid for md in md2]
+    # now, explicitly turn off 'implicit' permissions
+    md3 = ag.meta.listMetadata(q=json.dumps({'name': name}), privileged=False)
+    assert uuid not in [md.uuid for md in md3]
+    # finally, delete the original metadata
+    agave.meta.deleteMetadata(uuid=uuid)
+
 
 def test_list_monitors(agave):
     ms = agave.monitors.list()
