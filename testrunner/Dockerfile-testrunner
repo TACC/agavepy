@@ -1,6 +1,7 @@
 # Simple docker image for running the agavepy test suite.
 # Image: jstubbs/agavepy_testrunner
-# To use this image, mount test_credentials.json to /agavepy/agavepy/test_credentials.json
+# To use this image, mount test_credentials.json to /agavepy/agavepy/tests/test_credentials.json and
+# mount a large file to use for testing to /agavepy/agavepy/tests/test_largefile_upload_python_sdk
 
 from python:2
 
