@@ -565,6 +565,7 @@ def test_notification_to_url(agave, credentials, test_storage_system):
     rsp = requests.post(base_url)
     bin_name = rsp.json().get('name')
     bin_url = '{}/{}'.format(base_url, bin_name)
+    notification_target = 'http://requestb.in/{}'.format(bin_name)
     # create notification
      # get uuid of storage system
     stor = agave.systems.get(systemId=credentials['storage'])
@@ -572,19 +573,18 @@ def test_notification_to_url(agave, credentials, test_storage_system):
     body = {"associatedUuid": stor.uuid,
             "event": "*",
             "persistent": True,
-            "url": bin_url
+            "url": notification_target
     }
     n = agave.notifications.add(body=json.dumps(body))
     # wait for notification to be propagated
     time.sleep(3)
     # update the system:
     agave.systems.add(body=test_storage_system)
-    # TODO - this check is not working.
     # wait for notification to be sent
-    # time.sleep(18)
-    # # check for a notification
-    # rsp = requests.get('{}/requests'.format(bin_url))
-    # assert len(rsp.json()) > 0
+    time.sleep(18)
+    # check for a notification
+    rsp = requests.get('{}/requests'.format(bin_url))
+    assert len(rsp.json()) > 0
     # delete the notification
     agave.notifications.delete(uuid=n.id)
 
