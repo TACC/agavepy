@@ -89,6 +89,9 @@ def validate_file(file):
     assert file.path
     assert file.system
 
+def validate_history_rec(rec):
+    assert rec.description
+
 def validate_job(job):
     assert job.appId
     if 'endTime' in job:
@@ -184,6 +187,11 @@ def test_list_files(agave, credentials):
     files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
     for file in files:
         validate_file(file)
+
+def test_get_file_history(agave, credentials):
+    history = agave.files.getHistory(filePath=credentials['storage_user'], systemId=credentials['storage'])
+    for rec in history:
+        validate_history_rec(rec)
 
 def test_list_file_pems(agave, credentials):
     pems = agave.files.listPermissions(filePath=credentials['storage_user'], systemId=credentials['storage'])
