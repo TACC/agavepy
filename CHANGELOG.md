@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.3.14 - 2016-10-13
+### Added
+- No change.
+
+### Changed
+- (#30) Fix bug in files.getHistory operation where systemId parameter was missing.
+
+### Removed
+- No change.
+
 
 ## 0.3.13 - 2016-09-20
 ### Added
