@@ -431,7 +431,7 @@ class AgaveException(Exception):
 
 class Operation(object):
 
-    PRIMITIVE_TYPES = ['array', 'string', 'integer', 'int', 'boolean']
+    PRIMITIVE_TYPES = ['array', 'string', 'integer', 'int', 'boolean', 'dict']
 
     def __init__(self, resource, operation, client):
         self.resource = resource
@@ -504,6 +504,9 @@ class Operation(object):
         return self.process_model(obj, return_type)
 
     def process_untyped(self, obj):
+        return obj
+
+    def process_dict(self, obj, return_type):
         return obj
 
     def process_array(self, obj, return_type):
