@@ -1,0 +1,837 @@
+        {
+            "url": "http://localhost:9999/admin",
+            "path": "/admin",
+            "description": "Tenant admin services.",
+            "api_declaration": {
+                "authorizations": [
+                    "oauth2"
+                ],
+                "swaggerVersion": "1.2",
+                "apis": [
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "defaultValue": 250,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "limit"
+                                    },
+                                    {
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "offset"
+                                    }
+                                ],
+                                "type": "MultipleServiceAccountsResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the admin database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "List service accounts",
+                                "nickname": "listAccounts",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "defaultValue": "",
+                                        "description": "The description of the service account to add.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "ServiceAccount",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "nickname": "addAccount",
+                                "notes": "",
+                                "is_websocket": false,
+                                "summary": "Register a service account.",
+                                "type": "SingleServiceAccountResponse",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/admin/v2/service_accounts",
+                        "description": "Retrieve a (paginated) list of service accounts.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the service account.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "accountId"
+                                    }
+                                ],
+                                "type": "SingleServiceAccountResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the admin database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Retrieve details about a specific service account.",
+                                "nickname": "getAccount",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the service account.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "accountId"
+                                    },
+                                    {
+                                        "defaultValue": "",
+                                        "description": "The description of the service account to update.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "ServiceAccount",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "SingleServiceAccountResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the admin database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Update a specific service account.",
+                                "nickname": "updateAccount",
+                                "method": "PUT"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the service account.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "accountId"
+                                    }
+                                ],
+                                "type": "EmptyServiceAccountResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the admin database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Delete a specific service account.",
+                                "nickname": "deleteAccount",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/admin/v2/service_accounts/{accountId}",
+                        "description": "Manage a specific service account.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the service account.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "accountId"
+                                    }
+                                ],
+                                "type": "ServiceAccountRolesResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the admin database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Get the roles occupied by a service account.",
+                                "nickname": "getAccountRoles",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the service account.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "accountId"
+                                    },
+                                    {
+                                        "defaultValue": "",
+                                        "description": "The description of the role to add.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "AddRoleToAccountRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "nickname": "addRoleToAccount",
+                                "notes": "",
+                                "is_websocket": false,
+                                "summary": "Add a role to a service account.",
+                                "type": "AddRoleToAccountRequestResponse",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/admin/v2/service_accounts/{accountId}/roles",
+                        "description": "Work with the roles occupied by a service account.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the service account.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "accountId"
+                                    },
+                                    {
+                                        "description": "The id of the role.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "roleId"
+                                    }
+                                ],
+                                "type": "ServiceAccountRoleResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the admin database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Get details about a specific role occupied by a service account.",
+                                "nickname": "getAccountRole",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the service account.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "accountId"
+                                    },
+                                    {
+                                        "description": "The id of the role.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "roleId"
+                                    }
+                                ],
+                                "nickname": "deleteAccountRole",
+                                "notes": "",
+                                "is_websocket": false,
+                                "summary": "Delete a role from the list of occupied roles of a service account.",
+                                "type": "EmptyServiceAccountRoleResponse",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/admin/v2/service_accounts/{accountId}/roles/{roleId}",
+                        "description": "Work with actor workers.",
+                        "has_websocket": false
+                    }
+                ],
+                "models": {
+                    "ServiceAccountSummary": {
+                        "properties": {
+                            "accountId": {
+                                "type": "string",
+                                "description": "The unique id of the service account.",
+                                "name": "id"
+                            }
+                        },
+                        "id": "ServiceAccountSummary",
+                        "name": ""
+                    },
+                    "ServiceAccount": {
+                        "properties": {
+                            "accountId": {
+                                "type": "string",
+                                "description": "The unique id of the service account.",
+                                "name": "id"
+                            },
+                            "password": {
+                                "type": "string",
+                                "description": "The password for the service account.",
+                                "name": "image"
+                            },
+                            "roles": {
+                                "items": {
+                                    "$ref": "RoleInAccount"
+                                },
+                                "type": "array",
+                                "description": "roles occupied by service account.",
+                                "name": "roles"
+                            }
+
+                        },
+                        "id": "ServiceAccount",
+                        "name": ""
+                    },
+                    "RoleInAccount": {
+                        "properties": {
+                            "role_id": {
+                                "type": "string",
+                                "description": "The unique id of the service role.",
+                                "name": "id"
+                            }
+                        },
+                        "id": "RoleInAccount",
+                        "name": ""
+                    },
+                    "SingleServiceAccountResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "ServiceAccount",
+                                "name": "result"
+                            }
+                        },
+                        "id": "SingleServiceAccountResponse",
+                        "name": ""
+                    },
+                    "EmptyServiceAccountResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "String",
+                                "name": "result"
+                            }
+                        },
+                        "id": "EmptyServiceAccountResponse",
+                        "name": ""
+                    },
+                    "MultipleServiceAccountResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "items": {
+                                    "$ref": "ServiceAccountSummary"
+                                },
+                                "type": "array",
+                                "description": "response body",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MultipleServiceAccountResponse",
+                        "name": ""
+                    },
+                    "ServiceAccountRolesResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "ServiceAccount",
+                                "name": "result"
+                            }
+                        },
+                        "id": "ServiceAccountRolesResponse",
+                        "name": ""
+                    },
+                    "AddRoleToAccountRequest": {
+                        "properties": {
+                            "role_id": {
+                                "type": "string",
+                                "description": "The id of the role to add to the service account.",
+                                "name": "message"
+                            }
+                        },
+                        "id": "AddRoleToAccountRequest",
+                        "name": ""
+                    },
+                    "AddRoleToAccountRequestResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "ServiceAccount",
+                                "name": "result"
+                            }
+                        },
+                        "id": "AddRoleToAccountRequestResponse",
+                        "name": ""
+                    },
+                    "ActorMessageResponse": {
+                        "properties": {
+                            "executionId": {
+                                "type": "string",
+                                "description": "The id of the resulting execution.",
+                                "name": "executionId"
+                            },
+                            "msg": {
+                                "type": "string",
+                                "description": "The message variable for the execution.",
+                                "name": "msg"
+                            }
+                        },
+                        "id": "ActorMessageResponse",
+                        "name": ""
+                    },
+                   "ActorMessageRequestResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "ActorMessageResponse",
+                                "name": "result"
+                            }
+                        },
+                        "id": "ActorMessageRequestResponse",
+                        "name": ""
+                   },
+                    "ActorWorker": {
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "description": "The unique id of this worker.",
+                                "name": "id"
+                            },
+                            "image": {
+                                "type": "string",
+                                "description": "Docker image associated with the actor.",
+                                "name": "image"
+                            },
+                            "last_execution": {
+                                "type": "int",
+                                "description": "Last execution for this worker.",
+                                "name": "last_execution"
+                            },
+                            "location": {
+                                "type": "string",
+                                "description": "Location of docker daemon that this worker is using.",
+                                "name": "location"
+                            },
+                            "cid": {
+                                "type": "string",
+                                "description": "Container id of this worker.",
+                                "name": "cid"
+                            },
+                            "host_id": {
+                                "type": "string",
+                                "description": "id of the host where this worker is running.",
+                                "name": "host_id"
+                            },
+                            "host_ip": {
+                                "type": "string",
+                                "description": "IP address of the host where this worker is running.",
+                                "name": "host_id"
+                            },
+                            "status": {
+                                "type": "string",
+                                "description": "status of the worker.",
+                                "name": "status"
+                            },
+                            "tenant": {
+                                "type": "string",
+                                "description": "tenant this worker belongs to.",
+                                "name": "tenant"
+                            }
+                        },
+                        "id": "ActorWorker",
+                        "name": ""
+                    },
+                    "SingleActorWorkerResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "ActorWorker",
+                                "name": "result"
+                            }
+                        },
+                        "id": "SingleActorWorkerResponse",
+                        "name": ""
+                    },
+                    "MultipleActorWorkerResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "items": {
+                                    "$ref": "ActorWorker"
+                                },
+                                "type": "array",
+                                "description": "response body",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MultipleActorWorkerResponse",
+                        "name": ""
+                    },
+                    "EmptyActorWorkerRequestResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "String",
+                                "name": "result"
+                            }
+                        },
+                        "id": "EmptyActorWorkerRequestResponse",
+                        "name": ""
+                    },
+                    "AddWorkersRequest": {
+                        "properties": {
+                            "num": {
+                                "type": "int",
+                                "description": "The number of workers to ensure are running.",
+                                "name": "num"
+                            }
+                        },
+                        "id": "AddWorkersRequest",
+                        "name": ""
+                    },
+                    "ActorWorkersRequestResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "EmptyActorWorkerRequestResponse",
+                                "name": "result"
+                            }
+                        },
+                        "id": "ActorWorkersRequestResponse",
+                        "name": ""
+                    },
+                    "ExecutionsSummary": {
+                        "properties": {
+                            "ids": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array",
+                                "description": "The ids of all executions.",
+                                "name": "ids"
+                            },
+                            "actorId": {
+                                "type": "string",
+                                "description": "The id of the associated actor.",
+                                "name": "actorId"
+                            },
+                            "owner": {
+                                "type": "string",
+                                "description": "username of the owner of the actor.",
+                                "name": "owner"
+                            },
+                            "totalCpu": {
+                                "type": "int",
+                                "description": "CPU usage, in user jiffies, of all executions.",
+                                "name": "totalCpu"
+                            },
+                            "totalRuntime": {
+                                "type": "int",
+                                "description": "Runtime, in milliseconds, of all executions.",
+                                "name": "totalRuntime"
+                            },
+                            "totalIo": {
+                                "type": "int",
+                                "description": "Block I/O usage, in number of 512-byte sectors read from and written to, by all executions.",
+                                "name": "totalIo"
+                            }
+                        },
+                        "id": "ExecutionsSummary",
+                        "name": ""
+                    },
+                    "ExecutionsSummaryResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "ExecutionsSummary",
+                                "name": "result"
+                            }
+                        },
+                        "id": "ExecutionsSummaryResponse",
+                        "name": ""
+                    },
+                    "Execution": {
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "description": "The id of this executions.",
+                                "name": "id"
+                            },
+                            "actorId": {
+                                "type": "string",
+                                "description": "The id of the associated actor.",
+                                "name": "actorId"
+                            },
+                            "owner": {
+                                "type": "string",
+                                "description": "username of the owner of the actor.",
+                                "name": "owner"
+                            },
+                            "status": {
+                                "type": "string",
+                                "description": "status of the execution.",
+                                "name": "status"
+                            },
+                            "cpu": {
+                                "type": "int",
+                                "description": "CPU usage, in user jiffies, of this execution.",
+                                "name": "cpu"
+                            },
+                            "runtime": {
+                                "type": "int",
+                                "description": "Runtime, in milliseconds, of this execution.",
+                                "name": "runtime"
+                            },
+                            "io": {
+                                "type": "int",
+                                "description": "Block I/O usage, in number of 512-byte sectors read from and written to, by this execution.",
+                                "name": "io"
+                            }
+                        },
+                        "id": "Execution",
+                        "name": ""
+                    },
+                    "SingleActorExecutionResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "Execution",
+                                "name": "result"
+                            }
+                        },
+                        "id": "SingleActorExecutionResponse",
+                        "name": ""
+                    },
+                    "MultipleExecutionResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "items": {
+                                    "$ref": "Execution"
+                                },
+                                "type": "array",
+                                "description": "response body",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MultipleExecutionResponse",
+                        "name": ""
+                    },
+                    "ExecutionLogs": {
+                        "properties": {
+                            "logs": {
+                                "type": "string",
+                                "description": "The logs (standard out) of this execution.",
+                                "name": "id"
+                            }
+                        },
+                        "id": "ExecutionLogs",
+                        "name": ""
+                    },
+                    "ExecutionLogsResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "ExecutionLogs",
+                                "name": "result"
+                            }
+                        },
+                        "id": "ExecutionLogsResponse",
+                        "name": ""
+                    }
+                },
+                "basePath": "https://{{ api_server_base }}",
+                "resourcePath": "/actors/v2",
+                "apiVersion": "2.0.0-SNAPSHOT-r1dc40"
+            },
+            "name": "actors"
+        }
