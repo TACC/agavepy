@@ -77,12 +77,24 @@ class Operation(object):
                 headers.update(kwargs.pop('headers'))
             except ValueError:
                 raise AssertionError("Parameter headers must be of type dict.")
+        # allow passing a custom query dict
+        if kwargs.get('query'):
+            try:
+                params.update(kwargs.pop('query'))
+            except ValueError:
+                raise AssertionError("Parameter query must be of type dict.")
         accepts_multipart = ('multipart/form-data' in
                              self.json.get('consumes', []))
         for param in self.json.get('parameters', []):
             pname = param['name']
             ptype = param['type']
             value = kwargs.get(pname)
+            if ptype == 'dict':
+                if value and param['paramType'] == 'query':
+                    try:
+                        params.update(value)
+                    except ValueError:
+                        raise AssertionError("Parameter {} must be of type dict.".format(pname))
             # Turn list params into comma separated values
             if isinstance(value, list):
                 value = ",".join(value)
