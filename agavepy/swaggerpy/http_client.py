@@ -162,6 +162,7 @@ class JwtAuthenticator(Authenticator):
 
     def apply(self, request):
         request.headers[self.header_name] = self.jwt
+        request.url = request.url.strip('/v2')
 
 # noinspection PyDocstring
 class SynchronousHttpClient(HttpClient):
