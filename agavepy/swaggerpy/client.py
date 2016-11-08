@@ -132,6 +132,12 @@ class Operation(object):
                 for k, v in value.items():
                     params[k] = v
                 kwargs.pop('search')
+            value = kwargs.get('filter')
+            if value:
+                if not isinstance(value, str):
+                    raise TypeError("filter parameter must be of type str")
+                params['filter'] = value
+                kwargs.pop('filter')
 
         if kwargs:
             raise TypeError("'%s' does not have parameters %r" %
