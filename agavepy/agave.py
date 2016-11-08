@@ -473,6 +473,9 @@ class Operation(object):
         kwargs['proxies'] = self.client.proxies
         resp = with_refresh(self.client, operation)
         if resp.ok:
+            # if response is 204 (no content) return none directly
+            if resp.status_code == 204 and not resp.content:
+                return resp
             # if response is raw file, return it directly
             if (self.resource == 'files' and
                     (self.operation == 'download'
