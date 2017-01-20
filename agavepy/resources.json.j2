@@ -11410,7 +11410,7 @@
                       "method": "POST"
                     }
                   ],
-                  "path": "/admin/v2/roles",
+                  "path": "/admin/v2/service_roles",
                   "description": "Retrieve a (paginated) list of service roles.",
                   "has_websocket": false
                 },
@@ -11473,7 +11473,7 @@
                       "method": "DELETE"
                     }
                   ],
-                  "path": "/admin/v2/roles/{roleId}",
+                  "path": "/admin/v2/service_roles/{roleId}",
                   "description": "Manage a specific service role.",
                   "has_websocket": false
                 },
@@ -11535,7 +11535,7 @@
                       "method": "POST"
                     }
                   ],
-                  "path": "/admin/v2/roles/{roleId}/service_accounts",
+                  "path": "/admin/v2/service_roles/{roleId}/service_accounts",
                   "description": "Work with the service account that occupy a role.",
                   "has_websocket": false
                 },
@@ -11568,7 +11568,7 @@
                       "method": "DELETE"
                     }
                   ],
-                  "path": "/admin/v2/roles/{roleId}/service_accounts/{accountId}",
+                  "path": "/admin/v2/service_roles/{roleId}/service_accounts/{accountId}",
                   "description": "Work with a specific role of a service account.",
                   "has_websocket": false
                 },
@@ -12357,6 +12357,48 @@
                     }
                   },
                   "id": "ApiSummary",
+                  "name": ""
+                },
+                "ApiTemplate": {
+                  "properties": {
+                    "route": {
+                      "type": "string",
+                      "description": "Path of the template.",
+                      "name": "route"
+                    },
+                    "methods": {
+                      "type": "string",
+                      "description": "Methods associated with the template.",
+                      "name": "methods"
+                    },
+                    "roles": {
+                      "type": "string",
+                      "description": "roles associated with the template.",
+                      "name": "roles"
+                    },
+                    "tiers": {
+                      "type": "string",
+                      "description": "Throttling tiers associated with the template.",
+                      "name": "tiers"
+                    }
+                  },
+                  "id": "ApiTemplate",
+                  "name": ""
+                },
+                "ApiResource": {
+                  "properties": {
+                    "http_verbs": {
+                      "type": "dict",
+                      "description": "Http verbs and associated auth.",
+                      "name": "http_verbs"
+                    },
+                    "url_pattern": {
+                      "type": "string",
+                      "description": "URL pattern associated with the resource..",
+                      "name": "url_pattern"
+                    }
+                  },
+                  "id": "ApiResource",
                   "name": ""
                 },
                 "ApiRequestBody": {
