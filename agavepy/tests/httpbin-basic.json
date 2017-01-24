@@ -1,0 +1,9 @@
+{
+  "name": "httpbin_agavepy",
+  "version": "v0.1",
+  "context": "/httpbin_agavepy",
+  "url": "https://httpbin.org",
+  "visibility": "public",
+  "methods": ["GET", "POST", "PUT", "DELETE", "HEAD"],
+  "auth": "oauth"
+}
