@@ -61,38 +61,38 @@ def agave(credentials):
 
 
 def validate_account_summary(account):
-    assert 'accountId' in account
+    assert 'id' in account
 
 def validate_account(account):
-    assert 'accountId' in account
+    assert 'id' in account
     assert 'roles' in account
     roles = account['roles']
     assert 'Internal_everyone'
 
 def validate_role_summary(role):
-    assert 'roleId' in role
+    assert 'id' in role
 
 def validate_role(role):
-    assert 'roleId' in role
+    assert 'id' in role
     assert 'accounts' in role
 
 def validate_client(client):
-    assert 'clientId' in client
-    assert 'clientName' in client
-    assert 'clientOwner' in client
+    assert 'id' in client
+    assert 'name' in client
+    assert 'owner' in client
 
 def validate_api_summary(api):
-    assert 'apiId' in api
+    assert 'id' in api
     assert 'name' in api
-    assert 'provider' in api
+    assert 'owner' in api
     assert 'status' in api
     assert 'version' in api
 
 def validate_api_details(api):
     validate_api_summary(api)
-    assert api['apiId'] == 'Apps-admin-v2'
+    assert api['id'] == 'Apps-admin-v2'
     assert api['name'] == 'Apps'
-    assert api['provider'] == 'admin'
+    assert api['owner'] == 'admin'
     assert api['status'] == 'PUBLISHED'
     assert api['version'] == 'v2'
     assert api['context'] == '/apps/v2'
@@ -121,7 +121,7 @@ def test_get_account(agave):
 
 def test_added_account_in_list(agave):
     accounts = agave.admin.listAccounts()
-    assert 'agpytest_suite_svc_account' in [a.accountId for a in accounts]
+    assert 'agpytest_suite_svc_account' in [a.id for a in accounts]
 
 def test_list_roles(agave):
     roles = agave.admin.listRoles()
@@ -166,12 +166,12 @@ def test_remove_account_from_role(agave):
 def test_delete_role(agave):
     agave.admin.deleteRole(roleId='Internal_agpytest_suite_svc_role')
     roles = agave.admin.listRoles()
-    assert 'Internal_agpytest_suite_svc_role' not in [r.roleId for r in roles]
+    assert 'Internal_agpytest_suite_svc_role' not in [r.id for r in roles]
 
 def test_delete_account(agave):
     agave.admin.deleteAccount(accountId='agpytest_suite_svc_account')
     accounts = agave.admin.listAccounts()
-    assert 'agpytest_suite_svc_account' not in [a.accountId for a in accounts]
+    assert 'agpytest_suite_svc_account' not in [a.id for a in accounts]
 
 def test_list_clients(agave):
     clients = agave.admin.listClients()
@@ -191,11 +191,11 @@ def test_add_api(agave):
     api_desc = json.load(open(os.path.join(HERE, 'httpbin-basic.json')))
     api = agave.admin.addApi(body=api_desc)
     validate_api_summary(api)
-    assert api['apiId'] == 'httpbin_agavepy-admin-v0.1'
+    assert api['id'] == 'httpbin_agavepy-admin-v0.1'
     assert api['name'] == 'httpbin_agavepy'
     assert api['context'] == '/httpbin_agavepy/v0.1'
     assert api['status'] == 'CREATED'
-    assert api['provider'] == 'admin'
+    assert api['owner'] == 'admin'
     assert api['version'] == 'v0.1'
     assert api['visibility'] == 'public'
 
@@ -207,7 +207,7 @@ def test_update_api_status(agave):
 def test_delete_api(agave):
     agave.admin.deleteApi(apiId='httpbin_agavepy-admin-v0.1')
     apis = agave.admin.listApis()
-    assert 'httpbin_agavepy-admin-v0.1' not in [a.apiId for a in apis]
+    assert 'httpbin_agavepy-admin-v0.1' not in [a.id for a in apis]
 
 
 

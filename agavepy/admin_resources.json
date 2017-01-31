@@ -1,13 +1,46 @@
-        {
-            "url": "http://localhost:9999/admin",
-            "path": "/admin",
-            "description": "Tenant admin services.",
-            "api_declaration": {
-              "authorizations": [
-                "oauth2"
-              ],
-              "swaggerVersion": "1.2",
-              "apis": [
+{
+    "info": {
+        "termsOfServiceUrl": "http://agaveapi.co/terms/",
+        "contact": "dooley@tacc.utexas.edu",
+        "description": "Your Science-as-a-Service API Platform. \nFor more information, visit <a href=\"http://agaveapi.co\">http://agaveapi.co</a>",
+        "licenseUrl": "http://agaveapi.co/terms",
+        "title": "iPlant Agave API"
+    },
+    "authorizations": {
+        "oauth2": {
+            "scopes": [
+                {
+                    "scope": "PRODUCTION",
+                    "description": "catchall grant type for all api services."
+                }
+            ],
+            "type": "oauth2",
+            "grantTypes": {
+                "implicit": {
+                    "loginEndpoint": {
+                        "url": "https://{{ api_server_base }}/login"
+                    },
+                    "tokenName": "access_token"
+                },
+                "authorization_code": {
+                    "tokenRequestEndpoint": {
+                        "url": "https://{{ api_server_base }}/authorize",
+                        "clientSecretName": "client_secret",
+                        "clientIdName": "client_id"
+                    },
+                    "tokenEndpoint": {
+                        "url": "https://{{ api_server_base }}/token",
+                        "tokenName": "access_code"
+                    }
+                }
+            }
+        },
+        "basicAuth": {
+            "type": "basicAuth"
+        }
+    },
+    "swaggerVersion": "1.2",
+    "apis": [
                 {
                   "operations": [
                     {
@@ -719,7 +752,7 @@
               "models": {
                 "ServiceAccountSummary": {
                   "properties": {
-                    "accountId": {
+                    "id": {
                       "type": "string",
                       "description": "The unique id of the service account.",
                       "name": "id"
@@ -730,10 +763,10 @@
                 },
                 "ServiceAccount": {
                   "properties": {
-                    "accountId": {
+                    "id": {
                       "type": "string",
                       "description": "The unique id of the service account.",
-                      "name": "accountId"
+                      "name": "id"
                     },
                     "password": {
                       "type": "string",
@@ -973,7 +1006,7 @@
                 },
                 "RoleDetails": {
                   "properties": {
-                    "roleId": {
+                    "id": {
                       "type": "string",
                       "description": "The unique id of the role.",
                       "name": "id"
@@ -992,7 +1025,7 @@
                 },
                 "Role": {
                   "properties": {
-                    "roleId": {
+                    "id": {
                       "type": "string",
                       "description": "The unique id of the role.",
                       "name": "id"
@@ -1003,7 +1036,7 @@
                 },
                 "RoleSummary": {
                   "properties": {
-                    "roleId": {
+                    "id": {
                       "type": "string",
                       "description": "The unique id of the role.",
                       "name": "id"
@@ -1109,20 +1142,20 @@
                 },
                 "Client": {
                   "properties": {
-                    "clientId": {
+                    "id": {
                       "type": "string",
                       "description": "Unique id of the client.",
-                      "name": "clientId"
+                      "name": "id"
                     },
-                    "clientName": {
+                    "name": {
                       "type": "string",
                       "description": "Name of the client.",
-                      "name": "clientName"
+                      "name": "name"
                     },
-                    "clientOwner": {
+                    "owner": {
                       "type": "string",
                       "description": "Account name of the owner of the client.",
-                      "name": "clientOwner"
+                      "name": "owner"
                     }
                   },
                   "id": "Client",
@@ -1194,10 +1227,10 @@
                 },
                 "Api": {
                   "properties": {
-                    "apiId": {
+                    "id": {
                       "type": "string",
                       "description": "Unique id of the API.",
-                      "name": "apiId"
+                      "name": "id"
                     },
                     "name": {
                       "type": "string",
@@ -1214,20 +1247,15 @@
                       "description": "Environments in which the API is available.",
                       "name": "environments"
                     },
-                    "provider": {
+                    "owner": {
                       "type": "string",
-                      "description": "Account name of the provider of the API.",
-                      "name": "provider"
+                      "description": "Account name of the owner of the API.",
+                      "name": "owner"
                     },
                     "version": {
                       "type": "string",
                       "description": "Platform version of the API.",
                       "name": "version"
-                    },
-                    "lastUpdated": {
-                      "type": "string",
-                      "description": "Time the API was last updated.",
-                      "name": "lastUpdated"
                     },
                     "status": {
                       "type": "string",
@@ -1256,10 +1284,10 @@
                 },
                 "ApiSummary": {
                   "properties": {
-                    "apiId": {
+                    "id": {
                       "type": "string",
                       "description": "Unique id of the API.",
-                      "name": "apiId"
+                      "name": "id"
                     },
                     "name": {
                       "type": "string",

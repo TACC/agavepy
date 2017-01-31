@@ -11793,7 +11793,7 @@
               "models": {
                 "ServiceAccountSummary": {
                   "properties": {
-                    "accountId": {
+                    "id": {
                       "type": "string",
                       "description": "The unique id of the service account.",
                       "name": "id"
@@ -11804,7 +11804,7 @@
                 },
                 "ServiceAccount": {
                   "properties": {
-                    "accountId": {
+                    "id": {
                       "type": "string",
                       "description": "The unique id of the service account.",
                       "name": "accountId"
@@ -12047,7 +12047,7 @@
                 },
                 "RoleDetails": {
                   "properties": {
-                    "roleId": {
+                    "id": {
                       "type": "string",
                       "description": "The unique id of the role.",
                       "name": "id"
@@ -12066,7 +12066,7 @@
                 },
                 "Role": {
                   "properties": {
-                    "roleId": {
+                    "id": {
                       "type": "string",
                       "description": "The unique id of the role.",
                       "name": "id"
@@ -12077,7 +12077,7 @@
                 },
                 "RoleSummary": {
                   "properties": {
-                    "roleId": {
+                    "id": {
                       "type": "string",
                       "description": "The unique id of the role.",
                       "name": "id"
@@ -12183,20 +12183,20 @@
                 },
                 "Client": {
                   "properties": {
-                    "clientId": {
+                    "id": {
                       "type": "string",
                       "description": "Unique id of the client.",
-                      "name": "clientId"
+                      "name": "id"
                     },
                     "clientName": {
                       "type": "string",
                       "description": "Name of the client.",
                       "name": "clientName"
                     },
-                    "clientOwner": {
+                    "owner": {
                       "type": "string",
                       "description": "Account name of the owner of the client.",
-                      "name": "clientOwner"
+                      "name": "owner"
                     }
                   },
                   "id": "Client",
@@ -12268,10 +12268,10 @@
                 },
                 "Api": {
                   "properties": {
-                    "apiId": {
+                    "id": {
                       "type": "string",
                       "description": "Unique id of the API.",
-                      "name": "apiId"
+                      "name": "id"
                     },
                     "name": {
                       "type": "string",
@@ -12288,20 +12288,15 @@
                       "description": "Environments in which the API is available.",
                       "name": "environments"
                     },
-                    "provider": {
+                    "owner": {
                       "type": "string",
-                      "description": "Account name of the provider of the API.",
-                      "name": "provider"
+                      "description": "Account name of the owner of the API.",
+                      "name": "owner"
                     },
                     "version": {
                       "type": "string",
                       "description": "Platform version of the API.",
                       "name": "version"
-                    },
-                    "lastUpdated": {
-                      "type": "string",
-                      "description": "Time the API was last updated.",
-                      "name": "lastUpdated"
                     },
                     "status": {
                       "type": "string",
@@ -12330,20 +12325,20 @@
                 },
                 "ApiSummary": {
                   "properties": {
-                    "apiId": {
+                    "id": {
                       "type": "string",
                       "description": "Unique id of the API.",
-                      "name": "apiId"
+                      "name": "id"
                     },
                     "name": {
                       "type": "string",
                       "description": "Name of the API, also used as part of the id.",
                       "name": "name"
                     },
-                    "provider": {
+                    "owner": {
                       "type": "string",
-                      "description": "Account name of the provider of the API.",
-                      "name": "provider"
+                      "description": "Account name of the owner of the API.",
+                      "name": "owner"
                     },
                     "status": {
                       "type": "string",
