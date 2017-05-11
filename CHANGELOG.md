@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.4.0 - 2017-05-11
+### Added
+- Added support for streaming file uploads via the requests_toolbelt.
+
+### Changed
+- No change.
+
+### Removed
+- No change.
+
+
 ## 0.3.14 - 2016-10-13
 ### Added
 - No change.
