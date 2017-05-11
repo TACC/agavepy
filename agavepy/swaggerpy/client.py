@@ -13,6 +13,8 @@ import urllib
 import swaggerpy
 from numbers import Real
 
+from requests_toolbelt import MultipartEncoder
+
 from swaggerpy.http_client import SynchronousHttpClient
 from swaggerpy.processors import WebsocketProcessor, SwaggerProcessor
 
@@ -85,6 +87,7 @@ class Operation(object):
                 raise AssertionError("Parameter query must be of type dict.")
         accepts_multipart = ('multipart/form-data' in
                              self.json.get('consumes', []))
+
         for param in self.json.get('parameters', []):
             pname = param['name']
             ptype = param['type']
@@ -106,7 +109,14 @@ class Operation(object):
                     params[pname] = value
                 elif param_type == 'form':
                     if accepts_multipart and self.file_like(value):
-                        files[pname] = value
+                        # AD-1345 : issue uploading large files (see ticket).
+                        try:
+                            file_name = os.path.basename(value.name)
+                        except AttributeError:
+                            raise TypeError("File upload object must have a name attribute.")
+                        m = MultipartEncoder(fields = {pname: (file_name, value, 'text/plain')})
+                        headers['Content-type'] = m.content_type
+                        data = m
                     else:
                         data[pname] = value
                 elif param_type == 'body':
