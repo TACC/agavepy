@@ -3630,7 +3630,7 @@
                                         "name": "jobId"
                                     },
                                     {
-                                        "description": "The path to an output file or folder relative to the job output directory. This resource will follow data around as it moves from the execution system to archival storage.",
+                                        "description": "Path to an output file or folder relative to the job output directory. This resource will follow data around as it moves from the execution system to archival storage.",
                                         "allowMultiple": false,
                                         "required": false,
                                         "type": "string",
@@ -3639,7 +3639,7 @@
                                     },
                                     {
                                         "defaultValue": 250,
-                                        "description": "The max number of results.",
+                                        "description": "max number of results.",
                                         "format": "int32",
                                         "allowMultiple": false,
                                         "required": false,
@@ -3661,14 +3661,14 @@
                                     }
                                 ],
                                 "nickname": "listOutputs",
-                                "notes": "The inputs will be obtained from the job submission folder.",
+                                "notes": "If issued against an un-archived job, inputs and intermediate files will also be visible and accesible.",
                                 "is_websocket": false,
-                                "summary": "List the output folder for a job.",
+                                "summary": "List contents of a job's output directory.",
                                 "type": "MultipleRemoteFileResponse",
                                 "method": "GET"
                             }
                         ],
-                        "path": "/jobs/v2/{jobId}/output/listings/{filePath}",
+                        "path": "/jobs/v2/{jobId}/outputs/listings/{filePath}",
                         "description": "Return a listing of the output folder from the job.",
                         "has_websocket": false
                     },
@@ -3685,7 +3685,7 @@
                                         "name": "jobId"
                                     },
                                     {
-                                        "description": "The path to an output file relative to the job output directory. ",
+                                        "description": "Path to an output file relative to the job output directory.",
                                         "allowMultiple": false,
                                         "required": true,
                                         "type": "string",
@@ -3704,7 +3704,7 @@
                                 "method": "GET"
                             }
                         ],
-                        "path": "/jobs/v2/{jobId}/ouputs/media/{filePath}",
+                        "path": "/jobs/v2/{jobId}/outputs/media/{filePath}",
                         "description": "Download an output file.",
                         "has_websocket": false
                     },
