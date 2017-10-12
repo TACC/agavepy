@@ -1,6 +1,20 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.5.0 - 2017-05-11
+### Added
+- Added support for job output utilities.
+- Add support for creating agave clients within actors from JWT information.
+- Add support for actor state updates.
+- Add support for additional variables returned from the actors get_context() method.
+
+### Changed
+- No change.
+
+### Removed
+- No change.
+
+
 ## 0.4.0 - 2017-05-11
 ### Added
 - Added support for streaming file uploads via the requests_toolbelt.
