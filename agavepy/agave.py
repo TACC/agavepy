@@ -110,7 +110,8 @@ class Token(object):
     def __init__(self,
                  username, password,
                  api_server, api_key, api_secret, verify,
-                 parent, _token=None, _refresh_token=None, token_username=None):
+                 parent, _token=None, _refresh_token=None, token_username=None,
+                 expires_at=None, expires_in=None, created_at=None):
         self.username = username
         self.password = password
         self.api_server = api_server
@@ -123,6 +124,9 @@ class Token(object):
         if _token and _refresh_token:
             self.token_info = {'access_token': _token,
                                'refresh_token': _refresh_token}
+            self.token_info['expires_at'] = expires_at
+            self.token_info['expires_in'] = expires_in
+            self.token_info['created_at'] = created_at
             self.parent._token = _token
 
         self.token_url = urlparse.urljoin(self.api_server, 'token')
@@ -142,8 +146,12 @@ class Token(object):
         self.token_info['expiration'] = created_at + expires_in
         self.token_info['expires_at'] = time.ctime(created_at + expires_in)
         token = self.token_info['access_token']
-        # Notify parent that a token was created
+        # Update parent with new token data
         self.parent._token = token
+        self.parent.refresh_token = self.token_info['refresh_token']
+        self.parent.created_at = self.token_info['created_at']
+        self.parent.expiration = self.token_info['expiration']
+        self.parent.expires_at = self.token_info['expires_at']
         # try to persist the token data
         try:
             self.parent._write_client()
@@ -186,6 +194,10 @@ class Agave(object):
         ('jwt', False, 'jwt', None),
         ('jwt_header_name', False, 'header_name', None),
         ('api_server', True, 'api_server', None),
+        ('tenant_id', False, 'tenant_id', None),
+        ('expires_in', False, 'expires_in', None),
+        ('expires_at', False, 'expires_at', None),
+        ('created_at', False, 'created_at', None),
         ('client_name', False, 'client_name', None),
         ('api_key', False, 'api_key', None),
         ('api_secret', False, 'api_secret', None),
@@ -232,15 +244,27 @@ class Agave(object):
         d = {}
         if hasattr(self, 'token') and hasattr(self.token, 'token_info'):
             d = {'token': self.token.token_info.get('access_token'),
-                 'refresh_token': self.token.token_info.get('refresh_token')}
+                 'refresh_token': self.token.token_info.get('refresh_token'),
+                 'expires_in': self.token.token_info.get('expires_in'),
+                 'expires_at': self.token.token_info.get('expires_at'),
+                 'created_at': self.token.token_info.get('created_at'),
+                 }
         d.update({attr: getattr(self, attr) for _, _, attr, _ in self.PARAMS \
                          if not attr in ['resources', '_token', '_refresh_token', 'header_name', 'jwt', 'password', 'token_callback']})
+        # if we are writing to the .agave/current file, modify the fields accordingly
+        if Agave.agpy_path() == os.path.expanduser('~/.agave/current'):
+            d['tenantid'] = d.pop('tenant_id', '')
+            d['apisecret'] = d.pop('api_secret', '')
+            d['apikey'] = d.pop('api_key', '')
+            d['baseurl'] = d.pop('api_server', '')
+            d['access_token'] = d.pop('token', '')
         return d
 
     @classmethod
     def agpy_path(self):
         """Return path to .agpy file"""
-        places = [os.path.expanduser('~/.agpy'),
+        places = [os.path.expanduser('~/.agave/current'),
+                  os.path.expanduser('~/.agpy'),
                   '/etc/.agpy',
                   '/root/.agpy',
                   '/.agpy']
@@ -252,7 +276,31 @@ class Agave(object):
     def _read_clients(cls):
         """Read clients from the .agpy file."""
         with open(Agave.agpy_path()) as agpy:
-            return json.loads(agpy.read())
+            clients = json.loads(agpy.read())
+        # if we are reading the '.agave/current' file, we need to do some translation
+        if Agave.agpy_path() == os.path.expanduser('~/.agave/current'):
+            # first, make sure we have a list; in past versions of the CLI, the current file was a
+            # single JSON object
+            if not isinstance(clients, list):
+                clients = [clients]
+            for client in clients:
+                # convert CLI keys to agavepy keys:
+                for k, v in client.items():
+                    if k == 'tenantid':
+                        client['tenant_id'] = v
+                    elif k == 'apisecret':
+                        client['api_secret'] = v
+                    elif k == 'apikey':
+                        client['api_key'] = v
+                    elif k == 'baseurl':
+                        client['api_server'] = v
+                    elif k == 'access_token':
+                        client['token'] = v
+                # add missing attrs:
+                if 'verify' not in client:
+                    # default to verifying SSL:
+                    client['verify'] = True
+        return clients
 
     @classmethod
     def _restore_client(cls, **kwargs):
@@ -260,6 +308,7 @@ class Agave(object):
         clients = Agave._read_clients()
         if len(clients) == 0:
             raise AgaveError("No clients found.")
+        # if no attribute was passed, we'll just restore the first client in the list:
         if len(kwargs.items()) == 0:
             return Agave(**clients[0])
         for k, v in kwargs.items():
@@ -282,15 +331,29 @@ class Agave(object):
 
     def _write_client(self):
         """Update the .agpy file with the description of a client."""
-        clients = Agave._read_clients()
-        new_clients = []
-        for client in clients:
-            if client.get('api_key') == self.api_key or client.get('client_name') == self.client_name:
-                new_clients.append(self.to_dict())
-            else:
-                new_clients.append(client)
-        with open(Agave.agpy_path(), 'w') as agpy:
-            agpy.write(json.dumps(new_clients))
+        # if we are reading the '.agave/current' file, we need to use that format and simply update
+        # a few fields
+        if Agave.agpy_path() == os.path.expanduser('~/.agave/current'):
+            with open(Agave.agpy_path(), 'r') as agpy:
+                old_data = json.loads(agpy.read())
+            new_data = self.to_dict()
+            old_data['access_token'] = new_data['access_token']
+            old_data['refresh_token'] = new_data['refresh_token']
+            with open(Agave.agpy_path(), 'w') as agpy:
+                agpy.write(json.dumps(new_data))
+
+        else:
+            clients = Agave._read_clients()
+            new_clients = []
+            for client in clients:
+                # if this is the current client, update with the latest representation
+                if client.get('api_key') == self.api_key or client.get('client_name') == self.client_name:
+                    new_clients.append(self.to_dict())
+                else:
+                    # otherwise, write what is already there.
+                    new_clients.append(client)
+            with open(Agave.agpy_path(), 'w') as agpy:
+                agpy.write(json.dumps(new_clients))
 
     def refresh_aris(self):
         self.clients_ari()
@@ -342,7 +405,13 @@ class Agave(object):
             self.username, self.password,
             self.api_server, self.api_key, self.api_secret,
             self.verify,
-            self, self._token, self._refresh_token, self.token_username)
+            self,
+            self._token,
+            self._refresh_token,
+            self.token_username,
+            self.expires_at,
+            self.expires_in,
+            self.created_at)
         if self._token:
             pass
         else:
