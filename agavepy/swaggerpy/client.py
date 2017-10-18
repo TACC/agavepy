@@ -9,7 +9,7 @@ import json
 import logging
 import os.path
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import swaggerpy
 from numbers import Real
 
@@ -52,7 +52,7 @@ class Operation(object):
     def file_like(self, obj):
         """Try to decide if we should put this object in multipart."""
 
-        primitives = (basestring, Real)
+        primitives = (str, Real)
         return not isinstance(obj, primitives)
 
     def __call__(self, **kwargs):
@@ -61,7 +61,7 @@ class Operation(object):
         :param kwargs: ARI operation arguments.
         :return: Implementation specific response or WebSocket connection
         """
-        log.info("%s?%r" % (self.json['nickname'], urllib.urlencode(kwargs)))
+        log.info("%s?%r" % (self.json['nickname'], urllib.parse.urlencode(kwargs)))
         # http method must be native string (for Python 2.x, bytes). This must be done to prevent errors when trying to
         # upload binary data because when unicode is passed, the concatenated request string gets decoded using the
         # default encoding (ASCII) and that breaks on binary data. See the bottom of this thread:
@@ -120,7 +120,7 @@ class Operation(object):
                     else:
                         data[pname] = value
                 elif param_type == 'body':
-                    data = (value if isinstance(value, basestring)
+                    data = (value if isinstance(value, str)
                             else json.dumps(value))
                     headers = {'Content-type': 'application/json'}
                 else:
@@ -139,7 +139,7 @@ class Operation(object):
             if value:
                 if not isinstance(value, dict):
                     raise TypeError("search parameter must be of type dict")
-                for k, v in value.items():
+                for k, v in list(value.items()):
                     params[k] = v
                 kwargs.pop('search')
             value = kwargs.get('filter')
@@ -151,7 +151,7 @@ class Operation(object):
 
         if kwargs:
             raise TypeError("'%s' does not have parameters %r" %
-                            (self.json['nickname'], kwargs.keys()))
+                            (self.json['nickname'], list(kwargs.keys())))
 
         log.info("%s %s(%r)", method, uri, params)
         if self.json['is_websocket']:
@@ -249,7 +249,7 @@ class SwaggerClient(object):
             processors.extend(extra_processors)
         loader = swaggerpy.Loader(http_client, processors)
 
-        if isinstance(url_or_resource, basestring):
+        if isinstance(url_or_resource, str):
             log.debug("Loading from %s" % url_or_resource)
             self.api_docs = loader.load_resource_listing(url_or_resource)
         else:

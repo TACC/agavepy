@@ -23,7 +23,7 @@ class ParsingContext(object):
         self.args = {'context': self}
 
     def __repr__(self):
-        zipped = zip(self.type_stack, self.id_stack)
+        zipped = list(zip(self.type_stack, self.id_stack))
         strs = ["%s=%s" % (t, i) for (t, i) in zipped]
         return "ParsingContext(stack=%r)" % strs
 
@@ -127,10 +127,10 @@ class SwaggerProcessor(object):
                     context.pop()
                 context.pop()
             models = listing_api['api_declaration'].get('models', {})
-            for (name, model) in models.items():
+            for (name, model) in list(models.items()):
                 context.push('model', model, 'id')
                 self.process_model(**context.args)
-                for (name, prop) in model['properties'].items():
+                for (name, prop) in list(model['properties'].items()):
                     context.push('prop', prop, 'name')
                     self.process_property(**context.args)
                     context.pop()
@@ -273,8 +273,8 @@ class FlatenningProcessor(SwaggerProcessor):
     """
 
     def process_api_declaration(self, resources, resource, context):
-        resource.model_list = resource.models.values()
+        resource.model_list = list(resource.models.values())
 
     def process_model(self, resources, resource, model, context):
         # Convert properties dict to list
-        model.property_list = model.properties.values()
+        model.property_list = list(model.properties.values())

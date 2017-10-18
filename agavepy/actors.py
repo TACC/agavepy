@@ -7,7 +7,7 @@ import ast
 import os
 import requests
 
-from agave import Agave, AttrDict
+from .agave import Agave, AttrDict
 
 
 def get_client():
@@ -53,5 +53,5 @@ def update_state(state):
     url = '{}/actors/{}/state'.format(base,
                                       os.environ.get('_abaco_actor_id'))
     headers = {'Authorization': 'Bearer {}'.format(token)}
-    print "update_state() using URL: {}".format(url)
+    print(("update_state() using URL: {}".format(url)))
     requests.post(url, headers=headers, json={'state':state})

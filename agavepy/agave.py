@@ -1,7 +1,11 @@
 import xml.etree.ElementTree as ElementTree
 from functools import wraps
-import urlparse
-import urllib
+
+from future import standard_library
+standard_library.install_aliases()
+
+#import urllib.parse
+import urllib.request, urllib.parse, urllib.error
 import os
 import shelve
 from contextlib import closing
@@ -15,9 +19,9 @@ import requests
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
 
-from swaggerpy.client import SwaggerClient
-from swaggerpy.http_client import SynchronousHttpClient
-from swaggerpy.processors import SwaggerProcessor
+from .swaggerpy.client import SwaggerClient
+from .swaggerpy.http_client import SynchronousHttpClient
+from .swaggerpy.processors import SwaggerProcessor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -63,7 +67,7 @@ def load_resource(api_server):
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(HERE),
                              trim_blocks=True, lstrip_blocks=True)
     rsrcs = json.loads(conf.compile(
-        {'api_server_base': urlparse.urlparse(api_server).netloc}, env))
+        {'api_server_base': urllib.parse.urlparse(api_server).netloc}, env))
     return rsrcs
 
 def with_refresh(client, f, *args, **kwargs):
@@ -129,7 +133,7 @@ class Token(object):
             self.token_info['created_at'] = created_at
             self.parent._token = _token
 
-        self.token_url = urlparse.urljoin(self.api_server, 'token')
+        self.token_url = urllib.parse.urljoin(str(self.api_server), 'token')
 
     def _token(self, data):
         auth = requests.auth.HTTPBasicAuth(self.api_key, self.api_secret)
@@ -206,7 +210,7 @@ class Agave(object):
         ('resources', False, 'resources', None),
         ('verify', False, 'verify', True),
         ('token_callback', False, 'token_callback', None),
-        ('proxies', False, 'proxies', urllib.getproxies())
+        ('proxies', False, 'proxies', urllib.request.getproxies())
     ]
 
     def __init__(self, **kwargs):
@@ -220,7 +224,7 @@ class Agave(object):
             setattr(self, attr, value)
         if self.resources is None:
             self.resources = load_resource(self.api_server)
-        self.host = urlparse.urlsplit(self.api_server).netloc
+        self.host = urllib.parse.urlsplit(self.api_server).netloc
         if self.token_callback and not hasattr(self.token_callback, '__call__'):
             raise AgaveError('token_callback must be callable.')
         # If we are passed a JWT directly, we can bypass all OAuth-related tasks
@@ -285,7 +289,7 @@ class Agave(object):
                 clients = [clients]
             for client in clients:
                 # convert CLI keys to agavepy keys:
-                for k, v in client.items():
+                for k, v in list(client.items()):
                     if k == 'tenantid':
                         client['tenant_id'] = v
                     elif k == 'apisecret':
@@ -309,9 +313,9 @@ class Agave(object):
         if len(clients) == 0:
             raise AgaveError("No clients found.")
         # if no attribute was passed, we'll just restore the first client in the list:
-        if len(kwargs.items()) == 0:
+        if len(list(kwargs.items())) == 0:
             return Agave(**clients[0])
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             for client in clients:
                 if client.get(k) == v:
                     return Agave(**client)
@@ -467,9 +471,9 @@ class Agave(object):
     def __dir__(self):
         base = []
         if hasattr(self, 'clients_resource') and hasattr(self.clients_resource, 'resources'):
-            base.extend(self.clients_resource.resources.keys())
+            base.extend(list(self.clients_resource.resources.keys()))
         if self.all is not None:
-            base.extend(self.all.resources.keys())
+            base.extend(list(self.all.resources.keys()))
         return list(set(base))
 
 
@@ -485,12 +489,12 @@ class Resource(object):
     def __dir__(self):
         if hasattr(self, 'clients_resource') and hasattr(self.clients_resource, 'resources'):
             clients = self.client.clients_resource.resources
-            base = clients[self.resource].operations.keys()
+            base = list(clients[self.resource].operations.keys())
         else:
             base = []
         if self.client.all is not None:
             base.extend(
-                self.client.all.resources[self.resource].operations.keys())
+                list(self.client.all.resources[self.resource].operations.keys()))
         return base
 
 

@@ -10,7 +10,7 @@
 import logging
 import requests
 import requests.auth
-import urlparse
+import urllib.parse
 import websocket
 
 log = logging.getLogger(__name__)
@@ -95,7 +95,7 @@ class Authenticator(object):
         :param url: URL to check.
         :return: True if matches host, port and scheme, False otherwise.
         """
-        split = urlparse.urlsplit(url)
+        split = urllib.parse.urlsplit(url)
         return self.host == split.hostname
 
     def apply(self, request):
@@ -222,7 +222,7 @@ class SynchronousHttpClient(HttpClient):
         preped_req = proto_req.prepare()
         # Pull the Authorization header, if needed
         header = ["%s: %s" % (k, v)
-                  for (k, v) in preped_req.headers.items()
+                  for (k, v) in list(preped_req.headers.items())
                   if k == 'Authorization']
         # Pull the URL, which includes query params
         url = preped_req.url

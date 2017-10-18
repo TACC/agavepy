@@ -28,16 +28,16 @@ import requests
 
 import agavepy.agave as a
 from agavepy.async import AgaveAsyncResponse
-import testdata
+from . import testdata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 @pytest.fixture(scope='session')
 def credentials():
     credentials_file = os.environ.get('creds', 'test_credentials.json')
-    print "Using: {}".format(credentials_file)
+    print(("Using: {}".format(credentials_file)))
     return json.load(open(
-        os.path.join(HERE, credentials_file)))
+        os.path.join(HERE, credentials_file), 'r'))
 
 @pytest.fixture(scope='session')
 def agave(credentials):
@@ -137,7 +137,7 @@ def test_add_compute_system(agave, test_compute_system):
                            headers={'Authorization': 'Bearer ' + agave._token},
                            verify=agave.verify)
     except requests.exceptions.HTTPError as exc:
-        print "Error trying to register compute system:", str(exc)
+        print(("Error trying to register compute system:", str(exc)))
         raise exc
     validate_system(system)
 
@@ -150,7 +150,7 @@ def test_add_storage_system(agave, test_storage_system):
                        headers={'Authorization': 'Bearer ' + agave._token},
                        verify=agave.verify)
     except requests.exceptions.HTTPError as exc:
-        print "Error trying to set storage system as default:", str(exc)
+        print(("Error trying to set storage system as default:", str(exc)))
         raise exc
     validate_system(system)
 
@@ -177,7 +177,7 @@ def test_add_app(agave, test_app):
 
 def test_list_clients(agave, credentials):
     if not credentials.get('username') or not credentials.get('password'):
-        print "Skipping test_list_clients"
+        print("Skipping test_list_clients")
         return
     clients = agave.clients.list()
     for client in clients:
@@ -557,7 +557,7 @@ def validate_notification(n):
 
 def test_create_notification_to_url(agave, credentials, test_storage_system):
     # first, create a request bin
-    base_url = 'http://requestb.in/api/v1/bins'
+    base_url = 'https://requestb.in/api/v1/bins'
     rsp = requests.post(base_url)
     bin_name = rsp.json().get('name')
     bin_url = '{}/{}'.format(base_url, bin_name)
@@ -599,11 +599,11 @@ def test_delete_notification(agave, credentials):
 
 def test_notification_to_url(agave, credentials, test_storage_system):
     # first, create a request bin
-    base_url = 'http://requestb.in/api/v1/bins'
+    base_url = 'https://requestb.in/api/v1/bins'
     rsp = requests.post(base_url)
     bin_name = rsp.json().get('name')
     bin_url = '{}/{}'.format(base_url, bin_name)
-    notification_target = 'http://requestb.in/{}'.format(bin_name)
+    notification_target = 'https://requestb.in/{}'.format(bin_name)
     # create notification
      # get uuid of storage system
     stor = agave.systems.get(systemId=credentials['storage'])
