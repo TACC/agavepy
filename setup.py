@@ -29,6 +29,10 @@ if sys.argv[-1] == 'publish':
 readme = open('README.rst').read()
 requires = [pkg for pkg in open('requirements.txt').readlines()]
 
+# append the python2 requirements
+if sys.version_info[0] == 2:
+    requires.extend([pkg for pkg in open('requirements-py2.txt').readlines()])
+
 setup(
     name='agavepy',
     version='0.5.0',
