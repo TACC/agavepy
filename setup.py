@@ -35,7 +35,7 @@ if sys.version_info[0] == 2:
 
 setup(
     name='agavepy',
-    version='0.6.0',
+    version='0.6.1',
     description='SDK for Agave',
     long_description=readme,
     author='Joe Stubbs, Walter Moreira',
@@ -47,7 +47,7 @@ setup(
     ],
     package_dir={'agavepy': 'agavepy'},
     package_data={'agavepy': ['resources.json', 'resources.json.j2']},
-    data_files=[('', ['requirements.txt'])],
+    data_files=[('', ['requirements.txt', 'requirements-py2.txt'])],
     install_requires=requires,
     license="BSD",
     zip_safe=False,
