@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.6.1 - 2017-11-6
+### Added
+- No change.
+
+### Changed
+- Fixed an issue in setup.py prevting pip install to work from within python 2.
+
+### Removed
+- No change.
+
+
 ## 0.6.0 - 2017-11-6
 ### Added
 - Added support for Python 3.
