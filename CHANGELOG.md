@@ -1,7 +1,20 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## 0.5.0 - 2017-05-11
+## 0.6.0 - 2017-11-6
+### Added
+- Added support for Python 3.
+- Added support for restoring an agavepy client from an Agave CLI cache file.
+
+### Changed
+- Fixed issue where associatedUuid was (erroneously) required for notifications.list().
+
+### Removed
+- No change.
+
+
+
+## 0.5.0 - 2017-10-11
 ### Added
 - Added support for job output utilities.
 - Add support for creating agave clients within actors from JWT information.
