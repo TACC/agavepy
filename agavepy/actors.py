@@ -38,9 +38,11 @@ def get_context():
     })
     try:
         context['message_dict'] = ast.literal_eval(context['raw_message'])
+    except SyntaxError:
+        context['message_dict'] = None    
     except ValueError:
         context['message_dict'] = None
-    context.update(os.environ)
+
     context.update(os.environ)
     return context
 
