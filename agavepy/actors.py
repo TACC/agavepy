@@ -23,6 +23,7 @@ def get_client():
                    jwt_header_name='X-JWT-Assertion-dev_sandbox')
     else:
         # Try to use ~/.agave/current to support purely local testing
+        print("### Using local .agave")
         ag = Agave.restore()
 
     return ag
