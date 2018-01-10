@@ -16,14 +16,13 @@ def get_client():
     if os.environ.get('_abaco_access_token'):
         ag = Agave(api_server=os.environ.get('_abaco_api_server'),
                    token=os.environ.get('_abaco_access_token'))
-    elif os.environ.get('_abaco_api_server'):
+    elif os.environ.get('_abaco_api_server') is None:
         # otherwise, create a client with a fake JWT. this will only work in testing scenarios.
         ag = Agave(api_server=os.environ.get('_abaco_api_server'),
                    jwt='123',
                    jwt_header_name='X-JWT-Assertion-dev_sandbox')
     else:
-        # Try to use ~/.agave/current to support purely local testing
-        print("### Using local .agave")
+        # try to use ~/.agave/current to support purely local testing
         ag = Agave.restore()
 
     return ag
