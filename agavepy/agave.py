@@ -207,6 +207,7 @@ class Agave(object):
         ('api_secret', False, 'api_secret', None),
         ('token', False, '_token', None),
         ('refresh_token', False, '_refresh_token', None),
+        ('use_nonce', False, 'use_nonce', False),
         ('resources', False, 'resources', None),
         ('verify', False, 'verify', True),
         ('token_callback', False, 'token_callback', None),
@@ -242,6 +243,8 @@ class Agave(object):
         self.clients_resource = None
         self.all = None
         self.refresh_aris()
+        if not hasattr(self, 'apps'):
+            raise AgaveError('Required parameters for client instantiation missing.')
 
     def to_dict(self):
         """Return a dictionary representing this client."""
@@ -365,6 +368,8 @@ class Agave(object):
         # we need to refresh using a different method
         if self.jwt:
             self.jwt_ari()
+        elif self.use_nonce:
+            self.nonce_ari()
         else:
             self.full_ari()
 
@@ -379,6 +384,11 @@ class Agave(object):
         # bearer token
         self.all = self.resource(
             'token', 'host', '_token')
+
+    def nonce_ari(self):
+        # if use_nonce is passed in, we use the NonceAuthenticator which does not require any credentials at
+        # the time of instantiation.
+        self.all = self.resource('nonce', 'host')
 
     def jwt_ari(self):
         # If a jwt is passed in, create a resource object with the header_name and jwt token:

@@ -10395,6 +10395,137 @@
                                         "type": "string",
                                         "paramType": "path",
                                         "name": "actorId"
+                                    }
+                                ],
+                                "type": "MultipleActorNonceResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the actor database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "List the current nonces for an actor.",
+                                "nickname": "listNonces",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the actor.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "actorId"
+                                    },
+                                    {
+                                        "defaultValue": "",
+                                        "description": "The description of the nonce to add.",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "type": "AddNonceRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "nickname": "addNonce",
+                                "notes": "",
+                                "is_websocket": false,
+                                "summary": "Add a nonce to an actor.",
+                                "type": "ActorNonceRequestResponse",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/nonces",
+                        "description": "Work with actor nonces.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the actor.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "actorId"
+                                    },
+                                    {
+                                        "description": "The id of the nonce.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "nonceId"
+                                    }
+                                ],
+                                "type": "SingleActorNonceResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the actor database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Get the details about a specific nonce for an actor.",
+                                "nickname": "getNonce",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the actor.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "actorId"
+                                    },
+                                    {
+                                        "description": "The id of the nonce.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "nonceId"
+                                    }
+                                ],
+                                "nickname": "deleteNonce",
+                                "notes": "",
+                                "is_websocket": false,
+                                "summary": "Delete a nonce.",
+                                "type": "EmptyActorNonceRequestResponse",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/nonces/{nonceId}",
+                        "description": "Work with a specific nonce.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the actor.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "actorId"
                                     },
                                     {
                                         "defaultValue": 250,
@@ -10888,6 +11019,149 @@
                             }
                         },
                         "id": "ActorWorkersRequestResponse",
+                        "name": ""
+                    },
+                    "ActorNonce": {
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "description": "The unique id of the nonce.",
+                                "name": "id"
+                            },
+                            "level": {
+                                "type": "string",
+                                "description": "Permission level associated with nonce.",
+                                "name": "level"
+                            },
+                            "actor_id": {
+                                "type": "string",
+                                "description": "Actor id associated with nonce.",
+                                "name": "actor_id"
+                            },
+                            "last_use_time": {
+                                "type": "string",
+                                "description": "Last time nonce was used.",
+                                "name": "last_use_time"
+                            },
+                            "max_uses": {
+                                "type": "string",
+                                "description": "Max number of uses for this nonce.",
+                                "name": "max_uses"
+                            },
+                            "create_time": {
+                                "type": "string",
+                                "description": "Time stamp when nonce was created.",
+                                "name": "create_time"
+                            },
+                            "remaining_uses": {
+                                "type": "int",
+                                "description": "Remaining uses of nonce.",
+                                "name": "remaining_uses"
+                            }
+                        },
+                        "id": "ActorNonce",
+                        "name": ""
+                    },
+
+                    "SingleActorNonceResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "ActorNonce",
+                                "name": "result"
+                            }
+                        },
+                        "id": "SingleActorNonceResponse",
+                        "name": ""
+                    },
+                    "MultipleActorNonceResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "items": {
+                                    "$ref": "ActorNonce"
+                                },
+                                "type": "array",
+                                "description": "response body",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MultipleActorNonceResponse",
+                        "name": ""
+                    },
+                    "EmptyActorNonceRequestResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "String",
+                                "name": "result"
+                            }
+                        },
+                        "id": "EmptyActorNonceRequestResponse",
+                        "name": ""
+                    },
+                    "AddNonceRequest": {
+                        "properties": {
+                            "maxUses": {
+                                "type": "int",
+                                "description": "Max number of times nonce can be redeemed.",
+                                "name": "num"
+                            },
+                            "level": {
+                                "type": "string",
+                                "description": "Permissions level associated with this nonce (default is EXECUTE).",
+                                "name": "num"
+                            }
+
+                        },
+                        "id": "AddNonceRequest",
+                        "name": ""
+                    },
+                    "ActorNonceRequestResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "EmptyActorNonceRequestResponse",
+                                "name": "result"
+                            }
+                        },
+                        "id": "ActorNonceRequestResponse",
                         "name": ""
                     },
                     "ExecutionsSummary": {
