@@ -54,7 +54,7 @@ def get_context():
         context['raw_message_parse_log'] = "Error parsing message: {}".format(e)
 
     # Return an AttrDict so consumers can take advantage of dot notation
-    context['message_dict'] = AttrDict({})
+    context['message_dict'] = AttrDict(context['message_dict'])
 
     context.update(os.environ)
     return context
