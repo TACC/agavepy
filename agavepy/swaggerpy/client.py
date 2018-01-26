@@ -87,6 +87,11 @@ class Operation(object):
                 raise AssertionError("Parameter query must be of type dict.")
         accepts_multipart = ('multipart/form-data' in
                              self.json.get('consumes', []))
+        # allow passing an `x-nonce`
+        if kwargs.get('nonce'):
+            nonce = kwargs.get('nonce')
+            params['x-nonce'] = nonce
+            del kwargs['nonce']
 
         for param in self.json.get('parameters', []):
             pname = param['name']

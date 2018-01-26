@@ -153,6 +153,17 @@ class TokenAuthenticator(Authenticator):
     def apply(self, request):
         request.headers['Authorization'] = 'Bearer {}'.format(self.token)
 
+class NonceAuthenticator(Authenticator):
+    """ The NonceAuthenticator can be used when no authentication credentials are present at the time
+    of the client instantiation. The assumption is that a nonce or token will be provided at request
+    time to authenticate.
+    """
+    def __init__(self, host):
+        super(NonceAuthenticator, self).__init__(host)
+
+    def apply(self, request):
+        pass
+
 class JwtAuthenticator(Authenticator):
 
     def __init__(self, host, header_name, jwt):
@@ -193,6 +204,9 @@ class SynchronousHttpClient(HttpClient):
 
     def set_jwt(self, host, header_name, jwt):
         self.authenticator = JwtAuthenticator(host, header_name, jwt)
+
+    def set_nonce(self, host):
+        self.authenticator = NonceAuthenticator(host)
 
     def request(self, method, url, params=None, data=None,
                 headers=None, files=None, proxies=None):
