@@ -7,7 +7,7 @@ import ast
 import os
 import requests
 
-from .agave import Agave, AttrDict
+from .agave import Agave, AgaveError, AttrDict
 
 
 def get_client():
@@ -23,7 +23,11 @@ def get_client():
                    jwt_header_name='X-JWT-Assertion-dev_sandbox')
     else:
         # try to use ~/.agave/current to support purely local testing
-        ag = Agave.restore()
+        try:
+            ag = Agave.restore()
+        except Exception as e:
+            raise AgaveError(
+                "Unable to instantiate an Agave client: {}".format(e))
 
     return ag
 
@@ -38,16 +42,23 @@ def get_context():
         'state': os.environ.get('_abaco_actor_state'),
         'actor_dbid': os.environ.get('_abaco_actor_dbid'),
         'actor_id': os.environ.get('_abaco_actor_id'),
+        'raw_message_parse_log': ''
     })
     try:
         context['message_dict'] = ast.literal_eval(context['raw_message'])
-    except SyntaxError:
-        context['message_dict'] = None    
-    except ValueError:
-        context['message_dict'] = None
+    except SyntaxError as e:
+        context['message_dict'] = {}
+        context['raw_message_parse_log'] = "Error parsing message: {}".format(e)
+    except ValueError as e:
+        context['message_dict'] = {}
+        context['raw_message_parse_log'] = "Error parsing message: {}".format(e)
+
+    # Return an AttrDict so consumers can take advantage of dot notation
+    context['message_dict'] = AttrDict({})
 
     context.update(os.environ)
     return context
+
 
 def update_state(state):
     """Update the actor's state with the new value of `state`. The `state` variable should be a dictionary."""
