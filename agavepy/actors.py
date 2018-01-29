@@ -33,7 +33,9 @@ def get_client():
 
 
 def get_context():
-    """Returns a context dictionary with message and metadata about the message."""
+    """
+    Returns a context dictionary with message and metadata about the message
+    """
     context = AttrDict({
         'raw_message': os.environ.get('MSG'),
         'content_type': os.environ.get('_abaco_Content-Type'),
@@ -44,17 +46,20 @@ def get_context():
         'actor_id': os.environ.get('_abaco_actor_id'),
         'raw_message_parse_log': ''
     })
-    try:
-        context['message_dict'] = ast.literal_eval(context['raw_message'])
-    except SyntaxError as e:
-        context['message_dict'] = {}
-        context['raw_message_parse_log'] = "Error parsing message: {}".format(e)
-    except ValueError as e:
-        context['message_dict'] = {}
-        context['raw_message_parse_log'] = "Error parsing message: {}".format(e)
 
-    # Return an AttrDict so consumers can take advantage of dot notation
-    context['message_dict'] = AttrDict(context['message_dict'])
+    # Set up message_dict and error log preemptively
+    # message_dict is actually an AttrDict so users can use
+    # dot notation when programming against it
+    context['message_dict'] = AttrDict()
+    context['raw_message_parse_log'] = ''
+    try:
+        temp_dict = ast.literal_eval(context['raw_message'])
+        if isinstance(temp_dict, dict):
+            context['message_dict'] = AttrDict(temp_dict)
+    except Exception as e:
+        context['raw_message_parse_log'] = \
+            "Error parsing message: {}".format(e)
+        pass
 
     context.update(os.environ)
     return context
