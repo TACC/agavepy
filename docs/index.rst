@@ -10,6 +10,14 @@ Welcome to AgavePy's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   agavepy.actors
+   agavepy.apps
+   agavepy.files
+   agavepy.jobs
+   agavepy.meta
+   agavepy.notifications
+   agavepy.profiles
+   agavepy.systems
 
 
 Indices and tables
