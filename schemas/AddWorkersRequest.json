@@ -1,0 +1,13 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/AddWorkersRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "num": {
+      "description": "The number of workers to ensure are running.", 
+      "type": "int"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy AddWorkersRequest schema", 
+  "type": "object"
+}

@@ -1,0 +1,17 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/Permission.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "permission": {
+      "description": "", 
+      "type": "ACL"
+    }, 
+    "username": {
+      "description": "Username associate with this permission", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy Permission schema", 
+  "type": "object"
+}

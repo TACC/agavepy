@@ -1,0 +1,19 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/JobOperationRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "action": {
+      "description": "Action to perform on the job.", 
+      "enum": [
+        "resubmit", 
+        "stop"
+      ], 
+      "type": "string"
+    }
+  }, 
+  "required": [
+    "action"
+  ], 
+  "title": "AgavePy JobOperationRequest schema", 
+  "type": "object"
+}

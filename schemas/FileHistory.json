@@ -1,0 +1,21 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/FileHistory.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "created": {
+      "description": "The date of the event.", 
+      "type": "string"
+    }, 
+    "description": {
+      "description": "A brief description of the event details.", 
+      "type": "String"
+    }, 
+    "status": {
+      "description": "The status of the file/folder after this event.", 
+      "type": "String"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy FileHistory schema", 
+  "type": "object"
+}

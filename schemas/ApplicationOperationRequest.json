@@ -1,0 +1,39 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationOperationRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "action": {
+      "description": "Action to perform on the file or folder.", 
+      "enum": [
+        "publish", 
+        "clone"
+      ], 
+      "type": "string"
+    }, 
+    "deploymentPath": {
+      "description": "Path to the on cloned app's deployment folder on its storage system. Only used with the clone action.", 
+      "type": "string"
+    }, 
+    "executionSystem": {
+      "description": "System on which the clone apps should run. Only used with the clone action.", 
+      "type": "string"
+    }, 
+    "name": {
+      "description": "Name of cloned app. Only used with the clone action.", 
+      "type": "string"
+    }, 
+    "storageSystem": {
+      "description": "Storage system on which the cloned app's assets resides. Only used with the clone action.", 
+      "type": "string"
+    }, 
+    "version": {
+      "description": "Version of the cloned app. Only used with the clone action.", 
+      "type": "string"
+    }
+  }, 
+  "required": [
+    "action"
+  ], 
+  "title": "AgavePy ApplicationOperationRequest schema", 
+  "type": "object"
+}

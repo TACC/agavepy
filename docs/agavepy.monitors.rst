@@ -4,11 +4,9 @@ agavepy.monitors
 
 Summary: Create and manage system monitors
 
-list
-====
+list: Retrieve Monitor for a specific resource.
+===============================================
 ``agavepy.monitors.list(active=None, limit=250, offset=0, target=None)``
-
-Retrieve Monitor for a specific resource.
 
 Parameters:
 -----------
@@ -20,24 +18,86 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of MonitorDescription objects*
 
-add
-===
+**MonitorDescription schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/MonitorDescription.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "active": {
+          "description": "Whether this monitor is currently active.", 
+          "type": "boolean"
+        }, 
+        "created": {
+          "description": "A timestamp indicating when this Monitor was created.", 
+          "type": "string"
+        }, 
+        "frequency": {
+          "description": "The interval in minutes on which this monitor will run. Minimum is 5. Default is 720.", 
+          "type": "integer"
+        }, 
+        "id": {
+          "description": "The UUID for this monitor.", 
+          "type": "string"
+        }, 
+        "internalUsername": {
+          "description": "Internal user account used to perform the check.", 
+          "type": "string"
+        }, 
+        "lastCheck": {
+          "description": "The results of the last check run by this monitor.", 
+          "type": "MonitorCheck"
+        }, 
+        "lastSuccess": {
+          "description": "A timestamp indicating the last time this Monitor succeeded in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "lastUpdated": {
+          "description": "A timestamp indicating the last time this Monitor was updated in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "nextUpdate": {
+          "description": "A timestamp indicating the next time this Monitor will be run in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "The API user who owns this Monitor.", 
+          "type": "string"
+        }, 
+        "target": {
+          "description": "The id of the sytem to be monitored. This must be an active system registered with the Systems service.", 
+          "type": "boolean"
+        }, 
+        "updateSystemStatus": {
+          "description": "Whether this Monitor should update the system status when the results change. You must have the ADMIN role on the target system to use this feature.", 
+          "type": "boolean"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy MonitorDescription schema", 
+      "type": "object"
+    }
+
+add: Update or Add new Monitor.
+===============================
 ``agavepy.monitors.add(body)``
 
-Update or Add new Monitor.
-
 Parameters:
 -----------
     * **body**: The description of the app to add or update. This can be either a file upload or json posted to the request body. (JSON, MonitorRequest)
 
 
-**MonitorRequest:**
+**MonitorRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/MonitorRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "active": {
           "description": "Whether this monitor is currently active.", 
@@ -65,20 +125,80 @@ Parameters:
         "frequency", 
         "target"
       ], 
-      "title": "MonitorRequest", 
+      "title": "AgavePy MonitorRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single MonitorDescription object*
 
-get
-===
+**MonitorDescription schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/MonitorDescription.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "active": {
+          "description": "Whether this monitor is currently active.", 
+          "type": "boolean"
+        }, 
+        "created": {
+          "description": "A timestamp indicating when this Monitor was created.", 
+          "type": "string"
+        }, 
+        "frequency": {
+          "description": "The interval in minutes on which this monitor will run. Minimum is 5. Default is 720.", 
+          "type": "integer"
+        }, 
+        "id": {
+          "description": "The UUID for this monitor.", 
+          "type": "string"
+        }, 
+        "internalUsername": {
+          "description": "Internal user account used to perform the check.", 
+          "type": "string"
+        }, 
+        "lastCheck": {
+          "description": "The results of the last check run by this monitor.", 
+          "type": "MonitorCheck"
+        }, 
+        "lastSuccess": {
+          "description": "A timestamp indicating the last time this Monitor succeeded in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "lastUpdated": {
+          "description": "A timestamp indicating the last time this Monitor was updated in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "nextUpdate": {
+          "description": "A timestamp indicating the next time this Monitor will be run in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "The API user who owns this Monitor.", 
+          "type": "string"
+        }, 
+        "target": {
+          "description": "The id of the sytem to be monitored. This must be an active system registered with the Systems service.", 
+          "type": "boolean"
+        }, 
+        "updateSystemStatus": {
+          "description": "Whether this Monitor should update the system status when the results change. You must have the ADMIN role on the target system to use this feature.", 
+          "type": "boolean"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy MonitorDescription schema", 
+      "type": "object"
+    }
+
+get: Retrieve a specific monitor.
+=================================
 ``agavepy.monitors.get(monitorId)``
 
-Retrieve a specific monitor.
-
 Parameters:
 -----------
     * **monitorId**: The id of the monitor (string)
@@ -86,24 +206,86 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single MonitorDescription object*
 
-update
-======
+**MonitorDescription schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/MonitorDescription.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "active": {
+          "description": "Whether this monitor is currently active.", 
+          "type": "boolean"
+        }, 
+        "created": {
+          "description": "A timestamp indicating when this Monitor was created.", 
+          "type": "string"
+        }, 
+        "frequency": {
+          "description": "The interval in minutes on which this monitor will run. Minimum is 5. Default is 720.", 
+          "type": "integer"
+        }, 
+        "id": {
+          "description": "The UUID for this monitor.", 
+          "type": "string"
+        }, 
+        "internalUsername": {
+          "description": "Internal user account used to perform the check.", 
+          "type": "string"
+        }, 
+        "lastCheck": {
+          "description": "The results of the last check run by this monitor.", 
+          "type": "MonitorCheck"
+        }, 
+        "lastSuccess": {
+          "description": "A timestamp indicating the last time this Monitor succeeded in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "lastUpdated": {
+          "description": "A timestamp indicating the last time this Monitor was updated in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "nextUpdate": {
+          "description": "A timestamp indicating the next time this Monitor will be run in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "The API user who owns this Monitor.", 
+          "type": "string"
+        }, 
+        "target": {
+          "description": "The id of the sytem to be monitored. This must be an active system registered with the Systems service.", 
+          "type": "boolean"
+        }, 
+        "updateSystemStatus": {
+          "description": "Whether this Monitor should update the system status when the results change. You must have the ADMIN role on the target system to use this feature.", 
+          "type": "boolean"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy MonitorDescription schema", 
+      "type": "object"
+    }
+
+update: Updates an existing monitor.
+====================================
 ``agavepy.monitors.update(body)``
-
-Updates an existing monitor.
 
 Parameters:
 -----------
     * **body**: The description of the app to add or update. This can be either a file upload or json posted to the request body. (JSON, MonitorRequest)
 
 
-**MonitorRequest:**
+**MonitorRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/MonitorRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "active": {
           "description": "Whether this monitor is currently active.", 
@@ -131,19 +313,79 @@ Parameters:
         "frequency", 
         "target"
       ], 
-      "title": "MonitorRequest", 
+      "title": "AgavePy MonitorRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single MonitorDescription object*
 
-delete
-======
+**MonitorDescription schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/MonitorDescription.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "active": {
+          "description": "Whether this monitor is currently active.", 
+          "type": "boolean"
+        }, 
+        "created": {
+          "description": "A timestamp indicating when this Monitor was created.", 
+          "type": "string"
+        }, 
+        "frequency": {
+          "description": "The interval in minutes on which this monitor will run. Minimum is 5. Default is 720.", 
+          "type": "integer"
+        }, 
+        "id": {
+          "description": "The UUID for this monitor.", 
+          "type": "string"
+        }, 
+        "internalUsername": {
+          "description": "Internal user account used to perform the check.", 
+          "type": "string"
+        }, 
+        "lastCheck": {
+          "description": "The results of the last check run by this monitor.", 
+          "type": "MonitorCheck"
+        }, 
+        "lastSuccess": {
+          "description": "A timestamp indicating the last time this Monitor succeeded in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "lastUpdated": {
+          "description": "A timestamp indicating the last time this Monitor was updated in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "nextUpdate": {
+          "description": "A timestamp indicating the next time this Monitor will be run in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "The API user who owns this Monitor.", 
+          "type": "string"
+        }, 
+        "target": {
+          "description": "The id of the sytem to be monitored. This must be an active system registered with the Systems service.", 
+          "type": "boolean"
+        }, 
+        "updateSystemStatus": {
+          "description": "Whether this Monitor should update the system status when the results change. You must have the ADMIN role on the target system to use this feature.", 
+          "type": "boolean"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy MonitorDescription schema", 
+      "type": "object"
+    }
+
+delete: Deletes a monitor.
+==========================
 ``agavepy.monitors.delete(monitorId)``
-
-Deletes a monitor.
 
 Parameters:
 -----------
@@ -152,13 +394,24 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single EmptyMonitor object*
 
-listChecks
-==========
+**EmptyMonitor schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/EmptyMonitor.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {}, 
+      "required": [], 
+      "title": "AgavePy EmptyMonitor schema", 
+      "type": "object"
+    }
+
+listChecks: Retrieve monitor checks for a specific resource.
+============================================================
 ``agavepy.monitors.listChecks(monitorId, endDate=None, limit=250, offset=0, result=None, startDate=None)``
-
-Retrieve monitor checks for a specific resource.
 
 Parameters:
 -----------
@@ -172,13 +425,49 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of MonitorCheck objects*
 
-runCheck
-========
+**MonitorCheck schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/MonitorCheck.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "created": {
+          "description": "A timestamp indicating when this monitor check was created.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The UUID for this monitor check.", 
+          "type": "string"
+        }, 
+        "message": {
+          "description": "The error message if this monitor check failed.", 
+          "type": "string"
+        }, 
+        "result": {
+          "description": "The results of this monitor check.", 
+          "enum": [
+            "PASSED", 
+            "FAILED", 
+            "UNKNOWN"
+          ], 
+          "type": "string"
+        }
+      }, 
+      "required": [
+        "result", 
+        "created"
+      ], 
+      "title": "AgavePy MonitorCheck schema", 
+      "type": "object"
+    }
+
+runCheck: Forces a monitor check to run.
+========================================
 ``agavepy.monitors.runCheck(monitorId)``
-
-Forces a monitor check to run.
 
 Parameters:
 -----------
@@ -187,13 +476,49 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single MonitorCheck object*
 
-getCheck
-========
+**MonitorCheck schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/MonitorCheck.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "created": {
+          "description": "A timestamp indicating when this monitor check was created.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The UUID for this monitor check.", 
+          "type": "string"
+        }, 
+        "message": {
+          "description": "The error message if this monitor check failed.", 
+          "type": "string"
+        }, 
+        "result": {
+          "description": "The results of this monitor check.", 
+          "enum": [
+            "PASSED", 
+            "FAILED", 
+            "UNKNOWN"
+          ], 
+          "type": "string"
+        }
+      }, 
+      "required": [
+        "result", 
+        "created"
+      ], 
+      "title": "AgavePy MonitorCheck schema", 
+      "type": "object"
+    }
+
+getCheck: Retrieve a specific monitor check
+===========================================
 ``agavepy.monitors.getCheck(checkId, monitorId)``
-
-Retrieve a specific monitor check
 
 Parameters:
 -----------
@@ -203,5 +528,43 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single MonitorCheck object*
+
+**MonitorCheck schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/MonitorCheck.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "created": {
+          "description": "A timestamp indicating when this monitor check was created.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The UUID for this monitor check.", 
+          "type": "string"
+        }, 
+        "message": {
+          "description": "The error message if this monitor check failed.", 
+          "type": "string"
+        }, 
+        "result": {
+          "description": "The results of this monitor check.", 
+          "enum": [
+            "PASSED", 
+            "FAILED", 
+            "UNKNOWN"
+          ], 
+          "type": "string"
+        }
+      }, 
+      "required": [
+        "result", 
+        "created"
+      ], 
+      "title": "AgavePy MonitorCheck schema", 
+      "type": "object"
+    }
 

@@ -1,0 +1,13 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/MessageRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "message": {
+      "description": "The message to send to the actor.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy MessageRequest schema", 
+  "type": "object"
+}

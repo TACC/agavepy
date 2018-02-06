@@ -4,11 +4,9 @@ agavepy.actors
 
 Summary: Create and manage actors.
 
-list
-====
+list: List actors
+=================
 ``agavepy.actors.list(limit=250, offset=0)``
-
-List actors
 
 Parameters:
 -----------
@@ -18,24 +16,15 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of Actor objects*
 
-add
-===
-``agavepy.actors.add(body)``
-
-Register an actor.
-
-Parameters:
------------
-    * **body**: The description of the actor to add. (JSON, Actor)
-
-
-**Actor:**
+**Actor schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Actor.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "defaultEnvironment": {
           "description": "Default environmental variables and values.", 
@@ -71,19 +60,118 @@ Parameters:
         }
       }, 
       "required": [], 
-      "title": "Actor", 
+      "title": "AgavePy Actor schema", 
+      "type": "object"
+    }
+
+add: Register an actor.
+=======================
+``agavepy.actors.add(body)``
+
+Parameters:
+-----------
+    * **body**: The description of the actor to add. (JSON, Actor)
+
+
+**Actor schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Actor.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "defaultEnvironment": {
+          "description": "Default environmental variables and values.", 
+          "type": "dict"
+        }, 
+        "description": {
+          "description": "Description of this actor.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the actor.", 
+          "type": "string"
+        }, 
+        "image": {
+          "description": "Docker image associated with the actor.", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "username of the owner of the actor.", 
+          "type": "string"
+        }, 
+        "privileged": {
+          "description": "Whether this actor runs in privileged mode.", 
+          "type": "boolean"
+        }, 
+        "stateless": {
+          "description": "Whether the actor stores private state.", 
+          "type": "boolean"
+        }, 
+        "status": {
+          "description": "Current status of the actor.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Actor schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single Actor object*
 
-get
-===
+**Actor schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Actor.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "defaultEnvironment": {
+          "description": "Default environmental variables and values.", 
+          "type": "dict"
+        }, 
+        "description": {
+          "description": "Description of this actor.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the actor.", 
+          "type": "string"
+        }, 
+        "image": {
+          "description": "Docker image associated with the actor.", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "username of the owner of the actor.", 
+          "type": "string"
+        }, 
+        "privileged": {
+          "description": "Whether this actor runs in privileged mode.", 
+          "type": "boolean"
+        }, 
+        "stateless": {
+          "description": "Whether the actor stores private state.", 
+          "type": "boolean"
+        }, 
+        "status": {
+          "description": "Current status of the actor.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Actor schema", 
+      "type": "object"
+    }
+
+get: Retrieve details about a specific actor.
+=============================================
 ``agavepy.actors.get(actorId)``
-
-Retrieve details about a specific actor.
 
 Parameters:
 -----------
@@ -92,13 +180,57 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single Actor object*
 
-update
-======
+**Actor schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Actor.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "defaultEnvironment": {
+          "description": "Default environmental variables and values.", 
+          "type": "dict"
+        }, 
+        "description": {
+          "description": "Description of this actor.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the actor.", 
+          "type": "string"
+        }, 
+        "image": {
+          "description": "Docker image associated with the actor.", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "username of the owner of the actor.", 
+          "type": "string"
+        }, 
+        "privileged": {
+          "description": "Whether this actor runs in privileged mode.", 
+          "type": "boolean"
+        }, 
+        "stateless": {
+          "description": "Whether the actor stores private state.", 
+          "type": "boolean"
+        }, 
+        "status": {
+          "description": "Current status of the actor.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Actor schema", 
+      "type": "object"
+    }
+
+update: Retrieve details about a specific actor.
+================================================
 ``agavepy.actors.update(actorId, body)``
-
-Retrieve details about a specific actor.
 
 Parameters:
 -----------
@@ -106,11 +238,13 @@ Parameters:
     * **body**: The description of the actor to update. (JSON, Actor)
 
 
-**Actor:**
+**Actor schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Actor.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "defaultEnvironment": {
           "description": "Default environmental variables and values.", 
@@ -146,20 +280,64 @@ Parameters:
         }
       }, 
       "required": [], 
-      "title": "Actor", 
+      "title": "AgavePy Actor schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single Actor object*
 
-delete
-======
+**Actor schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Actor.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "defaultEnvironment": {
+          "description": "Default environmental variables and values.", 
+          "type": "dict"
+        }, 
+        "description": {
+          "description": "Description of this actor.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the actor.", 
+          "type": "string"
+        }, 
+        "image": {
+          "description": "Docker image associated with the actor.", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "username of the owner of the actor.", 
+          "type": "string"
+        }, 
+        "privileged": {
+          "description": "Whether this actor runs in privileged mode.", 
+          "type": "boolean"
+        }, 
+        "stateless": {
+          "description": "Whether the actor stores private state.", 
+          "type": "boolean"
+        }, 
+        "status": {
+          "description": "Current status of the actor.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Actor schema", 
+      "type": "object"
+    }
+
+delete: Delete a specific actor.
+================================
 ``agavepy.actors.delete(actorId)``
 
-Delete a specific actor.
-
 Parameters:
 -----------
     * **actorId**: The id of the actor. (string)
@@ -167,14 +345,12 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single String object*
 
-getMessages
-===========
+getMessages: Get the current number of messages for an actor.
+=============================================================
 ``agavepy.actors.getMessages(actorId)``
 
-Get the current number of messages for an actor.
-
 Parameters:
 -----------
     * **actorId**: The id of the actor. (string)
@@ -182,13 +358,29 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single ActorMessages object*
 
-sendMessage
-===========
+**ActorMessages schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ActorMessages.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "messages": {
+          "description": "The number of messages waiting in queue to be processed by this actor.", 
+          "type": "int"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ActorMessages schema", 
+      "type": "object"
+    }
+
+sendMessage: Send a message to an actor mailbox.
+================================================
 ``agavepy.actors.sendMessage(actorId, body, environment=None)``
-
-Send a message to an actor mailbox.
 
 Parameters:
 -----------
@@ -197,11 +389,13 @@ Parameters:
     * **body**: The description of the message to add. (JSON, MessageRequest)
 
 
-**MessageRequest:**
+**MessageRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/MessageRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "message": {
           "description": "The message to send to the actor.", 
@@ -209,19 +403,17 @@ Parameters:
         }
       }, 
       "required": [], 
-      "title": "MessageRequest", 
+      "title": "AgavePy MessageRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single ActorMessageResponse object*
 
-listWorkers
-===========
+listWorkers: List the current workers for an actor.
+===================================================
 ``agavepy.actors.listWorkers(actorId)``
-
-List the current workers for an actor.
 
 Parameters:
 -----------
@@ -230,13 +422,61 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of ActorWorker objects*
 
-addWorker
-=========
+**ActorWorker schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ActorWorker.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "cid": {
+          "description": "Container id of this worker.", 
+          "type": "string"
+        }, 
+        "host_id": {
+          "description": "id of the host where this worker is running.", 
+          "type": "string"
+        }, 
+        "host_ip": {
+          "description": "IP address of the host where this worker is running.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of this worker.", 
+          "type": "string"
+        }, 
+        "image": {
+          "description": "Docker image associated with the actor.", 
+          "type": "string"
+        }, 
+        "last_execution": {
+          "description": "Last execution for this worker.", 
+          "type": "int"
+        }, 
+        "location": {
+          "description": "Location of docker daemon that this worker is using.", 
+          "type": "string"
+        }, 
+        "status": {
+          "description": "status of the worker.", 
+          "type": "string"
+        }, 
+        "tenant": {
+          "description": "tenant this worker belongs to.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ActorWorker schema", 
+      "type": "object"
+    }
+
+addWorker: Add a worker to an actor.
+====================================
 ``agavepy.actors.addWorker(actorId, body)``
-
-Add a worker to an actor.
 
 Parameters:
 -----------
@@ -244,11 +484,13 @@ Parameters:
     * **body**: The description of the workers to add. (JSON, AddWorkersRequest)
 
 
-**AddWorkersRequest:**
+**AddWorkersRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/AddWorkersRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "num": {
           "description": "The number of workers to ensure are running.", 
@@ -256,20 +498,18 @@ Parameters:
         }
       }, 
       "required": [], 
-      "title": "AddWorkersRequest", 
+      "title": "AgavePy AddWorkersRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single EmptyActorWorkerRequestResponse object*
 
-getWorker
-=========
+getWorker: Get the details about a specific worker for an actor.
+================================================================
 ``agavepy.actors.getWorker(actorId, workerId)``
 
-Get the details about a specific worker for an actor.
-
 Parameters:
 -----------
     * **actorId**: The id of the actor. (string)
@@ -278,14 +518,62 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single ActorWorker object*
 
-deleteWorker
-============
+**ActorWorker schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ActorWorker.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "cid": {
+          "description": "Container id of this worker.", 
+          "type": "string"
+        }, 
+        "host_id": {
+          "description": "id of the host where this worker is running.", 
+          "type": "string"
+        }, 
+        "host_ip": {
+          "description": "IP address of the host where this worker is running.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of this worker.", 
+          "type": "string"
+        }, 
+        "image": {
+          "description": "Docker image associated with the actor.", 
+          "type": "string"
+        }, 
+        "last_execution": {
+          "description": "Last execution for this worker.", 
+          "type": "int"
+        }, 
+        "location": {
+          "description": "Location of docker daemon that this worker is using.", 
+          "type": "string"
+        }, 
+        "status": {
+          "description": "status of the worker.", 
+          "type": "string"
+        }, 
+        "tenant": {
+          "description": "tenant this worker belongs to.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ActorWorker schema", 
+      "type": "object"
+    }
+
+deleteWorker: Delete a worker.
+==============================
 ``agavepy.actors.deleteWorker(actorId, workerId)``
 
-Delete a worker.
-
 Parameters:
 -----------
     * **actorId**: The id of the actor. (string)
@@ -294,13 +582,11 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single String object*
 
-listNonces
-==========
+listNonces: List the current nonces for an actor.
+=================================================
 ``agavepy.actors.listNonces(actorId)``
-
-List the current nonces for an actor.
 
 Parameters:
 -----------
@@ -309,13 +595,53 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of ActorNonce objects*
 
-addNonce
-========
+**ActorNonce schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ActorNonce.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "actor_id": {
+          "description": "Actor id associated with nonce.", 
+          "type": "string"
+        }, 
+        "create_time": {
+          "description": "Time stamp when nonce was created.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the nonce.", 
+          "type": "string"
+        }, 
+        "last_use_time": {
+          "description": "Last time nonce was used.", 
+          "type": "string"
+        }, 
+        "level": {
+          "description": "Permission level associated with nonce.", 
+          "type": "string"
+        }, 
+        "max_uses": {
+          "description": "Max number of uses for this nonce.", 
+          "type": "string"
+        }, 
+        "remaining_uses": {
+          "description": "Remaining uses of nonce.", 
+          "type": "int"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ActorNonce schema", 
+      "type": "object"
+    }
+
+addNonce: Add a nonce to an actor.
+==================================
 ``agavepy.actors.addNonce(actorId, body=)``
-
-Add a nonce to an actor.
 
 Parameters:
 -----------
@@ -323,11 +649,13 @@ Parameters:
     * **body**: The description of the nonce to add. (JSON, AddNonceRequest)
 
 
-**AddNonceRequest:**
+**AddNonceRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/AddNonceRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "level": {
           "description": "Permissions level associated with this nonce (default is EXECUTE).", 
@@ -339,20 +667,18 @@ Parameters:
         }
       }, 
       "required": [], 
-      "title": "AddNonceRequest", 
+      "title": "AgavePy AddNonceRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single EmptyActorNonceRequestResponse object*
 
-getNonce
-========
+getNonce: Get the details about a specific nonce for an actor.
+==============================================================
 ``agavepy.actors.getNonce(actorId, nonceId)``
 
-Get the details about a specific nonce for an actor.
-
 Parameters:
 -----------
     * **actorId**: The id of the actor. (string)
@@ -361,14 +687,54 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single ActorNonce object*
 
-deleteNonce
-===========
+**ActorNonce schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ActorNonce.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "actor_id": {
+          "description": "Actor id associated with nonce.", 
+          "type": "string"
+        }, 
+        "create_time": {
+          "description": "Time stamp when nonce was created.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the nonce.", 
+          "type": "string"
+        }, 
+        "last_use_time": {
+          "description": "Last time nonce was used.", 
+          "type": "string"
+        }, 
+        "level": {
+          "description": "Permission level associated with nonce.", 
+          "type": "string"
+        }, 
+        "max_uses": {
+          "description": "Max number of uses for this nonce.", 
+          "type": "string"
+        }, 
+        "remaining_uses": {
+          "description": "Remaining uses of nonce.", 
+          "type": "int"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ActorNonce schema", 
+      "type": "object"
+    }
+
+deleteNonce: Delete a nonce.
+============================
 ``agavepy.actors.deleteNonce(actorId, nonceId)``
 
-Delete a nonce.
-
 Parameters:
 -----------
     * **actorId**: The id of the actor. (string)
@@ -377,13 +743,11 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single String object*
 
-listExecutions
-==============
+listExecutions: Summary data of all actor executions.
+=====================================================
 ``agavepy.actors.listExecutions(actorId, limit=250, offset=0)``
-
-Summary data of all actor executions.
 
 Parameters:
 -----------
@@ -394,13 +758,49 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single ExecutionsSummary object*
 
-addExecution
-============
+**ExecutionsSummary schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ExecutionsSummary.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "actorId": {
+          "description": "The id of the associated actor.", 
+          "type": "string"
+        }, 
+        "ids": {
+          "description": "The ids of all executions.", 
+          "type": "array"
+        }, 
+        "owner": {
+          "description": "username of the owner of the actor.", 
+          "type": "string"
+        }, 
+        "totalCpu": {
+          "description": "CPU usage, in user jiffies, of all executions.", 
+          "type": "int"
+        }, 
+        "totalIo": {
+          "description": "Block I/O usage, in number of 512-byte sectors read from and written to, by all executions.", 
+          "type": "int"
+        }, 
+        "totalRuntime": {
+          "description": "Runtime, in milliseconds, of all executions.", 
+          "type": "int"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ExecutionsSummary schema", 
+      "type": "object"
+    }
+
+addExecution: Register an actor execution.
+==========================================
 ``agavepy.actors.addExecution(actorId, body)``
-
-Register an actor execution.
 
 Parameters:
 -----------
@@ -410,14 +810,54 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single Execution object*
 
-getExecution
-============
+**Execution schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Execution.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "actorId": {
+          "description": "The id of the associated actor.", 
+          "type": "string"
+        }, 
+        "cpu": {
+          "description": "CPU usage, in user jiffies, of this execution.", 
+          "type": "int"
+        }, 
+        "id": {
+          "description": "The id of this executions.", 
+          "type": "string"
+        }, 
+        "io": {
+          "description": "Block I/O usage, in number of 512-byte sectors read from and written to, by this execution.", 
+          "type": "int"
+        }, 
+        "owner": {
+          "description": "username of the owner of the actor.", 
+          "type": "string"
+        }, 
+        "runtime": {
+          "description": "Runtime, in milliseconds, of this execution.", 
+          "type": "int"
+        }, 
+        "status": {
+          "description": "status of the execution.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Execution schema", 
+      "type": "object"
+    }
+
+getExecution: Retrieve details about a specific actor execution.
+================================================================
 ``agavepy.actors.getExecution(actorId, executionId)``
 
-Retrieve details about a specific actor execution.
-
 Parameters:
 -----------
     * **actorId**: The id of the actor. (string)
@@ -426,14 +866,54 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single Execution object*
 
-getExecutionLogs
-================
+**Execution schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Execution.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "actorId": {
+          "description": "The id of the associated actor.", 
+          "type": "string"
+        }, 
+        "cpu": {
+          "description": "CPU usage, in user jiffies, of this execution.", 
+          "type": "int"
+        }, 
+        "id": {
+          "description": "The id of this executions.", 
+          "type": "string"
+        }, 
+        "io": {
+          "description": "Block I/O usage, in number of 512-byte sectors read from and written to, by this execution.", 
+          "type": "int"
+        }, 
+        "owner": {
+          "description": "username of the owner of the actor.", 
+          "type": "string"
+        }, 
+        "runtime": {
+          "description": "Runtime, in milliseconds, of this execution.", 
+          "type": "int"
+        }, 
+        "status": {
+          "description": "status of the execution.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Execution schema", 
+      "type": "object"
+    }
+
+getExecutionLogs: Get logs for a specific actor execution.
+==========================================================
 ``agavepy.actors.getExecutionLogs(actorId, executionId)``
 
-Get logs for a specific actor execution.
-
 Parameters:
 -----------
     * **actorId**: The id of the actor. (string)
@@ -442,5 +922,23 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single ExecutionLogs object*
+
+**ExecutionLogs schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ExecutionLogs.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "logs": {
+          "description": "The logs (standard out) of this execution.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ExecutionLogs schema", 
+      "type": "object"
+    }
 

@@ -4,11 +4,9 @@ agavepy.jobs
 
 Summary: Run and manage jobs
 
-list
-====
+list: Get a list of jobs the authenticated user had submitted.
+==============================================================
 ``agavepy.jobs.list(limit=250, offset=0)``
-
-Get a list of jobs the authenticated user had submitted.
 
 Parameters:
 -----------
@@ -18,24 +16,70 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of JobSummary objects*
 
-submit
-======
+**JobSummary schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/JobSummary.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "appId": {
+          "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.", 
+          "type": "string"
+        }, 
+        "endTime": {
+          "description": "The date the job ended in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "executionSystem": {
+          "description": "The system id of the execution system.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the job.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the job.", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "The job owner.", 
+          "type": "string"
+        }, 
+        "startTime": {
+          "description": "The date the job started in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "status": {
+          "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy JobSummary schema", 
+      "type": "object"
+    }
+
+submit: Submit a new job request.
+=================================
 ``agavepy.jobs.submit(body)``
-
-Submit a new job request.
 
 Parameters:
 -----------
     * **body**: The description of the job to submit. This can be either a file upload or json posted to the request body. (JSON, JobRequest)
 
 
-**JobRequest:**
+**JobRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/JobRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "appId": {
           "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.", 
@@ -97,19 +141,131 @@ Parameters:
         "appId", 
         "archive"
       ], 
-      "title": "JobRequest", 
+      "title": "AgavePy JobRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single Job object*
 
-get
-===
+**Job schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Job.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "appId": {
+          "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.", 
+          "type": "string"
+        }, 
+        "archive": {
+          "description": "Whether the output from this job should be archived. If true, all new files created by this application's execution will be archived to the archivePath in the user's default storage system.", 
+          "type": "boolean"
+        }, 
+        "archivePath": {
+          "description": "The path of the archive folder for this job on the user's default storage sytem.", 
+          "type": "string"
+        }, 
+        "archiveSystem": {
+          "description": "The unique id of the storage system on which this job's output will be staged.", 
+          "type": "string"
+        }, 
+        "batchQueue": {
+          "description": "The queue to which this job should be submitted. This is optional and only applies when the execution system has a batch scheduler.", 
+          "type": "string"
+        }, 
+        "endTime": {
+          "description": "The date the job stopped running due to termination, completion, or error in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "executionSystem": {
+          "description": "The system id of the execution system.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the job.", 
+          "type": "string"
+        }, 
+        "inputs": {
+          "description": "The application specific input files needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. Inputs may be given as relative paths in the user's default storage system or as URI. If a URI is given, the data will be staged in by the IO service and made avaialble to the application at run time.", 
+          "type": "JobInputs"
+        }, 
+        "localId": {
+          "description": "The process or local job id of the job on the remote execution system.", 
+          "type": "string"
+        }, 
+        "maxRunTime": {
+          "description": "The requested compute time needed for this application to complete given in HH:mm:ss format.", 
+          "type": "string"
+        }, 
+        "memoryPerNode": {
+          "description": "The requested memory for this application to run given in GB.", 
+          "type": "string"
+        }, 
+        "message": {
+          "description": "The error message incurred when the job failed.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the job.", 
+          "type": "string"
+        }, 
+        "nodeCount": {
+          "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+          "type": "integer"
+        }, 
+        "notifications": {
+          "description": "An array of notifications you wish to receive.", 
+          "type": "array"
+        }, 
+        "outputPath": {
+          "description": "Relative path of the job's output data.", 
+          "type": "String"
+        }, 
+        "owner": {
+          "description": "The job owner.", 
+          "type": "string"
+        }, 
+        "parameters": {
+          "description": "The application specific parameters needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. The actual dataType will be determined by the application description.", 
+          "type": "JobParameters"
+        }, 
+        "processorsPerNode": {
+          "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+          "type": "integer"
+        }, 
+        "retries": {
+          "description": "The number of retires it took to submit this job.", 
+          "type": "integer"
+        }, 
+        "startTime": {
+          "description": "The date the job started in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "status": {
+          "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED", 
+          "type": "string"
+        }, 
+        "submitTime": {
+          "description": "The date the job was submitted in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "workPath": {
+          "description": "The directory on the remote execution system from which the job is running.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Job schema", 
+      "type": "object"
+    }
+
+get: Get details of the job with the specific job id.
+=====================================================
 ``agavepy.jobs.get(jobId)``
-
-Get details of the job with the specific job id.
 
 Parameters:
 -----------
@@ -118,13 +274,125 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single Job object*
 
-manage
-======
+**Job schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Job.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "appId": {
+          "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.", 
+          "type": "string"
+        }, 
+        "archive": {
+          "description": "Whether the output from this job should be archived. If true, all new files created by this application's execution will be archived to the archivePath in the user's default storage system.", 
+          "type": "boolean"
+        }, 
+        "archivePath": {
+          "description": "The path of the archive folder for this job on the user's default storage sytem.", 
+          "type": "string"
+        }, 
+        "archiveSystem": {
+          "description": "The unique id of the storage system on which this job's output will be staged.", 
+          "type": "string"
+        }, 
+        "batchQueue": {
+          "description": "The queue to which this job should be submitted. This is optional and only applies when the execution system has a batch scheduler.", 
+          "type": "string"
+        }, 
+        "endTime": {
+          "description": "The date the job stopped running due to termination, completion, or error in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "executionSystem": {
+          "description": "The system id of the execution system.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the job.", 
+          "type": "string"
+        }, 
+        "inputs": {
+          "description": "The application specific input files needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. Inputs may be given as relative paths in the user's default storage system or as URI. If a URI is given, the data will be staged in by the IO service and made avaialble to the application at run time.", 
+          "type": "JobInputs"
+        }, 
+        "localId": {
+          "description": "The process or local job id of the job on the remote execution system.", 
+          "type": "string"
+        }, 
+        "maxRunTime": {
+          "description": "The requested compute time needed for this application to complete given in HH:mm:ss format.", 
+          "type": "string"
+        }, 
+        "memoryPerNode": {
+          "description": "The requested memory for this application to run given in GB.", 
+          "type": "string"
+        }, 
+        "message": {
+          "description": "The error message incurred when the job failed.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the job.", 
+          "type": "string"
+        }, 
+        "nodeCount": {
+          "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+          "type": "integer"
+        }, 
+        "notifications": {
+          "description": "An array of notifications you wish to receive.", 
+          "type": "array"
+        }, 
+        "outputPath": {
+          "description": "Relative path of the job's output data.", 
+          "type": "String"
+        }, 
+        "owner": {
+          "description": "The job owner.", 
+          "type": "string"
+        }, 
+        "parameters": {
+          "description": "The application specific parameters needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. The actual dataType will be determined by the application description.", 
+          "type": "JobParameters"
+        }, 
+        "processorsPerNode": {
+          "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+          "type": "integer"
+        }, 
+        "retries": {
+          "description": "The number of retires it took to submit this job.", 
+          "type": "integer"
+        }, 
+        "startTime": {
+          "description": "The date the job started in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "status": {
+          "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED", 
+          "type": "string"
+        }, 
+        "submitTime": {
+          "description": "The date the job was submitted in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "workPath": {
+          "description": "The directory on the remote execution system from which the job is running.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Job schema", 
+      "type": "object"
+    }
+
+manage: Perform an action on a job.
+===================================
 ``agavepy.jobs.manage(body, jobId)``
-
-Perform an action on a job.
 
 Parameters:
 -----------
@@ -132,11 +400,13 @@ Parameters:
     * **body**: The operation to perform. (JSON, JobOperationRequest)
 
 
-**JobOperationRequest:**
+**JobOperationRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/JobOperationRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "action": {
           "description": "Action to perform on the job.", 
@@ -150,20 +420,132 @@ Parameters:
       "required": [
         "action"
       ], 
-      "title": "JobOperationRequest", 
+      "title": "AgavePy JobOperationRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single Job object*
 
-delete
-======
+**Job schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Job.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "appId": {
+          "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.", 
+          "type": "string"
+        }, 
+        "archive": {
+          "description": "Whether the output from this job should be archived. If true, all new files created by this application's execution will be archived to the archivePath in the user's default storage system.", 
+          "type": "boolean"
+        }, 
+        "archivePath": {
+          "description": "The path of the archive folder for this job on the user's default storage sytem.", 
+          "type": "string"
+        }, 
+        "archiveSystem": {
+          "description": "The unique id of the storage system on which this job's output will be staged.", 
+          "type": "string"
+        }, 
+        "batchQueue": {
+          "description": "The queue to which this job should be submitted. This is optional and only applies when the execution system has a batch scheduler.", 
+          "type": "string"
+        }, 
+        "endTime": {
+          "description": "The date the job stopped running due to termination, completion, or error in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "executionSystem": {
+          "description": "The system id of the execution system.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the job.", 
+          "type": "string"
+        }, 
+        "inputs": {
+          "description": "The application specific input files needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. Inputs may be given as relative paths in the user's default storage system or as URI. If a URI is given, the data will be staged in by the IO service and made avaialble to the application at run time.", 
+          "type": "JobInputs"
+        }, 
+        "localId": {
+          "description": "The process or local job id of the job on the remote execution system.", 
+          "type": "string"
+        }, 
+        "maxRunTime": {
+          "description": "The requested compute time needed for this application to complete given in HH:mm:ss format.", 
+          "type": "string"
+        }, 
+        "memoryPerNode": {
+          "description": "The requested memory for this application to run given in GB.", 
+          "type": "string"
+        }, 
+        "message": {
+          "description": "The error message incurred when the job failed.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the job.", 
+          "type": "string"
+        }, 
+        "nodeCount": {
+          "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+          "type": "integer"
+        }, 
+        "notifications": {
+          "description": "An array of notifications you wish to receive.", 
+          "type": "array"
+        }, 
+        "outputPath": {
+          "description": "Relative path of the job's output data.", 
+          "type": "String"
+        }, 
+        "owner": {
+          "description": "The job owner.", 
+          "type": "string"
+        }, 
+        "parameters": {
+          "description": "The application specific parameters needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. The actual dataType will be determined by the application description.", 
+          "type": "JobParameters"
+        }, 
+        "processorsPerNode": {
+          "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+          "type": "integer"
+        }, 
+        "retries": {
+          "description": "The number of retires it took to submit this job.", 
+          "type": "integer"
+        }, 
+        "startTime": {
+          "description": "The date the job started in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "status": {
+          "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED", 
+          "type": "string"
+        }, 
+        "submitTime": {
+          "description": "The date the job was submitted in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "workPath": {
+          "description": "The directory on the remote execution system from which the job is running.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Job schema", 
+      "type": "object"
+    }
+
+delete: Deletes a job from the user's history.
+==============================================
 ``agavepy.jobs.delete(jobId)``
 
-Deletes a job from the user's history.
-
 Parameters:
 -----------
     * **jobId**: The id of the job. (string)
@@ -171,14 +553,12 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-getHistory
-==========
+getHistory: Get the history of this job.
+========================================
 ``agavepy.jobs.getHistory(jobId, limit=250, offset=0)``
 
-Get the history of this job.
-
 Parameters:
 -----------
     * **jobId**: The id of the job. (string)
@@ -188,14 +568,38 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of JobHistory objects*
 
-listPermissions
-===============
+**JobHistory schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/JobHistory.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "created": {
+          "description": "The date of the event.", 
+          "type": "string"
+        }, 
+        "description": {
+          "description": "A brief description of the event details.", 
+          "type": "String"
+        }, 
+        "status": {
+          "description": "The status of the job after this event.", 
+          "type": "String"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy JobHistory schema", 
+      "type": "object"
+    }
+
+listPermissions: Get the permission ACL for this job.
+=====================================================
 ``agavepy.jobs.listPermissions(jobId, limit=250, offset=0)``
 
-Get the permission ACL for this job.
-
 Parameters:
 -----------
     * **jobId**: The id of the job. (string)
@@ -205,13 +609,33 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of Permission objects*
 
-updatePermissions
-=================
+**Permission schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Permission.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "permission": {
+          "description": "", 
+          "type": "ACL"
+        }, 
+        "username": {
+          "description": "Username associate with this permission", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Permission schema", 
+      "type": "object"
+    }
+
+updatePermissions: Add or update a user's permission for an application.
+========================================================================
 ``agavepy.jobs.updatePermissions(body, jobId)``
-
-Add or update a user's permission for an application.
 
 Parameters:
 -----------
@@ -219,11 +643,13 @@ Parameters:
     * **body**: The permission add or update.  (JSON, JobPermissionRequest)
 
 
-**JobPermissionRequest:**
+**JobPermissionRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/JobPermissionRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "permission": {
           "description": "The permission to set", 
@@ -248,19 +674,17 @@ Parameters:
         "username", 
         "permission"
       ], 
-      "title": "JobPermissionRequest", 
+      "title": "AgavePy JobPermissionRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-deletePermissions
-=================
+deletePermissions: Deletes all permissions on an job.
+=====================================================
 ``agavepy.jobs.deletePermissions(jobId)``
-
-Deletes all permissions on an job.
 
 Parameters:
 -----------
@@ -269,13 +693,11 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-listPermissionsForUser
-======================
+listPermissionsForUser: Get a specific user's permissions for a job.
+====================================================================
 ``agavepy.jobs.listPermissionsForUser(jobId, username, limit=250, offset=0)``
-
-Get a specific user's permissions for a job.
 
 Parameters:
 -----------
@@ -287,13 +709,33 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of Permission objects*
 
-updatePermissionsForUser
-========================
+**Permission schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Permission.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "permission": {
+          "description": "", 
+          "type": "ACL"
+        }, 
+        "username": {
+          "description": "Username associate with this permission", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Permission schema", 
+      "type": "object"
+    }
+
+updatePermissionsForUser: Add or update a user's permission for an job.
+=======================================================================
 ``agavepy.jobs.updatePermissionsForUser(body, jobId, username)``
-
-Add or update a user's permission for an job.
 
 Parameters:
 -----------
@@ -302,11 +744,13 @@ Parameters:
     * **body**: The permission to update.  (JSON, JobPermissionRequest)
 
 
-**JobPermissionRequest:**
+**JobPermissionRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/JobPermissionRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "permission": {
           "description": "The permission to set", 
@@ -331,19 +775,17 @@ Parameters:
         "username", 
         "permission"
       ], 
-      "title": "JobPermissionRequest", 
+      "title": "AgavePy JobPermissionRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-deletePermissionsForUser
-========================
+deletePermissionsForUser: Deletes all permissions for the given user on an job.
+===============================================================================
 ``agavepy.jobs.deletePermissionsForUser(uniqueName, username)``
-
-Deletes all permissions for the given user on an job.
 
 Parameters:
 -----------
@@ -353,13 +795,11 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *None*
 
-getStatus
-=========
+getStatus: Get the status of the job.
+=====================================
 ``agavepy.jobs.getStatus(jobId)``
-
-Get the status of the job.
 
 Parameters:
 -----------
@@ -368,13 +808,33 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single JobStatus object*
 
-listOutputs
-===========
+**JobStatus schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/JobStatus.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "id": {
+          "description": "The unique id of the job.", 
+          "type": "string"
+        }, 
+        "status": {
+          "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy JobStatus schema", 
+      "type": "object"
+    }
+
+listOutputs: List contents of a job's output directory.
+=======================================================
 ``agavepy.jobs.listOutputs(jobId, filePath=None, limit=250, offset=0)``
-
-List contents of a job's output directory.
 
 Parameters:
 -----------
@@ -386,13 +846,61 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of RemoteFile objects*
 
-downloadOutput
-==============
+**RemoteFile schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/RemoteFile.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "format": {
+          "description": "The file type of the file.", 
+          "type": "string"
+        }, 
+        "lastModified": {
+          "description": "The date this file was last modified in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "length": {
+          "description": "The length of the file/folder.", 
+          "type": "integer"
+        }, 
+        "mimeType": {
+          "description": "The mime type of the file/folder. If unknown, it defaults to application/binary.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the file/folder.", 
+          "type": "string"
+        }, 
+        "path": {
+          "description": "The absolute path to the file/folder.", 
+          "type": "string"
+        }, 
+        "permissions": {
+          "description": "The system permission of the invoking user on the file/folder.", 
+          "type": "string"
+        }, 
+        "system": {
+          "description": "The systemId of the system where this file lives.", 
+          "type": "string"
+        }, 
+        "type": {
+          "description": "Whether it is a file or folder.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy RemoteFile schema", 
+      "type": "object"
+    }
+
+downloadOutput: Download an output file from a specific job.
+============================================================
 ``agavepy.jobs.downloadOutput(filePath, jobId)``
-
-Download an output file from a specific job.
 
 Parameters:
 -----------
@@ -402,13 +910,11 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *None*
 
-search
-======
+search: Find jobs matching the given attribute/value combination(s).
+====================================================================
 ``agavepy.jobs.search(attribute, value, limit=250, offset=0)``
-
-Find jobs matching the given attribute/value combination(s).
 
 Parameters:
 -----------
@@ -420,5 +926,51 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of JobSummary objects*
+
+**JobSummary schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/JobSummary.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "appId": {
+          "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.", 
+          "type": "string"
+        }, 
+        "endTime": {
+          "description": "The date the job ended in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "executionSystem": {
+          "description": "The system id of the execution system.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the job.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the job.", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "The job owner.", 
+          "type": "string"
+        }, 
+        "startTime": {
+          "description": "The date the job started in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "status": {
+          "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy JobSummary schema", 
+      "type": "object"
+    }
 

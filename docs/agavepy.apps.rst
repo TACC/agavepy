@@ -4,11 +4,9 @@ agavepy.apps
 
 Summary: Register and manage apps
 
-list
-====
+list: Get a list of available applications.
+===========================================
 ``agavepy.apps.list(limit=250, offset=0, privateOnly=None, publicOnly=None)``
-
-Get a list of available applications.
 
 Parameters:
 -----------
@@ -20,24 +18,70 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of ApplicationSummary objects*
 
-add
-===
+**ApplicationSummary schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationSummary.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "executionSystem": {
+          "description": "The system id of the execution system where this app should run.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "Unique id of this app. Comprised of the app name-version.", 
+          "type": "string"
+        }, 
+        "isPublic": {
+          "description": "Whether the application is public or private.", 
+          "type": "boolean"
+        }, 
+        "lastModified": {
+          "description": "The date this application was last modified in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the application. The name does not have to be unique, but the combination of name and version does.", 
+          "type": "string"
+        }, 
+        "revision": {
+          "description": "The number of times this application has been revised.", 
+          "type": "integer"
+        }, 
+        "shortDescription": {
+          "description": "The short description of this application.", 
+          "type": "string"
+        }, 
+        "version": {
+          "description": "The version of the application in #.#.# format. While the version does not need to be unique, the combination of name and version does have to be unique.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ApplicationSummary schema", 
+      "type": "object"
+    }
+
+add: Register and update new applications.
+==========================================
 ``agavepy.apps.add(body)``
 
-Register and update new applications.
-
 Parameters:
 -----------
     * **body**: The description of the app to add or update.  (JSON, ApplicationRequest)
 
 
-**ApplicationRequest:**
+**ApplicationRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "available": {
           "description": "Whether the application is available.", 
@@ -172,20 +216,171 @@ Parameters:
         "executionType", 
         "version"
       ], 
-      "title": "ApplicationRequest", 
+      "title": "AgavePy ApplicationRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single Application object*
 
-get
-===
+**Application schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Application.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "available": {
+          "description": "Whether the application is available.", 
+          "type": "boolean"
+        }, 
+        "checkpointable": {
+          "description": "Whether the application supports checkpointing.", 
+          "type": "boolean"
+        }, 
+        "defaultMaxRunTime": {
+          "description": "The max execution time that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+          "type": "string"
+        }, 
+        "defaultMemoryPerNode": {
+          "description": "The default memory in GB to pass to the scheduler if none is given in the job description. This must be less than the max memory parameter in the target queue definition.", 
+          "type": "string"
+        }, 
+        "defaultNodeCount": {
+          "description": "The number of nodes that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+          "type": "string"
+        }, 
+        "defaultProcessorsPerNode": {
+          "description": "The number of processors to pass to the scheduler if none are given in the job description. This must be 1 if the app is serial.", 
+          "type": "string"
+        }, 
+        "defaultQueue": {
+          "description": "The queue on the execution system that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+          "type": "string"
+        }, 
+        "deploymentPath": {
+          "description": "The location in the user's default storage system containing the application wrapper and dependencies.", 
+          "type": "string"
+        }, 
+        "deploymentSystem": {
+          "description": "The system id of the storage system where this app should run.", 
+          "type": "string"
+        }, 
+        "executionSystem": {
+          "description": "The system id of the execution system where this app should run.", 
+          "type": "string"
+        }, 
+        "executionType": {
+          "description": "The execution type of the application. If you're unsure, it's probably HPC.", 
+          "enum": [
+            "ATMOSPHERE", 
+            "HPC", 
+            "CONDOR", 
+            "CLI"
+          ], 
+          "type": "string"
+        }, 
+        "helpURI": {
+          "description": "The URL where users can go for more information about the app.", 
+          "type": "string"
+        }, 
+        "icon": {
+          "description": "The icon to associate with this app.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "Unique id of this app. Comprised of the app name-version.", 
+          "type": "string"
+        }, 
+        "inputs": {
+          "description": "The inputs files for this application. ", 
+          "type": "array"
+        }, 
+        "isPublic": {
+          "description": "Whether the application is public or private.", 
+          "type": "boolean"
+        }, 
+        "label": {
+          "description": "The label to use when generating forms.", 
+          "type": "string"
+        }, 
+        "lastModified": {
+          "description": "The date this application was last modified in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "longDescription": {
+          "description": "The full text description of this input to use when generating forms.", 
+          "type": "string"
+        }, 
+        "modules": {
+          "description": "An array of modules to load prior to the execution of the application.", 
+          "type": "array"
+        }, 
+        "name": {
+          "description": "The name of the application. The name does not have to be unique, but the combination of name and version does.", 
+          "type": "string"
+        }, 
+        "ontology": {
+          "description": "An array of ontology values describing this application.", 
+          "type": "array"
+        }, 
+        "outputs": {
+          "description": "The outputs files for this application. ", 
+          "type": "array"
+        }, 
+        "parallelism": {
+          "description": "The parallelism type of the application. If you're unsure, it's probably SERIAL.", 
+          "enum": [
+            "SERIAL", 
+            "PARALLEL", 
+            "PTHREAD"
+          ], 
+          "type": "string"
+        }, 
+        "parameters": {
+          "description": "The inputs parameters for this application. ", 
+          "type": "array"
+        }, 
+        "revision": {
+          "description": "The number of times this application has been revised.", 
+          "type": "integer"
+        }, 
+        "shortDescription": {
+          "description": "The short description of this application.", 
+          "type": "string"
+        }, 
+        "tags": {
+          "description": "An array of tags related to this application.", 
+          "type": "array"
+        }, 
+        "templatePath": {
+          "description": "The path to the wrapper script relative to the deploymentPath.", 
+          "type": "string"
+        }, 
+        "testPath": {
+          "description": "The path to the test script relative to the deploymentPath.", 
+          "type": "string"
+        }, 
+        "uuid": {
+          "description": "The UUID of this application. UUID are 36 alphanumeric string.", 
+          "type": "string"
+        }, 
+        "version": {
+          "description": "The version of the application in #.#.# format. While the version does not need to be unique, the combination of name and version does have to be unique.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Application schema", 
+      "type": "object"
+    }
+
+get: Get details of an application by it's unique id.
+=====================================================
 ``agavepy.apps.get(appId)``
 
-Get details of an application by it's unique id.
-
 Parameters:
 -----------
     * **appId**: The id of the application. The application id is made up of the name and version separated by a dash. (string)
@@ -193,13 +388,164 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single Application object*
 
-update
-======
+**Application schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Application.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "available": {
+          "description": "Whether the application is available.", 
+          "type": "boolean"
+        }, 
+        "checkpointable": {
+          "description": "Whether the application supports checkpointing.", 
+          "type": "boolean"
+        }, 
+        "defaultMaxRunTime": {
+          "description": "The max execution time that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+          "type": "string"
+        }, 
+        "defaultMemoryPerNode": {
+          "description": "The default memory in GB to pass to the scheduler if none is given in the job description. This must be less than the max memory parameter in the target queue definition.", 
+          "type": "string"
+        }, 
+        "defaultNodeCount": {
+          "description": "The number of nodes that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+          "type": "string"
+        }, 
+        "defaultProcessorsPerNode": {
+          "description": "The number of processors to pass to the scheduler if none are given in the job description. This must be 1 if the app is serial.", 
+          "type": "string"
+        }, 
+        "defaultQueue": {
+          "description": "The queue on the execution system that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+          "type": "string"
+        }, 
+        "deploymentPath": {
+          "description": "The location in the user's default storage system containing the application wrapper and dependencies.", 
+          "type": "string"
+        }, 
+        "deploymentSystem": {
+          "description": "The system id of the storage system where this app should run.", 
+          "type": "string"
+        }, 
+        "executionSystem": {
+          "description": "The system id of the execution system where this app should run.", 
+          "type": "string"
+        }, 
+        "executionType": {
+          "description": "The execution type of the application. If you're unsure, it's probably HPC.", 
+          "enum": [
+            "ATMOSPHERE", 
+            "HPC", 
+            "CONDOR", 
+            "CLI"
+          ], 
+          "type": "string"
+        }, 
+        "helpURI": {
+          "description": "The URL where users can go for more information about the app.", 
+          "type": "string"
+        }, 
+        "icon": {
+          "description": "The icon to associate with this app.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "Unique id of this app. Comprised of the app name-version.", 
+          "type": "string"
+        }, 
+        "inputs": {
+          "description": "The inputs files for this application. ", 
+          "type": "array"
+        }, 
+        "isPublic": {
+          "description": "Whether the application is public or private.", 
+          "type": "boolean"
+        }, 
+        "label": {
+          "description": "The label to use when generating forms.", 
+          "type": "string"
+        }, 
+        "lastModified": {
+          "description": "The date this application was last modified in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "longDescription": {
+          "description": "The full text description of this input to use when generating forms.", 
+          "type": "string"
+        }, 
+        "modules": {
+          "description": "An array of modules to load prior to the execution of the application.", 
+          "type": "array"
+        }, 
+        "name": {
+          "description": "The name of the application. The name does not have to be unique, but the combination of name and version does.", 
+          "type": "string"
+        }, 
+        "ontology": {
+          "description": "An array of ontology values describing this application.", 
+          "type": "array"
+        }, 
+        "outputs": {
+          "description": "The outputs files for this application. ", 
+          "type": "array"
+        }, 
+        "parallelism": {
+          "description": "The parallelism type of the application. If you're unsure, it's probably SERIAL.", 
+          "enum": [
+            "SERIAL", 
+            "PARALLEL", 
+            "PTHREAD"
+          ], 
+          "type": "string"
+        }, 
+        "parameters": {
+          "description": "The inputs parameters for this application. ", 
+          "type": "array"
+        }, 
+        "revision": {
+          "description": "The number of times this application has been revised.", 
+          "type": "integer"
+        }, 
+        "shortDescription": {
+          "description": "The short description of this application.", 
+          "type": "string"
+        }, 
+        "tags": {
+          "description": "An array of tags related to this application.", 
+          "type": "array"
+        }, 
+        "templatePath": {
+          "description": "The path to the wrapper script relative to the deploymentPath.", 
+          "type": "string"
+        }, 
+        "testPath": {
+          "description": "The path to the test script relative to the deploymentPath.", 
+          "type": "string"
+        }, 
+        "uuid": {
+          "description": "The UUID of this application. UUID are 36 alphanumeric string.", 
+          "type": "string"
+        }, 
+        "version": {
+          "description": "The version of the application in #.#.# format. While the version does not need to be unique, the combination of name and version does have to be unique.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Application schema", 
+      "type": "object"
+    }
+
+update: Update an application.
+==============================
 ``agavepy.apps.update(appId, body)``
-
-Update an application.
 
 Parameters:
 -----------
@@ -207,11 +553,13 @@ Parameters:
     * **body**: The description of the app to add or update.  (JSON, ApplicationRequest)
 
 
-**ApplicationRequest:**
+**ApplicationRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "available": {
           "description": "Whether the application is available.", 
@@ -346,19 +694,170 @@ Parameters:
         "executionType", 
         "version"
       ], 
-      "title": "ApplicationRequest", 
+      "title": "AgavePy ApplicationRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single Application object*
 
-manage
-======
+**Application schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Application.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "available": {
+          "description": "Whether the application is available.", 
+          "type": "boolean"
+        }, 
+        "checkpointable": {
+          "description": "Whether the application supports checkpointing.", 
+          "type": "boolean"
+        }, 
+        "defaultMaxRunTime": {
+          "description": "The max execution time that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+          "type": "string"
+        }, 
+        "defaultMemoryPerNode": {
+          "description": "The default memory in GB to pass to the scheduler if none is given in the job description. This must be less than the max memory parameter in the target queue definition.", 
+          "type": "string"
+        }, 
+        "defaultNodeCount": {
+          "description": "The number of nodes that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+          "type": "string"
+        }, 
+        "defaultProcessorsPerNode": {
+          "description": "The number of processors to pass to the scheduler if none are given in the job description. This must be 1 if the app is serial.", 
+          "type": "string"
+        }, 
+        "defaultQueue": {
+          "description": "The queue on the execution system that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+          "type": "string"
+        }, 
+        "deploymentPath": {
+          "description": "The location in the user's default storage system containing the application wrapper and dependencies.", 
+          "type": "string"
+        }, 
+        "deploymentSystem": {
+          "description": "The system id of the storage system where this app should run.", 
+          "type": "string"
+        }, 
+        "executionSystem": {
+          "description": "The system id of the execution system where this app should run.", 
+          "type": "string"
+        }, 
+        "executionType": {
+          "description": "The execution type of the application. If you're unsure, it's probably HPC.", 
+          "enum": [
+            "ATMOSPHERE", 
+            "HPC", 
+            "CONDOR", 
+            "CLI"
+          ], 
+          "type": "string"
+        }, 
+        "helpURI": {
+          "description": "The URL where users can go for more information about the app.", 
+          "type": "string"
+        }, 
+        "icon": {
+          "description": "The icon to associate with this app.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "Unique id of this app. Comprised of the app name-version.", 
+          "type": "string"
+        }, 
+        "inputs": {
+          "description": "The inputs files for this application. ", 
+          "type": "array"
+        }, 
+        "isPublic": {
+          "description": "Whether the application is public or private.", 
+          "type": "boolean"
+        }, 
+        "label": {
+          "description": "The label to use when generating forms.", 
+          "type": "string"
+        }, 
+        "lastModified": {
+          "description": "The date this application was last modified in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "longDescription": {
+          "description": "The full text description of this input to use when generating forms.", 
+          "type": "string"
+        }, 
+        "modules": {
+          "description": "An array of modules to load prior to the execution of the application.", 
+          "type": "array"
+        }, 
+        "name": {
+          "description": "The name of the application. The name does not have to be unique, but the combination of name and version does.", 
+          "type": "string"
+        }, 
+        "ontology": {
+          "description": "An array of ontology values describing this application.", 
+          "type": "array"
+        }, 
+        "outputs": {
+          "description": "The outputs files for this application. ", 
+          "type": "array"
+        }, 
+        "parallelism": {
+          "description": "The parallelism type of the application. If you're unsure, it's probably SERIAL.", 
+          "enum": [
+            "SERIAL", 
+            "PARALLEL", 
+            "PTHREAD"
+          ], 
+          "type": "string"
+        }, 
+        "parameters": {
+          "description": "The inputs parameters for this application. ", 
+          "type": "array"
+        }, 
+        "revision": {
+          "description": "The number of times this application has been revised.", 
+          "type": "integer"
+        }, 
+        "shortDescription": {
+          "description": "The short description of this application.", 
+          "type": "string"
+        }, 
+        "tags": {
+          "description": "An array of tags related to this application.", 
+          "type": "array"
+        }, 
+        "templatePath": {
+          "description": "The path to the wrapper script relative to the deploymentPath.", 
+          "type": "string"
+        }, 
+        "testPath": {
+          "description": "The path to the test script relative to the deploymentPath.", 
+          "type": "string"
+        }, 
+        "uuid": {
+          "description": "The UUID of this application. UUID are 36 alphanumeric string.", 
+          "type": "string"
+        }, 
+        "version": {
+          "description": "The version of the application in #.#.# format. While the version does not need to be unique, the combination of name and version does have to be unique.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Application schema", 
+      "type": "object"
+    }
+
+manage: Edit an application.
+============================
 ``agavepy.apps.manage(appId, body)``
-
-Edit an application.
 
 Parameters:
 -----------
@@ -366,11 +865,13 @@ Parameters:
     * **body**: The operation to perform. (JSON, ApplicationOperationRequest)
 
 
-**ApplicationOperationRequest:**
+**ApplicationOperationRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationOperationRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "action": {
           "description": "Action to perform on the file or folder.", 
@@ -404,19 +905,170 @@ Parameters:
       "required": [
         "action"
       ], 
-      "title": "ApplicationOperationRequest", 
+      "title": "AgavePy ApplicationOperationRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single Application object*
 
-delete
-======
+**Application schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Application.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "available": {
+          "description": "Whether the application is available.", 
+          "type": "boolean"
+        }, 
+        "checkpointable": {
+          "description": "Whether the application supports checkpointing.", 
+          "type": "boolean"
+        }, 
+        "defaultMaxRunTime": {
+          "description": "The max execution time that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+          "type": "string"
+        }, 
+        "defaultMemoryPerNode": {
+          "description": "The default memory in GB to pass to the scheduler if none is given in the job description. This must be less than the max memory parameter in the target queue definition.", 
+          "type": "string"
+        }, 
+        "defaultNodeCount": {
+          "description": "The number of nodes that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+          "type": "string"
+        }, 
+        "defaultProcessorsPerNode": {
+          "description": "The number of processors to pass to the scheduler if none are given in the job description. This must be 1 if the app is serial.", 
+          "type": "string"
+        }, 
+        "defaultQueue": {
+          "description": "The queue on the execution system that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+          "type": "string"
+        }, 
+        "deploymentPath": {
+          "description": "The location in the user's default storage system containing the application wrapper and dependencies.", 
+          "type": "string"
+        }, 
+        "deploymentSystem": {
+          "description": "The system id of the storage system where this app should run.", 
+          "type": "string"
+        }, 
+        "executionSystem": {
+          "description": "The system id of the execution system where this app should run.", 
+          "type": "string"
+        }, 
+        "executionType": {
+          "description": "The execution type of the application. If you're unsure, it's probably HPC.", 
+          "enum": [
+            "ATMOSPHERE", 
+            "HPC", 
+            "CONDOR", 
+            "CLI"
+          ], 
+          "type": "string"
+        }, 
+        "helpURI": {
+          "description": "The URL where users can go for more information about the app.", 
+          "type": "string"
+        }, 
+        "icon": {
+          "description": "The icon to associate with this app.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "Unique id of this app. Comprised of the app name-version.", 
+          "type": "string"
+        }, 
+        "inputs": {
+          "description": "The inputs files for this application. ", 
+          "type": "array"
+        }, 
+        "isPublic": {
+          "description": "Whether the application is public or private.", 
+          "type": "boolean"
+        }, 
+        "label": {
+          "description": "The label to use when generating forms.", 
+          "type": "string"
+        }, 
+        "lastModified": {
+          "description": "The date this application was last modified in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "longDescription": {
+          "description": "The full text description of this input to use when generating forms.", 
+          "type": "string"
+        }, 
+        "modules": {
+          "description": "An array of modules to load prior to the execution of the application.", 
+          "type": "array"
+        }, 
+        "name": {
+          "description": "The name of the application. The name does not have to be unique, but the combination of name and version does.", 
+          "type": "string"
+        }, 
+        "ontology": {
+          "description": "An array of ontology values describing this application.", 
+          "type": "array"
+        }, 
+        "outputs": {
+          "description": "The outputs files for this application. ", 
+          "type": "array"
+        }, 
+        "parallelism": {
+          "description": "The parallelism type of the application. If you're unsure, it's probably SERIAL.", 
+          "enum": [
+            "SERIAL", 
+            "PARALLEL", 
+            "PTHREAD"
+          ], 
+          "type": "string"
+        }, 
+        "parameters": {
+          "description": "The inputs parameters for this application. ", 
+          "type": "array"
+        }, 
+        "revision": {
+          "description": "The number of times this application has been revised.", 
+          "type": "integer"
+        }, 
+        "shortDescription": {
+          "description": "The short description of this application.", 
+          "type": "string"
+        }, 
+        "tags": {
+          "description": "An array of tags related to this application.", 
+          "type": "array"
+        }, 
+        "templatePath": {
+          "description": "The path to the wrapper script relative to the deploymentPath.", 
+          "type": "string"
+        }, 
+        "testPath": {
+          "description": "The path to the test script relative to the deploymentPath.", 
+          "type": "string"
+        }, 
+        "uuid": {
+          "description": "The UUID of this application. UUID are 36 alphanumeric string.", 
+          "type": "string"
+        }, 
+        "version": {
+          "description": "The version of the application in #.#.# format. While the version does not need to be unique, the combination of name and version does have to be unique.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Application schema", 
+      "type": "object"
+    }
+
+delete: Deletes an application.
+===============================
 ``agavepy.apps.delete(appId)``
-
-Deletes an application.
 
 Parameters:
 -----------
@@ -425,13 +1077,11 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-listPermissions
-===============
+listPermissions: Get the permission ACL for this application.
+=============================================================
 ``agavepy.apps.listPermissions(appId, limit=250, offset=0)``
-
-Get the permission ACL for this application.
 
 Parameters:
 -----------
@@ -442,13 +1092,33 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of ApplicationPermission objects*
 
-updateApplicationPermissions
-============================
+**ApplicationPermission schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationPermission.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "permission": {
+          "description": "", 
+          "type": "ACL"
+        }, 
+        "username": {
+          "description": "Username associate with this permission", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ApplicationPermission schema", 
+      "type": "object"
+    }
+
+updateApplicationPermissions: Add or update a user's permission for an application.
+===================================================================================
 ``agavepy.apps.updateApplicationPermissions(appId, body)``
-
-Add or update a user's permission for an application.
 
 Parameters:
 -----------
@@ -456,11 +1126,13 @@ Parameters:
     * **body**: The permission add or update.  (JSON, ApplicationPermissionRequest)
 
 
-**ApplicationPermissionRequest:**
+**ApplicationPermissionRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationPermissionRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "permission": {
           "description": "The permission to set", 
@@ -485,19 +1157,17 @@ Parameters:
         "username", 
         "permission"
       ], 
-      "title": "ApplicationPermissionRequest", 
+      "title": "AgavePy ApplicationPermissionRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-deletePermissions
-=================
+deletePermissions: Deletes all permissions on an application.
+=============================================================
 ``agavepy.apps.deletePermissions(appId)``
-
-Deletes all permissions on an application.
 
 Parameters:
 -----------
@@ -506,13 +1176,11 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-listPermissionsForUser
-======================
+listPermissionsForUser: Get a specific user's permissions for an application.
+=============================================================================
 ``agavepy.apps.listPermissionsForUser(appId, username, limit=250, offset=0)``
-
-Get a specific user's permissions for an application.
 
 Parameters:
 -----------
@@ -524,13 +1192,33 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of ApplicationPermission objects*
 
-updatePermissionsForUser
-========================
+**ApplicationPermission schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationPermission.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "permission": {
+          "description": "", 
+          "type": "ACL"
+        }, 
+        "username": {
+          "description": "Username associate with this permission", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ApplicationPermission schema", 
+      "type": "object"
+    }
+
+updatePermissionsForUser: Add or update a user's permission for an application.
+===============================================================================
 ``agavepy.apps.updatePermissionsForUser(appId, body, username)``
-
-Add or update a user's permission for an application.
 
 Parameters:
 -----------
@@ -539,11 +1227,13 @@ Parameters:
     * **body**: The permission add or update.  (JSON, ApplicationPermissionRequest)
 
 
-**ApplicationPermissionRequest:**
+**ApplicationPermissionRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationPermissionRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "permission": {
           "description": "The permission to set", 
@@ -568,19 +1258,17 @@ Parameters:
         "username", 
         "permission"
       ], 
-      "title": "ApplicationPermissionRequest", 
+      "title": "AgavePy ApplicationPermissionRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-deletePermissionsForUser
-========================
+deletePermissionsForUser: Deletes all permissions for the given user on an application.
+=======================================================================================
 ``agavepy.apps.deletePermissionsForUser(appId, username)``
-
-Deletes all permissions for the given user on an application.
 
 Parameters:
 -----------
@@ -590,13 +1278,11 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-listByName
-==========
+listByName: Get a list of applications with the given name.
+===========================================================
 ``agavepy.apps.listByName(name, limit=250, offset=0, privateOnly=None, publicOnly=None)``
-
-Get a list of applications with the given name.
 
 Parameters:
 -----------
@@ -609,13 +1295,57 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of ApplicationSummary objects*
 
-listBySystemId
-==============
+**ApplicationSummary schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationSummary.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "executionSystem": {
+          "description": "The system id of the execution system where this app should run.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "Unique id of this app. Comprised of the app name-version.", 
+          "type": "string"
+        }, 
+        "isPublic": {
+          "description": "Whether the application is public or private.", 
+          "type": "boolean"
+        }, 
+        "lastModified": {
+          "description": "The date this application was last modified in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the application. The name does not have to be unique, but the combination of name and version does.", 
+          "type": "string"
+        }, 
+        "revision": {
+          "description": "The number of times this application has been revised.", 
+          "type": "integer"
+        }, 
+        "shortDescription": {
+          "description": "The short description of this application.", 
+          "type": "string"
+        }, 
+        "version": {
+          "description": "The version of the application in #.#.# format. While the version does not need to be unique, the combination of name and version does have to be unique.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ApplicationSummary schema", 
+      "type": "object"
+    }
+
+listBySystemId: Get a list of applications with the given systemId as their executionHost.
+==========================================================================================
 ``agavepy.apps.listBySystemId(systemId, limit=250, offset=0, privateOnly=None, publicOnly=None)``
-
-Get a list of applications with the given systemId as their executionHost.
 
 Parameters:
 -----------
@@ -628,5 +1358,51 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of ApplicationSummary objects*
+
+**ApplicationSummary schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationSummary.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "executionSystem": {
+          "description": "The system id of the execution system where this app should run.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "Unique id of this app. Comprised of the app name-version.", 
+          "type": "string"
+        }, 
+        "isPublic": {
+          "description": "Whether the application is public or private.", 
+          "type": "boolean"
+        }, 
+        "lastModified": {
+          "description": "The date this application was last modified in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the application. The name does not have to be unique, but the combination of name and version does.", 
+          "type": "string"
+        }, 
+        "revision": {
+          "description": "The number of times this application has been revised.", 
+          "type": "integer"
+        }, 
+        "shortDescription": {
+          "description": "The short description of this application.", 
+          "type": "string"
+        }, 
+        "version": {
+          "description": "The version of the application in #.#.# format. While the version does not need to be unique, the combination of name and version does have to be unique.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ApplicationSummary schema", 
+      "type": "object"
+    }
 

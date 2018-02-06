@@ -1,0 +1,21 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/FilePermission.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "name": {
+      "description": "The name of the file/folder.", 
+      "type": "string"
+    }, 
+    "owner": {
+      "description": "Local username of the owner.", 
+      "type": "string"
+    }, 
+    "permissions": {
+      "description": "One or more permission objects", 
+      "type": "array"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy FilePermission schema", 
+  "type": "object"
+}

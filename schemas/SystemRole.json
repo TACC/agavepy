@@ -1,0 +1,23 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/SystemRole.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "role": {
+      "description": "The role granted this user.", 
+      "enum": [
+        "USER", 
+        "PUBLISHER", 
+        "ADMIN", 
+        "OWNER"
+      ], 
+      "type": "string"
+    }, 
+    "username": {
+      "description": "The username of the api user granted this role.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy SystemRole schema", 
+  "type": "object"
+}

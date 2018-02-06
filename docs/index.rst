@@ -19,7 +19,6 @@ Welcome to AgavePy's documentation!
    agavepy.profiles
    agavepy.systems
 
-
 Indices and tables
 ==================
 

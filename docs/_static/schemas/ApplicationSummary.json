@@ -1,0 +1,41 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationSummary.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "executionSystem": {
+      "description": "The system id of the execution system where this app should run.", 
+      "type": "string"
+    }, 
+    "id": {
+      "description": "Unique id of this app. Comprised of the app name-version.", 
+      "type": "string"
+    }, 
+    "isPublic": {
+      "description": "Whether the application is public or private.", 
+      "type": "boolean"
+    }, 
+    "lastModified": {
+      "description": "The date this application was last modified in ISO 8601 format.", 
+      "type": "string"
+    }, 
+    "name": {
+      "description": "The name of the application. The name does not have to be unique, but the combination of name and version does.", 
+      "type": "string"
+    }, 
+    "revision": {
+      "description": "The number of times this application has been revised.", 
+      "type": "integer"
+    }, 
+    "shortDescription": {
+      "description": "The short description of this application.", 
+      "type": "string"
+    }, 
+    "version": {
+      "description": "The version of the application in #.#.# format. While the version does not need to be unique, the combination of name and version does have to be unique.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy ApplicationSummary schema", 
+  "type": "object"
+}

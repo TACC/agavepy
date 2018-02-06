@@ -1,0 +1,17 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/AddNonceRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "level": {
+      "description": "Permissions level associated with this nonce (default is EXECUTE).", 
+      "type": "string"
+    }, 
+    "maxUses": {
+      "description": "Max number of times nonce can be redeemed.", 
+      "type": "int"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy AddNonceRequest schema", 
+  "type": "object"
+}

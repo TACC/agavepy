@@ -1,0 +1,46 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/SystemSummary.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "default": {
+      "description": "Is the system the default for the authenticated user?", 
+      "type": "boolean"
+    }, 
+    "description": {
+      "description": "Verbose description of this system.", 
+      "type": "string"
+    }, 
+    "id": {
+      "description": "Unique identifier for this system.", 
+      "type": "string"
+    }, 
+    "name": {
+      "description": "Common name for this system.", 
+      "type": "string"
+    }, 
+    "public": {
+      "description": "Is the system publicly available?", 
+      "type": "boolean"
+    }, 
+    "status": {
+      "description": "The status of this system. Systems must be in UP status to be used.", 
+      "enum": [
+        "UP", 
+        "DOWN", 
+        "UNKNOWN"
+      ], 
+      "type": "string"
+    }, 
+    "type": {
+      "description": "The type of this system.", 
+      "enum": [
+        "EXECUTION", 
+        "STORAGE"
+      ], 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy SystemSummary schema", 
+  "type": "object"
+}

@@ -1,0 +1,41 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/Actor.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "defaultEnvironment": {
+      "description": "Default environmental variables and values.", 
+      "type": "dict"
+    }, 
+    "description": {
+      "description": "Description of this actor.", 
+      "type": "string"
+    }, 
+    "id": {
+      "description": "The unique id of the actor.", 
+      "type": "string"
+    }, 
+    "image": {
+      "description": "Docker image associated with the actor.", 
+      "type": "string"
+    }, 
+    "owner": {
+      "description": "username of the owner of the actor.", 
+      "type": "string"
+    }, 
+    "privileged": {
+      "description": "Whether this actor runs in privileged mode.", 
+      "type": "boolean"
+    }, 
+    "stateless": {
+      "description": "Whether the actor stores private state.", 
+      "type": "boolean"
+    }, 
+    "status": {
+      "description": "Current status of the actor.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy Actor schema", 
+  "type": "object"
+}

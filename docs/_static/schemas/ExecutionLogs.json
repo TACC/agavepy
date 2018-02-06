@@ -1,0 +1,13 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/ExecutionLogs.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "logs": {
+      "description": "The logs (standard out) of this execution.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy ExecutionLogs schema", 
+  "type": "object"
+}

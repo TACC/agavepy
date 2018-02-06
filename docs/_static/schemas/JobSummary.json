@@ -1,0 +1,41 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/JobSummary.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "appId": {
+      "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.", 
+      "type": "string"
+    }, 
+    "endTime": {
+      "description": "The date the job ended in ISO 8601 format.", 
+      "type": "string"
+    }, 
+    "executionSystem": {
+      "description": "The system id of the execution system.", 
+      "type": "string"
+    }, 
+    "id": {
+      "description": "The unique id of the job.", 
+      "type": "string"
+    }, 
+    "name": {
+      "description": "The name of the job.", 
+      "type": "string"
+    }, 
+    "owner": {
+      "description": "The job owner.", 
+      "type": "string"
+    }, 
+    "startTime": {
+      "description": "The date the job started in ISO 8601 format.", 
+      "type": "string"
+    }, 
+    "status": {
+      "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy JobSummary schema", 
+  "type": "object"
+}

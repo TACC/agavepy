@@ -14,6 +14,13 @@ help:
 
 .PHONY: help Makefile
 
+schemas: schemas-clean
+	mkdir -p _static/schemas/ && \
+	cp ../schemas/* _static/schemas/
+
+schemas-clean:
+	rm -rf _static/schemas/*
+
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile

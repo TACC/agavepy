@@ -1,0 +1,33 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/MonitorCheck.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "created": {
+      "description": "A timestamp indicating when this monitor check was created.", 
+      "type": "string"
+    }, 
+    "id": {
+      "description": "The UUID for this monitor check.", 
+      "type": "string"
+    }, 
+    "message": {
+      "description": "The error message if this monitor check failed.", 
+      "type": "string"
+    }, 
+    "result": {
+      "description": "The results of this monitor check.", 
+      "enum": [
+        "PASSED", 
+        "FAILED", 
+        "UNKNOWN"
+      ], 
+      "type": "string"
+    }
+  }, 
+  "required": [
+    "result", 
+    "created"
+  ], 
+  "title": "AgavePy MonitorCheck schema", 
+  "type": "object"
+}

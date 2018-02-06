@@ -1,0 +1,37 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/Execution.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "actorId": {
+      "description": "The id of the associated actor.", 
+      "type": "string"
+    }, 
+    "cpu": {
+      "description": "CPU usage, in user jiffies, of this execution.", 
+      "type": "int"
+    }, 
+    "id": {
+      "description": "The id of this executions.", 
+      "type": "string"
+    }, 
+    "io": {
+      "description": "Block I/O usage, in number of 512-byte sectors read from and written to, by this execution.", 
+      "type": "int"
+    }, 
+    "owner": {
+      "description": "username of the owner of the actor.", 
+      "type": "string"
+    }, 
+    "runtime": {
+      "description": "Runtime, in milliseconds, of this execution.", 
+      "type": "int"
+    }, 
+    "status": {
+      "description": "status of the execution.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy Execution schema", 
+  "type": "object"
+}

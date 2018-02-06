@@ -1,0 +1,45 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/RemoteFile.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "format": {
+      "description": "The file type of the file.", 
+      "type": "string"
+    }, 
+    "lastModified": {
+      "description": "The date this file was last modified in ISO 8601 format.", 
+      "type": "string"
+    }, 
+    "length": {
+      "description": "The length of the file/folder.", 
+      "type": "integer"
+    }, 
+    "mimeType": {
+      "description": "The mime type of the file/folder. If unknown, it defaults to application/binary.", 
+      "type": "string"
+    }, 
+    "name": {
+      "description": "The name of the file/folder.", 
+      "type": "string"
+    }, 
+    "path": {
+      "description": "The absolute path to the file/folder.", 
+      "type": "string"
+    }, 
+    "permissions": {
+      "description": "The system permission of the invoking user on the file/folder.", 
+      "type": "string"
+    }, 
+    "system": {
+      "description": "The systemId of the system where this file lives.", 
+      "type": "string"
+    }, 
+    "type": {
+      "description": "Whether it is a file or folder.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy RemoteFile schema", 
+  "type": "object"
+}

@@ -1,0 +1,41 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/Metadata.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "associationIds": {
+      "description": "UUIDs of associated Agave entities, including the Data to which this Metadata belongs.", 
+      "type": "array"
+    }, 
+    "created": {
+      "description": "A timestamp indicating when this Metadata was created in the metadata store.", 
+      "type": "string"
+    }, 
+    "internalUsername": {
+      "description": "The name of the Internal User, if any, who owns this metadata.", 
+      "type": "string"
+    }, 
+    "lastUpdated": {
+      "description": "A timestamp indicating when this Metadata was last updated in the metadata store.", 
+      "type": "string"
+    }, 
+    "name": {
+      "description": "The name of this metadata", 
+      "type": "string"
+    }, 
+    "owner": {
+      "description": "The API user who owns this Metadata.", 
+      "type": "string"
+    }, 
+    "uuid": {
+      "description": "The UUID for this Metadata.", 
+      "type": "string"
+    }, 
+    "value": {
+      "description": "A free text or JSON string containing the metadata stored for the given associationIds", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy Metadata schema", 
+  "type": "object"
+}

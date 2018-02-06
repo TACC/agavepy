@@ -4,11 +4,9 @@ agavepy.files
 
 Summary: Move and manage data
 
-downloadFromDefaultSystem
-=========================
+downloadFromDefaultSystem: Download a file from the user's default storage location.
+====================================================================================
 ``agavepy.files.downloadFromDefaultSystem(sourcefilePath)``
-
-Download a file from the user's default storage location.
 
 Parameters:
 -----------
@@ -17,13 +15,11 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *None*
 
-importToDefaultSystem
-=====================
+importToDefaultSystem: Import a file via direct upload or importing from a url to the user's default storage location.
+======================================================================================================================
 ``agavepy.files.importToDefaultSystem(sourcefilePath, callbackURL=None, fileName=None, fileToUpload=None, fileType=None, urlToIngest=None)``
-
-Import a file via direct upload or importing from a url to the user's default storage location.
 
 Parameters:
 -----------
@@ -37,13 +33,61 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single RemoteFile object*
 
-manageOnDefaultSystem
-=====================
+**RemoteFile schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/RemoteFile.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "format": {
+          "description": "The file type of the file.", 
+          "type": "string"
+        }, 
+        "lastModified": {
+          "description": "The date this file was last modified in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "length": {
+          "description": "The length of the file/folder.", 
+          "type": "integer"
+        }, 
+        "mimeType": {
+          "description": "The mime type of the file/folder. If unknown, it defaults to application/binary.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the file/folder.", 
+          "type": "string"
+        }, 
+        "path": {
+          "description": "The absolute path to the file/folder.", 
+          "type": "string"
+        }, 
+        "permissions": {
+          "description": "The system permission of the invoking user on the file/folder.", 
+          "type": "string"
+        }, 
+        "system": {
+          "description": "The systemId of the system where this file lives.", 
+          "type": "string"
+        }, 
+        "type": {
+          "description": "Whether it is a file or folder.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy RemoteFile schema", 
+      "type": "object"
+    }
+
+manageOnDefaultSystem: Perform an action on a file or folder.
+=============================================================
 ``agavepy.files.manageOnDefaultSystem(body, sourcefilePath)``
-
-Perform an action on a file or folder.
 
 Parameters:
 -----------
@@ -51,11 +95,13 @@ Parameters:
     * **body**: The operation to perform.  (JSON, FileOperationRequest)
 
 
-**FileOperationRequest:**
+**FileOperationRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FileOperationRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "action": {
           "description": "Action to perform on the file or folder.", 
@@ -75,19 +121,17 @@ Parameters:
       "required": [
         "action"
       ], 
-      "title": "FileOperationRequest", 
+      "title": "AgavePy FileOperationRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-deleteFromDefaultSystem
-=======================
+deleteFromDefaultSystem: Deletes a file or folder.
+==================================================
 ``agavepy.files.deleteFromDefaultSystem(sourcefilePath)``
-
-Deletes a file or folder.
 
 Parameters:
 -----------
@@ -96,13 +140,11 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-download
-========
+download: Download a file from the user's default storage location.
+===================================================================
 ``agavepy.files.download(filePath, systemId)``
-
-Download a file from the user's default storage location.
 
 Parameters:
 -----------
@@ -112,13 +154,11 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *None*
 
-importData
-==========
+importData: Import a file via direct upload or importing from a url to the user's default storage location.
+===========================================================================================================
 ``agavepy.files.importData(filePath, systemId, callbackURL=None, fileName=None, fileToUpload=None, fileType=None, notifications=[], urlToIngest=None)``
-
-Import a file via direct upload or importing from a url to the user's default storage location.
 
 Parameters:
 -----------
@@ -134,13 +174,61 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *A single RemoteFile object*
 
-manage
-======
+**RemoteFile schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/RemoteFile.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "format": {
+          "description": "The file type of the file.", 
+          "type": "string"
+        }, 
+        "lastModified": {
+          "description": "The date this file was last modified in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "length": {
+          "description": "The length of the file/folder.", 
+          "type": "integer"
+        }, 
+        "mimeType": {
+          "description": "The mime type of the file/folder. If unknown, it defaults to application/binary.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the file/folder.", 
+          "type": "string"
+        }, 
+        "path": {
+          "description": "The absolute path to the file/folder.", 
+          "type": "string"
+        }, 
+        "permissions": {
+          "description": "The system permission of the invoking user on the file/folder.", 
+          "type": "string"
+        }, 
+        "system": {
+          "description": "The systemId of the system where this file lives.", 
+          "type": "string"
+        }, 
+        "type": {
+          "description": "Whether it is a file or folder.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy RemoteFile schema", 
+      "type": "object"
+    }
+
+manage: Perform an action on a file or folder.
+==============================================
 ``agavepy.files.manage(body, filePath, systemId)``
-
-Perform an action on a file or folder.
 
 Parameters:
 -----------
@@ -149,11 +237,13 @@ Parameters:
     * **body**: The operation to perform.  (JSON, FileOperationRequest)
 
 
-**FileOperationRequest:**
+**FileOperationRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FileOperationRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "action": {
           "description": "Action to perform on the file or folder.", 
@@ -173,20 +263,18 @@ Parameters:
       "required": [
         "action"
       ], 
-      "title": "FileOperationRequest", 
+      "title": "AgavePy FileOperationRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-delete
-======
+delete: Deletes a file or folder.
+=================================
 ``agavepy.files.delete(filePath, systemId)``
 
-Deletes a file or folder.
-
 Parameters:
 -----------
     * **systemId**: The unique id of the system on which the data resides. (string)
@@ -195,14 +283,12 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-listOnDefaultSystem
-===================
+listOnDefaultSystem: Get a remote directory listing.
+====================================================
 ``agavepy.files.listOnDefaultSystem(filePath, limit=250, offset=0)``
 
-Get a remote directory listing.
-
 Parameters:
 -----------
     * **filePath**: The path of the file relative to the user's default storage location. (string)
@@ -212,13 +298,61 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of RemoteFile objects*
 
-list
-====
+**RemoteFile schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/RemoteFile.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "format": {
+          "description": "The file type of the file.", 
+          "type": "string"
+        }, 
+        "lastModified": {
+          "description": "The date this file was last modified in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "length": {
+          "description": "The length of the file/folder.", 
+          "type": "integer"
+        }, 
+        "mimeType": {
+          "description": "The mime type of the file/folder. If unknown, it defaults to application/binary.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the file/folder.", 
+          "type": "string"
+        }, 
+        "path": {
+          "description": "The absolute path to the file/folder.", 
+          "type": "string"
+        }, 
+        "permissions": {
+          "description": "The system permission of the invoking user on the file/folder.", 
+          "type": "string"
+        }, 
+        "system": {
+          "description": "The systemId of the system where this file lives.", 
+          "type": "string"
+        }, 
+        "type": {
+          "description": "Whether it is a file or folder.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy RemoteFile schema", 
+      "type": "object"
+    }
+
+list: Get a remote directory listing on a specific system.
+==========================================================
 ``agavepy.files.list(filePath, systemId, limit=250, offset=0)``
-
-Get a remote directory listing on a specific system.
 
 Parameters:
 -----------
@@ -230,13 +364,61 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of RemoteFile objects*
 
-getHistoryOnDefaultSystem
-=========================
+**RemoteFile schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/RemoteFile.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "format": {
+          "description": "The file type of the file.", 
+          "type": "string"
+        }, 
+        "lastModified": {
+          "description": "The date this file was last modified in ISO 8601 format.", 
+          "type": "string"
+        }, 
+        "length": {
+          "description": "The length of the file/folder.", 
+          "type": "integer"
+        }, 
+        "mimeType": {
+          "description": "The mime type of the file/folder. If unknown, it defaults to application/binary.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "The name of the file/folder.", 
+          "type": "string"
+        }, 
+        "path": {
+          "description": "The absolute path to the file/folder.", 
+          "type": "string"
+        }, 
+        "permissions": {
+          "description": "The system permission of the invoking user on the file/folder.", 
+          "type": "string"
+        }, 
+        "system": {
+          "description": "The systemId of the system where this file lives.", 
+          "type": "string"
+        }, 
+        "type": {
+          "description": "Whether it is a file or folder.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy RemoteFile schema", 
+      "type": "object"
+    }
+
+getHistoryOnDefaultSystem: Download a file from the user's default storage location.
+====================================================================================
 ``agavepy.files.getHistoryOnDefaultSystem(filePath, limit=250, offset=0)``
-
-Download a file from the user's default storage location.
 
 Parameters:
 -----------
@@ -247,13 +429,37 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of FileHistory objects*
 
-getHistory
-==========
+**FileHistory schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FileHistory.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "created": {
+          "description": "The date of the event.", 
+          "type": "string"
+        }, 
+        "description": {
+          "description": "A brief description of the event details.", 
+          "type": "String"
+        }, 
+        "status": {
+          "description": "The status of the file/folder after this event.", 
+          "type": "String"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy FileHistory schema", 
+      "type": "object"
+    }
+
+getHistory: Return history of api actions.
+==========================================
 ``agavepy.files.getHistory(filePath, systemId, limit=250, offset=0)``
-
-Return history of api actions.
 
 Parameters:
 -----------
@@ -265,14 +471,38 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of FileHistory objects*
 
-listPermissionsOnDefaultSystem
-==============================
+**FileHistory schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FileHistory.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "created": {
+          "description": "The date of the event.", 
+          "type": "string"
+        }, 
+        "description": {
+          "description": "A brief description of the event details.", 
+          "type": "String"
+        }, 
+        "status": {
+          "description": "The status of the file/folder after this event.", 
+          "type": "String"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy FileHistory schema", 
+      "type": "object"
+    }
+
+listPermissionsOnDefaultSystem: List all the share permissions for a file or folder.
+====================================================================================
 ``agavepy.files.listPermissionsOnDefaultSystem(filePath, limit=250, offset=0)``
 
-List all the share permissions for a file or folder.
-
 Parameters:
 -----------
     * **filePath**: The path of the file relative to the user's default storage location. (string)
@@ -282,25 +512,51 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of FilePermission objects*
 
-updatePermissionsOnDefaultSystem
-================================
+**FilePermission schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FilePermission.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "name": {
+          "description": "The name of the file/folder.", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "Local username of the owner.", 
+          "type": "string"
+        }, 
+        "permissions": {
+          "description": "One or more permission objects", 
+          "type": "array"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy FilePermission schema", 
+      "type": "object"
+    }
+
+updatePermissionsOnDefaultSystem: Update permissions for a single user.
+=======================================================================
 ``agavepy.files.updatePermissionsOnDefaultSystem(body, filePath)``
 
-Update permissions for a single user.
-
 Parameters:
 -----------
     * **filePath**: The path of the file relative to the user's default storage location. (string)
     * **body**: The permission add or update.  (JSON, FilePermissionRequest)
 
 
-**FilePermissionRequest:**
+**FilePermissionRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FilePermissionRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "permission": {
           "description": "The permission to set", 
@@ -329,19 +585,17 @@ Parameters:
         "username", 
         "permission"
       ], 
-      "title": "FilePermissionRequest", 
+      "title": "AgavePy FilePermissionRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 
-listPermissions
-===============
+listPermissions: List all the share permissions for a file or folder.
+=====================================================================
 ``agavepy.files.listPermissions(filePath, systemId, limit=250, offset=0)``
-
-List all the share permissions for a file or folder.
 
 Parameters:
 -----------
@@ -353,13 +607,37 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of FilePermission objects*
 
-updatePermissions
-=================
+**FilePermission schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FilePermission.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "name": {
+          "description": "The name of the file/folder.", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "Local username of the owner.", 
+          "type": "string"
+        }, 
+        "permissions": {
+          "description": "One or more permission objects", 
+          "type": "array"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy FilePermission schema", 
+      "type": "object"
+    }
+
+updatePermissions: Update permissions for a single user.
+========================================================
 ``agavepy.files.updatePermissions(body, filePath, systemId)``
-
-Update permissions for a single user.
 
 Parameters:
 -----------
@@ -368,11 +646,13 @@ Parameters:
     * **body**: The permission add or update.  (JSON, FilePermissionRequest)
 
 
-**FilePermissionRequest:**
+**FilePermissionRequest schema**
 
 .. code-block:: javascript
 
     {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FilePermissionRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
         "permission": {
           "description": "The permission to set", 
@@ -401,19 +681,43 @@ Parameters:
         "username", 
         "permission"
       ], 
-      "title": "FilePermissionRequest", 
+      "title": "AgavePy FilePermissionRequest schema", 
       "type": "object"
     }
 
 Response:
 ---------
-    * *Coming soon*
+    * *Array of FilePermission objects*
 
-deletePermissions
-=================
+**FilePermission schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FilePermission.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "name": {
+          "description": "The name of the file/folder.", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "Local username of the owner.", 
+          "type": "string"
+        }, 
+        "permissions": {
+          "description": "One or more permission objects", 
+          "type": "array"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy FilePermission schema", 
+      "type": "object"
+    }
+
+deletePermissions: Deletes all permissions on a file except those of the owner.
+===============================================================================
 ``agavepy.files.deletePermissions(filePath, systemId)``
-
-Deletes all permissions on a file except those of the owner.
 
 Parameters:
 -----------
@@ -423,5 +727,5 @@ Parameters:
 
 Response:
 ---------
-    * *Coming soon*
+    * *String*
 

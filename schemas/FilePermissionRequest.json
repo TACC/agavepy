@@ -1,0 +1,34 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/FilePermissionRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "permission": {
+      "description": "The permission to set", 
+      "enum": [
+        "READ", 
+        "WRITE", 
+        "EXECUTE", 
+        "READ_WRITE", 
+        "READ_EXECUTE", 
+        "WRITE_EXECUTE", 
+        "ALL", 
+        "NONE"
+      ], 
+      "type": "string"
+    }, 
+    "recursive": {
+      "description": "Should updated permissions be applied recursively. Defaults to false.", 
+      "type": "boolean"
+    }, 
+    "username": {
+      "description": "The username of the api user whose permission is to be set.", 
+      "type": "string"
+    }
+  }, 
+  "required": [
+    "username", 
+    "permission"
+  ], 
+  "title": "AgavePy FilePermissionRequest schema", 
+  "type": "object"
+}

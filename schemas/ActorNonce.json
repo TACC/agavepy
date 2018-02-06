@@ -1,0 +1,37 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/ActorNonce.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "actor_id": {
+      "description": "Actor id associated with nonce.", 
+      "type": "string"
+    }, 
+    "create_time": {
+      "description": "Time stamp when nonce was created.", 
+      "type": "string"
+    }, 
+    "id": {
+      "description": "The unique id of the nonce.", 
+      "type": "string"
+    }, 
+    "last_use_time": {
+      "description": "Last time nonce was used.", 
+      "type": "string"
+    }, 
+    "level": {
+      "description": "Permission level associated with nonce.", 
+      "type": "string"
+    }, 
+    "max_uses": {
+      "description": "Max number of uses for this nonce.", 
+      "type": "string"
+    }, 
+    "remaining_uses": {
+      "description": "Remaining uses of nonce.", 
+      "type": "int"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy ActorNonce schema", 
+  "type": "object"
+}
