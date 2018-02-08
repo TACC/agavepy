@@ -1,0 +1,27 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/MetadataPermissionRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "permission": {
+      "description": "The permission to set", 
+      "enum": [
+        "READ", 
+        "WRITE", 
+        "READ_WRITE", 
+        "ALL", 
+        "NONE"
+      ], 
+      "type": "string"
+    }, 
+    "username": {
+      "description": "The username of the api user whose permission is to be set.", 
+      "type": "string"
+    }
+  }, 
+  "required": [
+    "username", 
+    "permission"
+  ], 
+  "title": "AgavePy MetadataPermissionRequest schema", 
+  "type": "object"
+}

@@ -1,0 +1,109 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/Job.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "appId": {
+      "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.", 
+      "type": "string"
+    }, 
+    "archive": {
+      "description": "Whether the output from this job should be archived. If true, all new files created by this application's execution will be archived to the archivePath in the user's default storage system.", 
+      "type": "boolean"
+    }, 
+    "archivePath": {
+      "description": "The path of the archive folder for this job on the user's default storage sytem.", 
+      "type": "string"
+    }, 
+    "archiveSystem": {
+      "description": "The unique id of the storage system on which this job's output will be staged.", 
+      "type": "string"
+    }, 
+    "batchQueue": {
+      "description": "The queue to which this job should be submitted. This is optional and only applies when the execution system has a batch scheduler.", 
+      "type": "string"
+    }, 
+    "endTime": {
+      "description": "The date the job stopped running due to termination, completion, or error in ISO 8601 format.", 
+      "type": "string"
+    }, 
+    "executionSystem": {
+      "description": "The system id of the execution system.", 
+      "type": "string"
+    }, 
+    "id": {
+      "description": "The unique id of the job.", 
+      "type": "string"
+    }, 
+    "inputs": {
+      "description": "The application specific input files needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. Inputs may be given as relative paths in the user's default storage system or as URI. If a URI is given, the data will be staged in by the IO service and made avaialble to the application at run time.", 
+      "type": "JobInputs"
+    }, 
+    "localId": {
+      "description": "The process or local job id of the job on the remote execution system.", 
+      "type": "string"
+    }, 
+    "maxRunTime": {
+      "description": "The requested compute time needed for this application to complete given in HH:mm:ss format.", 
+      "type": "string"
+    }, 
+    "memoryPerNode": {
+      "description": "The requested memory for this application to run given in GB.", 
+      "type": "string"
+    }, 
+    "message": {
+      "description": "The error message incurred when the job failed.", 
+      "type": "string"
+    }, 
+    "name": {
+      "description": "The name of the job.", 
+      "type": "string"
+    }, 
+    "nodeCount": {
+      "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+      "type": "integer"
+    }, 
+    "notifications": {
+      "description": "An array of notifications you wish to receive.", 
+      "type": "array"
+    }, 
+    "outputPath": {
+      "description": "Relative path of the job's output data.", 
+      "type": "String"
+    }, 
+    "owner": {
+      "description": "The job owner.", 
+      "type": "string"
+    }, 
+    "parameters": {
+      "description": "The application specific parameters needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. The actual dataType will be determined by the application description.", 
+      "type": "JobParameters"
+    }, 
+    "processorsPerNode": {
+      "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+      "type": "integer"
+    }, 
+    "retries": {
+      "description": "The number of retires it took to submit this job.", 
+      "type": "integer"
+    }, 
+    "startTime": {
+      "description": "The date the job started in ISO 8601 format.", 
+      "type": "string"
+    }, 
+    "status": {
+      "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED", 
+      "type": "string"
+    }, 
+    "submitTime": {
+      "description": "The date the job was submitted in ISO 8601 format.", 
+      "type": "string"
+    }, 
+    "workPath": {
+      "description": "The directory on the remote execution system from which the job is running.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy Job schema", 
+  "type": "object"
+}

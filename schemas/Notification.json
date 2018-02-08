@@ -1,0 +1,49 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/Notification.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "associatedUuid": {
+      "description": "UUID of resource to whome the event applies.", 
+      "type": "string"
+    }, 
+    "attempts": {
+      "description": "The number of times this notification has been attempted to be fulfilled.", 
+      "type": "integer"
+    }, 
+    "created": {
+      "description": "A timestamp indicating when this notification was created in the notification store.", 
+      "type": "string"
+    }, 
+    "lastSent": {
+      "description": "A timestamp indicating the last time this notification was sent.", 
+      "type": "string"
+    }, 
+    "owner": {
+      "description": "The API user who owns this notification.", 
+      "type": "string"
+    }, 
+    "persistent": {
+      "description": "Whether this notification should stay active after it fires the first time.", 
+      "type": "boolean"
+    }, 
+    "responseCode": {
+      "description": "The response code from POSTing to the url or sending an email.", 
+      "type": "integer"
+    }, 
+    "success": {
+      "description": "Whether this notification was sent successfully.", 
+      "type": "boolean"
+    }, 
+    "url": {
+      "description": "The url or email address that will be notified of the event.", 
+      "type": "string"
+    }, 
+    "uuid": {
+      "description": "The UUID for this notification.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy Notification schema", 
+  "type": "object"
+}

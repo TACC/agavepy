@@ -2,6 +2,9 @@
 AgavePy
 =======
 
+.. image:: https://travis-ci.org/TACC/agavepy.svg?branch=reactors
+    :target: https://travis-ci.org/TACC/agavepy
+
 Python2/3 binding for TACC.Cloud `Agave`_ and `Abaco`_ APIs.
 
 Installation
@@ -68,8 +71,7 @@ Create a new Oauth client
 Reuse an existing Oauth client
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-For example, create a new client with:
+Ceate a new client with:
 
 .. code-block:: pycon
 
@@ -124,36 +126,4 @@ Finally, a client can be generated directly from a JWT in order to bypass the AP
 .. _PyPI: https://pypi.python.org/pypi
 .. _Developer Documentation: http://developer.tacc.cloud/
 .. _Jupyter: http://ipython.org/
-
-License
-=======
-
-AgavePy is licensed under a BSD license.
-
-Swagger.py is copyright of Digium, Inc., and licensed under BSD 3-Clause License.
-
 .. _Docker: https://docs.docker.com/installation/#installation
-
-
-Using agavepy in Docker
-========================
-
-This repository includes a ``Dockerfile`` and a ``docker-compose.yml``
-file, which allows a zero installation version of ``agavepy``.
-
-The only requirement is Docker_ and `docker-compose`_, most likely
-already installed in your system.
-
-Then, clone this repository and execute ``docker-compose`` as follows:
-
-.. code-block:: bash
-
-   $ git clone https://github.com/TACC/agavepy.git
-   $ cd agavepy
-   $ docker-compose build
-   $ docker-compose up
-
-(a bug in ``docker-compose`` is preventing to run just ``up``. The steps ``build`` and ``up`` have to be done separately.)
-Navigate to http://localhost:9999 and access the Jupyter_ notebook
-with password ``agavepy``.  The notebook ``Example.ipynb`` contains a
-full example of use.

@@ -1,0 +1,30 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/SystemOperationRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "action": {
+      "description": "Action to perform on the system.", 
+      "enum": [
+        "ENABLE", 
+        "DISABLE", 
+        "PUBLISH", 
+        "UNPUBLISH", 
+        "SETDEFAULT", 
+        "UNSETDEFAULT", 
+        "SETGLOBALDEFAULT", 
+        "UNSETGLOBALDEFAULT", 
+        "CLONE"
+      ], 
+      "type": "string"
+    }, 
+    "id": {
+      "description": "The new system id of the cloned system", 
+      "type": "string"
+    }
+  }, 
+  "required": [
+    "action"
+  ], 
+  "title": "AgavePy SystemOperationRequest schema", 
+  "type": "object"
+}

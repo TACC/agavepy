@@ -1,5 +1,5 @@
 
-docs:
+docs: deps
 	python build/swagger_to_rst.py && \
 	cd docs && \
 	make definitions && \
@@ -7,7 +7,14 @@ docs:
 	make html && \
 	cd ../
 
+deps:
+	mkdir -p schemas && \
+	mkdir -p definitions
+
 clean:
 	rm -rf schemas definitions
 
-.PHONY: docs clean
+tests:
+	py.test agavepy/tests/test_agave_basic.py
+
+.PHONY: docs clean deps

@@ -1,0 +1,25 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/FileOperationRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "action": {
+      "description": "Action to perform on the file or folder.", 
+      "enum": [
+        "mkdir", 
+        "rename", 
+        "copy", 
+        "move"
+      ], 
+      "type": "string"
+    }, 
+    "path": {
+      "description": "Destination file or folder.", 
+      "type": "string"
+    }
+  }, 
+  "required": [
+    "action"
+  ], 
+  "title": "AgavePy FileOperationRequest schema", 
+  "type": "object"
+}

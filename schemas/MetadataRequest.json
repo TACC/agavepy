@@ -1,0 +1,28 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/MetadataRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "associationIds": {
+      "description": "UUIDs of associated Agave entities, including the Data to which this Metadata belongs.", 
+      "type": "array"
+    }, 
+    "name": {
+      "description": "The name of this metadata", 
+      "type": "string"
+    }, 
+    "schemaId": {
+      "description": "The UUID of the schema that should be used to validate this request.", 
+      "type": "string"
+    }, 
+    "value": {
+      "description": "A free text or JSON string containing the metadata stored for the given associationIds", 
+      "type": "string"
+    }
+  }, 
+  "required": [
+    "name", 
+    "value"
+  ], 
+  "title": "AgavePy MetadataRequest schema", 
+  "type": "object"
+}

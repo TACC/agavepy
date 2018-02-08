@@ -1,0 +1,140 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "available": {
+      "description": "Whether the application is available.", 
+      "type": "boolean"
+    }, 
+    "checkpointable": {
+      "description": "Whether the application supports checkpointing.", 
+      "type": "boolean"
+    }, 
+    "defaultMaxRunTime": {
+      "description": "The max execution time that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+      "type": "int"
+    }, 
+    "defaultMemory": {
+      "description": "The default memory in GB to pass to the scheduler if none is given in the job description. This must be less than the max memory parameter in the target queue definition.", 
+      "type": "string"
+    }, 
+    "defaultNodeCount": {
+      "description": "The number of nodes that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+      "type": "string"
+    }, 
+    "defaultProcessors": {
+      "description": "The number of processors to pass to the scheduler if none are given in the job description. This must be 1 if the app is serial.", 
+      "type": "int"
+    }, 
+    "defaultQueue": {
+      "description": "The queue on the execution system that should be used if none is given in a job description. Ignore if the system does not support schedulers.", 
+      "type": "string"
+    }, 
+    "deploymentPath": {
+      "description": "The location in the user's default storage system containing the application wrapper and dependencies.", 
+      "type": "string"
+    }, 
+    "deploymentSystem": {
+      "description": "The system id of the storage system where this app should run.", 
+      "type": "string"
+    }, 
+    "executionSystem": {
+      "description": "The system id of the execution system where this app should run.", 
+      "type": "string"
+    }, 
+    "executionType": {
+      "description": "The execution type of the application. If you're unsure, it's probably HPC.", 
+      "enum": [
+        "ATMOSPHERE", 
+        "HPC", 
+        "CONDOR", 
+        "CLI"
+      ], 
+      "type": "string"
+    }, 
+    "helpURI": {
+      "description": "The URL where users can go for more information about the app.", 
+      "type": "string"
+    }, 
+    "icon": {
+      "description": "The icon to associate with this app.", 
+      "type": "string"
+    }, 
+    "inputs": {
+      "description": "The inputs files for this application. ", 
+      "type": "array"
+    }, 
+    "label": {
+      "description": "The label to use when generating forms.", 
+      "type": "string"
+    }, 
+    "longDescription": {
+      "description": "The full text description of this input to use when generating forms.", 
+      "type": "string"
+    }, 
+    "modules": {
+      "description": "An array of modules to load prior to the execution of the application.", 
+      "type": "array"
+    }, 
+    "name": {
+      "description": "The name of the application. The name does not have to be unique, but the combination of name and version does.", 
+      "type": "string"
+    }, 
+    "ontology": {
+      "description": "An array of ontology values describing this application.", 
+      "type": "array"
+    }, 
+    "outputs": {
+      "description": "The outputs files for this application. ", 
+      "type": "array"
+    }, 
+    "parallelism": {
+      "description": "The parallelism type of the application. If you're unsure, it's probably SERIAL.", 
+      "enum": [
+        "SERIAL", 
+        "PARALLEL", 
+        "PTHREAD"
+      ], 
+      "type": "string"
+    }, 
+    "parameters": {
+      "description": "The inputs parameters for this application. ", 
+      "type": "array"
+    }, 
+    "shortDescription": {
+      "description": "The short description of this application.", 
+      "type": "string"
+    }, 
+    "tags": {
+      "description": "An array of tags related to this application.", 
+      "type": "array"
+    }, 
+    "templatePath": {
+      "description": "The path to the wrapper script relative to the deploymentPath.", 
+      "type": "string"
+    }, 
+    "testPath": {
+      "description": "The path to the test script relative to the deploymentPath.", 
+      "type": "string"
+    }, 
+    "version": {
+      "description": "The version of the application in #.#.# format. While the version does not need to be unique, the combination of name and version does have to be unique.", 
+      "type": "string"
+    }
+  }, 
+  "required": [
+    "available", 
+    "inputs", 
+    "executionSystem", 
+    "testPath", 
+    "deploymentPath", 
+    "templatePath", 
+    "deploymentSystem", 
+    "name", 
+    "parameters", 
+    "executionType", 
+    "version"
+  ], 
+  "title": "AgavePy ApplicationRequest schema", 
+  "type": "object"
+}

@@ -1,0 +1,33 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/MetadataSchema.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "created": {
+      "description": "A timestamp indicating when this Metadata was created in the metadata schema store.", 
+      "type": "string"
+    }, 
+    "internalUsername": {
+      "description": "The name of the Internal User, if any, who owns this schema.", 
+      "type": "string"
+    }, 
+    "lastUpdated": {
+      "description": "A timestamp indicating when this Metadata was last updated in the metadata schema store.", 
+      "type": "string"
+    }, 
+    "owner": {
+      "description": "The API user who owns this Schema.", 
+      "type": "string"
+    }, 
+    "schema": {
+      "description": "A JSON Schema", 
+      "type": "string"
+    }, 
+    "uuid": {
+      "description": "The UUID for this Schema.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy MetadataSchema schema", 
+  "type": "object"
+}

@@ -1,0 +1,113 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/SystemRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "description": {
+      "description": "Verbose description of this system.", 
+      "type": "string"
+    }, 
+    "environment": {
+      "description": "Environment variables to set upon login prior to job submission.", 
+      "type": "string"
+    }, 
+    "executionType": {
+      "description": "The execution paradigm used to run jobs on this system.", 
+      "enum": [
+        "HPC", 
+        "CONDOR", 
+        "CLI"
+      ], 
+      "type": "string"
+    }, 
+    "id": {
+      "description": "Unique identifier for this system.", 
+      "type": "string"
+    }, 
+    "login": {
+      "description": "The login config defining how to connect to this system for job submission.", 
+      "type": "LoginConfig"
+    }, 
+    "maxSystemJobs": {
+      "description": "The maximum number of jobs that can be simultaneously run on the system across all queues.", 
+      "type": "int"
+    }, 
+    "maxSystemJobsPerUser": {
+      "description": "The maximum number of jobs that can be simultaneously run on the system across all queues by a single user.", 
+      "type": "int"
+    }, 
+    "name": {
+      "description": "Common name for this system.", 
+      "type": "string"
+    }, 
+    "queues": {
+      "description": "The execution paradigm used to run jobs on this system.", 
+      "type": "array"
+    }, 
+    "scheduler": {
+      "description": "The type of scheduled used to run jobs.", 
+      "enum": [
+        "COBALT", 
+        "CONDOR", 
+        "FORK", 
+        "LOADLEVELER", 
+        "LSF", 
+        "MOAB", 
+        "PBS", 
+        "SGE", 
+        "SLURM", 
+        "TORQUE", 
+        "UNKNOWN"
+      ], 
+      "type": "string"
+    }, 
+    "scratchDir": {
+      "description": "The scratch directory where job execution directories will be created at runtime. The workDir is used if this is not specified.", 
+      "type": "string"
+    }, 
+    "site": {
+      "description": "The site associated with this system.", 
+      "type": "string"
+    }, 
+    "startupScript": {
+      "description": "Script to be run after login and prior to execution.", 
+      "type": "string"
+    }, 
+    "status": {
+      "description": "The status of this system. Systems must be in UP status to be used.", 
+      "enum": [
+        "UP", 
+        "DOWN", 
+        "UNKNOWN"
+      ], 
+      "type": "string"
+    }, 
+    "storage": {
+      "description": "The storage config defining how to connect to this system for data staging.", 
+      "type": "StorageConfig"
+    }, 
+    "type": {
+      "description": "The type of this system.", 
+      "enum": [
+        "EXECUTION", 
+        "STORAGE"
+      ], 
+      "type": "string"
+    }, 
+    "workDir": {
+      "description": "The work directory where job execution directories will be created at runtime. This is used if scratchDir is not specified. If neither are specified, the job directory will be created in the system homeDir.", 
+      "type": "string"
+    }
+  }, 
+  "required": [
+    "status", 
+    "scheduler", 
+    "name", 
+    "queues", 
+    "storage", 
+    "executionType", 
+    "login", 
+    "type"
+  ], 
+  "title": "AgavePy SystemRequest schema", 
+  "type": "object"
+}

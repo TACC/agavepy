@@ -1,0 +1,45 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/ActorWorker.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "cid": {
+      "description": "Container id of this worker.", 
+      "type": "string"
+    }, 
+    "host_id": {
+      "description": "id of the host where this worker is running.", 
+      "type": "string"
+    }, 
+    "host_ip": {
+      "description": "IP address of the host where this worker is running.", 
+      "type": "string"
+    }, 
+    "id": {
+      "description": "The unique id of this worker.", 
+      "type": "string"
+    }, 
+    "image": {
+      "description": "Docker image associated with the actor.", 
+      "type": "string"
+    }, 
+    "last_execution": {
+      "description": "Last execution for this worker.", 
+      "type": "int"
+    }, 
+    "location": {
+      "description": "Location of docker daemon that this worker is using.", 
+      "type": "string"
+    }, 
+    "status": {
+      "description": "status of the worker.", 
+      "type": "string"
+    }, 
+    "tenant": {
+      "description": "tenant this worker belongs to.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy ActorWorker schema", 
+  "type": "object"
+}
