@@ -7,12 +7,22 @@ AgavePy
 
 Python2/3 binding for TACC.Cloud `Agave`_ and `Abaco`_ APIs.
 
+
 Installation
 ============
 
 Install from PyPI_::
 
     pip install agavepy
+
+
+Documentation
+=============
+
+A combination of hand-curated code examples, tutorials, and auto-generated API
+documentation can be found at AgavePy's ReadTheDocs site.
+
+- http://agavepy.readthedocs.io/en/latest/
 
 
 Quickstart
