@@ -2,8 +2,7 @@
 AgavePy
 =======
 
-A simple Python binding for the `Agave API`_.
-
+Python2/3 binding for TACC.Cloud `Agave`_ and `Abaco`_ APIs.
 
 Installation
 ============
@@ -13,44 +12,62 @@ Install from PyPI_::
     pip install agavepy
 
 
-Using agavepy in Docker
-========================
-
-This repository includes a ``Dockerfile`` and a ``docker-compose.yml``
-file, which allows a zero installation version of ``agavepy``.
-
-The only requirement is Docker_ and `docker-compose`_, most likely
-already installed in your system.
-
-Then, clone this repository and execute ``docker-compose`` as follows:
-
-.. code-block:: bash
-
-   $ git clone https://github.com/TACC/agavepy.git
-   $ cd agavepy
-   $ docker-compose build
-   $ docker-compose up
-
-(a bug in ``docker-compose`` is preventing to run just ``up``. The steps ``build`` and ``up`` have to be done separately.)
-Navigate to http://localhost:9999 and access the Jupyter_ notebook
-with password ``agavepy``.  The notebook ``Example.ipynb`` contains a
-full example of use.
-
-
 Quickstart
 ==========
 
-The first step is to create an ``agave`` Python object pointing to
-your tenant:
+If you already have an active installation of the TACC Cloud CLI, AgavePy will
+pick up on your existing credential cache, stored in `$HOME/.agave/current`. We
+illustrate this usage pattern first, as it's **really** straightforward.
+
+TACC Cloud CLI
+--------------
 
 .. code-block:: pycon
 
    >>> from agavepy.agave import Agave
-   >>> my_agave = Agave(api_server='https://agave.iplantc.org',
-   ...                  username='myusername', password='mypassword')
+   >>> ag = Agave.restore()
 
-Once the object is instantiated, interact with it according to the
-methods in the API documentation.
+Voila! You have an active, authenticated API client. AgavePy will use a cached
+Oauth2 refresh token to keep the session active. 
+
+Pure Python
+-----------
+
+Authentication and authorization to the TACC Cloud APIs uses `OAuth2`_, a 
+widely-adopted web standard. Our implementation of Oauth2 is designed to give
+you the flexibility you need to script and automate use of TACC Cloud while
+keeping your access credentials and digital assets secure. 
+
+This is covered in great detail in our `Developer Documentation`_ but some key
+concepts will be highlighted here, interleaved with Python code.
+
+The first step is to create a Python object ``ag`` pointing to an API server.
+Your project likely has its own API server, which are discoverable using 
+the ``tenants-list --rich`` command in the TACC Cloud CLI. For now, we can
+assume ``api.tacc.cloud`` (the default value) will work for you. 
+
+.. code-block:: pycon
+
+   >>> from agavepy.agave import Agave
+   >>> ag = Agave(api_server='https://api.tacc.cloud')
+
+Once the object is instantiated, interact with it according to the API 
+documentation and your specific usage needs. 
+
+Create a new Oauth client
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: pycon
+
+   >>> ag = Agave(api_server='https://api.tacc.cloud',
+   ...            username='your_username',
+   ...            password='your_password')
+   >>> ag.clients.new()
+ 
+
+Reuse an existing Oauth client
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 For example, create a new client with:
 
@@ -102,19 +119,41 @@ Finally, a client can be generated directly from a JWT in order to bypass the AP
     ...            api_server='https://agave-core-staging.tacc.utexas.edu', verify=False)
 
 
-.. _Agave API: http://agaveapi.co/
+.. _Agave: http://agaveapi.co/
+.. _Abaco: http://useabaco.cloud/
 .. _PyPI: https://pypi.python.org/pypi
-
-
-
+.. _Developer Documentation: http://developer.tacc.cloud/
+.. _Jupyter: http://ipython.org/
 
 License
 =======
 
-Agavepy is licensed under the BSD license.
+AgavePy is licensed under a BSD license.
 
 Swagger.py is copyright of Digium, Inc., and licensed under BSD 3-Clause License.
 
 .. _Docker: https://docs.docker.com/installation/#installation
-.. _docker-compose: https://docs.docker.com/compose/install/
-.. _Jupyter: http://ipython.org/
+
+
+Using agavepy in Docker
+========================
+
+This repository includes a ``Dockerfile`` and a ``docker-compose.yml``
+file, which allows a zero installation version of ``agavepy``.
+
+The only requirement is Docker_ and `docker-compose`_, most likely
+already installed in your system.
+
+Then, clone this repository and execute ``docker-compose`` as follows:
+
+.. code-block:: bash
+
+   $ git clone https://github.com/TACC/agavepy.git
+   $ cd agavepy
+   $ docker-compose build
+   $ docker-compose up
+
+(a bug in ``docker-compose`` is preventing to run just ``up``. The steps ``build`` and ``up`` have to be done separately.)
+Navigate to http://localhost:9999 and access the Jupyter_ notebook
+with password ``agavepy``.  The notebook ``Example.ipynb`` contains a
+full example of use.

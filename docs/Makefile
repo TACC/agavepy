@@ -14,6 +14,13 @@ help:
 
 .PHONY: help Makefile
 
+definitions: definitions-clean
+	mkdir -p _static/definitions/ && \
+	cp ../definitions/* _static/definitions/
+
+definitions-clean:
+	rm -rf _static/definitions/*
+
 schemas: schemas-clean
 	mkdir -p _static/schemas/ && \
 	cp ../schemas/* _static/schemas/
