@@ -1,0 +1,541 @@
+{
+  "api_declaration": {
+    "apiVersion": "2.2.14", 
+    "apis": [
+      {
+        "description": "Retrieve a (paginated) list of profiles.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "list", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "Filter results by name.", 
+                "name": "name", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "Filter results by email.", 
+                "name": "email", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "Filter results by first_name.", 
+                "name": "first_name", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "Filter results by last_name.", 
+                "name": "last_name", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "Filter results by full_name.", 
+                "name": "full_name", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "Filter results by status.", 
+                "name": "status", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "Filter results by username.", 
+                "name": "username", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user supplies an invalid username format"
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 404, 
+                "message": "The user profile cannot be found"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the profile database"
+              }
+            ], 
+            "summary": "List user profiles", 
+            "type": "MultipleProfileResponse"
+          }
+        ], 
+        "path": "/profiles/v2"
+      }, 
+      {
+        "description": "Retrieve the profile of the requesting user.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "get", 
+            "notes": "", 
+            "parameters": [], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user supplies an invalid username format"
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 404, 
+                "message": "The user profile cannot be found"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the profile database"
+              }
+            ], 
+            "summary": "Find authenticated user profile", 
+            "type": "SingleProfileResponse"
+          }
+        ], 
+        "path": "/profiles/v2/me"
+      }, 
+      {
+        "description": "Retrieve the profile of an API user by their exact username.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listByUsername", 
+            "notes": "Internal users will not be returned", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The username of a valid api user", 
+                "name": "username", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user supplies an invalid username format"
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 404, 
+                "message": "The user profile cannot be found"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the profile database"
+              }
+            ], 
+            "summary": "Find api user profile by their api username", 
+            "type": "SingleProfileResponse"
+          }
+        ], 
+        "path": "/profiles/v2/{username}"
+      }
+    ], 
+    "authorizations": [
+      "oauth2"
+    ], 
+    "basePath": "https://api.tacc.cloud", 
+    "models": {
+      "InternalUser": {
+        "id": "InternalUser", 
+        "name": "", 
+        "properties": {
+          "city": {
+            "description": "The api user's city.", 
+            "name": "city", 
+            "type": "string"
+          }, 
+          "country": {
+            "description": "The api user's country.", 
+            "name": "country", 
+            "type": "string"
+          }, 
+          "department": {
+            "description": "The api user's institutional department.", 
+            "name": "department", 
+            "type": "string"
+          }, 
+          "email": {
+            "description": "The api user's unique email address.", 
+            "name": "email", 
+            "type": "string"
+          }, 
+          "fax": {
+            "description": "The api user's fax number.", 
+            "name": "fax", 
+            "type": "string"
+          }, 
+          "firstName": {
+            "description": "The api user's first name.", 
+            "name": "firstName", 
+            "type": "string"
+          }, 
+          "gender": {
+            "description": "The api user's gender. male or female.", 
+            "name": "gender", 
+            "type": "string"
+          }, 
+          "institution": {
+            "description": "The api user's home institution", 
+            "name": "institution", 
+            "type": "string"
+          }, 
+          "lastName": {
+            "description": "The api user's last name.", 
+            "name": "lastName", 
+            "type": "string"
+          }, 
+          "phone": {
+            "description": "The api user's phone number.", 
+            "name": "phone", 
+            "type": "string"
+          }, 
+          "position": {
+            "description": "The api user's position of employment.", 
+            "name": "position", 
+            "type": "string"
+          }, 
+          "researchArea": {
+            "description": "The api user's primary area of research.", 
+            "name": "researchArea", 
+            "type": "string"
+          }, 
+          "state": {
+            "description": "The api user's state.", 
+            "name": "state", 
+            "type": "string"
+          }, 
+          "status": {
+            "description": "The api user's status. active or deleted.", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "username": {
+            "description": "The api user's unique username.", 
+            "name": "username", 
+            "type": "string"
+          }
+        }
+      }, 
+      "InternalUserRequest": {
+        "id": "InternalUserRequest", 
+        "name": "", 
+        "properties": {
+          "city": {
+            "description": "The api user's city.", 
+            "name": "city", 
+            "type": "string"
+          }, 
+          "country": {
+            "description": "The api user's country.", 
+            "name": "country", 
+            "type": "string"
+          }, 
+          "department": {
+            "description": "The api user's institutional department.", 
+            "name": "department", 
+            "type": "string"
+          }, 
+          "email": {
+            "description": "The api user's unique email address.", 
+            "name": "email", 
+            "required": true, 
+            "type": "string"
+          }, 
+          "fax": {
+            "description": "The api user's fax number.", 
+            "name": "fax", 
+            "type": "string"
+          }, 
+          "firstName": {
+            "description": "The api user's first name.", 
+            "name": "firstName", 
+            "type": "string"
+          }, 
+          "gender": {
+            "description": "The api user's gender. male or female.", 
+            "enum": [
+              "male", 
+              "female"
+            ], 
+            "name": "gender", 
+            "type": "string"
+          }, 
+          "institution": {
+            "description": "The api user's home institution", 
+            "name": "institution", 
+            "type": "string"
+          }, 
+          "lastName": {
+            "description": "The api user's last name.", 
+            "name": "lastName", 
+            "type": "string"
+          }, 
+          "phone": {
+            "description": "The api user's phone number.", 
+            "name": "phone", 
+            "type": "string"
+          }, 
+          "position": {
+            "description": "The api user's position of employment.", 
+            "name": "position", 
+            "type": "string"
+          }, 
+          "researchArea": {
+            "description": "The api user's primary area of research.", 
+            "name": "researchArea", 
+            "type": "string"
+          }, 
+          "state": {
+            "description": "The api user's state.", 
+            "name": "state", 
+            "type": "string"
+          }, 
+          "status": {
+            "description": "The api user's status. active or deleted.", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "username": {
+            "description": "The api user's unique username.", 
+            "name": "username", 
+            "required": true, 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultipleInternalUserResponse": {
+        "id": "MultipleInternalUserResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "InternalUser"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultipleProfileResponse": {
+        "id": "MultipleProfileResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "Profile"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "Profile": {
+        "id": "Profile", 
+        "name": "", 
+        "properties": {
+          "city": {
+            "description": "The api user's city.", 
+            "name": "city", 
+            "type": "string"
+          }, 
+          "country": {
+            "description": "The api user's country.", 
+            "name": "country", 
+            "type": "string"
+          }, 
+          "department": {
+            "description": "The api user's institutional department.", 
+            "name": "department", 
+            "type": "string"
+          }, 
+          "email": {
+            "description": "The api user's unique email address.", 
+            "name": "email", 
+            "type": "string"
+          }, 
+          "fax": {
+            "description": "The api user's fax number.", 
+            "name": "fax", 
+            "type": "string"
+          }, 
+          "firstName": {
+            "description": "The api user's first name.", 
+            "name": "firstName", 
+            "type": "string"
+          }, 
+          "gender": {
+            "description": "The api user's gender. male or female.", 
+            "name": "gender", 
+            "type": "string"
+          }, 
+          "institution": {
+            "description": "The api user's home institution", 
+            "name": "institution", 
+            "type": "string"
+          }, 
+          "lastName": {
+            "description": "The api user's last name.", 
+            "name": "lastName", 
+            "type": "string"
+          }, 
+          "phone": {
+            "description": "The api user's phone number.", 
+            "name": "phone", 
+            "type": "string"
+          }, 
+          "position": {
+            "description": "The api user's position of employment.", 
+            "name": "position", 
+            "type": "string"
+          }, 
+          "researchArea": {
+            "description": "The api user's primary area of research.", 
+            "name": "researchArea", 
+            "type": "string"
+          }, 
+          "state": {
+            "description": "The api user's state.", 
+            "name": "state", 
+            "type": "string"
+          }, 
+          "username": {
+            "description": "The api user's unique username.", 
+            "name": "username", 
+            "type": "string"
+          }
+        }
+      }, 
+      "SingleInternalUserResponse": {
+        "id": "SingleInternalUserResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "InternalUser"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "SingleProfileResponse": {
+        "id": "SingleProfileResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "Profile"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }
+    }, 
+    "resourcePath": "/profiles/v2", 
+    "swaggerVersion": "1.2"
+  }, 
+  "description": "Create and manage application users", 
+  "name": "profiles", 
+  "path": "/profiles", 
+  "url": "http://localhost:9999/profiles"
+}

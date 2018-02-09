@@ -14,19 +14,19 @@ help:
 
 .PHONY: help Makefile
 
-definitions: definitions-clean
-	mkdir -p _static/definitions/ && \
-	cp ../definitions/* _static/definitions/
+openapi: openapi-clean
+	mkdir -p _static/openapi/ && \
+	cp -R ../openapi/* _static/openapi/
 
-definitions-clean:
-	rm -rf _static/definitions/*
+openapi-clean:
+	rm -rf _static/openapi/*
 
-schemas: schemas-clean
-	mkdir -p _static/schemas/ && \
-	cp ../schemas/* _static/schemas/
+schema: schema-clean
+	mkdir -p _static/schema/ && \
+	cp -R ../schema/* _static/schema/
 
-schemas-clean:
-	rm -rf _static/schemas/*
+schema-clean:
+	rm -rf _static/schema/*
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).

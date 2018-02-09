@@ -29,8 +29,8 @@ Quickstart
 ==========
 
 If you already have an active installation of the TACC Cloud CLI, AgavePy will
-pick up on your existing credential cache, stored in `$HOME/.agave/current`. We
-illustrate this usage pattern first, as it's **really** straightforward.
+pick up on your existing credential cache, stored in `$HOME/.agave/current`. 
+We illustrate this usage pattern first, as it's **really** straightforward.
 
 TACC Cloud CLI
 --------------
@@ -41,7 +41,7 @@ TACC Cloud CLI
    >>> ag = Agave.restore()
 
 Voila! You have an active, authenticated API client. AgavePy will use a cached
-Oauth2 refresh token to keep the session active. 
+refresh token to keep this session active as long as the code is running. 
 
 Pure Python
 -----------
@@ -73,15 +73,75 @@ Create a new Oauth client
 .. code-block:: pycon
 
    >>> ag = Agave(api_server='https://api.tacc.cloud',
-   ...            username='your_username',
-   ...            password='your_password')
-   >>> ag.clients.new()
- 
+   ...            username='mwvaughn',
+   ...            password='PaZ$w0r6!')
+   >>> ag.clients.create(body={'clientName': 'my_client'})
+   {u'consumerKey': u'kV4XLPhVBAv9RTf7a2QyBHhQAXca', u'_links': {u'subscriber':
+   {u'href': u'https://api.tacc.cloud/profiles/v2/mwvaughn'}, u'self': {u'href':
+    u'https://api.tacc.cloud/clients/v2/my_client'}, u'subscriptions': {u'href':
+    u'https://api.tacc.cloud/clients/v2/my_client/subscriptions/'}},
+    u'description': u'', u'tier': u'Unlimited', u'callbackUrl': u'',
+    u'consumerSecret': u'5EbjEOcyzzIsAAE3vBS7nspVqHQa', u'name': u'my_client'}
+
+You use the **consumerKey** and **consumerSecret** to generate Oauth *tokens*, 
+which are temporary credentials that you can use in place of putting your real 
+credentials into code that is scripting against the TACC APIs.
 
 Reuse an existing Oauth client
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Ceate a new client with:
+Once you generate a client, you can re-use its key and secret. Clients can be
+created using the Python-based approach illustrated above, via the TACC Cloud
+CLI ``clients-create`` command, or by a direct, correctly-structured ``POST``
+to the ``clients`` web service. No matter how you've created a client, setting
+AgavePy up to use it works the same way:
+
+.. code-block:: pycon
+
+   >>> from agavepy.agave import Agave
+   >>> ag = Agave(api_server='https://api.tacc.cloud',
+   ...            username='mwvaughn', password='PaZ$w0r6!',
+   ...            client_name='my_client',
+   ...            api_key='kV4XLPhVBAv9RTf7a2QyBHhQAXca',
+   ...            api_secret='5EbjEOcyzzIsAAE3vBS7nspVqHQa')
+
+The Agave object ``ag`` is now configured to talk to all TACC Cloud services.
+Here's an example: Let's retrieve a the curent user's **profile**.
+
+.. code-block:: pycon
+
+   >>> ag.profiles.get()
+   {u'status': u'', u'username': u'mwvaughn', u'first_name': u'Matthew', 
+    u'last_name': u'Vaughn', u'phone': u'867-5309', u'mobile_phone': u'', 
+    u'create_time': u'20140515180317Z', u'full_name': u'vaughn', 
+    u'email': u'mwvaughn@devnull.com'}
+
+The refresh token
+^^^^^^^^^^^^^^^^^
+
+Nobody likes to change their password, but they have to if it leaks out into 
+the wild. A tragically easy way for that to happen is in committed code or a
+Docker container where it's been hard-coded. To get around this, AgavePy works
+with the TACC authentication APIs to support using a **refresh token**. 
+Basically, as long as you have the apikey, apisecret, and the last refresh 
+token for an authenticated session, you can renew the session without sending
+a password. Neat, right? Let's build on the ``ag`` object from above to learn
+about this.
+
+Let's start by inspecting its ``token`` property, which will also demonstrate 
+how you can access token data programmatically for your own purposes. 
+
+.. code-block:: pycon
+
+    >>> ag.token.token_info
+    {u'access_token': u'14f0bbd0b334e594e676661bf9ccc136', 'created_at': 
+     1518136421, u'expires_in': 13283, 'expires_at': 'Thu Feb  8 22:15:04',
+     u'token_type': u'bearer', 'expiration': 1518149704, u'scope': u'default',
+     u'refresh_token': u'b138c49040a6f67f80d49a1c112e44b'}
+    >>> ag.token.token_info['refresh_token']
+    u'b138c49046f67f80d49a1c10a12e44b'
+
+Ceate a new client as follows:
 
 .. code-block:: pycon
 

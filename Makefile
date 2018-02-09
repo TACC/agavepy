@@ -2,17 +2,17 @@
 docs: deps
 	python build/swagger_to_rst.py && \
 	cd docs && \
-	make definitions && \
-	make schemas && \
+	make openapi && \
+	make schema && \
 	make html && \
 	cd ../
 
 deps:
-	mkdir -p schemas && \
-	mkdir -p definitions
+	mkdir -p schema && \
+	mkdir -p openapi
 
 clean:
-	rm -rf schemas definitions
+	rm -rf schema openapi
 
 tests:
 	py.test agavepy/tests/test_agave_basic.py

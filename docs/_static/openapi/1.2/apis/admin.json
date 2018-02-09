@@ -1,0 +1,1391 @@
+{
+  "api_declaration": {
+    "apiVersion": "0.1", 
+    "apis": [
+      {
+        "description": "Retrieve a (paginated) list of service accounts.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listAccounts", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "List service accounts", 
+            "type": "MultipleServiceAccountsResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "addAccount", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": "", 
+                "description": "The description of the service account to add.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "ServiceAccount"
+              }
+            ], 
+            "summary": "Register a service account.", 
+            "type": "SingleServiceAccountResponse"
+          }
+        ], 
+        "path": "/admin/v2/service_accounts"
+      }, 
+      {
+        "description": "Manage a specific service account.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "getAccount", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the service account.", 
+                "name": "accountId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "Retrieve details about a specific service account.", 
+            "type": "SingleServiceAccountResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "PUT", 
+            "nickname": "updateAccount", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the service account.", 
+                "name": "accountId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "", 
+                "description": "The description of the service account to update.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "ServiceAccount"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "Update a specific service account.", 
+            "type": "SingleServiceAccountResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "deleteAccount", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the service account.", 
+                "name": "accountId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "Delete a specific service account.", 
+            "type": "EmptyServiceAccountResponse"
+          }
+        ], 
+        "path": "/admin/v2/service_accounts/{accountId}"
+      }, 
+      {
+        "description": "Work with the roles occupied by a service account.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listAccountRoles", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the service account.", 
+                "name": "accountId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "List the roles occupied by a service account.", 
+            "type": "ServiceAccountRolesResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "addRoleToAccount", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the service account.", 
+                "name": "accountId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "", 
+                "description": "The description of the role to add.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "AddRoleToAccountRequest"
+              }
+            ], 
+            "summary": "Add a role to a service account.", 
+            "type": "AddRoleToAccountRequestResponse"
+          }
+        ], 
+        "path": "/admin/v2/service_accounts/{accountId}/roles"
+      }, 
+      {
+        "description": "Work with a specific role of a service account.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "deleteRoleFromAccount", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the service account.", 
+                "name": "accountId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The id of the role.", 
+                "name": "roleId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "summary": "Delete a role from the list of occupied roles of a service account.", 
+            "type": "EmptyServiceAccountRoleResponse"
+          }
+        ], 
+        "path": "/admin/v2/service_accounts/{accountId}/roles/{roleId}"
+      }, 
+      {
+        "description": "Retrieve a (paginated) list of service roles.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listRoles", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "List service roles.", 
+            "type": "MultipleRolesResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "addRole", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": "", 
+                "description": "The description of the service role to add.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "Role"
+              }
+            ], 
+            "summary": "Register a service role.", 
+            "type": "SingleRoleResponse"
+          }
+        ], 
+        "path": "/admin/v2/service_roles"
+      }, 
+      {
+        "description": "Manage a specific service role.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "getRole", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the service role.", 
+                "name": "roleId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "Retrieve details about a specific service role.", 
+            "type": "SingleRoleResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "deleteRole", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the service role.", 
+                "name": "roleId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "Delete a specific service role.", 
+            "type": "EmptyRoleResponse"
+          }
+        ], 
+        "path": "/admin/v2/service_roles/{roleId}"
+      }, 
+      {
+        "description": "Work with the service account that occupy a role.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listAccountsInRole", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the service role.", 
+                "name": "roleId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "Get the service accounts that occupy a service role.", 
+            "type": "ServiceRoleAccountsResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "addAccountToRole", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the service role.", 
+                "name": "roleId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "", 
+                "description": "The description of the service account to add.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "AddServiceAccountToRoleRequest"
+              }
+            ], 
+            "summary": "Add a service account to a role.", 
+            "type": "AddServiceAccountToRoleResponse"
+          }
+        ], 
+        "path": "/admin/v2/service_roles/{roleId}/service_accounts"
+      }, 
+      {
+        "description": "Work with a specific role of a service account.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "deleteAccountFromRole", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the service role.", 
+                "name": "roleId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The id of the service account.", 
+                "name": "accountId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "summary": "Delete a service from the list of accounts occupying a service role.", 
+            "type": "EmptyRoleServiceAccountResponse"
+          }
+        ], 
+        "path": "/admin/v2/service_roles/{roleId}/service_accounts/{accountId}"
+      }, 
+      {
+        "description": "Retrieve a (paginated) list of OAuth clients.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listClients", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "List clients.", 
+            "type": "MultipleClientsResponse"
+          }
+        ], 
+        "path": "/admin/v2/clients"
+      }, 
+      {
+        "description": "Retrieve a (paginated) list of APIs.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listApis", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "List APIs.", 
+            "type": "MultipleApiResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "addApi", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": "", 
+                "description": "The description of the API to add.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "ApiRequestBody"
+              }
+            ], 
+            "summary": "Register an API.", 
+            "type": "SingleApiResponse"
+          }
+        ], 
+        "path": "/admin/v2/apis"
+      }, 
+      {
+        "description": "Manage a specific API.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "getApi", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the API.", 
+                "name": "apiId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "Retrieve details about a specific API.", 
+            "type": "SingleApiResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "deleteApi", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the API.", 
+                "name": "apiId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "Delete a specific API.", 
+            "type": "EmptyApiResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "PUT", 
+            "nickname": "updateApiStatus", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the API.", 
+                "name": "apiId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "", 
+                "description": "The new status for the API.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "ApiStatus"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the admin database"
+              }
+            ], 
+            "summary": "Update a specific API.", 
+            "type": "SingleApiResponse"
+          }
+        ], 
+        "path": "/admin/v2/apis/{apiId}"
+      }
+    ], 
+    "authorizations": [
+      "oauth2"
+    ], 
+    "basePath": "https://api.tacc.cloud", 
+    "models": {
+      "AddRoleToAccountRequest": {
+        "id": "AddRoleToAccountRequest", 
+        "name": "", 
+        "properties": {
+          "role_id": {
+            "description": "The id of the role to add to the service account.", 
+            "name": "role_id", 
+            "type": "string"
+          }
+        }
+      }, 
+      "AddRoleToAccountRequestResponse": {
+        "id": "AddRoleToAccountRequestResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "ServiceAccount"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "AddServiceAccountToRoleRequest": {
+        "id": "AddServiceAccountToRoleRequest", 
+        "name": "", 
+        "properties": {
+          "role_id": {
+            "description": "The id of the service account to add to the role.", 
+            "name": "account_id", 
+            "type": "string"
+          }
+        }
+      }, 
+      "AddServiceAccountToRoleResponse": {
+        "id": "AddServiceAccountToRoleResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "RoleDetails"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "Api": {
+        "id": "Api", 
+        "name": "", 
+        "properties": {
+          "context": {
+            "description": "Root path (context) for the API, starting with a slash character.", 
+            "name": "context", 
+            "type": "string"
+          }, 
+          "environments": {
+            "description": "Environments in which the API is available.", 
+            "name": "environments", 
+            "type": "string"
+          }, 
+          "id": {
+            "description": "Unique id of the API.", 
+            "name": "id", 
+            "type": "string"
+          }, 
+          "name": {
+            "description": "Name of the API, also used as part of the id.", 
+            "name": "name", 
+            "type": "string"
+          }, 
+          "owner": {
+            "description": "Account name of the owner of the API.", 
+            "name": "owner", 
+            "type": "string"
+          }, 
+          "resources": {
+            "description": "List of API resources which provide auth and throttling information for the API.", 
+            "items": {
+              "$ref": "ApiResource"
+            }, 
+            "name": "resources", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "Publication status of the API.", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "templates": {
+            "description": "List of API template tuples which provide the mappings from the frontend to the backend.", 
+            "items": {
+              "$ref": "ApiTemplate"
+            }, 
+            "name": "templates", 
+            "type": "array"
+          }, 
+          "version": {
+            "description": "Platform version of the API.", 
+            "name": "version", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ApiRequestBody": {
+        "id": "ApiRequestBody", 
+        "name": "", 
+        "properties": {
+          "api_name": {
+            "description": "Name of the API, which will also be used to identify the API.", 
+            "name": "api_name", 
+            "type": "string"
+          }, 
+          "auth": {
+            "description": "List of quth type per method from (none, oauth). Can also be single string for all methods.", 
+            "items": {
+              "type": "string"
+            }, 
+            "name": "auth", 
+            "type": "array"
+          }, 
+          "context": {
+            "description": "Root path (context) for the API, starting with a slash character.", 
+            "name": "context", 
+            "type": "string"
+          }, 
+          "methods": {
+            "description": "List of allowed methods from (GET, POST, PUT, DELETE, HEAD).", 
+            "items": {
+              "type": "string"
+            }, 
+            "name": "methods", 
+            "type": "array"
+          }, 
+          "roles": {
+            "description": "List of required roles to subscribe to API (required when visibility is 'restricted')", 
+            "items": {
+              "type": "string"
+            }, 
+            "name": "roles", 
+            "type": "array"
+          }, 
+          "url": {
+            "description": "Fully qualified production URL for the backend service (should include http or https).", 
+            "name": "url", 
+            "type": "string"
+          }, 
+          "visibility": {
+            "description": "Optionally set the visibility to 'public' or 'restricted' (default is public).", 
+            "name": "visibility", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ApiResource": {
+        "id": "ApiResource", 
+        "name": "", 
+        "properties": {
+          "http_verbs": {
+            "description": "Http verbs and associated auth.", 
+            "name": "http_verbs", 
+            "type": "dict"
+          }, 
+          "url_pattern": {
+            "description": "URL pattern associated with the resource..", 
+            "name": "url_pattern", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ApiStatus": {
+        "id": "ApiStatus", 
+        "name": "", 
+        "properties": {
+          "status": {
+            "description": "Status of the API: one of (CREATED, PUBLISHED, RETIRED).", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ApiSummary": {
+        "id": "ApiSummary", 
+        "name": "", 
+        "properties": {
+          "id": {
+            "description": "Unique id of the API.", 
+            "name": "id", 
+            "type": "string"
+          }, 
+          "name": {
+            "description": "Name of the API, also used as part of the id.", 
+            "name": "name", 
+            "type": "string"
+          }, 
+          "owner": {
+            "description": "Account name of the owner of the API.", 
+            "name": "owner", 
+            "type": "string"
+          }, 
+          "status": {
+            "description": "Publication status of the API.", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "version": {
+            "description": "Platform version of the API.", 
+            "name": "version", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ApiTemplate": {
+        "id": "ApiTemplate", 
+        "name": "", 
+        "properties": {
+          "methods": {
+            "description": "Methods associated with the template.", 
+            "name": "methods", 
+            "type": "string"
+          }, 
+          "roles": {
+            "description": "roles associated with the template.", 
+            "name": "roles", 
+            "type": "string"
+          }, 
+          "route": {
+            "description": "Path of the template.", 
+            "name": "route", 
+            "type": "string"
+          }, 
+          "tiers": {
+            "description": "Throttling tiers associated with the template.", 
+            "name": "tiers", 
+            "type": "string"
+          }
+        }
+      }, 
+      "Client": {
+        "id": "Client", 
+        "name": "", 
+        "properties": {
+          "clientName": {
+            "description": "Name of the client.", 
+            "name": "clientName", 
+            "type": "string"
+          }, 
+          "id": {
+            "description": "Unique id of the client.", 
+            "name": "id", 
+            "type": "string"
+          }, 
+          "owner": {
+            "description": "Account name of the owner of the client.", 
+            "name": "owner", 
+            "type": "string"
+          }
+        }
+      }, 
+      "EmptyApiResponse": {
+        "id": "EmptyApiResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "String"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "EmptyRoleResponse": {
+        "id": "EmptyRoleResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "String"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "EmptyRoleServiceAccountResponse": {
+        "id": "EmptyRoleServiceAccountResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "String"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "EmptyServiceAccountResponse": {
+        "id": "EmptyServiceAccountResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "String"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "EmptyServiceAccountRoleResponse": {
+        "id": "EmptyServiceAccountRoleResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "String"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultipleApiResponse": {
+        "id": "MultipleApiResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "ApiSummary"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultipleClientsResponse": {
+        "id": "MultipleClientsResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "Client"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultipleRolesResponse": {
+        "id": "MultipleRolesResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "RoleSummary"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultipleServiceAccountsResponse": {
+        "id": "MultipleServiceAccountsResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "ServiceAccountSummary"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "Role": {
+        "id": "Role", 
+        "name": "", 
+        "properties": {
+          "id": {
+            "description": "The unique id of the role.", 
+            "name": "id", 
+            "type": "string"
+          }
+        }
+      }, 
+      "RoleDetails": {
+        "id": "RoleDetails", 
+        "name": "", 
+        "properties": {
+          "accounts": {
+            "description": "service accounts that occupy this role.", 
+            "items": {
+              "type": "string"
+            }, 
+            "name": "accounts", 
+            "type": "array"
+          }, 
+          "id": {
+            "description": "The unique id of the role.", 
+            "name": "id", 
+            "type": "string"
+          }
+        }
+      }, 
+      "RoleSummary": {
+        "id": "RoleSummary", 
+        "name": "", 
+        "properties": {
+          "id": {
+            "description": "The unique id of the role.", 
+            "name": "id", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ServiceAccount": {
+        "id": "ServiceAccount", 
+        "name": "", 
+        "properties": {
+          "id": {
+            "description": "The unique id of the service account.", 
+            "name": "accountId", 
+            "type": "string"
+          }, 
+          "password": {
+            "description": "The password for the service account.", 
+            "name": "password", 
+            "type": "string"
+          }, 
+          "roles": {
+            "description": "roles occupied by service account.", 
+            "items": {
+              "type": "string"
+            }, 
+            "name": "roles", 
+            "type": "array"
+          }
+        }
+      }, 
+      "ServiceAccountRoleResponse": {
+        "id": "ServiceAccountRoleResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "RoleDetails"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ServiceAccountRolesResponse": {
+        "id": "ServiceAccountRolesResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "ServiceAccount"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ServiceAccountSummary": {
+        "id": "ServiceAccountSummary", 
+        "name": "", 
+        "properties": {
+          "id": {
+            "description": "The unique id of the service account.", 
+            "name": "id", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ServiceRoleAccountsResponse": {
+        "id": "ServiceRoleAccountsResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "RoleDetails"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "SingleApiResponse": {
+        "id": "SingleApiResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "Api"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "SingleRoleResponse": {
+        "id": "SingleRoleResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "RoleDetails"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "SingleServiceAccountResponse": {
+        "id": "SingleServiceAccountResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "ServiceAccount"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }
+    }, 
+    "resourcePath": "/admin/v2", 
+    "swaggerVersion": "1.2"
+  }, 
+  "description": "Tenant admin services.", 
+  "name": "admin", 
+  "path": "/admin", 
+  "url": "http://localhost:9999/admin"
+}

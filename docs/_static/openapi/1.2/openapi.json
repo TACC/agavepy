@@ -1,0 +1,69 @@
+{
+  "apiVersion": "2", 
+  "apis": [
+    {
+      "description": "Create and manage API keys. Requires HTTP BASIC authentication", 
+      "path": "apis/clients.json"
+    }, 
+    {
+      "description": "Register and manage apps", 
+      "path": "apis/apps.json"
+    }, 
+    {
+      "description": "Move and manage data", 
+      "path": "apis/files.json"
+    }, 
+    {
+      "description": "Run and manage jobs", 
+      "path": "apis/jobs.json"
+    }, 
+    {
+      "description": "Create and manage metadata", 
+      "path": "apis/meta.json"
+    }, 
+    {
+      "description": "Create and manage system monitors", 
+      "path": "apis/monitors.json"
+    }, 
+    {
+      "description": "Subscribe to and manage notifications", 
+      "path": "apis/notifications.json"
+    }, 
+    {
+      "description": "Create pre-authenticated, disposable URLs", 
+      "path": "apis/postits.json"
+    }, 
+    {
+      "description": "Create and manage application users", 
+      "path": "apis/profiles.json"
+    }, 
+    {
+      "description": "Register and manage systems", 
+      "path": "apis/systems.json"
+    }, 
+    {
+      "description": "Transform and stage data", 
+      "path": "apis/transforms.json"
+    }, 
+    {
+      "description": "Create and manage actors.", 
+      "path": "apis/actors.json"
+    }, 
+    {
+      "description": "Tenant admin services.", 
+      "path": "apis/admin.json"
+    }
+  ], 
+  "info": {
+    "contact": "opensource@tacc.cloud", 
+    "description": "Science-as-a-Service platform to accelerate research and discovery", 
+    "licenseUrl": "https://tacc.cloud/license", 
+    "termsOfServiceUrl": "https://tacc.cloud/tacc-usage-policy", 
+    "title": "TACC Cloud APIs"
+  }, 
+  "produces": [
+    "application/json"
+  ], 
+  "swaggerVersion": "1.2", 
+  "url": "https://api.tacc.cloud/"
+}

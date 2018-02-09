@@ -1,0 +1,428 @@
+{
+  "api_declaration": {
+    "apiVersion": "2.2.14", 
+    "apis": [
+      {
+        "description": "Search and manage notification resources", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "add", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": "{\n\t\"url\" : \"http://requestb.in/1jj4jnz1?uuid={UUID}&status=${EVENT}\",\n\t\"event\" : \"*\",\n\t\"associatedUuid\" : \"<insert uuid here>\",\n\t\"persistent\": true\n}", 
+                "description": "The notification to add.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "NotificationRequest"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user supplies an invalid form"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the notification database"
+              }
+            ], 
+            "summary": "Update or Add new notification.", 
+            "type": "NotificationResponse"
+          }
+        ], 
+        "path": "/notifications/v2/"
+      }, 
+      {
+        "description": "Query for the notification with the given UUID", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "list", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The uuid of the associated resource. All notifications for this resource visible to the user will be returned.", 
+                "name": "associatedUuid", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user does not supply a UUID or supplies an invalid JSON query"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 404, 
+                "message": "The specified notification cannot be found"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the notification database"
+              }
+            ], 
+            "summary": "Retrieve notification for a specific resource.", 
+            "type": "MultipleNotificationResponse"
+          }
+        ], 
+        "path": "/notifications/v2/"
+      }, 
+      {
+        "description": "Query for the notification with the given UUID", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "get", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The uuid of the notification item", 
+                "name": "uuid", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user does not supply a UUID"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 404, 
+                "message": "The specified notification cannot be found"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the notification database"
+              }
+            ], 
+            "summary": "Retrieve notification.", 
+            "type": "NotificationResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "update", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The uuid of the notification item", 
+                "name": "uuid", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "{\n\t\"url\" : \"http://requestb.in/1jj4jnz1?uuid={UUID}&status=${EVENT}\",\n\t\"event\" : \"*\",\n\t\"associatedUuid\" : \"<insert uuid here>\",\n\t\"persistent\": true\n}", 
+                "description": "The notification to update.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "NotificationRequest"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user supplies an invalid form"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the notification database"
+              }
+            ], 
+            "summary": "Update or Add new notification.", 
+            "type": "NotificationResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "delete", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The uuid of the notification item", 
+                "name": "uuid", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user supplies no UUID"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the notification database"
+              }
+            ], 
+            "summary": "Remove notification from the system.", 
+            "type": "EmptyNotificationResponse"
+          }
+        ], 
+        "path": "/notifications/v2/{uuid}"
+      }
+    ], 
+    "authorizations": [
+      "oauth2"
+    ], 
+    "basePath": "https://api.tacc.cloud", 
+    "models": {
+      "EmptyNotification": {
+        "id": "EmptyNotification", 
+        "name": "", 
+        "properties": {}
+      }, 
+      "EmptyNotificationResponse": {
+        "id": "EmptyNotificationResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "EmptyNotification"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "version": {
+            "description": "API version number", 
+            "name": "version", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultipleNotificationResponse": {
+        "id": "MultipleNotificationResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "Description of an error. null otherwise.", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "Notification"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "version": {
+            "description": "API version number", 
+            "name": "version", 
+            "type": "string"
+          }
+        }
+      }, 
+      "Notification": {
+        "id": "Notification", 
+        "name": "", 
+        "properties": {
+          "associatedUuid": {
+            "description": "UUID of resource to whome the event applies.", 
+            "name": "associatedUuid", 
+            "type": "string"
+          }, 
+          "attempts": {
+            "description": "The number of times this notification has been attempted to be fulfilled.", 
+            "format": "int32", 
+            "name": "attempts", 
+            "type": "integer"
+          }, 
+          "created": {
+            "description": "A timestamp indicating when this notification was created in the notification store.", 
+            "format": "date-time", 
+            "name": "created", 
+            "type": "string"
+          }, 
+          "lastSent": {
+            "description": "A timestamp indicating the last time this notification was sent.", 
+            "format": "date-time", 
+            "name": "lastSent", 
+            "type": "string"
+          }, 
+          "owner": {
+            "description": "The API user who owns this notification.", 
+            "name": "owner", 
+            "type": "string"
+          }, 
+          "persistent": {
+            "description": "Whether this notification should stay active after it fires the first time.", 
+            "name": "persistent", 
+            "type": "boolean"
+          }, 
+          "responseCode": {
+            "description": "The response code from POSTing to the url or sending an email.", 
+            "format": "int32", 
+            "name": "responseCode", 
+            "type": "integer"
+          }, 
+          "success": {
+            "description": "Whether this notification was sent successfully.", 
+            "name": "success", 
+            "type": "boolean"
+          }, 
+          "url": {
+            "description": "The url or email address that will be notified of the event.", 
+            "name": "url", 
+            "type": "string"
+          }, 
+          "uuid": {
+            "description": "The UUID for this notification.", 
+            "name": "uuid", 
+            "type": "string"
+          }
+        }
+      }, 
+      "NotificationRequest": {
+        "id": "NotificationRequest", 
+        "name": "", 
+        "properties": {
+          "associatedUuid": {
+            "description": "UUID of resource to whome the event applies.", 
+            "name": "associatedUuid", 
+            "required": true, 
+            "type": "string"
+          }, 
+          "persistent": {
+            "description": "Whether this notification should stay active after it fires the first time.", 
+            "name": "persistent", 
+            "required": true, 
+            "type": "boolean"
+          }, 
+          "url": {
+            "description": "The url or email address that will be notified of the event.", 
+            "name": "url", 
+            "required": true, 
+            "type": "string"
+          }
+        }
+      }, 
+      "NotificationResponse": {
+        "id": "NotificationResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "Notification"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "version": {
+            "description": "API version number", 
+            "name": "version", 
+            "type": "string"
+          }
+        }
+      }
+    }, 
+    "resourcePath": "/notifications/v2", 
+    "swaggerVersion": "1.2"
+  }, 
+  "description": "Subscribe to and manage notifications", 
+  "name": "notifications", 
+  "path": "/notifications", 
+  "url": "http://localhost:9999/notifications"
+}

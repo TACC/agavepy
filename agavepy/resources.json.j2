@@ -1,9 +1,9 @@
 {
     "info": {
-        "termsOfServiceUrl": "https://portal.tacc.utexas.edu/tacc-usage-policy",
+        "termsOfServiceUrl": "https://tacc.cloud/tacc-usage-policy",
         "contact": "opensource@tacc.cloud",
-        "description": "Science-as-a-Service platform for accelerating research and discovery",
-        "licenseUrl": "http://agaveapi.co/terms",
+        "description": "Science-as-a-Service platform to accelerate research and discovery",
+        "licenseUrl": "https://tacc.cloud/license",
         "title": "TACC Cloud APIs"
     },
     "authorizations": {
@@ -12090,7 +12090,7 @@
                     },
                     "roles": {
                       "items": {
-                        "$ref": "string"
+                        "type": "string"
                       },
                       "type": "array",
                       "description": "roles occupied by service account.",
@@ -12328,7 +12328,7 @@
                     },
                     "accounts": {
                       "items": {
-                        "$ref": "string"
+                        "type": "string"
                       },
                       "type": "array",
                       "description": "service accounts that occupy this role.",
@@ -12689,7 +12689,7 @@
                     },
                     "methods": {
                       "items": {
-                        "$ref": "string"
+                        "type": "string"
                       },
                       "type": "array",
                       "description": "List of allowed methods from (GET, POST, PUT, DELETE, HEAD).",
@@ -12697,7 +12697,7 @@
                     },
                     "auth": {
                       "items": {
-                        "$ref": "string"
+                        "type": "string"
                       },
                       "type": "array",
                       "description": "List of quth type per method from (none, oauth). Can also be single string for all methods.",
@@ -12710,7 +12710,7 @@
                     },
                     "roles": {
                       "items": {
-                        "$ref": "string"
+                        "type": "string"
                       },
                       "type": "array",
                       "description": "List of required roles to subscribe to API (required when visibility is 'restricted')",

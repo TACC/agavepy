@@ -1,0 +1,1321 @@
+{
+  "api_declaration": {
+    "apiVersion": "2.2.14", 
+    "apis": [
+      {
+        "description": "Submit a new job request.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "list", 
+            "notes": "All jobs both private and shared that are associated with a user.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "summary": "Get a list of jobs the authenticated user had submitted.", 
+            "type": "MultipleJobResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "submit", 
+            "notes": "This is the sole point of submission for new jobs. Users must have permissions both on the app, execution host, and storage host to submit a job. Job requests are processed immediatly, however the actualy submission and execution happen asynchronously, so users are highly encouraged to leverage the callbackUrl parameter to receive notification of updates rather than polling.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": "{\n\t\"name\":\"wc-demo\",\n\t\"appId\":\"wc-demo-1.00\",\n\t\"memoryPerNode\":1,\n\t\"notifications\":[\n\t\t{\n\t\t\t\"url\":\"nryan@mlb.com\",\n\t\t\t\"event\":\"FINISHED\"\n\t\t}\n\t],\n\t\"inputs\":{\n\t\t\"query1\":\"agave://demo.storage.example.com/apps/wc-1.00/picksumipsum.txt\"\n\t}\n}", 
+                "description": "The description of the job to submit. This can be either a file upload or json posted to the request body.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "JobRequest"
+              }
+            ], 
+            "summary": "Submit a new job request.", 
+            "type": "SingleJobResponse"
+          }
+        ], 
+        "path": "/jobs/v2/"
+      }, 
+      {
+        "description": "Get specific job details", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "get", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the job.", 
+                "format": "int32", 
+                "name": "jobId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "summary": "Get details of the job with the specific job id.", 
+            "type": "SingleJobResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "manage", 
+            "notes": "Using this method, users can stop a job that is currently running or resumbit the job for re-execution. If resubmitted, a new job will be created with the exact same inputs.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the job.", 
+                "name": "jobId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "{\n\t\"action\":\"stop\"\n}", 
+                "description": "The operation to perform.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "JobOperationRequest"
+              }
+            ], 
+            "summary": "Perform an action on a job.", 
+            "type": "SingleJobResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "delete", 
+            "notes": "The job will be removed from the user's job history and will no longer show up in listing requests. Any archived data associated with this job will be unaffected. Once deleted, there is no way to recover the deleted job.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the job.", 
+                "name": "jobId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "summary": "Deletes a job from the user's history.", 
+            "type": "EmptyJobResponse"
+          }
+        ], 
+        "path": "/jobs/v2/{jobId}"
+      }, 
+      {
+        "description": "Get detailed job history containing every event in its history.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "getHistory", 
+            "notes": "Users must have read access to this job to view the history.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the job.", 
+                "name": "jobId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "summary": "Get the history of this job.", 
+            "type": "JobHistoryResponse"
+          }
+        ], 
+        "path": "/jobs/v2/{jobId}/history"
+      }, 
+      {
+        "description": "Get job permission details", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listPermissions", 
+            "notes": "Users must have read access to this job to view the permissions.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the job.", 
+                "name": "jobId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "summary": "Get the permission ACL for this job.", 
+            "type": "JobPermissionResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "updatePermissions", 
+            "notes": "To delete a single user, set their permission to NONE or an empty string", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the job.", 
+                "name": "jobId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "{\n\t\"username\":\"\",\n\t\"permission\": \"READ\"\n}", 
+                "description": "The permission add or update. ", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "JobPermissionRequest"
+              }
+            ], 
+            "summary": "Add or update a user's permission for an application.", 
+            "type": "EmptyJobResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "deletePermissions", 
+            "notes": "This will reset the permissions such that only the user who submitted the job will be able to view it. Job owners cannot remove their own permissions.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the job.", 
+                "name": "jobId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "summary": "Deletes all permissions on an job.", 
+            "type": "EmptyJobResponse"
+          }
+        ], 
+        "path": "/jobs/v2/{jobId}/pems"
+      }, 
+      {
+        "description": "Get job permission details for a specific user.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listPermissionsForUser", 
+            "notes": "Users must have read access to this job to view the permissions.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the job.", 
+                "name": "jobId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The username of the api user associated with the permission.", 
+                "name": "username", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "summary": "Get a specific user's permissions for a job.", 
+            "type": "JobPermissionResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "updatePermissionsForUser", 
+            "notes": "To delete a single user, use the DELETE operation or set their permission to NONE or an empty string", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the job.", 
+                "name": "jobId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The username of the api user associated with the permission", 
+                "name": "username", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "{\n\t\"username\":\"\",\n\t\"permission\": \"READ_EXECUTE\",\n\t\"recursive\": false\n}", 
+                "description": "The permission to update. ", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "JobPermissionRequest"
+              }
+            ], 
+            "summary": "Add or update a user's permission for an job.", 
+            "type": "EmptyJobResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "deletePermissionsForUser", 
+            "notes": "This will remove all permissions on an job for a user. Job owners cannot remote their own permissions.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the application. The application id is made up of the name and version separated by a dash.", 
+                "name": "uniqueName", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The username of the api user associated with the permission", 
+                "name": "username", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "summary": "Deletes all permissions for the given user on an job.", 
+            "type": "EmptyApplicationResponse"
+          }
+        ], 
+        "path": "/jobs/v2/{jobId}/pems/{username}"
+      }, 
+      {
+        "description": "Return just the status of the job", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "getStatus", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the job.", 
+                "name": "jobId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "summary": "Get the status of the job.", 
+            "type": "JobStatusResponse"
+          }
+        ], 
+        "path": "/jobs/v2/{jobId}/status"
+      }, 
+      {
+        "description": "Return a listing of the output folder from the job.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listOutputs", 
+            "notes": "If issued against an un-archived job, inputs and intermediate files will also be visible and accesible.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the job.", 
+                "name": "jobId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "Path to an output file or folder relative to the job output directory. This resource will follow data around as it moves from the execution system to archival storage.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "summary": "List contents of a job's output directory.", 
+            "type": "MultipleRemoteFileResponse"
+          }
+        ], 
+        "path": "/jobs/v2/{jobId}/outputs/listings/{filePath}"
+      }, 
+      {
+        "description": "Download an output file.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "downloadOutput", 
+            "notes": "This service will follow data around as it moves from the execution system to archival storage. You can use this endpoint to keep a permanent handle of the output of a job. Directory download is not currently supported.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the job.", 
+                "name": "jobId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "Path to an output file relative to the job output directory.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "produces": [
+              "application/octet-stream"
+            ], 
+            "summary": "Download an output file from a specific job.", 
+            "type": "JobOutputFileDownload"
+          }
+        ], 
+        "path": "/jobs/v2/{jobId}/outputs/media/{filePath}"
+      }, 
+      {
+        "description": "Search for jobs matching given attribute/value combination(s).", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "search", 
+            "notes": "Search by combinations of attributes and values. The URL should be constructed with alternating attribute and value fields.", 
+            "parameters": [
+              {
+                "allowMultiple": true, 
+                "description": "The attribute to query by. This can be any job field.", 
+                "name": "attribute", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": true, 
+                "description": "The value of the attribute to query for.", 
+                "name": "value", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "summary": "Find jobs matching the given attribute/value combination(s).", 
+            "type": "MultipleJobResponse"
+          }
+        ], 
+        "path": "/jobs/v2/{attribute}/{value}"
+      }
+    ], 
+    "authorizations": [
+      "oauth2"
+    ], 
+    "basePath": "https://api.tacc.cloud", 
+    "models": {
+      "ACL": {
+        "id": "ACL", 
+        "name": "", 
+        "properties": {
+          "read": {
+            "description": "can read", 
+            "name": "read", 
+            "type": "boolean"
+          }, 
+          "write": {
+            "description": "can write", 
+            "name": "write", 
+            "type": "boolean"
+          }
+        }
+      }, 
+      "EmptyJobResponse": {
+        "id": "EmptyJobResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "empty result", 
+            "name": "result", 
+            "type": "string"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "Job": {
+        "id": "Job", 
+        "name": "", 
+        "properties": {
+          "appId": {
+            "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.", 
+            "name": "appId", 
+            "type": "string"
+          }, 
+          "archive": {
+            "description": "Whether the output from this job should be archived. If true, all new files created by this application's execution will be archived to the archivePath in the user's default storage system.", 
+            "name": "archive", 
+            "type": "boolean"
+          }, 
+          "archivePath": {
+            "description": "The path of the archive folder for this job on the user's default storage sytem.", 
+            "name": "archivePath", 
+            "type": "string"
+          }, 
+          "archiveSystem": {
+            "description": "The unique id of the storage system on which this job's output will be staged.", 
+            "name": "archiveSystem", 
+            "type": "string"
+          }, 
+          "batchQueue": {
+            "description": "The queue to which this job should be submitted. This is optional and only applies when the execution system has a batch scheduler.", 
+            "name": "batchQueue", 
+            "type": "string"
+          }, 
+          "endTime": {
+            "description": "The date the job stopped running due to termination, completion, or error in ISO 8601 format.", 
+            "format": "date-time", 
+            "name": "endTime", 
+            "type": "string"
+          }, 
+          "executionSystem": {
+            "description": "The system id of the execution system.", 
+            "name": "executionSystem", 
+            "type": "string"
+          }, 
+          "id": {
+            "description": "The unique id of the job.", 
+            "name": "id", 
+            "type": "string"
+          }, 
+          "inputs": {
+            "description": "The application specific input files needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. Inputs may be given as relative paths in the user's default storage system or as URI. If a URI is given, the data will be staged in by the IO service and made avaialble to the application at run time.", 
+            "name": "inputs", 
+            "type": "JobInputs"
+          }, 
+          "localId": {
+            "description": "The process or local job id of the job on the remote execution system.", 
+            "name": "localId", 
+            "type": "string"
+          }, 
+          "maxRunTime": {
+            "description": "The requested compute time needed for this application to complete given in HH:mm:ss format.", 
+            "name": "maxRunTime", 
+            "type": "string"
+          }, 
+          "memoryPerNode": {
+            "description": "The requested memory for this application to run given in GB.", 
+            "name": "memoryPerNode", 
+            "type": "string"
+          }, 
+          "message": {
+            "description": "The error message incurred when the job failed.", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "name": {
+            "description": "The name of the job.", 
+            "name": "name", 
+            "type": "string"
+          }, 
+          "nodeCount": {
+            "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+            "format": "int32", 
+            "name": "nodeCount", 
+            "type": "integer"
+          }, 
+          "notifications": {
+            "description": "An array of notifications you wish to receive.", 
+            "items": {
+              "$ref": "Notification"
+            }, 
+            "name": "notifications", 
+            "type": "array"
+          }, 
+          "outputPath": {
+            "description": "Relative path of the job's output data.", 
+            "name": "outputPath", 
+            "type": "String"
+          }, 
+          "owner": {
+            "description": "The job owner.", 
+            "name": "owner", 
+            "type": "string"
+          }, 
+          "parameters": {
+            "description": "The application specific parameters needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. The actual dataType will be determined by the application description.", 
+            "name": "parameters", 
+            "type": "JobParameters"
+          }, 
+          "processorsPerNode": {
+            "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+            "format": "int32", 
+            "name": "processorsPerNode", 
+            "type": "integer"
+          }, 
+          "retries": {
+            "description": "The number of retires it took to submit this job.", 
+            "format": "int32", 
+            "name": "retries", 
+            "type": "integer"
+          }, 
+          "startTime": {
+            "description": "The date the job started in ISO 8601 format.", 
+            "format": "date-time", 
+            "name": "startTime", 
+            "type": "string"
+          }, 
+          "status": {
+            "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "submitTime": {
+            "description": "The date the job was submitted in ISO 8601 format.", 
+            "format": "date-time", 
+            "name": "submitTime", 
+            "type": "string"
+          }, 
+          "workPath": {
+            "description": "The directory on the remote execution system from which the job is running.", 
+            "name": "workPath", 
+            "type": "string"
+          }
+        }
+      }, 
+      "JobHistory": {
+        "id": "JobHistory", 
+        "name": "", 
+        "properties": {
+          "created": {
+            "description": "The date of the event.", 
+            "format": "date-time", 
+            "name": "created", 
+            "type": "string"
+          }, 
+          "description": {
+            "description": "A brief description of the event details.", 
+            "name": "description", 
+            "type": "String"
+          }, 
+          "status": {
+            "description": "The status of the job after this event.", 
+            "name": "status", 
+            "type": "String"
+          }
+        }
+      }, 
+      "JobHistoryResponse": {
+        "id": "JobHistoryResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "JobHistory"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "JobInputs": {
+        "id": "JobInputs", 
+        "name": "", 
+        "properties": {
+          "parameter1": {
+            "description": "One or more inputs identified in the description of the app you're running. ", 
+            "name": "parameter1", 
+            "required": false, 
+            "type": "string"
+          }
+        }
+      }, 
+      "JobOperationRequest": {
+        "id": "JobOperationRequest", 
+        "name": "", 
+        "properties": {
+          "action": {
+            "description": "Action to perform on the job.", 
+            "enum": [
+              "resubmit", 
+              "stop"
+            ], 
+            "name": "action", 
+            "required": true, 
+            "type": "string"
+          }
+        }
+      }, 
+      "JobOutputFileDownload": {
+        "id": "JobOutputFileDownload", 
+        "name": "", 
+        "properties": {}
+      }, 
+      "JobParameters": {
+        "id": "JobParameters", 
+        "name": "", 
+        "properties": {
+          "parameter1": {
+            "description": "One or more parameters identified in the description of the app you're running. ", 
+            "name": "parameter1", 
+            "required": false, 
+            "type": "string"
+          }
+        }
+      }, 
+      "JobPermissionRequest": {
+        "id": "JobPermissionRequest", 
+        "name": "", 
+        "properties": {
+          "permission": {
+            "description": "The permission to set", 
+            "enum": [
+              "READ", 
+              "WRITE", 
+              "EXECUTE", 
+              "READ_WRITE", 
+              "READ_EXECUTE", 
+              "WRITE_EXECUTE", 
+              "ALL", 
+              "NONE"
+            ], 
+            "name": "permission", 
+            "required": true, 
+            "type": "string"
+          }, 
+          "username": {
+            "description": "The username of the api user whose permission is to be set.", 
+            "name": "username", 
+            "required": true, 
+            "type": "string"
+          }
+        }
+      }, 
+      "JobPermissionResponse": {
+        "id": "JobPermissionResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "Permission"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "JobRequest": {
+        "id": "JobRequest", 
+        "name": "", 
+        "properties": {
+          "appId": {
+            "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.", 
+            "name": "appId", 
+            "required": true, 
+            "type": "string"
+          }, 
+          "archive": {
+            "description": "Whether the output from this job should be archived. If true, all new files created by this application's execution will be archived to the archivePath in the user's default storage system.", 
+            "name": "archive", 
+            "required": true, 
+            "type": "boolean"
+          }, 
+          "archivePath": {
+            "description": "The path of the archive folder for this job on the user's default storage sytem.", 
+            "name": "archivePath", 
+            "type": "string"
+          }, 
+          "archiveSystem": {
+            "description": "The unique id of the storage system on which this job's output will be staged.", 
+            "name": "archiveSystem", 
+            "type": "string"
+          }, 
+          "batchQueue": {
+            "description": "The queue to which this job should be submitted. This is optional and only applies when the execution system has a batch scheduler.", 
+            "name": "batchQueue", 
+            "type": "string"
+          }, 
+          "inputs": {
+            "description": "The application specific input files needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. Inputs may be given as relative paths in the user's default storage system or as URI. If a URI is given, the data will be staged in by the IO service and made avaialble to the application at run time.", 
+            "name": "inputs", 
+            "required": true, 
+            "type": "JobInputs"
+          }, 
+          "maxRunTime": {
+            "description": "The requested compute time needed for this application to complete given in HH:mm:ss format.", 
+            "name": "maxRunTime", 
+            "type": "string"
+          }, 
+          "memoryPerNode": {
+            "description": "The requested memory for this application to run given in GB.", 
+            "name": "memoryPerNode", 
+            "type": "string"
+          }, 
+          "name": {
+            "description": "The name of the job.", 
+            "name": "name", 
+            "required": true, 
+            "type": "string"
+          }, 
+          "nodeCount": {
+            "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+            "format": "int32", 
+            "name": "nodeCount", 
+            "type": "integer"
+          }, 
+          "notifications": {
+            "description": "An array of notifications you wish to receive.", 
+            "items": {
+              "$ref": "Notification"
+            }, 
+            "name": "notifications", 
+            "type": "array"
+          }, 
+          "parameters": {
+            "description": "The application specific parameters needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. The actual dataType will be determined by the application description.", 
+            "name": "parameters", 
+            "required": true, 
+            "type": "JobParameters"
+          }, 
+          "processorsPerNode": {
+            "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+            "format": "int32", 
+            "minimum": 1, 
+            "name": "processorsPerNode", 
+            "type": "integer"
+          }
+        }
+      }, 
+      "JobStatus": {
+        "id": "JobStatus", 
+        "name": "", 
+        "properties": {
+          "id": {
+            "description": "The unique id of the job.", 
+            "name": "id", 
+            "type": "string"
+          }, 
+          "status": {
+            "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "JobStatusResponse": {
+        "id": "JobStatusResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "name": "result", 
+            "type": "JobStatus"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "JobSubmission": {
+        "id": "JobSubmission", 
+        "name": "", 
+        "properties": {
+          "appId": {
+            "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.", 
+            "name": "appId", 
+            "type": "string"
+          }, 
+          "archive": {
+            "description": "Whether the output from this job should be archived. If true, all new files created by this application's execution will be archived to the archivePath in the user's default storage system.", 
+            "name": "archive", 
+            "type": "boolean"
+          }, 
+          "archivePath": {
+            "description": "The path of the archive folder for this job on the archiveSystem. Defaults to the user's default storage system.", 
+            "name": "archivePath", 
+            "type": "string"
+          }, 
+          "archiveSystem": {
+            "description": "The system on which the job data will be archived", 
+            "name": "archiveSystem", 
+            "type": "string"
+          }, 
+          "batchQueue": {
+            "description": "The queue to which this job should be submitted. This is optional and only applies when the execution system has a batch scheduler.", 
+            "name": "batchQueue", 
+            "type": "string"
+          }, 
+          "inputs": {
+            "description": "The application specific input files needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. Inputs may be given as relative paths in the user's default storage system or as URI. If a URI is given, the data will be staged in by the IO service and made avaialble to the application at run time.", 
+            "name": "inputs", 
+            "type": "JobInputs"
+          }, 
+          "maxMemory": {
+            "description": "The maximum amount of memory needed for this application to run given in GB.", 
+            "name": "maxMemory", 
+            "type": "string"
+          }, 
+          "maxRunTime": {
+            "description": "The estimated compute time needed for this application to complete given in hh:mm:ss format.", 
+            "name": "maxRunTime", 
+            "type": "string"
+          }, 
+          "name": {
+            "description": "The name of the job.", 
+            "name": "name", 
+            "type": "string"
+          }, 
+          "nodeCount": {
+            "description": "The number of nodes this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.", 
+            "format": "int32", 
+            "minimum": 1, 
+            "name": "nodeCount", 
+            "type": "integer"
+          }, 
+          "notifications": {
+            "description": "An array of notifications you wish to receive.", 
+            "items": {
+              "$ref": "Notification"
+            }, 
+            "name": "notifications", 
+            "type": "array"
+          }, 
+          "parameters": {
+            "description": "The application specific parameters needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. The actual dataType will be determined by the application description.", 
+            "name": "parameters", 
+            "type": "JobParameters"
+          }, 
+          "processorsPerNode": {
+            "description": "The number of processors this application should utilize while running.", 
+            "format": "int32", 
+            "minimum": 1, 
+            "name": "processorsPerNode", 
+            "type": "integer"
+          }
+        }
+      }, 
+      "JobSummary": {
+        "id": "JobSummary", 
+        "name": "", 
+        "properties": {
+          "appId": {
+            "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.", 
+            "name": "appId", 
+            "type": "string"
+          }, 
+          "endTime": {
+            "description": "The date the job ended in ISO 8601 format.", 
+            "format": "date-time", 
+            "name": "endTime", 
+            "type": "string"
+          }, 
+          "executionSystem": {
+            "description": "The system id of the execution system.", 
+            "name": "executionSystem", 
+            "type": "string"
+          }, 
+          "id": {
+            "description": "The unique id of the job.", 
+            "name": "id", 
+            "type": "string"
+          }, 
+          "name": {
+            "description": "The name of the job.", 
+            "name": "name", 
+            "type": "string"
+          }, 
+          "owner": {
+            "description": "The job owner.", 
+            "name": "owner", 
+            "type": "string"
+          }, 
+          "startTime": {
+            "description": "The date the job started in ISO 8601 format.", 
+            "format": "date-time", 
+            "name": "startTime", 
+            "type": "string"
+          }, 
+          "status": {
+            "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultipleJobResponse": {
+        "id": "MultipleJobResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "JobSummary"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultipleRemoteFileResponse": {
+        "id": "MultipleRemoteFileResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "RemoteFile"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "Notification": {
+        "id": "Notification", 
+        "name": "", 
+        "properties": {
+          "event": {
+            "description": "The event you wish to recieve a notification about. Specify * for all events.", 
+            "name": "event", 
+            "type": "string"
+          }, 
+          "persistent": {
+            "description": "Whether this event should remain active after it triggers the first time.", 
+            "name": "persistent", 
+            "type": "boolean"
+          }, 
+          "url": {
+            "description": "The URI to notify when the import is complete. This can be an email address or URL. If a URL is given, a POST will be made to this address. URL templating is supported. Valid template values are: ${JOB_STATUS}, ${JOB_URL}, ${JOB_ID}, ${JOB_SYSTEM}, ${JOB_NAME}, ${JOB_START_TIME}, ${JOB_END_TIME}, ${JOB_SUBMIT_TIME}, ${JOB_ARCHIVE_PATH}, ${JOB_ARCHIVE_URL}, ${JOB_ERROR}", 
+            "format": "int32", 
+            "name": "url", 
+            "type": "integer"
+          }
+        }
+      }, 
+      "Permission": {
+        "id": "Permission", 
+        "name": "", 
+        "properties": {
+          "permission": {
+            "name": "permission", 
+            "type": "ACL"
+          }, 
+          "username": {
+            "description": "Username associate with this permission", 
+            "name": "username", 
+            "type": "string"
+          }
+        }
+      }, 
+      "PermissionListing": {
+        "id": "PermissionListing", 
+        "name": "", 
+        "properties": {
+          "name": {
+            "description": "Unique name of the application to which this permissions apply.", 
+            "name": "name", 
+            "type": "string"
+          }, 
+          "owner": {
+            "description": "Owner of the application.", 
+            "name": "owner", 
+            "type": "string"
+          }, 
+          "permissions": {
+            "description": "Permissions granted on this application.", 
+            "items": {
+              "$ref": "Permission"
+            }, 
+            "name": "permissions", 
+            "type": "array"
+          }
+        }
+      }, 
+      "RemoteFile": {
+        "id": "RemoteFile", 
+        "name": "", 
+        "properties": {
+          "format": {
+            "description": "The file type of the file.", 
+            "name": "format", 
+            "type": "string"
+          }, 
+          "lastModified": {
+            "description": "The date this file was last modified in ISO 8601 format.", 
+            "format": "date-time", 
+            "name": "lastModified", 
+            "type": "string"
+          }, 
+          "length": {
+            "description": "The length of the file/folder.", 
+            "format": "int32", 
+            "name": "length", 
+            "type": "integer"
+          }, 
+          "mimeType": {
+            "description": "The mime type of the file/folder. If unknown, it defaults to application/binary.", 
+            "name": "mimeType", 
+            "type": "string"
+          }, 
+          "name": {
+            "description": "The name of the file/folder.", 
+            "name": "name", 
+            "type": "string"
+          }, 
+          "path": {
+            "description": "The absolute path to the file/folder.", 
+            "name": "path", 
+            "type": "string"
+          }, 
+          "permissions": {
+            "description": "The system permission of the invoking user on the file/folder.", 
+            "name": "permissions", 
+            "type": "string"
+          }, 
+          "system": {
+            "description": "The systemId of the system where this file lives.", 
+            "name": "system", 
+            "type": "string"
+          }, 
+          "type": {
+            "description": "Whether it is a file or folder.", 
+            "name": "type", 
+            "type": "string"
+          }
+        }
+      }, 
+      "SingleJobResponse": {
+        "id": "SingleJobResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "Job"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }
+    }, 
+    "resourcePath": "/jobs/v2", 
+    "swaggerVersion": "1.2"
+  }, 
+  "description": "Run and manage jobs", 
+  "name": "jobs", 
+  "path": "/jobs", 
+  "url": "http://localhost:9999/jobs"
+}

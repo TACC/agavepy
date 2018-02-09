@@ -1,0 +1,1049 @@
+{
+  "api_declaration": {
+    "apiVersion": "2.2.14", 
+    "apis": [
+      {
+        "description": "Manage files and folders", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "downloadFromDefaultSystem", 
+            "notes": "This will return the raw file from the user's default storage location.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "sourcefilePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "produces": [
+              "application/octet-stream"
+            ], 
+            "summary": "Download a file from the user's default storage location.", 
+            "type": "void"
+          }, 
+          {
+            "consumes": [
+              "multipart/form-data"
+            ], 
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "importToDefaultSystem", 
+            "notes": "This will return a handle to the file upload.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "sourcefilePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The file format this file is in. Defaults to raw. This will be used in file transform operations.", 
+                "name": "fileType", 
+                "paramType": "form", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The URI to notify when the import is complete. This can be an email address or http URL. If a URL is given, a GET will be made to this address. URL templating is supported. Valid template values are: ${NAME}, ${SOURCE_FORMAT}, ${DEST_FORMAT}, ${STATUS}", 
+                "name": "callbackURL", 
+                "paramType": "form", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The name of the file after importing. If not specified, the uploaded file name will be used.", 
+                "name": "fileName", 
+                "paramType": "form", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The URL to import the file from. This parameter is used if not file is uploaded with this post.", 
+                "name": "urlToIngest", 
+                "paramType": "form", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "dataType": "file", 
+                "description": "The file object to import.", 
+                "name": "fileToUpload", 
+                "paramType": "form", 
+                "required": false, 
+                "type": "void"
+              }
+            ], 
+            "summary": "Import a file via direct upload or importing from a url to the user's default storage location.", 
+            "type": "SingleRemoteFileResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "PUT", 
+            "nickname": "manageOnDefaultSystem", 
+            "notes": "This will return a handle to the file upload.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "sourcefilePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "{\n\t\"action\":\"mkdir\",\n\t\"path\": \"deleteme\"\n}", 
+                "description": "The operation to perform. ", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "FileOperationRequest"
+              }
+            ], 
+            "summary": "Perform an action on a file or folder.", 
+            "type": "EmptyRemoteFileResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "deleteFromDefaultSystem", 
+            "notes": "This will delete the file or folder at the given path from the user's default storage location.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "sourcefilePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "summary": "Deletes a file or folder.", 
+            "type": "EmptyRemoteFileResponse"
+          }
+        ], 
+        "path": "/files/v2/media/{sourcefilePath}"
+      }, 
+      {
+        "description": "Manage files and folders on a specific system", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "download", 
+            "notes": "This will return the raw file from the user's default storage location.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The unique id of the system on which the data resides.", 
+                "name": "systemId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "produces": [
+              "application/octet-stream"
+            ], 
+            "summary": "Download a file from the user's default storage location.", 
+            "type": "void"
+          }, 
+          {
+            "consumes": [
+              "multipart/form-data"
+            ], 
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "importData", 
+            "notes": "This will return a handle to the file upload.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The unique id of the system on which the data resides.", 
+                "name": "systemId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The file format this file is in. Defaults to raw. This will be used in file transform operations.", 
+                "name": "fileType", 
+                "paramType": "form", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The URI to notify when the import is complete. This can be an email address or http URL. If a URL is given, a GET will be made to this address. URL templating is supported. Valid template values are: ${NAME}, ${SOURCE_FORMAT}, ${DEST_FORMAT}, ${STATUS}", 
+                "name": "callbackURL", 
+                "paramType": "form", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The name of the file after importing. If not specified, the uploaded file name will be used.", 
+                "name": "fileName", 
+                "paramType": "form", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The URL to import the file from. This parameter is used if not file is uploaded with this post.", 
+                "name": "urlToIngest", 
+                "paramType": "form", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "dataType": "file", 
+                "description": "The file object to import.", 
+                "name": "fileToUpload", 
+                "paramType": "form", 
+                "required": false, 
+                "type": "void"
+              }, 
+              {
+                "allowMultiple": true, 
+                "defaultValue": "[]", 
+                "description": "A list of notification objects to apply to the transfer. ", 
+                "name": "notifications", 
+                "paramType": "form", 
+                "required": false, 
+                "type": "FileNotificationRequest"
+              }
+            ], 
+            "summary": "Import a file via direct upload or importing from a url to the user's default storage location.", 
+            "type": "SingleRemoteFileResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "PUT", 
+            "nickname": "manage", 
+            "notes": "This will return a handle to the file upload.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The unique id of the system on which the data resides.", 
+                "name": "systemId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "{\n\t\"action\":\"mkdir\",\n\t\"dirName\": \"deleteme\"\n}", 
+                "description": "The operation to perform. ", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "FileOperationRequest"
+              }
+            ], 
+            "summary": "Perform an action on a file or folder.", 
+            "type": "EmptyRemoteFileResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "delete", 
+            "notes": "This will delete the file or folder at the given path from the user's default storage location.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The unique id of the system on which the data resides.", 
+                "name": "systemId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "summary": "Deletes a file or folder.", 
+            "type": "EmptyRemoteFileResponse"
+          }
+        ], 
+        "path": "/files/v2/media/system/{systemId}/{filePath}"
+      }, 
+      {
+        "description": "Obtain remote directory listings.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listOnDefaultSystem", 
+            "notes": "This will return the a directory listing or information about a single file if the path is not a directory.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "summary": "Get a remote directory listing.", 
+            "type": "MultipleRemoteFileResponse"
+          }
+        ], 
+        "path": "/files/v2/listings/{filePath}"
+      }, 
+      {
+        "description": "Obtian remote directory listings.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "list", 
+            "notes": "This will return the a directory listing or information about a single file if the path is not a directory.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The unique id of the system on which the data resides.", 
+                "name": "systemId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "summary": "Get a remote directory listing on a specific system.", 
+            "type": "MultipleRemoteFileResponse"
+          }
+        ], 
+        "path": "/files/v2/listings/system/{systemId}/{filePath}"
+      }, 
+      {
+        "description": "View history of api actions on this file/folder", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "getHistoryOnDefaultSystem", 
+            "notes": "This will return the raw file from the user's default storage location.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "summary": "Download a file from the user's default storage location.", 
+            "type": "FileHistoryResponse"
+          }
+        ], 
+        "path": "/files/v2/history/{filePath}"
+      }, 
+      {
+        "description": "View history of api actions on this file/folder", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "getHistory", 
+            "notes": "This will return history of api actions on this file/folder.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The unique id of the system on which the data resides.", 
+                "name": "systemId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the given system root location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "summary": "Return history of api actions.", 
+            "type": "FileHistoryResponse"
+          }
+        ], 
+        "path": "/files/v2/history/system/{systemId}/{filePath}"
+      }, 
+      {
+        "description": "Manage share permissions on files and folders", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listPermissionsOnDefaultSystem", 
+            "notes": "You must have read permission on this file or folder to call this endpoint", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "summary": "List all the share permissions for a file or folder.", 
+            "type": "MultiplePermissionResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "updatePermissionsOnDefaultSystem", 
+            "notes": "Due to the nature of the underlying file system, permissions are autonomous. READ and WRITE are exclusive. ALL implies ownership. If you want someone to be able to see and edit a document, give them all=true permissions.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "{\n\t\"username\":\"\",\n\t\"permission\": \"READ_EXECUTE\",\n\t\"recursive\": false\n}", 
+                "description": "The permission add or update. ", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "FilePermissionRequest"
+              }
+            ], 
+            "summary": "Update permissions for a single user.", 
+            "type": "EmptyRemoteFileResponse"
+          }
+        ], 
+        "path": "/files/v2/pems/{filePath}"
+      }, 
+      {
+        "description": "Manage share permissions on files and folders", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listPermissions", 
+            "notes": "You must have read permission on this file or folder to call this endpoint", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The unique id of the system on which the data resides.", 
+                "name": "systemId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "summary": "List all the share permissions for a file or folder.", 
+            "type": "MultiplePermissionResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "updatePermissions", 
+            "notes": "Due to the nature of the underlying file system, permissions are autonomous. READ and WRITE are exclusive. ALL implies ownership. If you want someone to be able to see and edit a document, give them all=true permissions.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The unique id of the system on which the data resides.", 
+                "name": "systemId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "{\n\t\"username\":\"\",\n\t\"permission\": \"READ_EXECUTE\",\n\t\"recursive\": false\n}", 
+                "description": "The permission add or update. ", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "FilePermissionRequest"
+              }
+            ], 
+            "summary": "Update permissions for a single user.", 
+            "type": "MultiplePermissionResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "deletePermissions", 
+            "notes": "Once applied, users will not be able to view or edit these files anymore. Keep this in mind before calling this on data referenced by shared applications.", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The path of the file relative to the user's default storage location.", 
+                "name": "filePath", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The unique id of the system on which the data resides.", 
+                "name": "systemId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "summary": "Deletes all permissions on a file except those of the owner.", 
+            "type": "EmptyRemoteFileResponse"
+          }
+        ], 
+        "path": "/files/v2/pems/system/{systemId}/{filePath}"
+      }
+    ], 
+    "authorizations": [
+      "oauth2"
+    ], 
+    "basePath": "https://api.tacc.cloud", 
+    "models": {
+      "EmptyRemoteFileResponse": {
+        "id": "EmptyRemoteFileResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "empty result", 
+            "name": "result", 
+            "type": "string"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "FileHistory": {
+        "id": "FileHistory", 
+        "name": "", 
+        "properties": {
+          "created": {
+            "description": "The date of the event.", 
+            "format": "date-time", 
+            "name": "created", 
+            "type": "string"
+          }, 
+          "description": {
+            "description": "A brief description of the event details.", 
+            "name": "description", 
+            "type": "String"
+          }, 
+          "status": {
+            "description": "The status of the file/folder after this event.", 
+            "name": "status", 
+            "type": "String"
+          }
+        }
+      }, 
+      "FileHistoryResponse": {
+        "id": "FileHistoryResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "FileHistory"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "FileNotificationRequest": {
+        "id": "FileNotificationRequest", 
+        "name": "", 
+        "properties": {
+          "event": {
+            "description": "The event you wish to recieve a notification about. Specify * for all events.", 
+            "name": "event", 
+            "type": "string"
+          }, 
+          "persistent": {
+            "description": "Whether this event should remain active after it triggers the first time.", 
+            "name": "persistent", 
+            "type": "boolean"
+          }, 
+          "url": {
+            "description": "The URI to notify when the import is complete. This can be an email address or URL. If a URL is given, a POST will be made to this address. URL templating is supported. Valid template values are: ${JOB_STATUS}, ${JOB_URL}, ${JOB_ID}, ${JOB_SYSTEM}, ${JOB_NAME}, ${JOB_START_TIME}, ${JOB_END_TIME}, ${JOB_SUBMIT_TIME}, ${JOB_ARCHIVE_PATH}, ${JOB_ARCHIVE_URL}, ${JOB_ERROR}", 
+            "format": "int32", 
+            "name": "url", 
+            "type": "integer"
+          }
+        }
+      }, 
+      "FileOperationRequest": {
+        "id": "FileOperationRequest", 
+        "name": "", 
+        "properties": {
+          "action": {
+            "description": "Action to perform on the file or folder.", 
+            "enum": [
+              "mkdir", 
+              "rename", 
+              "copy", 
+              "move"
+            ], 
+            "name": "action", 
+            "required": true, 
+            "type": "string"
+          }, 
+          "path": {
+            "description": "Destination file or folder.", 
+            "name": "path", 
+            "type": "string"
+          }
+        }
+      }, 
+      "FilePermission": {
+        "id": "FilePermission", 
+        "name": "", 
+        "properties": {
+          "name": {
+            "description": "The name of the file/folder.", 
+            "name": "name", 
+            "type": "string"
+          }, 
+          "owner": {
+            "description": "Local username of the owner.", 
+            "name": "owner", 
+            "type": "string"
+          }, 
+          "permissions": {
+            "description": "One or more permission objects", 
+            "items": {
+              "$ref": "Permission"
+            }, 
+            "name": "permissions", 
+            "type": "array"
+          }
+        }
+      }, 
+      "FilePermissionRequest": {
+        "id": "FilePermissionRequest", 
+        "name": "", 
+        "properties": {
+          "permission": {
+            "description": "The permission to set", 
+            "enum": [
+              "READ", 
+              "WRITE", 
+              "EXECUTE", 
+              "READ_WRITE", 
+              "READ_EXECUTE", 
+              "WRITE_EXECUTE", 
+              "ALL", 
+              "NONE"
+            ], 
+            "name": "permission", 
+            "required": true, 
+            "type": "string"
+          }, 
+          "recursive": {
+            "description": "Should updated permissions be applied recursively. Defaults to false.", 
+            "name": "recursive", 
+            "type": "boolean"
+          }, 
+          "username": {
+            "description": "The username of the api user whose permission is to be set.", 
+            "name": "username", 
+            "required": true, 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultiplePermissionResponse": {
+        "id": "MultiplePermissionResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "One or more file permissions", 
+            "items": {
+              "$ref": "FilePermission"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultipleRemoteFileResponse": {
+        "id": "MultipleRemoteFileResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "RemoteFile"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "Permission": {
+        "id": "Permission", 
+        "name": "", 
+        "properties": {
+          "permission": {
+            "description": "One or more permission objects", 
+            "name": "permission", 
+            "type": "PermissionStanza"
+          }, 
+          "username": {
+            "description": "The name of the user for this permission object.", 
+            "name": "username", 
+            "type": "string"
+          }
+        }
+      }, 
+      "PermissionStanza": {
+        "id": "PermissionStanza", 
+        "name": "", 
+        "properties": {
+          "execute": {
+            "description": "Is the file executable", 
+            "name": "execute", 
+            "type": "boolean"
+          }, 
+          "read": {
+            "description": "Is the file readable", 
+            "name": "read", 
+            "type": "boolean"
+          }, 
+          "write": {
+            "description": "Is the file writable", 
+            "name": "write", 
+            "type": "boolean"
+          }
+        }
+      }, 
+      "RemoteFile": {
+        "id": "RemoteFile", 
+        "name": "", 
+        "properties": {
+          "format": {
+            "description": "The file type of the file.", 
+            "name": "format", 
+            "type": "string"
+          }, 
+          "lastModified": {
+            "description": "The date this file was last modified in ISO 8601 format.", 
+            "format": "date-time", 
+            "name": "lastModified", 
+            "type": "string"
+          }, 
+          "length": {
+            "description": "The length of the file/folder.", 
+            "format": "int32", 
+            "name": "length", 
+            "type": "integer"
+          }, 
+          "mimeType": {
+            "description": "The mime type of the file/folder. If unknown, it defaults to application/binary.", 
+            "name": "mimeType", 
+            "type": "string"
+          }, 
+          "name": {
+            "description": "The name of the file/folder.", 
+            "name": "name", 
+            "type": "string"
+          }, 
+          "path": {
+            "description": "The absolute path to the file/folder.", 
+            "name": "path", 
+            "type": "string"
+          }, 
+          "permissions": {
+            "description": "The system permission of the invoking user on the file/folder.", 
+            "name": "permissions", 
+            "type": "string"
+          }, 
+          "system": {
+            "description": "The systemId of the system where this file lives.", 
+            "name": "system", 
+            "type": "string"
+          }, 
+          "type": {
+            "description": "Whether it is a file or folder.", 
+            "name": "type", 
+            "type": "string"
+          }
+        }
+      }, 
+      "SingleRemoteFileResponse": {
+        "id": "SingleRemoteFileResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "RemoteFile"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }
+    }, 
+    "resourcePath": "/files/v2", 
+    "swaggerVersion": "1.2"
+  }, 
+  "description": "Move and manage data", 
+  "name": "files", 
+  "path": "/files", 
+  "url": "http://localhost:9999/files"
+}

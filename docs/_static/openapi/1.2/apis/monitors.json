@@ -1,0 +1,729 @@
+{
+  "api_declaration": {
+    "apiVersion": "2.2.14", 
+    "apis": [
+      {
+        "description": "Search and manage monitoring tasks", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "list", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The target to search for.", 
+                "name": "target", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "Filter by monitors that are active or inactive.", 
+                "enum": [
+                  "true", 
+                  "false"
+                ], 
+                "name": "active", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user does not supply a UUID or supplies an invalid JSON query"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 404, 
+                "message": "The specified Monitor cannot be found"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to process the request."
+              }
+            ], 
+            "summary": "Retrieve Monitor for a specific resource.", 
+            "type": "MultipleMonitorResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "add", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": "{ \n\t\"active\": true, \n\t\"frequency\": 720, \n\t\"internalUsername\": null, \n\t\"target\": \"data.iplantcollaborative.org\", \n\t\"updateSystemStatus\": false \n}", 
+                "description": "The description of the app to add or update. This can be either a file upload or json posted to the request body.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "MonitorRequest"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user supplies an invalid form"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to save the monitor."
+              }
+            ], 
+            "summary": "Update or Add new Monitor.", 
+            "type": "MonitorResponse"
+          }
+        ], 
+        "path": "/monitors/v2/"
+      }, 
+      {
+        "description": "Query for the monitor with the given id", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "get", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the monitor", 
+                "name": "monitorId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user does not supply a UUID"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 404, 
+                "message": "The specified Monitor cannot be found"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to process the request."
+              }
+            ], 
+            "summary": "Retrieve a specific monitor.", 
+            "type": "MonitorResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "update", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "defaultValue": "{ \n\t\"active\": true, \n\t\"frequency\": 720, \n\t\"internalUsername\": null, \n\t\"target\": \"data.iplantcollaborative.org\", \n\t\"updateSystemStatus\": false \n}", 
+                "description": "The description of the app to add or update. This can be either a file upload or json posted to the request body.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "MonitorRequest"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user supplies an invalid form"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to process the request."
+              }
+            ], 
+            "summary": "Updates an existing monitor.", 
+            "type": "MonitorResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "DELETE", 
+            "nickname": "delete", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the monitor", 
+                "name": "monitorId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user supplies no UUID"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to process the request."
+              }
+            ], 
+            "summary": "Deletes a monitor.", 
+            "type": "EmptyMonitorResponse"
+          }
+        ], 
+        "path": "/monitors/v2/{monitorId}"
+      }, 
+      {
+        "description": "Query for monitor checks", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "listChecks", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the monitor", 
+                "name": "monitorId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "A timestamp indicating the earliest time of the first monitor check in ISO 8601 format", 
+                "name": "startDate", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "A timestamp indicating the latest time of the first monitor check in ISO 8601 format", 
+                "name": "endDate", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "A timestamp indicating the latest time of the first monitor check in ISO 8601 format", 
+                "enum": [
+                  "PASSED", 
+                  "FAILED", 
+                  "UNKNOWN"
+                ], 
+                "name": "result", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 250, 
+                "description": "The max number of results.", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "limit", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": 0, 
+                "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)", 
+                "format": "int32", 
+                "min": 0, 
+                "name": "offset", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "integer"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user does not supply a UUID or supplies an invalid JSON query"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 404, 
+                "message": "The specified Monitor cannot be found"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to process the request."
+              }
+            ], 
+            "summary": "Retrieve monitor checks for a specific resource.", 
+            "type": "MultipleMonitorCheckResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "runCheck", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the monitor", 
+                "name": "monitorId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user supplies an invalid form"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to process the request."
+              }
+            ], 
+            "summary": "Forces a monitor check to run.", 
+            "type": "MonitorCheckResponse"
+          }
+        ], 
+        "path": "/monitors/v2/{monitorId}/checks"
+      }, 
+      {
+        "description": "Query for the monitor check with the given id", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "getCheck", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the monitor", 
+                "name": "monitorId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The id of the monitor check", 
+                "name": "checkId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 400, 
+                "message": "Raised if a user does not supply a UUID"
+              }, 
+              {
+                "code": 401, 
+                "message": "Raised if the user is not authorized."
+              }, 
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 404, 
+                "message": "The specified Monitor cannot be found"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to process the request."
+              }
+            ], 
+            "summary": "Retrieve a specific monitor check", 
+            "type": "MonitorCheckResponse"
+          }
+        ], 
+        "path": "/monitors/v2/{monitorId}/checks/{checkId}"
+      }
+    ], 
+    "authorizations": [
+      "oauth2"
+    ], 
+    "basePath": "https://api.tacc.cloud", 
+    "models": {
+      "EmptyMonitor": {
+        "id": "EmptyMonitor", 
+        "name": "", 
+        "properties": {}
+      }, 
+      "EmptyMonitorResponse": {
+        "id": "EmptyMonitorResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "EmptyMonitor"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "version": {
+            "description": "API version number", 
+            "name": "version", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MonitorCheck": {
+        "id": "MonitorCheck", 
+        "name": "", 
+        "properties": {
+          "created": {
+            "description": "A timestamp indicating when this monitor check was created.", 
+            "format": "date-time", 
+            "name": "created", 
+            "required": true, 
+            "type": "string"
+          }, 
+          "id": {
+            "description": "The UUID for this monitor check.", 
+            "name": "id", 
+            "type": "string"
+          }, 
+          "message": {
+            "description": "The error message if this monitor check failed.", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "The results of this monitor check.", 
+            "enum": [
+              "PASSED", 
+              "FAILED", 
+              "UNKNOWN"
+            ], 
+            "name": "result", 
+            "required": true, 
+            "type": "string"
+          }
+        }
+      }, 
+      "MonitorCheckResponse": {
+        "id": "MonitorCheckResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "MonitorCheck"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "version": {
+            "description": "API version number", 
+            "name": "version", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MonitorDescription": {
+        "id": "MonitorDescription", 
+        "name": "", 
+        "properties": {
+          "active": {
+            "description": "Whether this monitor is currently active.", 
+            "name": "active", 
+            "type": "boolean"
+          }, 
+          "created": {
+            "description": "A timestamp indicating when this Monitor was created.", 
+            "format": "date-time", 
+            "name": "created", 
+            "type": "string"
+          }, 
+          "frequency": {
+            "description": "The interval in minutes on which this monitor will run. Minimum is 5. Default is 720.", 
+            "format": "int32", 
+            "name": "frequency", 
+            "type": "integer"
+          }, 
+          "id": {
+            "description": "The UUID for this monitor.", 
+            "name": "id", 
+            "type": "string"
+          }, 
+          "internalUsername": {
+            "description": "Internal user account used to perform the check.", 
+            "name": "internalUsername", 
+            "type": "string"
+          }, 
+          "lastCheck": {
+            "description": "The results of the last check run by this monitor.", 
+            "name": "lastCheck", 
+            "type": "MonitorCheck"
+          }, 
+          "lastSuccess": {
+            "description": "A timestamp indicating the last time this Monitor succeeded in ISO 8601 format", 
+            "format": "date-time", 
+            "name": "lastSuccess", 
+            "type": "string"
+          }, 
+          "lastUpdated": {
+            "description": "A timestamp indicating the last time this Monitor was updated in ISO 8601 format", 
+            "format": "date-time", 
+            "name": "lastUpdated", 
+            "type": "string"
+          }, 
+          "nextUpdate": {
+            "description": "A timestamp indicating the next time this Monitor will be run in ISO 8601 format", 
+            "format": "date-time", 
+            "name": "nextUpdate", 
+            "type": "string"
+          }, 
+          "owner": {
+            "description": "The API user who owns this Monitor.", 
+            "name": "owner", 
+            "type": "string"
+          }, 
+          "target": {
+            "description": "The id of the sytem to be monitored. This must be an active system registered with the Systems service.", 
+            "name": "target", 
+            "type": "boolean"
+          }, 
+          "updateSystemStatus": {
+            "description": "Whether this Monitor should update the system status when the results change. You must have the ADMIN role on the target system to use this feature.", 
+            "name": "updateSystemStatus", 
+            "type": "boolean"
+          }
+        }
+      }, 
+      "MonitorRequest": {
+        "id": "MonitorRequest", 
+        "name": "", 
+        "properties": {
+          "active": {
+            "defaultValue": true, 
+            "description": "Whether this monitor is currently active.", 
+            "name": "active", 
+            "required": true, 
+            "type": "boolean"
+          }, 
+          "frequency": {
+            "defaultValue": 720, 
+            "description": "The interval in minutes on which this monitor will run. Minimum is 5. Default is 720.", 
+            "format": "int32", 
+            "minimum": 5, 
+            "name": "frequency", 
+            "required": true, 
+            "type": "integer"
+          }, 
+          "internalUsername": {
+            "description": "Internal user account used to perform the check.", 
+            "name": "internalUsername", 
+            "type": "string"
+          }, 
+          "target": {
+            "defaultValue": "data.iplantcollaborative.org", 
+            "description": "The id of the sytem to be monitored. This must be an active system registered with the Systems service.", 
+            "name": "target", 
+            "required": true, 
+            "type": "string"
+          }, 
+          "updateSystemStatus": {
+            "defaultValue": false, 
+            "description": "Whether this Monitor should update the system status when the results change. You must have the ADMIN role on the target system to use this feature.", 
+            "name": "updateSystemStatus", 
+            "type": "boolean"
+          }
+        }
+      }, 
+      "MonitorResponse": {
+        "id": "MonitorResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "MonitorDescription"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "version": {
+            "description": "API version number", 
+            "name": "version", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultipleMonitorCheckResponse": {
+        "id": "MultipleMonitorCheckResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "Description of an error. null otherwise.", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "MonitorCheck"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "version": {
+            "description": "API version number", 
+            "name": "version", 
+            "type": "string"
+          }
+        }
+      }, 
+      "MultipleMonitorResponse": {
+        "id": "MultipleMonitorResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "Description of an error. null otherwise.", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "description": "response body", 
+            "items": {
+              "$ref": "MonitorDescription"
+            }, 
+            "name": "result", 
+            "type": "array"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }, 
+          "version": {
+            "description": "API version number", 
+            "name": "version", 
+            "type": "string"
+          }
+        }
+      }
+    }, 
+    "resourcePath": "/monitors/v2", 
+    "swaggerVersion": "1.2"
+  }, 
+  "description": "Create and manage system monitors", 
+  "name": "monitors", 
+  "path": "/monitors", 
+  "url": "http://localhost:9999/monitors"
+}
