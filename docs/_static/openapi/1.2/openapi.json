@@ -3,55 +3,55 @@
   "apis": [
     {
       "description": "Create and manage API keys. Requires HTTP BASIC authentication", 
-      "path": "apis/clients.json"
+      "path": "APIs/clients.json"
     }, 
     {
       "description": "Register and manage apps", 
-      "path": "apis/apps.json"
+      "path": "APIs/apps.json"
     }, 
     {
       "description": "Move and manage data", 
-      "path": "apis/files.json"
+      "path": "APIs/files.json"
     }, 
     {
       "description": "Run and manage jobs", 
-      "path": "apis/jobs.json"
+      "path": "APIs/jobs.json"
     }, 
     {
       "description": "Create and manage metadata", 
-      "path": "apis/meta.json"
+      "path": "APIs/meta.json"
     }, 
     {
       "description": "Create and manage system monitors", 
-      "path": "apis/monitors.json"
+      "path": "APIs/monitors.json"
     }, 
     {
       "description": "Subscribe to and manage notifications", 
-      "path": "apis/notifications.json"
+      "path": "APIs/notifications.json"
     }, 
     {
       "description": "Create pre-authenticated, disposable URLs", 
-      "path": "apis/postits.json"
+      "path": "APIs/postits.json"
     }, 
     {
       "description": "Create and manage application users", 
-      "path": "apis/profiles.json"
+      "path": "APIs/profiles.json"
     }, 
     {
       "description": "Register and manage systems", 
-      "path": "apis/systems.json"
+      "path": "APIs/systems.json"
     }, 
     {
       "description": "Transform and stage data", 
-      "path": "apis/transforms.json"
+      "path": "APIs/transforms.json"
     }, 
     {
       "description": "Create and manage actors.", 
-      "path": "apis/actors.json"
+      "path": "APIs/actors.json"
     }, 
     {
       "description": "Tenant admin services.", 
-      "path": "apis/admin.json"
+      "path": "APIs/admin.json"
     }
   ], 
   "info": {

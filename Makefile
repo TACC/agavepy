@@ -12,7 +12,9 @@ deps:
 	mkdir -p openapi
 
 clean:
-	rm -rf schema openapi
+	rm -rf schema openapi && \
+	cd docs && \
+	make clean
 
 tests:
 	py.test agavepy/tests/test_agave_basic.py
