@@ -66,13 +66,7 @@ def get_context():
 
 
 def update_state(state):
-    """Update the actor's state with the new value of `state`. The `state` variable should be a dictionary."""
-    base = os.environ.get('_abaco_api_server')
-    token = os.environ.get('_abaco_access_token')
-    if 'localhost' in base:
-        base = 'http://172.17.0.1:8000'
-    url = '{}/actors/{}/state'.format(base,
-                                      os.environ.get('_abaco_actor_id'))
-    headers = {'Authorization': 'Bearer {}'.format(token)}
-    print(("update_state() using URL: {}".format(url)))
-    requests.post(url, headers=headers, json={'state':state})
+    """Update the actor's state with the new value of `state`. The `state` variable should be JSON serializable."""
+    ag = get_client()
+    actor_id = get_context()['actor_id']
+    ag.actors.updateState(actorId=actor_id, body=state)
