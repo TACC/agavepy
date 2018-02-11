@@ -64,6 +64,25 @@ def get_context():
     context.update(os.environ)
     return context
 
+def get_binary_message():
+    """Read the full binary message sent via the abaco named pipe."""
+    fd = os.open('/_abaco_binary_data', os.O_RDONLY | os.O_NONBLOCK)
+    msg = b''
+    while True:
+        frame = _read_bytes(fd)
+        if frame:
+            msg += frame
+        else:
+            return msg
+
+def _read_bytes(fifo, n=4069):
+    """Read at most n bytes from a pipe at path `fifo`."""
+    try:
+        return os.read(fifo, n)
+    except OSError:
+        # an empty fifo will return a Resource temporarily unavailable OSError (Errno 11)
+        # since we explicitly support a single message protocol, this means we are done
+        return None
 
 def update_state(state):
     """Update the actor's state with the new value of `state`. The `state` variable should be JSON serializable."""
