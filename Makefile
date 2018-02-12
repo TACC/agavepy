@@ -1,6 +1,6 @@
 
 docs: deps
-	python build/swagger_to_rst.py && \
+	python scripts/swagger_to_rst.py && \
 	cd docs && \
 	make openapi && \
 	make schema && \
