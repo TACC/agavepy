@@ -241,6 +241,130 @@
         "path": "/actors/v2/{actorId}/messages"
       }, 
       {
+        "description": "Work with an actor's state.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "getState", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the actor.", 
+                "name": "actorId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the actor database"
+              }
+            ], 
+            "summary": "Get the current state for an actor.", 
+            "type": "ActorStateResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "updateState", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the actor.", 
+                "name": "actorId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "", 
+                "description": "The value of the state. Should be JSON-serializable.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "summary": "Update an actor's state with a JSON-serializable object.", 
+            "type": "ActorStateRequestResponse"
+          }
+        ], 
+        "path": "/actors/v2/{actorId}/state"
+      }, 
+      {
+        "description": "Work with an actor's permissions.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "getPermissions", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the actor.", 
+                "name": "actorId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the actor database"
+              }
+            ], 
+            "summary": "Get the current permissions for an actor.", 
+            "type": "ActorPermissionsResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "updatePermissions", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the actor.", 
+                "name": "actorId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "", 
+                "description": "The permission record; user and level fields required.", 
+                "name": "body", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "PermissionsUpdateRequest"
+              }
+            ], 
+            "summary": "Update an actor's permissions with a new permission for a user.", 
+            "type": "ActorPermissionsRequestResponse"
+          }
+        ], 
+        "path": "/actors/v2/{actorId}/permissions"
+      }, 
+      {
         "description": "Work with actor workers.", 
         "has_websocket": false, 
         "operations": [
@@ -555,33 +679,6 @@
             ], 
             "summary": "Summary data of all actor executions.", 
             "type": "ExecutionsSummaryResponse"
-          }, 
-          {
-            "is_websocket": false, 
-            "method": "POST", 
-            "nickname": "addExecution", 
-            "notes": "", 
-            "parameters": [
-              {
-                "allowMultiple": false, 
-                "description": "The id of the actor.", 
-                "name": "actorId", 
-                "paramType": "path", 
-                "required": true, 
-                "type": "string"
-              }, 
-              {
-                "allowMultiple": false, 
-                "defaultValue": "", 
-                "description": "The description of the actor execution to add.", 
-                "name": "body", 
-                "paramType": "body", 
-                "required": true, 
-                "type": "ActorExecution"
-              }
-            ], 
-            "summary": "Register an actor execution.", 
-            "type": "SingleActorExecutionResponse"
           }
         ], 
         "path": "/actors/v2/{actorId}/executions"
@@ -844,6 +941,108 @@
           "result": {
             "name": "result", 
             "type": "EmptyActorNonceRequestResponse"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ActorPermissions": {
+        "id": "ActorPermissions", 
+        "name": "", 
+        "properties": {
+          "permissions": {
+            "description": "The dictionary of permissions associated with the actor.", 
+            "name": "permissions", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ActorPermissionsRequestResponse": {
+        "id": "ActorPermissionsRequestResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "ActorPermissionsResponse"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ActorPermissionsResponse": {
+        "id": "ActorPermissionsResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "ActorPermissions"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ActorState": {
+        "id": "ActorState", 
+        "name": "", 
+        "properties": {
+          "state": {
+            "description": "The current state of the actor.", 
+            "name": "state", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ActorStateRequestResponse": {
+        "id": "ActorStateRequestResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "ActorState"
+          }, 
+          "status": {
+            "description": "success or failure", 
+            "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "ActorStateResponse": {
+        "id": "ActorStateResponse", 
+        "name": "", 
+        "properties": {
+          "message": {
+            "description": "success or failure", 
+            "name": "message", 
+            "type": "string"
+          }, 
+          "result": {
+            "name": "result", 
+            "type": "ActorState"
           }, 
           "status": {
             "description": "success or failure", 
@@ -1244,6 +1443,22 @@
           "status": {
             "description": "success or failure", 
             "name": "status", 
+            "type": "string"
+          }
+        }
+      }, 
+      "PermissionsUpdateRequest": {
+        "id": "PermissionsUpdateRequest", 
+        "name": "", 
+        "properties": {
+          "level": {
+            "description": "The level associated with the permission.", 
+            "name": "level", 
+            "type": "string"
+          }, 
+          "user": {
+            "description": "The user associated with the permission.", 
+            "name": "user", 
             "type": "string"
           }
         }

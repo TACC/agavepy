@@ -1,0 +1,17 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/PermissionsUpdateRequest.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "level": {
+      "description": "The level associated with the permission.", 
+      "type": "string"
+    }, 
+    "user": {
+      "description": "The user associated with the permission.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy PermissionsUpdateRequest schema", 
+  "type": "object"
+}

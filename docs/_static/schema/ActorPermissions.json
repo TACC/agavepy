@@ -1,0 +1,13 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/ActorPermissions.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "permissions": {
+      "description": "The dictionary of permissions associated with the actor.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy ActorPermissions schema", 
+  "type": "object"
+}

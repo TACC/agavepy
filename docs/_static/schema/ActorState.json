@@ -1,0 +1,13 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/ActorState.json", 
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "properties": {
+    "state": {
+      "description": "The current state of the actor.", 
+      "type": "string"
+    }
+  }, 
+  "required": [], 
+  "title": "AgavePy ActorState schema", 
+  "type": "object"
+}
