@@ -4,8 +4,10 @@ Module to facilitate writing actor containers for the abaco platform. See https:
 """
 
 import ast
+import cloudpickle
 import os
 import requests
+import socket
 
 from .agave import Agave, AgaveError, AttrDict
 
@@ -89,3 +91,48 @@ def update_state(state):
     ag = get_client()
     actor_id = get_context()['actor_id']
     ag.actors.updateState(actorId=actor_id, body=state)
+
+
+def send_python_result(obj):
+    """
+    Send an arbitrary python object, `obj` 
+    :param obj: a python object to return as a result.
+    :return: 
+    """
+    try:
+        b = cloudpickle.dumps(obj)
+    except Exception as e:
+        msg = "Could not serialize {}; got exception: {}".format(obj, e)
+        print(msg)
+        raise AgaveError(msg)
+    send_bytes_result(b)
+
+def send_bytes_result(b):
+    """
+    Send a result `b` which should be a bytes object to the Abaco system.
+    `b` must be shorter than MAX_RESULT_LENGTH configured for the Abaco instance
+    or else 
+    """
+    if not isinstance(b, bytes):
+        msg = "send_bytes_result did not receive bytes, got: {}".format(b)
+        print(msg)
+        raise AgaveError(msg)
+    sock = _get_results_socket()
+    try:
+        sock.send(b)
+    except Exception as e:
+        msg = "Got exception sending bytes over results socket: {}".format(e)
+        print(msg)
+        raise AgaveError(msg)
+
+def _get_results_socket():
+    """Instantiate the results socket for sending binary results."""
+    client = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+    sock = '/_abaco_results.sock'
+    try:
+        client.connect(sock)
+    except (FileNotFoundError, ConnectionError) as e:
+        msg = "Exception connecting to results socket: {}".format(e)
+        print(msg)
+        raise AgaveError(msg)
+    return client
