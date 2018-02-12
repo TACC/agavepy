@@ -10972,12 +10972,32 @@
                         "id": "ActorMessageRequestResponse",
                         "name": ""
                    },
-                    "ActorStateResponse": {
+                    "ActorState": {
                         "properties": {
                             "state": {
                                 "type": "string",
                                 "description": "The current state of the actor.",
                                 "name": "state"
+                            }
+                        },
+                        "id": "ActorState",
+                        "name": ""
+                    },
+                    "ActorStateResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "ActorState",
+                                "name": "result"
                             }
                         },
                         "id": "ActorStateResponse",
@@ -10996,7 +11016,7 @@
                                 "name": "message"
                             },
                             "result": {
-                                "type": "ActorStateResponse",
+                                "type": "ActorState",
                                 "name": "result"
                             }
                         },
