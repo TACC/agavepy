@@ -11023,12 +11023,32 @@
                         "id": "ActorStateRequestResponse",
                         "name": ""
                    },
-                    "ActorPermissionsResponse": {
+                    "ActorPermissions": {
                         "properties": {
                             "permissions": {
                                 "type": "string",
-                                "description": "The permissions associated with the actor.",
+                                "description": "The dictionary of permissions associated with the actor.",
                                 "name": "permissions"
+                            }
+                        },
+                        "id": "ActorPermissions",
+                        "name": ""
+                    },
+                    "ActorPermissionsResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "ActorPermissions",
+                                "name": "result"
                             }
                         },
                         "id": "ActorPermissionsResponse",
