@@ -4,21 +4,15 @@ AgavePy
 
 .. image:: https://badge.fury.io/py/agavepy.svg
    :target: http://badge.fury.io/py/agavepy
-   :alt: PyPI package
 
 .. image:: https://travis-ci.org/TACC/agavepy.svg?branch=develop
-    :target: https://travis-ci.org/TACC/agavepy
-   :alt: Travis CI build status (Linux)
-
-.. image:: https://codecov.io/github/TACC/agavepy/coverage.svg?branch=master
-   :target: https://codecov.io/github/TACC/agavepy?branch=develop
-   :alt: Code Coverage
+   :target: https://travis-ci.org/TACC/agavepy
 
 .. image:: https://readthedocs.org/projects/agavepy/badge/?version=latest
    :target: https://readthedocs.org/projects/agavepy/?badge=latest
-   :alt: Documentation Status
 
-Python2/3 binding for TACC.Cloud `Agave`_ and `Abaco`_ APIs.
+
+**Python2/3 binding for TACC.Cloud `Agave`_ and `Abaco`_ APIs**
 
 - Documentation: https://agavepy.readthedocs.io/en/latest/
 - GitHub: https://github.com/TACC/agavepy
