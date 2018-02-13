@@ -20,7 +20,7 @@ AgavePy
 
 Python2/3 binding for TACC.Cloud `Agave`_ and `Abaco`_ APIs.
 
-- Documentation: http://agavepy.readthedocs.io/en/latest/
+- Documentation: https://agavepy.readthedocs.io/en/latest/
 - GitHub: https://github.com/TACC/agavepy
 - PyPI: https://pypi.python.org/pypi/agavepy
 - Free software: 3-Clause BSD License
