@@ -3,16 +3,18 @@ AgavePy
 =======
 
 .. image:: https://badge.fury.io/py/agavepy.svg
-   :target: http://badge.fury.io/py/agavepy
+    :target: http://badge.fury.io/py/agavepy
 
 .. image:: https://travis-ci.org/TACC/agavepy.svg?branch=develop
-   :target: https://travis-ci.org/TACC/agavepy
+    :target: https://travis-ci.org/TACC/agavepy
 
 .. image:: https://readthedocs.org/projects/agavepy/badge/?version=latest
-   :target: https://readthedocs.org/projects/agavepy/?badge=latest
+    :target: https://readthedocs.org/projects/agavepy/?badge=latest
 
+.. image:: https://img.shields.io/pypi/l/Django.svg
+    :target: https://raw.githubusercontent.com/TACC/agavepy/master/LICENSE
 
-**Python2/3 binding for TACC.Cloud `Agave`_ and `Abaco`_ APIs**
+**Python2/3 binding for TACC.Cloud Agave and Abaco APIs**
 
 - Documentation: https://agavepy.readthedocs.io/en/latest/
 - GitHub: https://github.com/TACC/agavepy
@@ -30,7 +32,7 @@ Install from PyPI_::
 Install from GitHub checkout::
 
     cd agavepy
-    python setup install
+    python setup.py install
 
 Quickstart
 ==========
