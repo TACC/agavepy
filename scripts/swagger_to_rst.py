@@ -1,4 +1,6 @@
 '''Converts Swagger 1.2 defs for TACC Cloud services to ReStructured Text'''
+from __future__ import absolute_import
+from __future__ import print_function
 from future import standard_library
 standard_library.install_aliases()
 
@@ -193,7 +195,7 @@ def write_swagger_1_2(res, filename='openapi', form='json'):
         f.write(json.dumps(swag, indent=2, sort_keys=True))
         f.close()
     except Exception as e:
-        print("Failure to write Index {}: {}".format(filename, e))
+        print(("Failure to write Index {}: {}".format(filename, e)))
         sys.exit(1)
 
     # individual api definitions
@@ -212,7 +214,7 @@ def write_swagger_1_2(res, filename='openapi', form='json'):
             f.write(json.dumps(api_def, indent=2, sort_keys=True))
             f.close()
         except Exception as e:
-            print("Failure to write API {}: {}".format(api_filename, e))
+            print(("Failure to write API {}: {}".format(api_filename, e)))
             sys.exit(1)
 
     return True
@@ -320,11 +322,11 @@ def main():
                         resp_schema_type = None
 
                         if resp_type in respmods:
-                            print("ResponseType: {}".format(resp_type))
+                            print(("ResponseType: {}".format(resp_type)))
                             try:
                                 resp_type_obj = respmods[resp_type]['result']['type']
                             except KeyError:
-                                 print(respmods[resp_type])
+                                 print((respmods[resp_type]))
                                  pass
                             if resp_type_obj == 'array':
                                 # get item $ref
