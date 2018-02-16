@@ -10247,6 +10247,41 @@
                                 "summary": "Send a message to an actor mailbox.",
                                 "type": "ActorMessageRequestResponse",
                                 "method": "POST"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the actor.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "actorId"
+                                    },
+                                    {
+                                        "description": "Optional dictionary of environmental variables",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "type": "dict",
+                                        "paramType": "query",
+                                        "name": "environment"
+                                    },
+                                    {
+                                        "defaultValue": "",
+                                        "description": "The description of the message to add.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "MessageRequest",
+                                        "paramType": "body",
+                                        "name": "message"
+                                    }
+                                ],
+                                "nickname": "sendBinaryMessage",
+                                "notes": "",
+                                "is_websocket": false,
+                                "summary": "Send a message to an actor mailbox.",
+                                "type": "ActorMessageRequestResponse",
+                                "method": "POST"
                             }
                         ],
                         "path": "/actors/v2/{actorId}/messages",
@@ -10737,6 +10772,49 @@
                         ],
                         "path": "/actors/v2/{actorId}/executions/{executionId}",
                         "description": "Manage a specific execution for a specific actor.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the actor.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "actorId"
+                                    },
+                                    {
+                                        "description": "The id of the execution.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "executionId"
+                                    }
+                                ],
+                                "type": "string",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the actor database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Get result for a specific actor execution.",
+                                "nickname": "getOneExecutionResult",
+                                "method": "GET"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/executions/{executionId}/results",
+                        "description": "Get result for a specific execution.",
                         "has_websocket": false
                     },
                     {
