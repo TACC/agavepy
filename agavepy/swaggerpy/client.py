@@ -125,9 +125,20 @@ class Operation(object):
                     else:
                         data[pname] = value
                 elif param_type == 'body':
-                    data = (value if isinstance(value, str)
-                            else json.dumps(value))
-                    headers = {'Content-type': 'application/json'}
+                    isjson = True
+                    if isinstance(value, str):
+                        data = value
+                    else:
+                        try:
+                            data = json.dumps(value)
+                        except TypeError:
+                            data = value
+                            if not headers.get('Content-type') \
+                                or headers.get('Content-type') == 'application/octet-stream':
+                                isjson = False
+                                headers['Content-type'] = 'application/octet-stream'
+                    if isjson:
+                        headers['Content-type'] = 'application/json'
                 else:
                     raise AssertionError(
                         "Unsupported paramType %s" %
