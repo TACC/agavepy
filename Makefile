@@ -1,4 +1,9 @@
 
+authors:
+	git log --format='%aN <%aE>' | sort -u --ignore-case | grep -v 'users.noreply.github.com' > AUTHORS && \
+	git add AUTHORS && \
+	git commit AUTHORS -m 'Updating AUTHORS'
+
 docs: deps
 	python scripts/swagger_to_rst.py && \
 	cd docs && \

@@ -411,6 +411,136 @@ Response:
 ---------
     * *A single ActorMessageResponse object*
 
+getState: Get the current state for an actor.
+=============================================
+``agavepy.actors.getState(actorId)``
+
+Parameters:
+-----------
+    * **actorId**: The id of the actor. (string)
+
+
+Response:
+---------
+    * *A single ActorState object*
+
+**ActorState schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ActorState.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "state": {
+          "description": "The current state of the actor.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ActorState schema", 
+      "type": "object"
+    }
+
+updateState: Update an actor's state with a JSON-serializable object.
+=====================================================================
+``agavepy.actors.updateState(actorId, body)``
+
+Parameters:
+-----------
+    * **actorId**: The id of the actor. (string)
+    * **body**: The value of the state. Should be JSON-serializable. (JSON, string)
+
+
+Response:
+---------
+    * *A single ActorState object*
+
+**ActorState schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ActorState.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "state": {
+          "description": "The current state of the actor.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ActorState schema", 
+      "type": "object"
+    }
+
+getPermissions: Get the current permissions for an actor.
+=========================================================
+``agavepy.actors.getPermissions(actorId)``
+
+Parameters:
+-----------
+    * **actorId**: The id of the actor. (string)
+
+
+Response:
+---------
+    * *A single ActorPermissions object*
+
+**ActorPermissions schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ActorPermissions.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "permissions": {
+          "description": "The dictionary of permissions associated with the actor.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ActorPermissions schema", 
+      "type": "object"
+    }
+
+updatePermissions: Update an actor's permissions with a new permission for a user.
+==================================================================================
+``agavepy.actors.updatePermissions(actorId, body)``
+
+Parameters:
+-----------
+    * **actorId**: The id of the actor. (string)
+    * **body**: The permission record; user and level fields required. (JSON, PermissionsUpdateRequest)
+
+
+**PermissionsUpdateRequest schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/PermissionsUpdateRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "level": {
+          "description": "The level associated with the permission.", 
+          "type": "string"
+        }, 
+        "user": {
+          "description": "The user associated with the permission.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy PermissionsUpdateRequest schema", 
+      "type": "object"
+    }
+
+Response:
+---------
+    * *A single ActorPermissionsResponse object*
+
 listWorkers: List the current workers for an actor.
 ===================================================
 ``agavepy.actors.listWorkers(actorId)``
@@ -795,62 +925,6 @@ Response:
       }, 
       "required": [], 
       "title": "AgavePy ExecutionsSummary schema", 
-      "type": "object"
-    }
-
-addExecution: Register an actor execution.
-==========================================
-``agavepy.actors.addExecution(actorId, body)``
-
-Parameters:
------------
-    * **actorId**: The id of the actor. (string)
-    * **body**: The description of the actor execution to add. (JSON, ActorExecution)
-
-
-Response:
----------
-    * *A single Execution object*
-
-**Execution schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/Execution.json", 
-      "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {
-        "actorId": {
-          "description": "The id of the associated actor.", 
-          "type": "string"
-        }, 
-        "cpu": {
-          "description": "CPU usage, in user jiffies, of this execution.", 
-          "type": "int"
-        }, 
-        "id": {
-          "description": "The id of this executions.", 
-          "type": "string"
-        }, 
-        "io": {
-          "description": "Block I/O usage, in number of 512-byte sectors read from and written to, by this execution.", 
-          "type": "int"
-        }, 
-        "owner": {
-          "description": "username of the owner of the actor.", 
-          "type": "string"
-        }, 
-        "runtime": {
-          "description": "Runtime, in milliseconds, of this execution.", 
-          "type": "int"
-        }, 
-        "status": {
-          "description": "status of the execution.", 
-          "type": "string"
-        }
-      }, 
-      "required": [], 
-      "title": "AgavePy Execution schema", 
       "type": "object"
     }
 

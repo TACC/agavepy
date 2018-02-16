@@ -2,11 +2,24 @@
 AgavePy
 =======
 
+.. image:: https://badge.fury.io/py/agavepy.svg
+    :target: http://badge.fury.io/py/agavepy
+
 .. image:: https://travis-ci.org/TACC/agavepy.svg?branch=develop
     :target: https://travis-ci.org/TACC/agavepy
 
-Python2/3 binding for TACC.Cloud `Agave`_ and `Abaco`_ APIs.
+.. image:: https://readthedocs.org/projects/agavepy/badge/?version=latest
+    :target: https://readthedocs.org/projects/agavepy/?badge=latest
 
+.. image:: https://img.shields.io/pypi/l/Django.svg
+    :target: https://raw.githubusercontent.com/TACC/agavepy/master/LICENSE
+
+**Python2/3 binding for TACC.Cloud Agave and Abaco APIs**
+
+- Documentation: https://agavepy.readthedocs.io/en/latest/
+- GitHub: https://github.com/TACC/agavepy
+- PyPI: https://pypi.python.org/pypi/agavepy
+- Free software: 3-Clause BSD License
 
 Installation
 ============
@@ -16,14 +29,10 @@ Install from PyPI_::
     pip install agavepy
 
 
-Documentation
-=============
+Install from GitHub checkout::
 
-A combination of hand-curated code examples, tutorials, and auto-generated API
-documentation can be found at AgavePy's ReadTheDocs site.
-
-- http://agavepy.readthedocs.io/en/latest/
-
+    cd agavepy
+    python setup.py install
 
 Quickstart
 ==========
