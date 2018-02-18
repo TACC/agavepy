@@ -263,6 +263,19 @@ Response:
       "type": "object"
     }
 
+delete: Deletes a job from the user's history.
+==============================================
+``agavepy.jobs.delete(jobId)``
+
+Parameters:
+-----------
+    * **jobId**: The id of the job. (string)
+
+
+Response:
+---------
+    * *String*
+
 get: Get details of the job with the specific job id.
 =====================================================
 ``agavepy.jobs.get(jobId)``
@@ -542,19 +555,6 @@ Response:
       "type": "object"
     }
 
-delete: Deletes a job from the user's history.
-==============================================
-``agavepy.jobs.delete(jobId)``
-
-Parameters:
------------
-    * **jobId**: The id of the job. (string)
-
-
-Response:
----------
-    * *String*
-
 getHistory: Get the history of this job.
 ========================================
 ``agavepy.jobs.getHistory(jobId, limit=250, offset=0)``
@@ -595,6 +595,19 @@ Response:
       "title": "AgavePy JobHistory schema", 
       "type": "object"
     }
+
+deletePermissions: Deletes all permissions on an job.
+=====================================================
+``agavepy.jobs.deletePermissions(jobId)``
+
+Parameters:
+-----------
+    * **jobId**: The id of the job. (string)
+
+
+Response:
+---------
+    * *String*
 
 listPermissions: Get the permission ACL for this job.
 =====================================================
@@ -682,18 +695,19 @@ Response:
 ---------
     * *String*
 
-deletePermissions: Deletes all permissions on an job.
-=====================================================
-``agavepy.jobs.deletePermissions(jobId)``
+deletePermissionsForUser: Deletes all permissions for the given user on an job.
+===============================================================================
+``agavepy.jobs.deletePermissionsForUser(uniqueName, username)``
 
 Parameters:
 -----------
-    * **jobId**: The id of the job. (string)
+    * **uniqueName**: The id of the application. The application id is made up of the name and version separated by a dash. (string)
+    * **username**: The username of the api user associated with the permission (string)
 
 
 Response:
 ---------
-    * *String*
+    * *None*
 
 listPermissionsForUser: Get a specific user's permissions for a job.
 ====================================================================
@@ -782,20 +796,6 @@ Parameters:
 Response:
 ---------
     * *String*
-
-deletePermissionsForUser: Deletes all permissions for the given user on an job.
-===============================================================================
-``agavepy.jobs.deletePermissionsForUser(uniqueName, username)``
-
-Parameters:
------------
-    * **uniqueName**: The id of the application. The application id is made up of the name and version separated by a dash. (string)
-    * **username**: The username of the api user associated with the permission (string)
-
-
-Response:
----------
-    * *None*
 
 getStatus: Get the status of the job.
 =====================================

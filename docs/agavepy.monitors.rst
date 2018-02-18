@@ -4,84 +4,6 @@ agavepy.monitors
 
 Summary: Create and manage system monitors
 
-list: Retrieve Monitor for a specific resource.
-===============================================
-``agavepy.monitors.list(active=None, limit=250, offset=0, target=None)``
-
-Parameters:
------------
-    * **target**: The target to search for. (string)
-    * **active**: Filter by monitors that are active or inactive. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
-
-
-Response:
----------
-    * *Array of MonitorDescription objects*
-
-**MonitorDescription schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/MonitorDescription.json", 
-      "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {
-        "active": {
-          "description": "Whether this monitor is currently active.", 
-          "type": "boolean"
-        }, 
-        "created": {
-          "description": "A timestamp indicating when this Monitor was created.", 
-          "type": "string"
-        }, 
-        "frequency": {
-          "description": "The interval in minutes on which this monitor will run. Minimum is 5. Default is 720.", 
-          "type": "integer"
-        }, 
-        "id": {
-          "description": "The UUID for this monitor.", 
-          "type": "string"
-        }, 
-        "internalUsername": {
-          "description": "Internal user account used to perform the check.", 
-          "type": "string"
-        }, 
-        "lastCheck": {
-          "description": "The results of the last check run by this monitor.", 
-          "type": "MonitorCheck"
-        }, 
-        "lastSuccess": {
-          "description": "A timestamp indicating the last time this Monitor succeeded in ISO 8601 format", 
-          "type": "string"
-        }, 
-        "lastUpdated": {
-          "description": "A timestamp indicating the last time this Monitor was updated in ISO 8601 format", 
-          "type": "string"
-        }, 
-        "nextUpdate": {
-          "description": "A timestamp indicating the next time this Monitor will be run in ISO 8601 format", 
-          "type": "string"
-        }, 
-        "owner": {
-          "description": "The API user who owns this Monitor.", 
-          "type": "string"
-        }, 
-        "target": {
-          "description": "The id of the sytem to be monitored. This must be an active system registered with the Systems service.", 
-          "type": "boolean"
-        }, 
-        "updateSystemStatus": {
-          "description": "Whether this Monitor should update the system status when the results change. You must have the ADMIN role on the target system to use this feature.", 
-          "type": "boolean"
-        }
-      }, 
-      "required": [], 
-      "title": "AgavePy MonitorDescription schema", 
-      "type": "object"
-    }
-
 add: Update or Add new Monitor.
 ===============================
 ``agavepy.monitors.add(body)``
@@ -192,6 +114,110 @@ Response:
       }, 
       "required": [], 
       "title": "AgavePy MonitorDescription schema", 
+      "type": "object"
+    }
+
+list: Retrieve Monitor for a specific resource.
+===============================================
+``agavepy.monitors.list(active=None, limit=250, offset=0, target=None)``
+
+Parameters:
+-----------
+    * **target**: The target to search for. (string)
+    * **active**: Filter by monitors that are active or inactive. (string)
+    * **limit**: The max number of results. (integer)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+
+
+Response:
+---------
+    * *Array of MonitorDescription objects*
+
+**MonitorDescription schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/MonitorDescription.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "active": {
+          "description": "Whether this monitor is currently active.", 
+          "type": "boolean"
+        }, 
+        "created": {
+          "description": "A timestamp indicating when this Monitor was created.", 
+          "type": "string"
+        }, 
+        "frequency": {
+          "description": "The interval in minutes on which this monitor will run. Minimum is 5. Default is 720.", 
+          "type": "integer"
+        }, 
+        "id": {
+          "description": "The UUID for this monitor.", 
+          "type": "string"
+        }, 
+        "internalUsername": {
+          "description": "Internal user account used to perform the check.", 
+          "type": "string"
+        }, 
+        "lastCheck": {
+          "description": "The results of the last check run by this monitor.", 
+          "type": "MonitorCheck"
+        }, 
+        "lastSuccess": {
+          "description": "A timestamp indicating the last time this Monitor succeeded in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "lastUpdated": {
+          "description": "A timestamp indicating the last time this Monitor was updated in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "nextUpdate": {
+          "description": "A timestamp indicating the next time this Monitor will be run in ISO 8601 format", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "The API user who owns this Monitor.", 
+          "type": "string"
+        }, 
+        "target": {
+          "description": "The id of the sytem to be monitored. This must be an active system registered with the Systems service.", 
+          "type": "boolean"
+        }, 
+        "updateSystemStatus": {
+          "description": "Whether this Monitor should update the system status when the results change. You must have the ADMIN role on the target system to use this feature.", 
+          "type": "boolean"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy MonitorDescription schema", 
+      "type": "object"
+    }
+
+delete: Deletes a monitor.
+==========================
+``agavepy.monitors.delete(monitorId)``
+
+Parameters:
+-----------
+    * **monitorId**: The id of the monitor (string)
+
+
+Response:
+---------
+    * *A single EmptyMonitor object*
+
+**EmptyMonitor schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/EmptyMonitor.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {}, 
+      "required": [], 
+      "title": "AgavePy EmptyMonitor schema", 
       "type": "object"
     }
 
@@ -380,32 +406,6 @@ Response:
       }, 
       "required": [], 
       "title": "AgavePy MonitorDescription schema", 
-      "type": "object"
-    }
-
-delete: Deletes a monitor.
-==========================
-``agavepy.monitors.delete(monitorId)``
-
-Parameters:
------------
-    * **monitorId**: The id of the monitor (string)
-
-
-Response:
----------
-    * *A single EmptyMonitor object*
-
-**EmptyMonitor schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/EmptyMonitor.json", 
-      "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {}, 
-      "required": [], 
-      "title": "AgavePy EmptyMonitor schema", 
       "type": "object"
     }
 

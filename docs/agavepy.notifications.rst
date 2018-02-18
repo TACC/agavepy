@@ -170,6 +170,32 @@ Response:
       "type": "object"
     }
 
+delete: Remove notification from the system.
+============================================
+``agavepy.notifications.delete(uuid)``
+
+Parameters:
+-----------
+    * **uuid**: The uuid of the notification item (string)
+
+
+Response:
+---------
+    * *A single EmptyNotification object*
+
+**EmptyNotification schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/EmptyNotification.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {}, 
+      "required": [], 
+      "title": "AgavePy EmptyNotification schema", 
+      "type": "object"
+    }
+
 get: Retrieve notification.
 ===========================
 ``agavepy.notifications.get(uuid)``
@@ -332,32 +358,6 @@ Response:
       }, 
       "required": [], 
       "title": "AgavePy Notification schema", 
-      "type": "object"
-    }
-
-delete: Remove notification from the system.
-============================================
-``agavepy.notifications.delete(uuid)``
-
-Parameters:
------------
-    * **uuid**: The uuid of the notification item (string)
-
-
-Response:
----------
-    * *A single EmptyNotification object*
-
-**EmptyNotification schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/EmptyNotification.json", 
-      "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {}, 
-      "required": [], 
-      "title": "AgavePy EmptyNotification schema", 
       "type": "object"
     }
 

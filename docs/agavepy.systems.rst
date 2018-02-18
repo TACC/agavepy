@@ -4,74 +4,6 @@ agavepy.systems
 
 Summary: Register and manage systems
 
-list: Show all systems available to the user.
-=============================================
-``agavepy.systems.list(default=None, limit=250, offset=0, public=None, type=None)``
-
-Parameters:
------------
-    * **type**: The type of system to return (string)
-    * **default**: Should only default systems be returned (boolean)
-    * **public**: Should only publicly available systems be returned (boolean)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
-
-
-Response:
----------
-    * *Array of SystemSummary objects*
-
-**SystemSummary schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/SystemSummary.json", 
-      "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {
-        "default": {
-          "description": "Is the system the default for the authenticated user?", 
-          "type": "boolean"
-        }, 
-        "description": {
-          "description": "Verbose description of this system.", 
-          "type": "string"
-        }, 
-        "id": {
-          "description": "Unique identifier for this system.", 
-          "type": "string"
-        }, 
-        "name": {
-          "description": "Common name for this system.", 
-          "type": "string"
-        }, 
-        "public": {
-          "description": "Is the system publicly available?", 
-          "type": "boolean"
-        }, 
-        "status": {
-          "description": "The status of this system. Systems must be in UP status to be used.", 
-          "enum": [
-            "UP", 
-            "DOWN", 
-            "UNKNOWN"
-          ], 
-          "type": "string"
-        }, 
-        "type": {
-          "description": "The type of this system.", 
-          "enum": [
-            "EXECUTION", 
-            "STORAGE"
-          ], 
-          "type": "string"
-        }
-      }, 
-      "required": [], 
-      "title": "AgavePy SystemSummary schema", 
-      "type": "object"
-    }
-
 add: Add or update a system.
 ============================
 ``agavepy.systems.add(body)``
@@ -332,6 +264,87 @@ Response:
       "type": "object"
     }
 
+list: Show all systems available to the user.
+=============================================
+``agavepy.systems.list(default=None, limit=250, offset=0, public=None, type=None)``
+
+Parameters:
+-----------
+    * **type**: The type of system to return (string)
+    * **default**: Should only default systems be returned (boolean)
+    * **public**: Should only publicly available systems be returned (boolean)
+    * **limit**: The max number of results. (integer)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+
+
+Response:
+---------
+    * *Array of SystemSummary objects*
+
+**SystemSummary schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/SystemSummary.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "default": {
+          "description": "Is the system the default for the authenticated user?", 
+          "type": "boolean"
+        }, 
+        "description": {
+          "description": "Verbose description of this system.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "Unique identifier for this system.", 
+          "type": "string"
+        }, 
+        "name": {
+          "description": "Common name for this system.", 
+          "type": "string"
+        }, 
+        "public": {
+          "description": "Is the system publicly available?", 
+          "type": "boolean"
+        }, 
+        "status": {
+          "description": "The status of this system. Systems must be in UP status to be used.", 
+          "enum": [
+            "UP", 
+            "DOWN", 
+            "UNKNOWN"
+          ], 
+          "type": "string"
+        }, 
+        "type": {
+          "description": "The type of this system.", 
+          "enum": [
+            "EXECUTION", 
+            "STORAGE"
+          ], 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy SystemSummary schema", 
+      "type": "object"
+    }
+
+delete: Delete a system.
+========================
+``agavepy.systems.delete(systemId)``
+
+Parameters:
+-----------
+    * **systemId**: The unique id of the system (string)
+
+
+Response:
+---------
+    * *String*
+
 get: Find information about an individual system.
 =================================================
 ``agavepy.systems.get(systemId)``
@@ -473,6 +486,55 @@ Response:
       "title": "AgavePy System schema", 
       "type": "object"
     }
+
+manage: Perform a management action on the system.
+==================================================
+``agavepy.systems.manage(body, systemId)``
+
+Parameters:
+-----------
+    * **systemId**: The unique id of the system (string)
+    * **body**: The description of the system to update. (JSON, SystemOperationRequest)
+
+
+**SystemOperationRequest schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/SystemOperationRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "action": {
+          "description": "Action to perform on the system.", 
+          "enum": [
+            "ENABLE", 
+            "DISABLE", 
+            "PUBLISH", 
+            "UNPUBLISH", 
+            "SETDEFAULT", 
+            "UNSETDEFAULT", 
+            "SETGLOBALDEFAULT", 
+            "UNSETGLOBALDEFAULT", 
+            "CLONE"
+          ], 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The new system id of the cloned system", 
+          "type": "string"
+        }
+      }, 
+      "required": [
+        "action"
+      ], 
+      "title": "AgavePy SystemOperationRequest schema", 
+      "type": "object"
+    }
+
+Response:
+---------
+    * *String*
 
 update: Find information about an individual system.
 ====================================================
@@ -735,62 +797,13 @@ Response:
       "type": "object"
     }
 
-manage: Perform a management action on the system.
-==================================================
-``agavepy.systems.manage(body, systemId)``
+deleteRoles: Deletes all roles on a system.
+===========================================
+``agavepy.systems.deleteRoles(systemId)``
 
 Parameters:
 -----------
-    * **systemId**: The unique id of the system (string)
-    * **body**: The description of the system to update. (JSON, SystemOperationRequest)
-
-
-**SystemOperationRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/SystemOperationRequest.json", 
-      "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {
-        "action": {
-          "description": "Action to perform on the system.", 
-          "enum": [
-            "ENABLE", 
-            "DISABLE", 
-            "PUBLISH", 
-            "UNPUBLISH", 
-            "SETDEFAULT", 
-            "UNSETDEFAULT", 
-            "SETGLOBALDEFAULT", 
-            "UNSETGLOBALDEFAULT", 
-            "CLONE"
-          ], 
-          "type": "string"
-        }, 
-        "id": {
-          "description": "The new system id of the cloned system", 
-          "type": "string"
-        }
-      }, 
-      "required": [
-        "action"
-      ], 
-      "title": "AgavePy SystemOperationRequest schema", 
-      "type": "object"
-    }
-
-Response:
----------
-    * *String*
-
-delete: Delete a system.
-========================
-``agavepy.systems.delete(systemId)``
-
-Parameters:
------------
-    * **systemId**: The unique id of the system (string)
+    * **systemId**: The id of the system. (string)
 
 
 Response:
@@ -882,13 +895,14 @@ Response:
 ---------
     * *String*
 
-deleteRoles: Deletes all roles on a system.
-===========================================
-``agavepy.systems.deleteRoles(systemId)``
+deleteRoleForUser: Deletes all roles on a system.
+=================================================
+``agavepy.systems.deleteRoleForUser(systemId, username)``
 
 Parameters:
 -----------
     * **systemId**: The id of the system. (string)
+    * **username**: The username of the api user associated with the role (string)
 
 
 Response:
@@ -982,14 +996,13 @@ Response:
 ---------
     * *String*
 
-deleteRoleForUser: Deletes all roles on a system.
-=================================================
-``agavepy.systems.deleteRoleForUser(systemId, username)``
+deleteCredentials: Deletes all credentials registered to a system.
+==================================================================
+``agavepy.systems.deleteCredentials(systemId)``
 
 Parameters:
 -----------
     * **systemId**: The id of the system. (string)
-    * **username**: The username of the api user associated with the role (string)
 
 
 Response:
@@ -1158,13 +1171,14 @@ Response:
 ---------
     * *String*
 
-deleteCredentials: Deletes all credentials registered to a system.
-==================================================================
-``agavepy.systems.deleteCredentials(systemId)``
+deleteCredentialsForInternalUser: Deletes all credentials registered to a system.
+=================================================================================
+``agavepy.systems.deleteCredentialsForInternalUser(internalUsername, systemId)``
 
 Parameters:
 -----------
     * **systemId**: The id of the system. (string)
+    * **internalUsername**: The username of a internal user on this system. (string)
 
 
 Response:
@@ -1335,14 +1349,15 @@ Response:
 ---------
     * *String*
 
-deleteCredentialsForInternalUser: Deletes all credentials registered to a system.
-=================================================================================
-``agavepy.systems.deleteCredentialsForInternalUser(internalUsername, systemId)``
+deleteCredentialsForInternalUserByType: Deletes the internal user credentials for the given credential type on a system.
+========================================================================================================================
+``agavepy.systems.deleteCredentialsForInternalUserByType(credentialType, internalUsername, systemId)``
 
 Parameters:
 -----------
     * **systemId**: The id of the system. (string)
     * **internalUsername**: The username of a internal user on this system. (string)
+    * **credentialType**: The configuration type to which to apply this credential. (string)
 
 
 Response:
@@ -1510,21 +1525,6 @@ Parameters:
       "title": "AgavePy UserCredential schema", 
       "type": "object"
     }
-
-Response:
----------
-    * *String*
-
-deleteCredentialsForInternalUserByType: Deletes the internal user credentials for the given credential type on a system.
-========================================================================================================================
-``agavepy.systems.deleteCredentialsForInternalUserByType(credentialType, internalUsername, systemId)``
-
-Parameters:
------------
-    * **systemId**: The id of the system. (string)
-    * **internalUsername**: The username of a internal user on this system. (string)
-    * **credentialType**: The configuration type to which to apply this credential. (string)
-
 
 Response:
 ---------

@@ -4,66 +4,6 @@ agavepy.actors
 
 Summary: Create and manage actors.
 
-list: List actors
-=================
-``agavepy.actors.list(limit=250, offset=0)``
-
-Parameters:
------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
-
-
-Response:
----------
-    * *Array of Actor objects*
-
-**Actor schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/Actor.json", 
-      "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {
-        "defaultEnvironment": {
-          "description": "Default environmental variables and values.", 
-          "type": "dict"
-        }, 
-        "description": {
-          "description": "Description of this actor.", 
-          "type": "string"
-        }, 
-        "id": {
-          "description": "The unique id of the actor.", 
-          "type": "string"
-        }, 
-        "image": {
-          "description": "Docker image associated with the actor.", 
-          "type": "string"
-        }, 
-        "owner": {
-          "description": "username of the owner of the actor.", 
-          "type": "string"
-        }, 
-        "privileged": {
-          "description": "Whether this actor runs in privileged mode.", 
-          "type": "boolean"
-        }, 
-        "stateless": {
-          "description": "Whether the actor stores private state.", 
-          "type": "boolean"
-        }, 
-        "status": {
-          "description": "Current status of the actor.", 
-          "type": "string"
-        }
-      }, 
-      "required": [], 
-      "title": "AgavePy Actor schema", 
-      "type": "object"
-    }
-
 add: Register an actor.
 =======================
 ``agavepy.actors.add(body)``
@@ -168,6 +108,79 @@ Response:
       "title": "AgavePy Actor schema", 
       "type": "object"
     }
+
+list: List actors
+=================
+``agavepy.actors.list(limit=250, offset=0)``
+
+Parameters:
+-----------
+    * **limit**: The max number of results. (integer)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+
+
+Response:
+---------
+    * *Array of Actor objects*
+
+**Actor schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/Actor.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "defaultEnvironment": {
+          "description": "Default environmental variables and values.", 
+          "type": "dict"
+        }, 
+        "description": {
+          "description": "Description of this actor.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the actor.", 
+          "type": "string"
+        }, 
+        "image": {
+          "description": "Docker image associated with the actor.", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "username of the owner of the actor.", 
+          "type": "string"
+        }, 
+        "privileged": {
+          "description": "Whether this actor runs in privileged mode.", 
+          "type": "boolean"
+        }, 
+        "stateless": {
+          "description": "Whether the actor stores private state.", 
+          "type": "boolean"
+        }, 
+        "status": {
+          "description": "Current status of the actor.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy Actor schema", 
+      "type": "object"
+    }
+
+delete: Delete a specific actor.
+================================
+``agavepy.actors.delete(actorId)``
+
+Parameters:
+-----------
+    * **actorId**: The id of the actor. (string)
+
+
+Response:
+---------
+    * *A single String object*
 
 get: Retrieve details about a specific actor.
 =============================================
@@ -333,19 +346,6 @@ Response:
       "title": "AgavePy Actor schema", 
       "type": "object"
     }
-
-delete: Delete a specific actor.
-================================
-``agavepy.actors.delete(actorId)``
-
-Parameters:
------------
-    * **actorId**: The id of the actor. (string)
-
-
-Response:
----------
-    * *A single String object*
 
 getMessages: Get the current number of messages for an actor.
 =============================================================
@@ -541,69 +541,6 @@ Response:
 ---------
     * *A single ActorPermissionsResponse object*
 
-listWorkers: List the current workers for an actor.
-===================================================
-``agavepy.actors.listWorkers(actorId)``
-
-Parameters:
------------
-    * **actorId**: The id of the actor. (string)
-
-
-Response:
----------
-    * *Array of ActorWorker objects*
-
-**ActorWorker schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/ActorWorker.json", 
-      "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {
-        "cid": {
-          "description": "Container id of this worker.", 
-          "type": "string"
-        }, 
-        "host_id": {
-          "description": "id of the host where this worker is running.", 
-          "type": "string"
-        }, 
-        "host_ip": {
-          "description": "IP address of the host where this worker is running.", 
-          "type": "string"
-        }, 
-        "id": {
-          "description": "The unique id of this worker.", 
-          "type": "string"
-        }, 
-        "image": {
-          "description": "Docker image associated with the actor.", 
-          "type": "string"
-        }, 
-        "last_execution": {
-          "description": "Last execution for this worker.", 
-          "type": "int"
-        }, 
-        "location": {
-          "description": "Location of docker daemon that this worker is using.", 
-          "type": "string"
-        }, 
-        "status": {
-          "description": "status of the worker.", 
-          "type": "string"
-        }, 
-        "tenant": {
-          "description": "tenant this worker belongs to.", 
-          "type": "string"
-        }
-      }, 
-      "required": [], 
-      "title": "AgavePy ActorWorker schema", 
-      "type": "object"
-    }
-
 addWorker: Add a worker to an actor.
 ====================================
 ``agavepy.actors.addWorker(actorId, body)``
@@ -636,19 +573,18 @@ Response:
 ---------
     * *A single EmptyActorWorkerRequestResponse object*
 
-getWorker: Get the details about a specific worker for an actor.
-================================================================
-``agavepy.actors.getWorker(actorId, workerId)``
+listWorkers: List the current workers for an actor.
+===================================================
+``agavepy.actors.listWorkers(actorId)``
 
 Parameters:
 -----------
     * **actorId**: The id of the actor. (string)
-    * **workerId**: The id of the worker. (string)
 
 
 Response:
 ---------
-    * *A single ActorWorker object*
+    * *Array of ActorWorker objects*
 
 **ActorWorker schema**
 
@@ -714,58 +650,67 @@ Response:
 ---------
     * *A single String object*
 
-listNonces: List the current nonces for an actor.
-=================================================
-``agavepy.actors.listNonces(actorId)``
+getWorker: Get the details about a specific worker for an actor.
+================================================================
+``agavepy.actors.getWorker(actorId, workerId)``
 
 Parameters:
 -----------
     * **actorId**: The id of the actor. (string)
+    * **workerId**: The id of the worker. (string)
 
 
 Response:
 ---------
-    * *Array of ActorNonce objects*
+    * *A single ActorWorker object*
 
-**ActorNonce schema**
+**ActorWorker schema**
 
 .. code-block:: javascript
 
     {
-      "$id": "http://agavepy.readthedocs.io/en/latest/ActorNonce.json", 
+      "$id": "http://agavepy.readthedocs.io/en/latest/ActorWorker.json", 
       "$schema": "http://json-schema.org/draft-07/schema#", 
       "properties": {
-        "actor_id": {
-          "description": "Actor id associated with nonce.", 
+        "cid": {
+          "description": "Container id of this worker.", 
           "type": "string"
         }, 
-        "create_time": {
-          "description": "Time stamp when nonce was created.", 
+        "host_id": {
+          "description": "id of the host where this worker is running.", 
+          "type": "string"
+        }, 
+        "host_ip": {
+          "description": "IP address of the host where this worker is running.", 
           "type": "string"
         }, 
         "id": {
-          "description": "The unique id of the nonce.", 
+          "description": "The unique id of this worker.", 
           "type": "string"
         }, 
-        "last_use_time": {
-          "description": "Last time nonce was used.", 
+        "image": {
+          "description": "Docker image associated with the actor.", 
           "type": "string"
         }, 
-        "level": {
-          "description": "Permission level associated with nonce.", 
-          "type": "string"
-        }, 
-        "max_uses": {
-          "description": "Max number of uses for this nonce.", 
-          "type": "string"
-        }, 
-        "remaining_uses": {
-          "description": "Remaining uses of nonce.", 
+        "last_execution": {
+          "description": "Last execution for this worker.", 
           "type": "int"
+        }, 
+        "location": {
+          "description": "Location of docker daemon that this worker is using.", 
+          "type": "string"
+        }, 
+        "status": {
+          "description": "status of the worker.", 
+          "type": "string"
+        }, 
+        "tenant": {
+          "description": "tenant this worker belongs to.", 
+          "type": "string"
         }
       }, 
       "required": [], 
-      "title": "AgavePy ActorNonce schema", 
+      "title": "AgavePy ActorWorker schema", 
       "type": "object"
     }
 
@@ -805,19 +750,18 @@ Response:
 ---------
     * *A single EmptyActorNonceRequestResponse object*
 
-getNonce: Get the details about a specific nonce for an actor.
-==============================================================
-``agavepy.actors.getNonce(actorId, nonceId)``
+listNonces: List the current nonces for an actor.
+=================================================
+``agavepy.actors.listNonces(actorId)``
 
 Parameters:
 -----------
     * **actorId**: The id of the actor. (string)
-    * **nonceId**: The id of the nonce. (string)
 
 
 Response:
 ---------
-    * *A single ActorNonce object*
+    * *Array of ActorNonce objects*
 
 **ActorNonce schema**
 
@@ -874,6 +818,62 @@ Parameters:
 Response:
 ---------
     * *A single String object*
+
+getNonce: Get the details about a specific nonce for an actor.
+==============================================================
+``agavepy.actors.getNonce(actorId, nonceId)``
+
+Parameters:
+-----------
+    * **actorId**: The id of the actor. (string)
+    * **nonceId**: The id of the nonce. (string)
+
+
+Response:
+---------
+    * *A single ActorNonce object*
+
+**ActorNonce schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/ActorNonce.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "actor_id": {
+          "description": "Actor id associated with nonce.", 
+          "type": "string"
+        }, 
+        "create_time": {
+          "description": "Time stamp when nonce was created.", 
+          "type": "string"
+        }, 
+        "id": {
+          "description": "The unique id of the nonce.", 
+          "type": "string"
+        }, 
+        "last_use_time": {
+          "description": "Last time nonce was used.", 
+          "type": "string"
+        }, 
+        "level": {
+          "description": "Permission level associated with nonce.", 
+          "type": "string"
+        }, 
+        "max_uses": {
+          "description": "Max number of uses for this nonce.", 
+          "type": "string"
+        }, 
+        "remaining_uses": {
+          "description": "Remaining uses of nonce.", 
+          "type": "int"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy ActorNonce schema", 
+      "type": "object"
+    }
 
 listExecutions: Summary data of all actor executions.
 =====================================================

@@ -12,7 +12,10 @@ BUILDDIR      = _build
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help Makefile
+.PHONY: help Makefile static-clean
+
+static-clean: openapi-clean schema-clean
+	true
 
 openapi: openapi-clean
 	mkdir -p _static/openapi/ && \
