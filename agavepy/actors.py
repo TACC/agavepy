@@ -4,10 +4,12 @@ Module to facilitate writing actor containers for the abaco platform. See https:
 """
 
 import ast
+from concurrent.futures import TimeoutError
 import cloudpickle
 import os
 import requests
 import socket
+import time
 
 from .agave import Agave, AgaveError, AttrDict
 
@@ -136,3 +138,184 @@ def _get_results_socket():
         print(msg)
         raise AgaveError(msg)
     return client
+
+
+class AbacoExecutor(object):
+    """Executor class that leverages an Abaco actor for executions"""
+
+    def __init__(self,
+                 # the agave oauth client to use to connect to the abaco instance
+                 ag,
+                 # use an existing actor; it must have been defined with an allowable image.
+                 actor_id=None,
+                 # specify an image to use for the abaco actor. it must be able to accept a message that contains a
+                 # callable and parameters and execute the callable.
+                 image=None,
+                 # if not specifying an image, one of a pre-defined set of strings that determines the image to use for the actor
+                 context=None,
+                 # the number of abaco workers to use for the actor
+                 num_workers=1,
+                 # timeout (in seconds) to wait for actor to be READY; for very large images, may need to increase this
+                 # to allow for longer download times on the abaco side.
+                 timeout=60):
+        self.ag = ag
+        self.timeout = timeout
+        if actor_id:
+            # make sure it exists:
+            rsp = ag.actors.get(actorId=actor_id)
+            self.actor_id = actor_id
+            self.status = rsp.get('status')
+            self.image = rsp.get('image')
+        else:
+            # this is a new actor:
+            self.image = None
+            if image:
+                self.image = image
+            elif context and hasattr(context, 'lower'):
+                # basic py3 image:
+                if context.lower() == 'py3':
+                    self.image = 'abacosamples/py3_func:dev'
+                # docker image with many scientific libraries pre-installed
+                elif context.lower() == 'py3-scipy':
+                    self.image = 'abacosamples/scipy'
+                # docker image used for the sd2e jupyter hub
+                elif context.lower() == 'sd2e-jupyter':
+                    self.image = 'sd2e/jupyteruser-batch'
+                # add support for other contexts as needed...
+            # provide a sensible default image
+            if not self.image:
+                self.image = 'abacosamples/py3_func:dev'
+            # register an Abaco actor with the appropriate image:
+            try:
+                rsp = ag.actors.add(body={'image': self.image})
+            except Exception as e:
+                raise AgaveError("Unable to register the actor; exception: {}".format(e))
+            self.actor_id = rsp['id']
+            self.status = 'SUBMITTED'
+
+        self.wait_until_ready()
+        self.num_workers = num_workers
+        if self.num_workers <= 1:
+            return
+        # register the workers:
+        try:
+            ag.actors.addWorker(actorId=self.actor_id,
+                                body={'num': self.num_workers})
+        except TypeError:
+            # this is an issue in agavepy; swallow these for now until it is fixed
+            pass
+        except Exception as e:
+            raise AgaveError("Unable to add workers for actor. Exceptoion: {}".format(e))
+
+    def _update_status(self):
+        status = self.ag.actors.get(actorId=self.actor_id).get('status')
+        self.status = status
+        return status
+
+    def _is_ready(self):
+        return self.status == 'READY'
+
+    def wait_until_ready(self, timeout=None):
+        now = time.time()
+        if timeout:
+            future = now + timeout
+        else:
+            future = float("inf")
+        while not self._is_ready() and time.time() < future:
+            self._update_status()
+            time.sleep(2)
+
+    def submit(self, fn, *args, **kwargs):
+        """Schedule the callable fn to run as fn(*args, **kwargs) and returns a
+        AbacoAsyncReponse Future object representing the execution of the callable."""
+
+        if not args:
+            args = []
+        if not kwargs:
+            kwargs = {}
+        message = cloudpickle.dumps({'func': fn, 'args': args, 'kwargs': kwargs})
+        headers = {'Content-Type': 'application/octet-stream'}
+        rsp = self.ag.actors.sendBinaryMessage(actorId=self.actor_id, message=message, headers=headers)
+        execution_id = rsp.get('executionId')
+        if not execution_id:
+            raise AgaveError("Error submitting function call. Did not get an execution id; response: {}".format(rsp))
+        return AbacoAsyncResponse(self.ag, self.actor_id, execution_id, )
+
+    def delete(self):
+        """ Delete this executor completely."""
+        self.ag.actors.delete(actorId=self.actor_id)
+
+
+    def blocking_call(self, fn, *args, **kwargs):
+        """Execute fn(*args, **kwargs) and block until the result completes. """
+        arsp = self.submit(fn, *args, **kwargs)
+        return arsp.result()
+
+
+# max time, in seconds, to sleep between status check calls for an execution
+MAX_SLEEP = 60
+
+def exp_backoff(prev, count):
+    # exponentially increase the sleep amount via the equation 2^(0.2*prev) every 10th time:
+    next = prev
+    if (count % 10) == 0:
+        next = 2.0 ** (prev * 0.2)
+    if next > MAX_SLEEP:
+        return MAX_SLEEP
+    return next
+
+class AbacoAsyncResponse(object):
+    """
+    Future class encapsulating an asynchronous execution performed via an Abaco actor.
+    """
+
+    def __init__(self, ag, actor_id, execution_id):
+        self.ag = ag
+        self.actor_id = actor_id
+        self.execution_id = execution_id
+        self.status = 'SUBMITTED'
+
+    def _update_status(self):
+        status = self.ag.actors.getExecution(actorId=self.actor_id, executionId=self.execution_id).get('status')
+        self.status = status
+        return status
+
+    def _is_done(self):
+        return self.status == 'COMPLETE'
+
+    def done(self):
+        """Return True if the call was successfully cancelled or finished running."""
+        self._update_status()
+        return self._is_done()
+
+    def running(self):
+        self._update_status()
+        return not self._is_done()
+
+    def result(self, timeout=None):
+        """
+        :param timeout: int,
+        :return:
+        """
+        now = time.time()
+        sleep = 0.5
+        count = 0
+        if timeout:
+            future = now + timeout
+        else:
+            future = float("inf")
+        while not self._is_done() and time.time() < future:
+            self._update_status()
+            count += 1
+            time.sleep(exp_backoff(sleep, count))
+        if time.time() > future and not self._is_done():
+            raise TimeoutError()
+        # result should be ready:
+        results = []
+        while True:
+            result = self.ag.actors.getOneExecutionResult(actorId=self.actor_id, executionId=self.execution_id).content
+            if not result:
+                break
+            results.append(cloudpickle.loads(result))
+        return results
+

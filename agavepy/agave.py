@@ -564,6 +564,9 @@ class Operation(object):
                     (self.operation == 'download'
                      or self.operation == 'downloadFromDefaultSystem')):
                 return resp
+            # if response is a result, return it directly as well:
+            if (self.resource == 'actors' and self.operation == 'getOneExecutionResult'):
+                return resp
             processed = self.post_process(resp.json(), self.return_type)
             result = processed['result'] if 'result' in processed else None
             # if operation is clients.create, save name
