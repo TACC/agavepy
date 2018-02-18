@@ -18,7 +18,7 @@ deps:
 	mkdir -p openapi
 
 clean:
-	rm -rf agavepy.egg-info build dist && \
+	rm -rf agavepy.egg-info build dist .cache && \
 	rm -rf schema openapi && \
 	cd docs && \
 	make clean

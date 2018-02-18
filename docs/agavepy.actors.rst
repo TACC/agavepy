@@ -378,6 +378,39 @@ Response:
       "type": "object"
     }
 
+sendBinaryMessage: Send a message to an actor mailbox.
+======================================================
+``agavepy.actors.sendBinaryMessage(actorId, message, environment=None)``
+
+Parameters:
+-----------
+    * **actorId**: The id of the actor. (string)
+    * **environment**: Optional dictionary of environmental variables (dict)
+    * **message**: The description of the message to add. (JSON, MessageRequest)
+
+
+**MessageRequest schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/MessageRequest.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {
+        "message": {
+          "description": "The message to send to the actor.", 
+          "type": "string"
+        }
+      }, 
+      "required": [], 
+      "title": "AgavePy MessageRequest schema", 
+      "type": "object"
+    }
+
+Response:
+---------
+    * *A single ActorMessageResponse object*
+
 sendMessage: Send a message to an actor mailbox.
 ================================================
 ``agavepy.actors.sendMessage(actorId, body, environment=None)``
@@ -983,6 +1016,20 @@ Response:
       "title": "AgavePy Execution schema", 
       "type": "object"
     }
+
+getOneExecutionResult: Get result for a specific actor execution.
+=================================================================
+``agavepy.actors.getOneExecutionResult(actorId, executionId)``
+
+Parameters:
+-----------
+    * **actorId**: The id of the actor. (string)
+    * **executionId**: The id of the execution. (string)
+
+
+Response:
+---------
+    * *None*
 
 getExecutionLogs: Get logs for a specific actor execution.
 ==========================================================

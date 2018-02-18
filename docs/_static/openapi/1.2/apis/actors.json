@@ -236,6 +236,41 @@
             ], 
             "summary": "Send a message to an actor mailbox.", 
             "type": "ActorMessageRequestResponse"
+          }, 
+          {
+            "is_websocket": false, 
+            "method": "POST", 
+            "nickname": "sendBinaryMessage", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the actor.", 
+                "name": "actorId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "Optional dictionary of environmental variables", 
+                "name": "environment", 
+                "paramType": "query", 
+                "required": false, 
+                "type": "dict"
+              }, 
+              {
+                "allowMultiple": false, 
+                "defaultValue": "", 
+                "description": "The description of the message to add.", 
+                "name": "message", 
+                "paramType": "body", 
+                "required": true, 
+                "type": "MessageRequest"
+              }
+            ], 
+            "summary": "Send a message to an actor mailbox.", 
+            "type": "ActorMessageRequestResponse"
           }
         ], 
         "path": "/actors/v2/{actorId}/messages"
@@ -725,6 +760,49 @@
           }
         ], 
         "path": "/actors/v2/{actorId}/executions/{executionId}"
+      }, 
+      {
+        "description": "Get result for a specific execution.", 
+        "has_websocket": false, 
+        "operations": [
+          {
+            "is_websocket": false, 
+            "method": "GET", 
+            "nickname": "getOneExecutionResult", 
+            "notes": "", 
+            "parameters": [
+              {
+                "allowMultiple": false, 
+                "description": "The id of the actor.", 
+                "name": "actorId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }, 
+              {
+                "allowMultiple": false, 
+                "description": "The id of the execution.", 
+                "name": "executionId", 
+                "paramType": "path", 
+                "required": true, 
+                "type": "string"
+              }
+            ], 
+            "responseMessages": [
+              {
+                "code": 403, 
+                "message": "Failed to authenticate the user"
+              }, 
+              {
+                "code": 500, 
+                "message": "The service was unable to query the actor database"
+              }
+            ], 
+            "summary": "Get result for a specific actor execution.", 
+            "type": "string"
+          }
+        ], 
+        "path": "/actors/v2/{actorId}/executions/{executionId}/results"
       }, 
       {
         "description": "Manage logs for a specific execution.", 
