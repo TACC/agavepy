@@ -177,17 +177,19 @@ class AbacoExecutor(object):
                     self.image = 'abacosamples/py3_func:dev'
                 # docker image with many scientific libraries pre-installed
                 elif context.lower() == 'py3-scipy':
-                    self.image = 'abacosamples/scipy'
+                    self.image = 'abacosamples/py3_sci_base_func'
                 # docker image used for the sd2e jupyter hub
                 elif context.lower() == 'sd2e-jupyter':
-                    self.image = 'sd2e/jupyteruser-batch'
+                    self.image = 'sd2e/jupyteruser_func'
                 # add support for other contexts as needed...
             # provide a sensible default image
             if not self.image:
                 self.image = 'abacosamples/py3_func:dev'
             # register an Abaco actor with the appropriate image:
             try:
-                rsp = ag.actors.add(body={'image': self.image})
+                rsp = ag.actors.add(body={'image': self.image,
+                                          'stateless': True,
+                                          'name': 'agpy_abaco_executor'})
             except Exception as e:
                 raise AgaveError("Unable to register the actor; exception: {}".format(e))
             self.actor_id = rsp['id']
@@ -240,6 +242,18 @@ class AbacoExecutor(object):
         if not execution_id:
             raise AgaveError("Error submitting function call. Did not get an execution id; response: {}".format(rsp))
         return AbacoAsyncResponse(self.ag, self.actor_id, execution_id, )
+
+
+    def map(self, fn, args_list=[], kwargs_list=None):
+        """
+        Map a function, fn, over input data args_list and kwargs_list. If kwargs_list is provided,
+        it must have the same length as args list.
+        """
+        if not kwargs_list:
+            kwargs_list = [{} for i in args_list]
+        if not len(args_list) == len(kwargs_list):
+            raise AgaveError("map requires lists of equal length")
+        return [self.submit(fn, *args, **kwargs) for args, kwargs in zip(args_list, kwargs_list)]
 
     def delete(self):
         """ Delete this executor completely."""
