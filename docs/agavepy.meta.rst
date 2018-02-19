@@ -4,22 +4,6 @@ agavepy.meta
 
 Summary: Create and manage metadata
 
-listMetadata: List and/or search metadata.
-==========================================
-``agavepy.meta.listMetadata(limit=250, offset=0, privileged=True, q=None)``
-
-Parameters:
------------
-    * **q**: The query to perform. Traditional MongoDB queries are supported (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
-    * **privileged**: If false, implicit permissions are ignored and only records to which the user has explicit permissions are returned (boolean)
-
-
-Response:
----------
-    * *Array of MetadataResponse objects*
-
 addMetadata: Update or Add new Metadata.
 ========================================
 ``agavepy.meta.addMetadata(body)``
@@ -109,6 +93,48 @@ Response:
       }, 
       "required": [], 
       "title": "AgavePy Metadata schema", 
+      "type": "object"
+    }
+
+listMetadata: List and/or search metadata.
+==========================================
+``agavepy.meta.listMetadata(limit=250, offset=0, privileged=True, q=None)``
+
+Parameters:
+-----------
+    * **q**: The query to perform. Traditional MongoDB queries are supported (string)
+    * **limit**: The max number of results. (integer)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **privileged**: If false, implicit permissions are ignored and only records to which the user has explicit permissions are returned (boolean)
+
+
+Response:
+---------
+    * *Array of MetadataResponse objects*
+
+deleteMetadata: Remove Metadata from the system.
+================================================
+``agavepy.meta.deleteMetadata(uuid)``
+
+Parameters:
+-----------
+    * **uuid**: The uuid of the metadata item (string)
+
+
+Response:
+---------
+    * *A single EmptyMetadata object*
+
+**EmptyMetadata schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/EmptyMetadata.json", 
+      "$schema": "http://json-schema.org/draft-07/schema#", 
+      "properties": {}, 
+      "required": [], 
+      "title": "AgavePy EmptyMetadata schema", 
       "type": "object"
     }
 
@@ -266,29 +292,54 @@ Response:
       "type": "object"
     }
 
-deleteMetadata: Remove Metadata from the system.
-================================================
-``agavepy.meta.deleteMetadata(uuid)``
+addSchema: Add a new Metadata Schema.
+=====================================
+``agavepy.meta.addSchema(body)``
 
 Parameters:
 -----------
-    * **uuid**: The uuid of the metadata item (string)
+    * **body**: A valid JSON Schema object (JSON, string)
 
 
 Response:
 ---------
-    * *A single EmptyMetadata object*
+    * *A single MetadataSchema object*
 
-**EmptyMetadata schema**
+**MetadataSchema schema**
 
 .. code-block:: javascript
 
     {
-      "$id": "http://agavepy.readthedocs.io/en/latest/EmptyMetadata.json", 
+      "$id": "http://agavepy.readthedocs.io/en/latest/MetadataSchema.json", 
       "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {}, 
+      "properties": {
+        "created": {
+          "description": "A timestamp indicating when this Metadata was created in the metadata schema store.", 
+          "type": "string"
+        }, 
+        "internalUsername": {
+          "description": "The name of the Internal User, if any, who owns this schema.", 
+          "type": "string"
+        }, 
+        "lastUpdated": {
+          "description": "A timestamp indicating when this Metadata was last updated in the metadata schema store.", 
+          "type": "string"
+        }, 
+        "owner": {
+          "description": "The API user who owns this Schema.", 
+          "type": "string"
+        }, 
+        "schema": {
+          "description": "A JSON Schema", 
+          "type": "string"
+        }, 
+        "uuid": {
+          "description": "The UUID for this Schema.", 
+          "type": "string"
+        }
+      }, 
       "required": [], 
-      "title": "AgavePy EmptyMetadata schema", 
+      "title": "AgavePy MetadataSchema schema", 
       "type": "object"
     }
 
@@ -345,54 +396,29 @@ Response:
       "type": "object"
     }
 
-addSchema: Add a new Metadata Schema.
-=====================================
-``agavepy.meta.addSchema(body)``
+deleteSchema: Remove Metadata Schema from the system.
+=====================================================
+``agavepy.meta.deleteSchema(uuid)``
 
 Parameters:
 -----------
-    * **body**: A valid JSON Schema object (JSON, string)
+    * **uuid**: The uuid of the metadata schema item (string)
 
 
 Response:
 ---------
-    * *A single MetadataSchema object*
+    * *A single EmptyMetadata object*
 
-**MetadataSchema schema**
+**EmptyMetadata schema**
 
 .. code-block:: javascript
 
     {
-      "$id": "http://agavepy.readthedocs.io/en/latest/MetadataSchema.json", 
+      "$id": "http://agavepy.readthedocs.io/en/latest/EmptyMetadata.json", 
       "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {
-        "created": {
-          "description": "A timestamp indicating when this Metadata was created in the metadata schema store.", 
-          "type": "string"
-        }, 
-        "internalUsername": {
-          "description": "The name of the Internal User, if any, who owns this schema.", 
-          "type": "string"
-        }, 
-        "lastUpdated": {
-          "description": "A timestamp indicating when this Metadata was last updated in the metadata schema store.", 
-          "type": "string"
-        }, 
-        "owner": {
-          "description": "The API user who owns this Schema.", 
-          "type": "string"
-        }, 
-        "schema": {
-          "description": "A JSON Schema", 
-          "type": "string"
-        }, 
-        "uuid": {
-          "description": "The UUID for this Schema.", 
-          "type": "string"
-        }
-      }, 
+      "properties": {}, 
       "required": [], 
-      "title": "AgavePy MetadataSchema schema", 
+      "title": "AgavePy EmptyMetadata schema", 
       "type": "object"
     }
 
@@ -501,13 +527,13 @@ Response:
       "type": "object"
     }
 
-deleteSchema: Remove Metadata Schema from the system.
-=====================================================
-``agavepy.meta.deleteSchema(uuid)``
+deleteMetadataPermission: Deletes all permissions on the given metadata.
+========================================================================
+``agavepy.meta.deleteMetadataPermission(uuid)``
 
 Parameters:
 -----------
-    * **uuid**: The uuid of the metadata schema item (string)
+    * **uuid**: The uuid of the metadata item (string)
 
 
 Response:
@@ -632,13 +658,14 @@ Response:
       "type": "object"
     }
 
-deleteMetadataPermission: Deletes all permissions on the given metadata.
-========================================================================
-``agavepy.meta.deleteMetadataPermission(uuid)``
+deleteMetadataPermissionsForUser: Deletes all permissions on the given metadata.
+================================================================================
+``agavepy.meta.deleteMetadataPermissionsForUser(username, uuid)``
 
 Parameters:
 -----------
     * **uuid**: The uuid of the metadata item (string)
+    * **username**: The username of the permission owner (string)
 
 
 Response:
@@ -763,14 +790,13 @@ Response:
       "type": "object"
     }
 
-deleteMetadataPermissionsForUser: Deletes all permissions on the given metadata.
-================================================================================
-``agavepy.meta.deleteMetadataPermissionsForUser(username, uuid)``
+deleteSchemaPermissions: Deletes all permissions on the given schema.
+=====================================================================
+``agavepy.meta.deleteSchemaPermissions(uuid)``
 
 Parameters:
 -----------
-    * **uuid**: The uuid of the metadata item (string)
-    * **username**: The username of the permission owner (string)
+    * **uuid**: The uuid of the metadata schema item (string)
 
 
 Response:
@@ -895,13 +921,14 @@ Response:
       "type": "object"
     }
 
-deleteSchemaPermissions: Deletes all permissions on the given schema.
-=====================================================================
-``agavepy.meta.deleteSchemaPermissions(uuid)``
+deleteSchemaPermissionsForUser: Deletes all permissions on the given metadata.
+==============================================================================
+``agavepy.meta.deleteSchemaPermissionsForUser(username, uuid)``
 
 Parameters:
 -----------
     * **uuid**: The uuid of the metadata schema item (string)
+    * **username**: The username of the permission owner (string)
 
 
 Response:
@@ -1023,33 +1050,6 @@ Response:
       }, 
       "required": [], 
       "title": "AgavePy Permission schema", 
-      "type": "object"
-    }
-
-deleteSchemaPermissionsForUser: Deletes all permissions on the given metadata.
-==============================================================================
-``agavepy.meta.deleteSchemaPermissionsForUser(username, uuid)``
-
-Parameters:
------------
-    * **uuid**: The uuid of the metadata schema item (string)
-    * **username**: The username of the permission owner (string)
-
-
-Response:
----------
-    * *A single EmptyMetadata object*
-
-**EmptyMetadata schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/EmptyMetadata.json", 
-      "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {}, 
-      "required": [], 
-      "title": "AgavePy EmptyMetadata schema", 
       "type": "object"
     }
 

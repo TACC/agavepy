@@ -12,6 +12,8 @@ import json
 import sys
 import textwrap
 
+from operator import itemgetter
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 PWD = os.getcwd()
 
@@ -230,6 +232,8 @@ def main():
         #if api_name in WHITELIST and api_name not in BLACKLIST:
         if api_name not in SVC_BLACKLIST:
 
+            print("{}/".format(api_name))
+
             f = open(os.path.join(PWD, DEST, api_name + '.rst'), 'w')
             # example: agavepy.apps
             f.write(rst_heading(api_name, 'subtitle') + '\n\n')
@@ -249,13 +253,19 @@ def main():
                 else:
                     respmods[mk] = mod['properties'].copy()
 
-            # Iterate through operations
             for sub_api in api['api_declaration']['apis']:
-                for op in sub_api.get('operations'):
+                # Iterate through operations
+                op_list = sorted(sub_api.get('operations'),
+                                 key=itemgetter('nickname'),
+                                 reverse=False)
+
+                for op in op_list:
+                #for op in sub_api.get('operations'):
                     # agavepy.apps.list
                     submod_name_path = submod_name(
                         op.get('nickname'), api_name)
                     if submod_name_path not in API_BLACKLIST:
+                        print(" - {}".format(op.get('nickname')))
 
                         # assemble param list for func signature
                         arglist = []
@@ -322,12 +332,13 @@ def main():
                         resp_schema_type = None
 
                         if resp_type in respmods:
-                            print(("ResponseType: {}".format(resp_type)))
                             try:
                                 resp_type_obj = respmods[resp_type]['result']['type']
-                            except KeyError:
-                                 print((respmods[resp_type]))
-                                 pass
+                            except KeyError as e:
+                                print("ResponseType: {}".format(resp_type))
+                                print("Value: {} / Error: {}".format(
+                                    respmods[resp_type], e))
+                                pass
                             if resp_type_obj == 'array':
                                 # get item $ref
                                 resp_item = respmods[resp_type]['result']['items']['$ref']

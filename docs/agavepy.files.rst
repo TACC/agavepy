@@ -4,6 +4,19 @@ agavepy.files
 
 Summary: Move and manage data
 
+deleteFromDefaultSystem: Deletes a file or folder.
+==================================================
+``agavepy.files.deleteFromDefaultSystem(sourcefilePath)``
+
+Parameters:
+-----------
+    * **sourcefilePath**: The path of the file relative to the user's default storage location. (string)
+
+
+Response:
+---------
+    * *String*
+
 downloadFromDefaultSystem: Download a file from the user's default storage location.
 ====================================================================================
 ``agavepy.files.downloadFromDefaultSystem(sourcefilePath)``
@@ -129,13 +142,14 @@ Response:
 ---------
     * *String*
 
-deleteFromDefaultSystem: Deletes a file or folder.
-==================================================
-``agavepy.files.deleteFromDefaultSystem(sourcefilePath)``
+delete: Deletes a file or folder.
+=================================
+``agavepy.files.delete(filePath, systemId)``
 
 Parameters:
 -----------
-    * **sourcefilePath**: The path of the file relative to the user's default storage location. (string)
+    * **systemId**: The unique id of the system on which the data resides. (string)
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
 
 
 Response:
@@ -266,20 +280,6 @@ Parameters:
       "title": "AgavePy FileOperationRequest schema", 
       "type": "object"
     }
-
-Response:
----------
-    * *String*
-
-delete: Deletes a file or folder.
-=================================
-``agavepy.files.delete(filePath, systemId)``
-
-Parameters:
------------
-    * **systemId**: The unique id of the system on which the data resides. (string)
-    * **filePath**: The path of the file relative to the user's default storage location. (string)
-
 
 Response:
 ---------
@@ -593,6 +593,20 @@ Response:
 ---------
     * *String*
 
+deletePermissions: Deletes all permissions on a file except those of the owner.
+===============================================================================
+``agavepy.files.deletePermissions(filePath, systemId)``
+
+Parameters:
+-----------
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **systemId**: The unique id of the system on which the data resides. (string)
+
+
+Response:
+---------
+    * *String*
+
 listPermissions: List all the share permissions for a file or folder.
 =====================================================================
 ``agavepy.files.listPermissions(filePath, systemId, limit=250, offset=0)``
@@ -714,18 +728,4 @@ Response:
       "title": "AgavePy FilePermission schema", 
       "type": "object"
     }
-
-deletePermissions: Deletes all permissions on a file except those of the owner.
-===============================================================================
-``agavepy.files.deletePermissions(filePath, systemId)``
-
-Parameters:
------------
-    * **filePath**: The path of the file relative to the user's default storage location. (string)
-    * **systemId**: The unique id of the system on which the data resides. (string)
-
-
-Response:
----------
-    * *String*
 
