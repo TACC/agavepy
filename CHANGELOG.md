@@ -1,12 +1,26 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+
+## 0.7.0 - 2018-03-08
+### Added
+- Added support for nonces including creating an Agave client using the `use_nonce=True` flag.
+- Added support for managing an actor's state.
+- Added support for managing an actor's permissions.
+
+### Changed
+- No change.
+
+### Removed
+- No change.
+
+
 ## 0.6.1 - 2017-11-6
 ### Added
 - No change.
 
 ### Changed
-- Fixed an issue in setup.py prevting pip install to work from within python 2.
+- Fixed an issue in setup.py preventing pip install to work from within python 2.
 
 ### Removed
 - No change.
