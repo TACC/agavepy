@@ -23,7 +23,10 @@ clean:
 	cd docs && \
 	make clean
 
+install:
+	python setup.py install
+
 tests:
-	py.test agavepy/tests/test_agave_basic.py
+	py.test agavepy/tests/test_agave_basic.py -s
 
 .PHONY: docs clean deps authors

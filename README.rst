@@ -33,6 +33,8 @@ Install from GitHub checkout::
 
     cd agavepy
     python setup.py install
+    # or #
+    make install
 
 Quickstart
 ==========
