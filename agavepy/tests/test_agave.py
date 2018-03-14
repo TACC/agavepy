@@ -42,7 +42,12 @@ def credentials():
     '''
     credentials = {}
     # credential store
-    ag_cred_store = os.path.expanduser('~/.agave/current')
+    if os.environ.get('AGAVE_CACHE_DIR', None) is not None:
+        ag_cred_store = os.path.join(
+            os.environ.get('AGAVE_CACHE_DIR'), 'current')
+    else:
+        ag_cred_store = os.path.expanduser('~/.agave/current')
+
     if os.path.exists(ag_cred_store):
         tempcred = json.load(open(ag_cred_store, 'r'))
         credentials['apiserver'] = tempcred.get('baseurl', None)
@@ -65,10 +70,11 @@ def credentials():
     for env in ('apikey', 'apisecret', 'username', 'password',
                 'apiserver', 'verify_certs', 'refresh_token',
                 'token', 'client_name'):
-        varname = '_AGAVE_' + env.upper()
-        if os.environ.get(varname, None) is not None:
-            credentials[env] = os.environ.get(varname)
-            print("Loaded {} from env".format(env))
+        for varname_root in ['_AGAVE_', 'AGAVE_']:
+            varname = varname_root + env.upper()
+            if os.environ.get(varname, None) is not None:
+                credentials[env] = os.environ.get(varname)
+                print("Loaded {} from env".format(env))
 
     return credentials
 

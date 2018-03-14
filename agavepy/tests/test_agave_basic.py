@@ -51,10 +51,11 @@ def credentials():
     for env in ('apikey', 'apisecret', 'username', 'password',
                 'apiserver', 'verify_certs', 'refresh_token',
                 'token', 'client_name'):
-        varname = '_AGAVE_' + env.upper()
-        if os.environ.get(varname, None) is not None:
-            credentials[env] = os.environ.get(varname)
-            print("Loaded {} from env".format(env))
+        for varname_root in ['_AGAVE_', 'AGAVE_']:
+            varname = varname_root + env.upper()
+            if os.environ.get(varname, None) is not None:
+                credentials[env] = os.environ.get(varname)
+                print("Loaded {} from env".format(env))
 
     return credentials
 
