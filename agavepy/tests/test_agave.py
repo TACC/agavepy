@@ -69,7 +69,7 @@ def credentials():
     # environment
     for env in ('apikey', 'apisecret', 'username', 'password',
                 'apiserver', 'verify_certs', 'refresh_token',
-                'token', 'client_name'):
+                'token', 'client_name', 'tenantid'):
         for varname_root in ['_AGAVE_', 'AGAVE_']:
             varname = varname_root + env.upper()
             if os.environ.get(varname, None) is not None:
