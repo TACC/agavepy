@@ -270,10 +270,10 @@ class Agave(object):
     @classmethod
     def agavecurrent_path(self):
         """Return path to .agave/current file allowing for AGAVE_CACHEDIR"""
-        if os.environ.get('AGAVE_CACHE_DIR', None) != "":
-            agavecurrent = os.path.join(os.environ.get(
-                'AGAVE_CACHE_DIR'), 'current')
-            return agavecurrent
+        agcachedir = os.environ.get('AGAVE_CACHE_DIR', None)
+        if agcachedir is not None:
+            if os.path.isdir(agcachedir):
+                return os.path.join(agcachedir, 'current')
         else:
             return os.path.expanduser('~/.agave/current')
 
