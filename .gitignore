@@ -51,3 +51,4 @@ docs/_build/
 *.ipynb*
 .idea
 test_credentials.json
+.pytest_cache/
