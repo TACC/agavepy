@@ -35,28 +35,6 @@ def json_response(f):
     return _f
 
 
-def save(client, key, secret):
-    """
-
-    :type client: str
-    :type key: str
-    :type secret: str
-    :rtype: None
-    """
-    with closing(shelve.open(os.path.expanduser('~/.agavepy'))) as agavepyrc:
-        agavepyrc[str(client)] = (key, secret)
-
-
-def recover(name):
-    """Try to recover api keys for client ``name``.
-
-    :type name: str
-    :rtype: (str, str)
-    """
-    with closing(shelve.open(os.path.expanduser('~/.agavepy'))) as agavepyrc:
-        return agavepyrc[str(name)]
-
-
 def load_resource(api_server):
     """Load a default resource file.
 
@@ -232,11 +210,6 @@ class Agave(object):
         if self.jwt:
             if not self.header_name:
                 raise AgaveError("The jwt header name is required to use the jwt authenticator.")
-        # If we are given a client name and no keys, then try to retrieve
-        # them from a persistent file.
-        if (self.client_name is not None
-                and self.api_key is None and self.api_secret is None):
-            self.api_key, self.api_secret = recover(self.client_name)
         self.token = None
         if self.api_key is not None and self.api_secret is not None and self.jwt is None:
             self.set_client(self.api_key, self.api_secret)
@@ -571,9 +544,6 @@ class Operation(object):
             result = processed['result'] if 'result' in processed else None
             # if operation is clients.create, save name
             if self.resource == 'clients' and self.operation == 'create':
-                save(result['name'],
-                     result['consumerKey'],
-                     result['consumerSecret'])
                 self.client.set_client(result['consumerKey'],
                                        result['consumerSecret'])
             return result
