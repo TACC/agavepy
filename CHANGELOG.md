@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.7.1 - 2018-07-01
+### Added
+- No change.
+
+### Changed
+- Fixed issue with clients.add where client was created but am Exception was raised trying to persist the client locally using shelve.
+
+### Removed
+- The legacy `save()` and `recover()` methods that leveraged the shelve package have been removed. This functionality has been replaced with the `Agave.restore()` and `Agave._write_client()` methods.
+
 
 ## 0.7.0 - 2018-03-08
 ### Added
