@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.7.2 - 2018-07-03
+### Added
+- No change.
+
+### Changed
+- Fixed issue where importing the actors module failed due to missing cloudpickle dependency.
+
+### Removed
+- No change.
+
+
 ## 0.7.1 - 2018-07-01
 ### Added
 - No change.
