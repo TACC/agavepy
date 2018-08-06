@@ -55,7 +55,7 @@ refresh token to keep this session active as long as the code is running.
 Pure Python
 -----------
 
-Authentication and authorization to the TACC Cloud APIs uses `OAuth2`_, a 
+Authentication and authorization to the TACC Cloud APIs uses OAuth2, a 
 widely-adopted web standard. Our implementation of Oauth2 is designed to give
 you the flexibility you need to script and automate use of TACC Cloud while
 keeping your access credentials and digital assets secure. 
