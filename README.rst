@@ -21,6 +21,7 @@ AgavePy
 - PyPI: https://pypi.python.org/pypi/agavepy
 - Free software: 3-Clause BSD License
 
+
 Installation
 ============
 
@@ -35,6 +36,17 @@ Install from GitHub checkout::
     python setup.py install
     # or #
     make install
+
+
+Contributing
+============
+In case you want to contribute, you should read our 
+`contributing guidelines`_ and we have a contributor's guide
+that explains `setting up a development environment and the contribution process`_.
+
+.. _contributing guidelines: CONTRIBUTING.md
+.. _setting up a development environment and the contribution process: docs/contributing/
+
 
 Quickstart
 ==========
@@ -152,7 +164,6 @@ how you can access token data programmatically for your own purposes.
     >>> ag.token.token_info['refresh_token']
     u'b138c49046f67f80d49a1c10a12e44b'
 
-**To be continued**
 
 .. _Agave: https://agaveapi.co/
 .. _Abaco: http://useabaco.cloud/
