@@ -1,6 +1,6 @@
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)              
 GIT_BRANCH_CLEAN := $(shell echo $(GIT_BRANCH) | sed -e "s/[^[:alnum:]]/-/g")   
-DOCKER_IMAGE := agavepy-$(if $(GIT_BRANCH_CLEAN),:$(GIT_BRANCH_CLEAN))      
+DOCKER_IMAGE := agavepy$(if $(GIT_BRANCH_CLEAN),:$(GIT_BRANCH_CLEAN))      
                                                                                 
 DOCKER_BUILD_ARGS ?= --force-rm                                                 
 DOCKERFILE ?= dev.Dockerfile                                                        
