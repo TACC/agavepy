@@ -10,7 +10,7 @@ RUN git clone https://github.com/TACC/agavepy
 
 WORKDIR /agavepy
 
-ADD https://raw.githubusercontent.com/alejandrox1/dev_env/master/local-setup/bashrc /home/$USER/.bashrc
-ADD https://raw.githubusercontent.com/alejandrox1/dev_env/master/local-setup/bash_prompt /home/$USER/.bash_prompt
+ADD https://raw.githubusercontent.com/alejandrox1/dev_env/master/local-setup/bashrc /root/.bashrc
+ADD https://raw.githubusercontent.com/alejandrox1/dev_env/master/local-setup/bash_prompt /root/.bash_prompt
 
 CMD ["/bin/bash"]
