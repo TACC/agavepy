@@ -54,7 +54,7 @@ def tenant_list(tenantsurl="https://api.tacc.utexas.edu/tenants"):
 
     # Print results.
     print("{0:<20} {1:<40} {2:<50}".format("CODE", "NAME", "URL"))
-    for tenant in tenants["result"]:
+    for tenant in tenants.get("result", []):
         print("{0:<20} {1:<40} {2:<50}".format(
             tenant.get("code", ""), tenant.get("name", ""), 
             tenant.get("baseUrl", "")))
