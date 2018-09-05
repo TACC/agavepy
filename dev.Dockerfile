@@ -1,10 +1,22 @@
 FROM python:3.6.6-stretch
 
 
+# Install python $PYVERSION.
+ARG PYVERSION=2.7.15
+
 RUN apt-get update -y && apt-get install -yq git bash-completion \
     curl vim tree \
     && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /src/.*deb
+    && rm -rf /src/.*deb \
+    && wget https://www.python.org/ftp/python/${PYVERSION}/Python-${PYVERSION}.tgz \
+    && tar -xvf Python-${PYVERSION}.tgz \
+    && cd Python-${PYVERSION} \
+    && ./configure --with-ensurepip=install \
+    && make \
+    && make altinstall \
+    && ln -sf /usr/local/bin/python2.7 /usr/bin/python2 \
+    && cd ../ \
+    && rm -r Python-${PYVERSION}.tgz Python-${PYVERSION}
 
 RUN git clone https://github.com/TACC/agavepy 
 
