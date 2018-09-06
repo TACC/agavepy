@@ -1,0 +1,24 @@
+{                                                     
+    "status": "success",                                                        
+    "message": "Client created successfully.",                                  
+    "version": "2.0.0-SNAPSHOT-rc3fad",                                         
+    "result": {                                                                 
+        "description": "{DESCRIPTION}",                                         
+        "name": "{NAME}",                                                       
+        "consumerKey": "xxxxxxxxxxxxxxxxxxxxxxxxxx",                            
+        "_links": {                                                             
+            "subscriber": {                                                     
+                "href": "{URL_ROOT}profiles/v2/{USER}"                          
+            },                                                                  
+            "self": {                                                           
+                "href": "{URL_ROOT}clients/v2/{NAME}"                           
+            },                                                                  
+            "subscriptions": {                                                  
+                "href": "{URL_ROOT}clients/v2/{NAME}/subscriptions/"            
+            }                                                                   
+        },                                                                      
+        "tier": "{TIER}",                                                       
+        "consumerSecret": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",                  
+        "callbackUrl": "{CALLBACK_URL}"                                         
+    }                                                                           
+}

@@ -10,7 +10,7 @@ import json
 import requests
 import sys
 from os import path
-from .response_handlers import handle_bad_response_status_code
+from utils import handle_bad_response_status_code
 
 
 class AgaveClientError(Exception):
@@ -45,10 +45,6 @@ def client_create(username, client_name, description, tenant_url):
     api_key: string
     api_secret: string
     """
-    # Get username.
-    if username == "" or username is None:
-        username = input("API username: ")
-
     # Get user's password.
     passwd = getpass.getpass(prompt="API password: ")
 
