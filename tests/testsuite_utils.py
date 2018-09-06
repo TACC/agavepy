@@ -7,7 +7,7 @@ import socket
 from threading import Thread
 try: # python 2
     from BaseHTTPServer import HTTPServer
-except ModuleNotFoundError: # python 3
+except ImportError: # python 3
     from http.server import HTTPServer
 
 
