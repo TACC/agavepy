@@ -156,6 +156,29 @@ AgavePy up to use it works the same way:
 The Agave object ``ag`` is now configured to talk to all TACC Cloud services.
 
 
+Generate an Access Token
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In order to interact with the TACC cloud services in a more secure and
+controlled manner - without constantly using your username and password - we
+will use the oauth client, created in the previous step, to generate access
+tokens.
+
+The generated tokens will by defualt have a lifetime of 4 hours, or 14400
+seconds.
+
+To create a token
+
+.. code-block:: pycon
+
+    >>> ag.get_access_token()
+    API password:
+    >>> ag.token
+    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+Keep in mind that you will need to create an oauth client first!
+
+
 The refresh token
 ^^^^^^^^^^^^^^^^^
 

@@ -28,6 +28,7 @@ from .swaggerpy.processors import SwaggerProcessor
 
 from .clients import client_create
 from .tenants import tenant_list
+from .tokens import token_create
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -546,6 +547,36 @@ class Agave(object):
 
         self.api_key, self.api_secret = client_create(
             self.username, client_name, description, tenant_url)
+
+
+    def get_access_token(self):
+        """ Generate an access token
+        """
+        # Check that a client for this session has been created by checking api
+        # key and secret.
+        if (self.api_key == "" or self.api_key is None or 
+                self.api_secret == "" or self.api_secret is None):
+            print("Please create a client first. See \"clients_create(client_name, description)\"\n")
+            return
+
+        # Set tenant url.
+        tenant_url = self.api_server
+
+        # Set username.
+        if self.username == "" or self.username is None:
+            self.username = input("API username: ")
+
+        # Create access token.
+        token_data = token_create(self.username, self.api_key, self.api_secret, tenant_url)
+
+        # Update client.
+        self.token         = token_data.get("access_token")
+        self.refresh_token = token_data.get("refresh_token")
+        self.expires_in    = token_data.get("expires_in")
+        self.created_at    = token_data.get("created_at")
+        self.expires_at    = token_data.get("expires_at")
+
+
 
 
 
