@@ -537,7 +537,13 @@ class Agave(object):
         description: string
             Description of the client to be created.
         """
+        # Set tenant url.
         tenant_url = self.api_server
+        
+        # Set username.
+        if self.username == "" or self.username is None:
+            self.username = input("API username: ")
+
         self.api_key, self.api_secret = client_create(
             self.username, client_name, description, tenant_url)
 
