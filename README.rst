@@ -148,21 +148,13 @@ AgavePy up to use it works the same way:
 
    >>> from agavepy.agave import Agave
    >>> ag = Agave(api_server='https://api.tacc.cloud',
-   ...            username='mwvaughn', password='PaZ$w0r6!',
+   ...            username='mwvaughn',
    ...            client_name='my_client',
    ...            api_key='kV4XLPhVBAv9RTf7a2QyBHhQAXca',
    ...            api_secret='5EbjEOcyzzIsAAE3vBS7nspVqHQa')
 
 The Agave object ``ag`` is now configured to talk to all TACC Cloud services.
-Here's an example: Let's retrieve a the curent user's **profile**.
 
-.. code-block:: pycon
-
-   >>> ag.profiles.get()
-   {u'status': u'', u'username': u'mwvaughn', u'first_name': u'Matthew', 
-    u'last_name': u'Vaughn', u'phone': u'867-5309', u'mobile_phone': u'', 
-    u'create_time': u'20140515180317Z', u'full_name': u'vaughn', 
-    u'email': u'mwvaughn@devnull.com'}
 
 The refresh token
 ^^^^^^^^^^^^^^^^^
