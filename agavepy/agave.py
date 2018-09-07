@@ -1,3 +1,6 @@
+from __future__ import print_function
+from builtins import input
+
 import xml.etree.ElementTree as ElementTree
 from functools import wraps
 
@@ -16,12 +19,16 @@ import jinja2
 import dateutil.parser
 import requests
 
+
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
 
 from .swaggerpy.client import SwaggerClient
 from .swaggerpy.http_client import SynchronousHttpClient
 from .swaggerpy.processors import SwaggerProcessor
+
+from .clients import client_create
+from .tenants import tenant_list
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -220,9 +227,21 @@ class Agave(object):
                 value = (kwargs[param] if mandatory
                          else kwargs.get(param, default))
             except KeyError:
-                raise AgaveError(
-                    'parameter "{}" is mandatory'.format(param))
+                # Request user to set the tenant url (api_server).
+                if param == "api_server":
+                    self.list_tenants(tenantsurl="https://api.tacc.utexas.edu/tenants")
+                    value = input(
+                        "\nPlease specify the url of a tenant to interact with: ")
+                    
+                    # If present, remove the last '/' from the url.
+                    if value[-1] == "/":
+                        value = value[:-1]
+
+                else:
+                    raise AgaveError("parameter \"{}\" is mandatory".format(param))
+
             setattr(self, attr, value)
+
         if self.resources is None:
             self.resources = load_resource(self.api_server)
         self.host = urllib.parse.urlsplit(self.api_server).netloc
@@ -495,6 +514,40 @@ class Agave(object):
         if self.all is not None:
             base.extend(list(self.all.resources.keys()))
         return list(set(base))
+
+
+    def list_tenants(self, tenantsurl="https://api.tacc.utexas.edu/tenants"):
+        """ List Agave tenants
+
+        PARAMETERS
+        ----------
+        tenantsurl: string (default: "https://api.tacc.utexas.edu/tenants")
+            Endpoint with Agave tenant information.
+        """
+        tenant_list(tenantsurl)
+
+    def clients_create(self, client_name, description):
+        """ Create an Agave Oauth client
+
+        Save the api key and secret upon a successfull reuest to Agave.
+
+        PARAMETERS
+        ----------
+        client_name: string
+            Name of the oauth client to be created.
+        description: string
+            Description of the client to be created.
+        """
+        # Set tenant url.
+        tenant_url = self.api_server
+        
+        # Set username.
+        if self.username == "" or self.username is None:
+            self.username = input("API username: ")
+
+        self.api_key, self.api_secret = client_create(
+            self.username, client_name, description, tenant_url)
+
 
 
 class Resource(object):
