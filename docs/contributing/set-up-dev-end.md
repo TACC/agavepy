@@ -1,9 +1,9 @@
 ### Work with a development container
-In this section, you learn to develop like the TACC LSC core team.
-The `TACC/agavepy` repository includes a `Dockerfile` at its root.
+In this section, you learn to develop like the TACC team.
+The `TACC/agavepy` repository includes a `Dockerfile` (`dev.Dockerfile`) at its root.
 This file defines AgavePy's development environment.
 The `Dockerfile` lists the environment's dependencies: system libraries and
-binaries, Go environment, Go dependencies, etc.
+binaries, environment, dependencies, etc.
 
 AgavePy's development environment is itself, ultimately a Docker container.
 You use the `TACC/agavepy` repository and its `Dockerfile` to create a
