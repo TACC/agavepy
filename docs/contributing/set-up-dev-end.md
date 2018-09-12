@@ -1,9 +1,10 @@
 ### Work with a development container
-In this section, you learn to develop like the TACC LSC core team.
-The `TACC/agavepy` repository includes a `Dockerfile` at its root.
+
+In this section, you learn to develop like the TACC team.
+The `TACC/agavepy` repository includes a `Dockerfile` (`dev.Dockerfile`) at its root.
 This file defines AgavePy's development environment.
 The `Dockerfile` lists the environment's dependencies: system libraries and
-binaries, Go environment, Go dependencies, etc.
+binaries, environment, dependencies, etc.
 
 AgavePy's development environment is itself, ultimately a Docker container.
 You use the `TACC/agavepy` repository and its `Dockerfile` to create a
@@ -15,7 +16,8 @@ You also created a branch called `dry-run-test`. In this section, you continue
 working with your fork on this branch.
 
 
-## Task 1. Sttart a development container
+## Task 1. Start a development container
+
 In this section, you will run a development container.
 This worflow is automated for you by the Makefile in the root of the
 repository.
@@ -33,11 +35,11 @@ repository.
    ```
    $ git checkout dry-run-test
    ```
-   If you get a essage that the branch doesn't exist, add the `-b` flab (`git
+   If you get a essage that the branch doesn't exist, add the `-b` flag (`git
    checkout -b dry-run-test`) so the comand creates the branch and checks it
    out.
 
-4. Use `make` to bouild a development environment image and run it in a
+4. Use `make` to build a development environment image and run it in a
    continer.
    ```
    $ make shell
