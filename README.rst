@@ -77,10 +77,32 @@ keeping your access credentials and digital assets secure.
 This is covered in great detail in our `Developer Documentation`_ but some key
 concepts will be highlighted here, interleaved with Python code.
 
-The first step is to create a Python object ``ag`` pointing to an API server.
-Your project likely has its own API server, which are discoverable using 
-the ``tenants-list --rich`` command in the TACC Cloud CLI. For now, we can
-assume ``api.tacc.cloud`` (the default value) will work for you. 
+The first step is to create a Python object ``ag`` which will interact with an
+Agave tenant.
+
+.. code-block:: pycon
+
+    >>> from agavepy.agave import Agave
+    >>> ag = Agave()
+    CODE                 NAME                                     URL
+    3dem                 3dem Tenant                              https://api.3dem.org/
+    agave.prod           Agave Public Tenant                      https://public.agaveapi.co/
+    araport.org          Araport                                  https://api.araport.org/
+    designsafe           DesignSafe                               https://agave.designsafe-ci.org/
+    iplantc.org          CyVerse Science APIs                     https://agave.iplantc.org/
+    irec                 iReceptor                                https://irec.tenants.prod.tacc.cloud/
+    sd2e                 SD2E Tenant                              https://api.sd2e.org/
+    sgci                 Science Gateways Community Institute     https://sgci.tacc.cloud/
+    tacc.prod            TACC                                     https://api.tacc.utexas.edu/
+    vdjserver.org        VDJ Server                               https://vdj-agave-api.tacc.utexas.edu/
+    
+    Please specify the url of a tenant to interact with: https://api.araport.org/
+    >>> ag.api_server
+    'https://api.araport.org/'
+
+
+If you already now what tenant you want to work with, you can instantiate
+``Agave`` as follows:
 
 .. code-block:: pycon
 

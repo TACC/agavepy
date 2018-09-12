@@ -1,3 +1,6 @@
+from __future__ import print_function
+from builtins import input
+
 import xml.etree.ElementTree as ElementTree
 from functools import wraps
 
@@ -22,6 +25,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 from .swaggerpy.client import SwaggerClient
 from .swaggerpy.http_client import SynchronousHttpClient
 from .swaggerpy.processors import SwaggerProcessor
+
+from .tenants import tenant_list
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -220,9 +225,16 @@ class Agave(object):
                 value = (kwargs[param] if mandatory
                          else kwargs.get(param, default))
             except KeyError:
-                raise AgaveError(
-                    'parameter "{}" is mandatory'.format(param))
+                if param == "api_server":
+                    self.list_tenants(tenantsurl="https://api.tacc.utexas.edu/tenants")
+                    value = input(
+                        "\nPlease specify the url of a tenant to interact with: ")
+
+                else:
+                    raise AgaveError("parameter \"{}\" is mandatory".format(param))
+
             setattr(self, attr, value)
+
         if self.resources is None:
             self.resources = load_resource(self.api_server)
         self.host = urllib.parse.urlsplit(self.api_server).netloc
@@ -495,6 +507,17 @@ class Agave(object):
         if self.all is not None:
             base.extend(list(self.all.resources.keys()))
         return list(set(base))
+
+
+    def list_tenants(self, tenantsurl="https://api.tacc.utexas.edu/tenants"):
+        """ List Agave tenants
+
+        PARAMETERS
+        ----------
+        tenantsurl: string (default: "https://api.tacc.utexas.edu/tenants")
+            Endpoint with Agave tenant information.
+        """
+        tenant_list(tenantsurl)
 
 
 class Resource(object):

@@ -1,4 +1,5 @@
 ### Work with a development container
+
 In this section, you learn to develop like the TACC team.
 The `TACC/agavepy` repository includes a `Dockerfile` (`dev.Dockerfile`) at its root.
 This file defines AgavePy's development environment.
@@ -16,6 +17,7 @@ working with your fork on this branch.
 
 
 ## Task 1. Start a development container
+
 In this section, you will run a development container.
 This worflow is automated for you by the Makefile in the root of the
 repository.
