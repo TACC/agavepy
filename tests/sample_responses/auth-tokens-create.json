@@ -1,0 +1,7 @@
+{
+    "scope": "default",
+    "token_type": "bearer",
+    "expires_in": 14400,
+    "refresh_token": "01234567891011121314151617181920",
+    "access_token": "01234567891011121314151617181920"
+}

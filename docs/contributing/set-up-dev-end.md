@@ -1,5 +1,6 @@
 ### Work with a development container
 
+
 In this section, you learn to develop like the TACC team.
 The `TACC/agavepy` repository includes a `Dockerfile` (`dev.Dockerfile`) at its root.
 This file defines AgavePy's development environment.
@@ -14,6 +15,7 @@ If you followed the procedures that [set up Git for contributing](set-up-git.md)
 you should have a fork of the `TACC/agavepy` repository.
 You also created a branch called `dry-run-test`. In this section, you continue
 working with your fork on this branch.
+
 
 
 ## Task 1. Start a development container
