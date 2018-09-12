@@ -19,6 +19,7 @@ import jinja2
 import dateutil.parser
 import requests
 
+
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
 
@@ -29,6 +30,7 @@ from .swaggerpy.processors import SwaggerProcessor
 from .clients import client_create
 from .tenants import tenant_list
 from .tokens import token_create
+
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -575,6 +577,7 @@ class Agave(object):
         self.expires_in    = token_data.get("expires_in")
         self.created_at    = token_data.get("created_at")
         self.expires_at    = token_data.get("expires_at")
+
 
 
 

@@ -16,7 +16,10 @@ RUN apt-get update -y && apt-get install -yq git bash-completion \
     && make altinstall \
     && ln -sf /usr/local/bin/python2.7 /usr/bin/python2 \
     && cd ../ \
-    && rm -r Python-${PYVERSION}.tgz Python-${PYVERSION}
+    && rm -r Python-${PYVERSION}.tgz Python-${PYVERSION} \
+    && pip install sphinx \
+    && pip install pytest \
+    && pip2.7 install mock
 
 RUN git clone https://github.com/TACC/agavepy 
 

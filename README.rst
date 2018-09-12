@@ -156,6 +156,7 @@ AgavePy up to use it works the same way:
 The Agave object ``ag`` is now configured to talk to all TACC Cloud services.
 
 
+
 Generate an Access Token
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -177,6 +178,7 @@ To create a token
     'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 
 Keep in mind that you will need to create an oauth client first!
+
 
 
 The refresh token
