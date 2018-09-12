@@ -6,7 +6,7 @@ Methods to interact with Agave tenants.
 from __future__ import print_function
 import requests
 import sys
-from .response_handlers import handle_bad_response_status_code
+from utils import handle_bad_response_status_code
 
 
 def get_tenants(url):

@@ -25,6 +25,14 @@ build: # Build development container.
 clean:
 	rm -rf agavepy.egg-info build dist .cache
 	rm -rf schema openapi
+	rm -rf agavepy/__pycache__/
+	rm -rf agavepy/tests/__pycache__/
+	rm -rf agavepy/*.pyc
+	rm -rf tests/__pycache__/
+	rm -rf tests/*.pyc
+	rm -rf .pytest_cache/
+
+clean-docs:
 	make -C docs/ clean
 
 deps:
@@ -32,19 +40,25 @@ deps:
 	mkdir -p openap
 
 docs: deps
-	python scripts/swagger_to_rst.py && \
-	cd docs && \
-	make static-clean && \
-	make openapi && \
-	make schema && \
-	make html && \
+	python scripts/swagger_to_rst.py
+	cd docs
+	make static-clean
+	make openapi
+	make schema
+	make html
 	cd ../
 
 install:
 	python setup.py install
 
+install-py2:
+	python2 setup.py install
+
 shell: build # Start a shell inside the build environment.
 	$(DOCKER_RUN_AGAVECLI) bash
 
 tests:
-	py.test agavepy/tests/test_agave_basic.py -s
+	pytest -v --cache-clear tests/
+
+tests-py2:
+	python2 -m pytest tests

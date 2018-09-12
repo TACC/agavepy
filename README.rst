@@ -114,23 +114,26 @@ documentation and your specific usage needs.
 
 Create a new Oauth client
 ^^^^^^^^^^^^^^^^^^^^^^^^^
+In order to interact with Agave, you'll need to first create an Oauth client so
+that later on you can create access tokens to do work.
+
+To create a client you can do the following:
 
 .. code-block:: pycon
 
-   >>> ag = Agave(api_server='https://api.tacc.cloud',
-   ...            username='mwvaughn',
-   ...            password='PaZ$w0r6!')
-   >>> ag.clients.create(body={'clientName': 'my_client'})
-   {u'consumerKey': u'kV4XLPhVBAv9RTf7a2QyBHhQAXca', u'_links': {u'subscriber':
-   {u'href': u'https://api.tacc.cloud/profiles/v2/mwvaughn'}, u'self': {u'href':
-    u'https://api.tacc.cloud/clients/v2/my_client'}, u'subscriptions': {u'href':
-    u'https://api.tacc.cloud/clients/v2/my_client/subscriptions/'}},
-    u'description': u'', u'tier': u'Unlimited', u'callbackUrl': u'',
-    u'consumerSecret': u'5EbjEOcyzzIsAAE3vBS7nspVqHQa', u'name': u'my_client'}
+    >>> from agavepy.agave import Agave
+    >>> ag = Agave(api_server='https://api.tacc.cloud')
+    >>> ag.clients_create("client-name", "some description")
+    API username: your-username
+    API password: 
+    >>> ag.api_key
+    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+    >>> ag.api_secret
+    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
-You use the **consumerKey** and **consumerSecret** to generate Oauth *tokens*, 
+You will use the api key and secret to generate Oauth *tokens*, 
 which are temporary credentials that you can use in place of putting your real 
-credentials into code that is scripting against the TACC APIs.
+credentials into code that is interacting with TACC APIs.
 
 Reuse an existing Oauth client
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -145,21 +148,13 @@ AgavePy up to use it works the same way:
 
    >>> from agavepy.agave import Agave
    >>> ag = Agave(api_server='https://api.tacc.cloud',
-   ...            username='mwvaughn', password='PaZ$w0r6!',
+   ...            username='mwvaughn',
    ...            client_name='my_client',
    ...            api_key='kV4XLPhVBAv9RTf7a2QyBHhQAXca',
    ...            api_secret='5EbjEOcyzzIsAAE3vBS7nspVqHQa')
 
 The Agave object ``ag`` is now configured to talk to all TACC Cloud services.
-Here's an example: Let's retrieve a the curent user's **profile**.
 
-.. code-block:: pycon
-
-   >>> ag.profiles.get()
-   {u'status': u'', u'username': u'mwvaughn', u'first_name': u'Matthew', 
-    u'last_name': u'Vaughn', u'phone': u'867-5309', u'mobile_phone': u'', 
-    u'create_time': u'20140515180317Z', u'full_name': u'vaughn', 
-    u'email': u'mwvaughn@devnull.com'}
 
 The refresh token
 ^^^^^^^^^^^^^^^^^
