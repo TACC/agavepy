@@ -1,6 +1,18 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.7.3 - 2018-09-13
+### Added
+- No change.
+
+### Changed
+- Fixed issue where authentication does not honor AGAVE_CACHE_DIR (https://github.com/TACC/agavepy/issues/38)
+- Fixed an issue where futures was missing from python2 requirements.
+
+### Removed
+- No change.
+
+
 ## 0.7.2 - 2018-07-03
 ### Added
 - No change.
