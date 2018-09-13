@@ -8,4 +8,5 @@ six>=1.9.0
 websocket-client>=0.29.0
 requests_toolbelt>=0.7.1
 future>=0.16.0
-cloudpickle==0.5.2
+configparser>=3.5.0
+cloudpickle>=0.4.0

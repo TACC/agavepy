@@ -232,7 +232,7 @@ class Agave(object):
         d.update({attr: getattr(self, attr) for _, _, attr, _ in self.PARAMS \
                          if not attr in ['resources', '_token', '_refresh_token', 'header_name', 'jwt', 'password', 'token_callback']})
         # if we are writing to the .agave/current file, modify the fields accordingly
-        if Agave.agpy_path() == os.path.expanduser('~/.agave/current'):
+        if Agave.agpy_path() == Agave.agavecurrent_path():
             d['tenantid'] = d.pop('tenant_id', '')
             d['apisecret'] = d.pop('api_secret', '')
             d['apikey'] = d.pop('api_key', '')
@@ -241,9 +241,19 @@ class Agave(object):
         return d
 
     @classmethod
+    def agavecurrent_path(self):
+        """Return path to .agave/current file allowing for AGAVE_CACHEDIR"""
+        agcachedir = os.environ.get('AGAVE_CACHE_DIR', None)
+        if agcachedir is not None:
+            if os.path.isdir(agcachedir):
+                return os.path.join(agcachedir, 'current')
+        else:
+            return os.path.expanduser('~/.agave/current')
+
+    @classmethod
     def agpy_path(self):
         """Return path to .agpy file"""
-        places = [os.path.expanduser('~/.agave/current'),
+        places = [self.agavecurrent_path(),
                   os.path.expanduser('~/.agpy'),
                   '/etc/.agpy',
                   '/root/.agpy',
@@ -257,8 +267,8 @@ class Agave(object):
         """Read clients from the .agpy file."""
         with open(Agave.agpy_path()) as agpy:
             clients = json.loads(agpy.read())
-        # if we are reading the '.agave/current' file, we need to do some translation
-        if Agave.agpy_path() == os.path.expanduser('~/.agave/current'):
+        # if we are reading an '.agave/current' file, we need to do some translation
+        if Agave.agpy_path() == Agave.agavecurrent_path():
             # first, make sure we have a list; in past versions of the CLI, the current file was a
             # single JSON object
             if not isinstance(clients, list):
@@ -313,7 +323,7 @@ class Agave(object):
         """Update the .agpy file with the description of a client."""
         # if we are reading the '.agave/current' file, we need to use that format and simply update
         # a few fields
-        if Agave.agpy_path() == os.path.expanduser('~/.agave/current'):
+        if Agave.agpy_path() == Agave.agavecurrent_path():
             with open(Agave.agpy_path(), 'r') as agpy:
                 old_data = json.loads(agpy.read())
             new_data = self.to_dict()
