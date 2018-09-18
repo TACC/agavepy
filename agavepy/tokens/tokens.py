@@ -10,7 +10,7 @@ import requests
 import sys
 import time
 from os import path
-from utils import handle_bad_response_status_code
+from ..utils import handle_bad_response_status_code
 
 
 class AgaveTokenError(Exception):

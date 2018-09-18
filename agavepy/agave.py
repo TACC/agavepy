@@ -19,6 +19,10 @@ import jinja2
 import dateutil.parser
 import requests
 
+from .tenants import tenant_list
+from .clients import client_create
+from .tokens import token_create
+from .utils import save_config
 
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
@@ -26,10 +30,6 @@ sys.path.insert(0, os.path.dirname(__file__))
 from .swaggerpy.client import SwaggerClient
 from .swaggerpy.http_client import SynchronousHttpClient
 from .swaggerpy.processors import SwaggerProcessor
-
-from .clients import client_create
-from .tenants import tenant_list
-from .tokens import token_create
 
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -224,25 +224,43 @@ class Agave(object):
     ]
 
     def __init__(self, **kwargs):
+        
         for param, mandatory, attr, default in self.PARAMS:
             try:
-                value = (kwargs[param] if mandatory
-                         else kwargs.get(param, default))
+                value = (kwargs[param] if mandatory 
+                        else kwargs.get(param, default))
             except KeyError:
-                # Request user to set the tenant url (api_server).
-                if param == "api_server":
-                    self.list_tenants(tenantsurl="https://api.tacc.utexas.edu/tenants")
-                    value = input(
-                        "\nPlease specify the url of a tenant to interact with: ")
-                    
-                    # If present, remove the last '/' from the url.
-                    if value[-1] == "/":
-                        value = value[:-1]
-
-                else:
-                    raise AgaveError("parameter \"{}\" is mandatory".format(param))
+                pass
 
             setattr(self, attr, value)
+
+        # The following sectionsets tenant ID (tenant_id) and tenant url 
+        # (api_server).
+        # Neither tenant ID nor tenant url are set.
+        if self.tenant_id is None and self.api_server is None:
+            tenants = self.list_tenants(tenantsurl="https://api.tacc.utexas.edu/tenants")
+            value = input("\nPlease specify the ID for the tenant you wish to interact with: ")
+            self.tenant_id  = tenants[value]["id"]
+            tenant_url = tenants[value]["url"]
+            if tenant_url[-1] == '/':
+                tenant_url = tenant_url[:-1]
+            self.api_server = tenant_url
+        # Tenant ID was not set.
+        elif self.tenant_id is None and self.api_server is not None:
+            tenants = tenant_list(tenantsurl="https://api.tacc.utexas.edu/tenants")
+
+            for _, tenant in tenants.items():
+                if self.api_server in tenant["url"]:
+                    self.tenant_id = tenant["id"]
+        # Tenant url was not set.
+        elif self.api_server is None and self.tenant_id is not None:
+            tenants = tenant_list(tenantsurl="https://api.tacc.utexas.edu/tenants")
+
+            tenant_url = tenants[self.tenant_id]["url"]
+            if tenant_url[-1] == '/':
+                tenant_url = tenant_url[:-1]
+            self.api_server = tenant_url
+    
 
         if self.resources is None:
             self.resources = load_resource(self.api_server)
@@ -518,6 +536,41 @@ class Agave(object):
         return list(set(base))
 
 
+    def save_configs(self, cache_dir=None):
+        """ Save configs
+
+        Save configuration to AGAVE_CACHE_DIR. This will update 
+        AGAVE_CACHE_DIR/current and AGAVE_CACHE_DIR/config.json.
+        
+        PARAMETERS
+        ----------
+        cache_dir: string (default: None)
+            If no cache_dir is passed it will default to ~/.agave.
+        """
+        current_context = {
+            "tenantid": self.tenant_id,
+            "baseurl": self.api_server,
+            "devurl": "",
+            "apisecret": self.api_secret,
+            "apikey": self.api_key,
+            "username": self.username,
+            "access_token": self.token,
+            "refresh_token": self.refresh_token,
+            "created_at": self.created_at,
+            "expires_in": self.expires_in,
+            "expires_at": self.expires_at,
+        }
+
+        # Convert None values to empty strings.
+        for k, v in current_context.items():
+            if v is None or isinstance(v, Resource):
+                current_context[k] = ""
+
+        if cache_dir is None:
+            cache_dir = os.path.expanduser("~/.agave")
+        save_config(cache_dir, current_context)
+
+
     def list_tenants(self, tenantsurl="https://api.tacc.utexas.edu/tenants"):
         """ List Agave tenants
 
@@ -526,7 +579,14 @@ class Agave(object):
         tenantsurl: string (default: "https://api.tacc.utexas.edu/tenants")
             Endpoint with Agave tenant information.
         """
-        tenant_list(tenantsurl)
+        tenants = tenant_list(tenantsurl)
+        print("{0:<20} {1:<40} {2:<50}".format("ID", "NAME", "URL"))
+        for _, tenant in tenants.items():
+            print("{0:<20} {1:<40} {2:<50}".format(
+                    tenant["id"], tenant["name"], tenant["url"]))
+
+        return tenants
+
 
     def clients_create(self, client_name, description):
         """ Create an Agave Oauth client

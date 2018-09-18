@@ -1,0 +1,43 @@
+{
+  "current": {
+    "access_token": "",
+    "apikey": "",
+    "apisecret": "",
+    "baseurl": "https://api.sd2e.org",
+    "created_at": "",
+    "devurl": "",
+    "expires_at": "",
+    "expires_in": "",
+    "refresh_token": "",
+    "tenantid": "sd2e",
+    "username": ""
+  },
+  "tenants": {
+    "irec": {
+      "access_token": "",
+      "apikey": "",
+      "apisecret": "",
+      "baseurl": "https://irec.tenants.prod.tacc.cloud",
+      "created_at": "",
+      "devurl": "",
+      "expires_at": "",
+      "expires_in": "",
+      "refresh_token": "",
+      "tenantid": "irec",
+      "username": ""
+    },
+    "sd2e": {
+      "access_token": "",
+      "apikey": "",
+      "apisecret": "",
+      "baseurl": "https://api.sd2e.org",
+      "created_at": "",
+      "devurl": "",
+      "expires_at": "",
+      "expires_in": "",
+      "refresh_token": "",
+      "tenantid": "sd2e",
+      "username": ""
+    }
+  }
+}

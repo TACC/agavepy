@@ -21,7 +21,7 @@ def handle_bad_response_status_code(r):
     """
     if not r.ok:
         error_msg = "Bad {0} request to {1}, status code {2}\n".format(
-            r.request.method, r.url, r.status_code),                        
+            r.request.method, r.url, r.status_code)
         error_msg += "{}\n".format(r.request.body)
         error_msg += "{}\n".format(r.json())
 

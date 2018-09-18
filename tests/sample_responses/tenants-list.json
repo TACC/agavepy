@@ -1,0 +1,260 @@
+{
+  "status": "success",
+  "message": "",
+  "result": [
+    {
+      "id": "6601411570898817-b0b0b0bb0b-0001-016",
+      "name": "3dem Tenant",
+      "baseUrl": "https://api.3dem.org/",
+      "code": "3dem",
+      "contact": [
+        {
+          "name": "user user",
+          "email": "user@tacc.utexas.edu",
+          "url": "",
+          "type": "admin",
+          "primary": true
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://docker.example.com/tenants/v2/3dem"
+        },
+        "publickey": {
+          "href": "https://api.3dem.org/apim/v2/publickey"
+        }
+      }
+    },
+    {
+      "id": "4201449684007961-b0b0b0bb0b-0001-016",
+      "name": "Agave Public Tenant",
+      "baseUrl": "https://public.agaveapi.co/",
+      "code": "agave.prod",
+      "contact": [
+        {
+          "name": "user user",
+          "email": "user@tacc.utexas.edu",
+          "url": "",
+          "type": "admin",
+          "primary": true
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://docker.example.com/tenants/v2/agave.prod"
+        },
+        "publickey": {
+          "href": "https://public.agaveapi.co/apim/v2/publickey"
+        }
+      }
+    },
+    {
+      "id": "0001411570898826-b0b0b0bb0b-0001-016",
+      "name": "Araport",
+      "baseUrl": "https://api.araport.org/",
+      "code": "araport.org",
+      "contact": [
+        {
+          "name": "user user",
+          "email": "user@tacc.utexas.edu",
+          "url": "",
+          "type": "admin",
+          "primary": true
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://docker.example.com/tenants/v2/araport.org"
+        },
+        "publickey": {
+          "href": "https://api.araport.org/apim/v2/publickey"
+        }
+      }
+    },
+    {
+      "id": "3201449684007961-b0b0b0bb0b-0001-016",
+      "name": "DesignSafe",
+      "baseUrl": "https://agave.designsafe-ci.org/",
+      "code": "designsafe",
+      "contact": [
+        {
+          "name": "user user",
+          "email": "user@tacc.utexas.edu",
+          "url": "",
+          "type": "admin",
+          "primary": true
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://docker.example.com/tenants/v2/designsafe"
+        },
+        "publickey": {
+          "href": "https://agave.designsafe-ci.org/apim/v2/publickey"
+        }
+      }
+    },
+    {
+      "id": "0001411570898781-b0b0b0bb0b-0001-016",
+      "name": "CyVerse Science APIs",
+      "baseUrl": "https://agave.iplantc.org/",
+      "code": "iplantc.org",
+      "contact": [
+        {
+          "name": "user user",
+          "email": "user@tacc.utexas.edu",
+          "url": "",
+          "type": "admin",
+          "primary": true
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://docker.example.com/tenants/v2/iplantc.org"
+        },
+        "publickey": {
+          "href": "https://agave.iplantc.org/apim/v2/publickey"
+        }
+      }
+    },
+    {
+      "id": "0001411570898837-b0b0b0bb0b-0001-016",
+      "name": "iReceptor",
+      "baseUrl": "https://irec.tenants.prod.tacc.cloud/",
+      "code": "irec",
+      "contact": [
+        {
+          "name": "user user",
+          "email": "user@sfu.ca",
+          "url": "",
+          "type": "admin",
+          "primary": true
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://docker.example.com/tenants/v2/irec"
+        },
+        "publickey": {
+          "href": "https://irec.tenants.prod.tacc.cloud/apim/v2/publickey"
+        }
+      }
+    },
+    {
+      "id": "0001411570898818-b0b0b0bb0b-0001-016",
+      "name": "Portals Tenant",
+      "baseUrl": "https://portals-api.tacc.utexas.edu/",
+      "code": "portals",
+      "contact": [
+        {
+          "name": "Portals Admin",
+          "email": "admin@example.com",
+          "url": "",
+          "type": "admin",
+          "primary": true
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://docker.example.com/tenants/v2/portals"
+        },
+        "publickey": {
+          "href": "https://portals-api.tacc.utexas.edu/apim/v2/publickey"
+        }
+      }
+    },
+    {
+      "id": "0001411570898817-b0b0b0bb0b-0001-016",
+      "name": "SD2E Tenant",
+      "baseUrl": "https://api.sd2e.org/",
+      "code": "sd2e",
+      "contact": [
+        {
+          "name": "user user",
+          "email": "user@tacc.utexas.edu",
+          "url": "",
+          "type": "admin",
+          "primary": true
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://docker.example.com/tenants/v2/sd2e"
+        },
+        "publickey": {
+          "href": "https://api.sd2e.org/apim/v2/publickey"
+        }
+      }
+    },
+    {
+      "id": "5603147879475572250-242ac113-0001-016",
+      "name": "Science Gateways Community Institute",
+      "baseUrl": "https://sgci.tacc.cloud/",
+      "code": "sgci",
+      "contact": [
+        {
+          "name": "user user",
+          "email": "user@sciencegateways.org",
+          "url": "",
+          "type": "admin",
+          "primary": true
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://docker.example.com/tenants/v2/sgci"
+        },
+        "publickey": {
+          "href": "https://sgci.tacc.cloud/apim/v2/publickey"
+        }
+      }
+    },
+    {
+      "id": "0001423978050162-b0b0b0bb0b-0001-016",
+      "name": "TACC",
+      "baseUrl": "https://api.tacc.utexas.edu/",
+      "code": "tacc.prod",
+      "contact": [
+        {
+          "name": "user user",
+          "email": "user@tacc.utexas.edu",
+          "url": "",
+          "type": "admin",
+          "primary": true
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://docker.example.com/tenants/v2/tacc.prod"
+        },
+        "publickey": {
+          "href": "https://api.tacc.utexas.edu/apim/v2/publickey"
+        }
+      }
+    },
+    {
+      "id": "0001411570898793-b0b0b0bb0b-0001-016",
+      "name": "VDJ Server",
+      "baseUrl": "https://vdj-agave-api.tacc.utexas.edu/",
+      "code": "vdjserver.org",
+      "contact": [
+        {
+          "name": "user user",
+          "email": "user@tacc.utexas.edu",
+          "url": "",
+          "type": "admin",
+          "primary": true
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://docker.example.com/tenants/v2/vdjserver.org"
+        },
+        "publickey": {
+          "href": "https://vdj-agave-api.tacc.utexas.edu/apim/v2/publickey"
+        }
+      }
+    }
+  ],
+  "version": "2.2.22-r7deb380"
+}

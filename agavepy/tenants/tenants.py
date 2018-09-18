@@ -6,7 +6,7 @@ Methods to interact with Agave tenants.
 from __future__ import print_function
 import requests
 import sys
-from utils import handle_bad_response_status_code
+from ..utils import handle_bad_response_status_code
 
 
 def get_tenants(url):
@@ -52,9 +52,18 @@ def tenant_list(tenantsurl="https://api.tacc.utexas.edu/tenants"):
     # Get a json of all AGave tenants.
     tenants = get_tenants(tenantsurl)
 
-    # Print results.
-    print("{0:<20} {1:<40} {2:<50}".format("CODE", "NAME", "URL"))
+    # Create dictionary of tenants.
+    tenants_info = dict()
+
+    # Parse results.
     for tenant in tenants.get("result", []):
-        print("{0:<20} {1:<40} {2:<50}".format(
-            tenant.get("code", ""), tenant.get("name", ""), 
-            tenant.get("baseUrl", "")))
+        # code is the tenant id, name is the full name, baseUrl is the url.
+        tenant_info = {
+            "id": tenant.get("code", ""), 
+            "name": tenant.get("name", ""), 
+            "url": tenant.get("baseUrl", ""),
+        }
+        tenants_info[tenant_info["id"]] = tenant_info
+
+
+    return tenants_info
