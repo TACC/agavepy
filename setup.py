@@ -43,7 +43,11 @@ setup(
     url='https://github.com/TACC/agavepy',
     packages=[
         'agavepy',
-        'agavepy.swaggerpy'
+        'agavepy.swaggerpy',
+        "agavepy.tenants",
+        "agavepy.clients",
+        "agavepy.tokens",
+        "agavepy.utils"
     ],
     package_dir={'agavepy': 'agavepy'},
     package_data={'agavepy': ['resources.json', 'resources.json.j2']},
