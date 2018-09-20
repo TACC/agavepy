@@ -10,7 +10,7 @@ import json
 import requests
 import sys
 from os import path
-from utils import handle_bad_response_status_code
+from ..utils import handle_bad_response_status_code
 
 
 class AgaveClientError(Exception):

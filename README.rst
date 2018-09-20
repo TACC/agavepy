@@ -96,7 +96,7 @@ Agave tenant.
     tacc.prod            TACC                                     https://api.tacc.utexas.edu/
     vdjserver.org        VDJ Server                               https://vdj-agave-api.tacc.utexas.edu/
     
-    Please specify the url of a tenant to interact with: https://api.araport.org/
+    Please specify the ID of a tenant to interact with: araport.org
     >>> ag.api_server
     'https://api.araport.org/'
 
@@ -107,7 +107,14 @@ If you already now what tenant you want to work with, you can instantiate
 .. code-block:: pycon
 
    >>> from agavepy.agave import Agave
-   >>> ag = Agave(api_server='https://api.tacc.cloud')
+   >>> ag = Agave(api_server="https://api.tacc.cloud")
+
+or 
+
+.. code-block:: pycon
+
+    >>> from agavepy.agave import Agave
+    >>> ag = Agave(tenant_id="tacc.prod")
 
 Once the object is instantiated, interact with it according to the API 
 documentation and your specific usage needs. 
@@ -179,6 +186,22 @@ To create a token
 
 Keep in mind that you will need to create an oauth client first!
 
+
+
+Saving your credentials
+^^^^^^^^^^^^^^^^^^^^^^^
+
+To save your process (api key, api secret, access token, refresh token, tenant
+information) you can use the method ``Agave.save_configs()``
+
+.. code-block:: pycon
+
+    >>> ag.save_configs()
+
+By default, ``Agave.save_configs`` will store credentials in ``~/.agave``. 
+It will save all session in ``~/.agave/config.json`` and, for
+backwards-compatibility with other agave tooling, it will save the current
+session in ``~/.agave/current``.
 
 
 The refresh token

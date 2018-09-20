@@ -92,7 +92,7 @@ class TestMockServer(MockServer):
         MockServer.serve.__func__(cls, MockServerTokenEndpoints)
 
 
-    @patch("tokens.getpass.getpass")
+    @patch("agavepy.tokens.tokens.getpass.getpass")
     def test_get_access_token(self, mock_pass):
         """ Test client create op
 

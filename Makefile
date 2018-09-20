@@ -26,6 +26,10 @@ clean:
 	rm -rf agavepy.egg-info build dist .cache
 	rm -rf schema openapi
 	rm -rf agavepy/__pycache__/
+	rm -rf agavepy/tenants/*.pyc agavepy/tenants/__pycache__/
+	rm -rf agavepy/clients/*.pyc agavepy/clients/__pycache__/
+	rm -rf agavepy/tokens/*.pyc agavepy/tokens/__pycache__/
+	rm -rf agavepy/utils/*.pyc agavepy/utils/__pycache__/
 	rm -rf agavepy/tests/__pycache__/
 	rm -rf agavepy/*.pyc
 	rm -rf tests/__pycache__/

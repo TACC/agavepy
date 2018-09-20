@@ -90,7 +90,7 @@ class TestMockServer(MockServer):
 
 
     @patch("agavepy.agave.input")
-    @patch("clients.getpass.getpass")
+    @patch("agavepy.clients.clients.getpass.getpass")
     def test_client_create(self, mock_input, mock_pass):
         """ Test client create op
 
