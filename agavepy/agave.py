@@ -19,10 +19,10 @@ import jinja2
 import dateutil.parser
 import requests
 
-from .tenants import tenant_list
-from .clients import client_create
-from .tokens import token_create
-from .utils import save_config
+from agavepy.tenants import tenant_list
+from agavepy.clients import client_create
+from agavepy.tokens import token_create
+from agavepy.utils import save_config
 
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
