@@ -39,18 +39,11 @@ clean:
 clean-docs:
 	make -C docs/ clean
 
-deps:
-	mkdir -p schema
-	mkdir -p openap
 
-docs: deps
-	python scripts/swagger_to_rst.py
-	cd docs
-	make static-clean
-	make openapi
-	make schema
-	make html
-	cd ../
+docs:
+	pip install sphinx-rtd-theme>=0.4.0
+	make -C docs/ html
+
 
 install:
 	python setup.py install
@@ -65,4 +58,4 @@ tests:
 	pytest -v --cache-clear tests/
 
 tests-py2:
-	python2 -m pytest tests
+	python2 -m pytest -v tests

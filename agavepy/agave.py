@@ -20,7 +20,7 @@ import dateutil.parser
 import requests
 
 from agavepy.tenants import tenant_list
-from agavepy.clients import client_create
+from agavepy.clients import clients_create, clients_list
 from agavepy.tokens import token_create
 from agavepy.utils import save_config
 
@@ -607,8 +607,21 @@ class Agave(object):
         if self.username == "" or self.username is None:
             self.username = input("API username: ")
 
-        self.api_key, self.api_secret = client_create(
+        self.api_key, self.api_secret = clients_create(
             self.username, client_name, description, tenant_url)
+
+
+    def clients_list(self):
+        """ List all Agave oauth clients
+        """
+        # Set username.
+        if self.username == "" or self.username is None:
+            self.username = input("API username: ")
+
+        # Set tenant url.
+        tenant_url = self.api_server
+
+        clients_list(self.username, tenant_url)
 
 
     def get_access_token(self):

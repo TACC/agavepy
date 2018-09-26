@@ -1,0 +1,25 @@
+{
+  "status": "success",
+  "message": "Clients retrieved successfully.",
+  "version": "2.0.0-SNAPSHOT-rc3fad",
+  "result": [
+    {
+      "description": "default client",
+      "name": "DefaultApplication",
+      "consumerKey": "Wxsaxaxsa",
+      "_links": {
+        "subscriber": {
+          "href": "https://url/profiles/v2/user"
+        },
+        "self": {
+          "href": "https://url/clients/v2/DefaultApplication"
+        },
+        "subscriptions": {
+          "href": "https://url/clients/v2/DefaultApplication/subscriptions/"
+        }
+      },
+      "tier": "Unlimited",
+      "callbackUrl": ""
+    }
+  ]
+}

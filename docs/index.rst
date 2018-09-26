@@ -10,6 +10,8 @@ Welcome to AgavePy's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   clients/index
+
    agavepy.actors
    agavepy.apps
    agavepy.files
