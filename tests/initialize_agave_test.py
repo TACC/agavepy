@@ -41,6 +41,7 @@ class TestAgaveInitialization:
 
         # Instantiate Agave object making reference to local mock server.
         ag = Agave()
+        ag.init()
 
         assert ag.tenant_id == "sd2e"
         assert ag.api_server == "https://api.sd2e.org"

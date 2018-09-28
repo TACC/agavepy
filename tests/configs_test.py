@@ -1,7 +1,7 @@
 """
-    save_configs_test.py
+    configs_test.py
 
-Test save configuration function.    
+Test save and load configuration function.    
 """
 import pytest
 import json
@@ -49,16 +49,19 @@ class TestSaveConfigs:
             cache_dir = tempfile.mkdtemp()
 
             a = Agave(tenant_id="sd2e")
+            a.init()
             a.client_name = "client-1"
             a.username = "user-1"
             a.save_configs(cache_dir)
 
             b = Agave(tenant_id="tacc.prod")
+            b.init()
             b.client_name = "client-2"
             b.username = "user-2"
             b.save_configs(cache_dir)
 
             c = Agave(tenant_id="sd2e")
+            c.init()
             c.client_name = "client-3"
             c.username = "user-3"
             c.save_configs(cache_dir)
@@ -70,5 +73,53 @@ class TestSaveConfigs:
             print()
             print(sample_config)
             assert config == sample_config 
+        finally:
+            shutil.rmtree(cache_dir)
+
+
+    @patch("agavepy.tenants.tenants.get_tenants")
+    def test_load_configs(self, mock_get_tenants):
+        """ Test load_configs function
+        """
+        try:
+            # create a tmp dir and use it as a cache dir.
+            cache_dir = tempfile.mkdtemp()
+            # Save sample configurations to cache dir.
+            with open("{}/config.json".format(cache_dir), "w") as f:
+                json.dump(sample_config, f, indent=4)
+
+            ag = Agave()
+            ag.load_configs(cache_dir=cache_dir)
+
+            sample_client = list(sample_config["current"].keys())[0]
+            assert ag.client_name == sample_client
+            assert ag.tenant_id   == sample_config["current"][sample_client]["tenantid"]
+            assert ag.username    == sample_config["current"][sample_client]["username"]
+
+        finally:
+            shutil.rmtree(cache_dir)
+
+
+    @patch("agavepy.tenants.tenants.get_tenants")
+    def test_load_configs_specify_session(self, mock_get_tenants):
+        """ Test load_configs function
+
+        Load a specific session from a configurations file.
+        """
+        try:
+            # create a tmp dir and use it as a cache dir.
+            cache_dir = tempfile.mkdtemp()
+            # Save sample configurations to cache dir.
+            with open("{}/config.json".format(cache_dir), "w") as f:
+                json.dump(sample_config, f, indent=4)
+
+            ag = Agave()
+            ag.load_configs(cache_dir=cache_dir, tenant_id="tacc.prod", 
+                    username="user-2", client_name="client-2")
+
+            assert ag.client_name == "client-2"
+            assert ag.username    == "user-2"
+            assert ag.tenant_id   == "tacc.prod"
+
         finally:
             shutil.rmtree(cache_dir)
