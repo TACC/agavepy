@@ -1,43 +1,53 @@
 {
-  "current": {
-    "access_token": "",
-    "apikey": "",
-    "apisecret": "",
-    "baseurl": "https://api.sd2e.org",
-    "created_at": "",
-    "devurl": "",
-    "expires_at": "",
-    "expires_in": "",
-    "refresh_token": "",
-    "tenantid": "sd2e",
-    "username": ""
-  },
-  "tenants": {
-    "irec": {
-      "access_token": "",
-      "apikey": "",
-      "apisecret": "",
-      "baseurl": "https://irec.tenants.prod.tacc.cloud",
-      "created_at": "",
-      "devurl": "",
-      "expires_at": "",
-      "expires_in": "",
-      "refresh_token": "",
-      "tenantid": "irec",
-      "username": ""
+    "current": {
+        "client-3": {
+            "tenantid": "sd2e",
+            "baseurl": "https://api.sd2e.org",
+            "devurl": "",
+            "apisecret": "",
+            "apikey": "",
+            "username": "user-3",
+            "access_token": "",
+            "refresh_token": "",
+            "created_at": "",
+            "expires_in": "",
+            "expires_at": ""
+        }
     },
-    "sd2e": {
-      "access_token": "",
-      "apikey": "",
-      "apisecret": "",
-      "baseurl": "https://api.sd2e.org",
-      "created_at": "",
-      "devurl": "",
-      "expires_at": "",
-      "expires_in": "",
-      "refresh_token": "",
-      "tenantid": "sd2e",
-      "username": ""
+    "sessions": {
+        "sd2e": {
+            "user-1": {
+                "client-1": {
+                    "tenantid": "sd2e",
+                    "baseurl": "https://api.sd2e.org",
+                    "devurl": "",
+                    "apisecret": "",
+                    "apikey": "",
+                    "username": "user-1",
+                    "access_token": "",
+                    "refresh_token": "",
+                    "created_at": "",
+                    "expires_in": "",
+                    "expires_at": ""
+                }
+            }
+        },
+        "tacc.prod": {
+            "user-2": {
+                "client-2": {
+                    "tenantid": "tacc.prod",
+                    "baseurl": "https://api.tacc.utexas.edu",
+                    "devurl": "",
+                    "apisecret": "",
+                    "apikey": "",
+                    "username": "user-2",
+                    "access_token": "",
+                    "refresh_token": "",
+                    "created_at": "",
+                    "expires_in": "",
+                    "expires_at": ""
+                }
+            }
+        }
     }
-  }
 }

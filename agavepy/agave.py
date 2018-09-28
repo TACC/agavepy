@@ -568,7 +568,7 @@ class Agave(object):
 
         if cache_dir is None:
             cache_dir = os.path.expanduser("~/.agave")
-        save_config(cache_dir, current_context)
+        save_config(cache_dir, current_context, self.client_name)
 
 
     def list_tenants(self, tenantsurl="https://api.tacc.utexas.edu/tenants"):
@@ -609,6 +609,8 @@ class Agave(object):
 
         self.api_key, self.api_secret = clients_create(
             self.username, client_name, description, tenant_url)
+        # Save client name upon successful return of function.
+        self.client_name = client_name
 
 
     def clients_list(self):
