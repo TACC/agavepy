@@ -21,9 +21,10 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from agavepy.agave import Agave
 
 
-# The agave API will provide a response with the following format upon a
-# successfull attempt at creating a client.
+# Sample successful responses from the agave api.
 sample_client_create_response = response_template_to_json("clients-create.json")
+sample_client_list_response = response_template_to_json("clients-list.json")
+
 
 
 class MockServerClientEndpoints(BaseHTTPRequestHandler):
@@ -31,9 +32,16 @@ class MockServerClientEndpoints(BaseHTTPRequestHandler):
 
     Mock client managament endpoints from the agave api.
     """
+    def do_GET(self):
+        """ Mock oauth client listing.
+        """
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(json.dumps(sample_client_list_response).encode())
+
 
     def do_POST(self):
-        """ Test agave client creation
+        """ Mock agave client creation
         """
         # Get request data.
         form = cgi.FieldStorage(
@@ -90,7 +98,7 @@ class TestMockServer(MockServer):
 
 
     @patch("agavepy.agave.input")
-    @patch("agavepy.clients.clients.getpass.getpass")
+    @patch("agavepy.clients.create.getpass.getpass")
     def test_client_create(self, mock_input, mock_pass):
         """ Test client create op
 
@@ -110,3 +118,29 @@ class TestMockServer(MockServer):
 
         assert ag.api_key == "some api key"
         assert ag.api_secret == "some secret"
+
+
+    @patch("agavepy.agave.input")
+    @patch("agavepy.clients.list.getpass.getpass")
+    def test_clients_list(self, mock_input, mock_pass, capfd):
+        """ Test clients listing
+
+        Patch username and password from user to send a client create request
+        to mock server.
+        """
+        # Patch username and password.
+        mock_input.return_value = "user"
+        mock_pass.return_value = "pass"
+
+        # Instantiate Agave object making reference to local mock server.
+        local_uri = "http://localhost:{port}".format(port=self.mock_server_port)
+        ag = Agave(api_server=local_uri)
+
+        # List clients.
+        ag.clients_list()
+
+        # Stdout should contain the putput from the command.
+        # Stderr will contain logs from the mock http server.
+        out, err = capfd.readouterr()
+        assert "DefaultApplication" in out
+        assert "\"GET /clients/v2 HTTP/1.1\" 200" in err 

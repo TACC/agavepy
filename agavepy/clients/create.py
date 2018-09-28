@@ -1,29 +1,20 @@
 """
-    clients.py
+    create.py
 
-Functions related to Agave Oauth clients.
+Functions to create Agave oauth clients.
 """
 from __future__ import print_function
-from builtins import input
 import getpass
 import json
 import requests
 import sys
 from os import path
+from .exceptions import AgaveClientError
 from ..utils import handle_bad_response_status_code
 
 
-class AgaveClientError(Exception):
-    """ Handle Agave-related client operations
-    """
-    def __init__(self, msg):
-        self.msg = msg
 
-    def __str__(self):
-        return repr(self.msg)
-
-
-def client_create(username, client_name, description, tenant_url):
+def clients_create(username, client_name, description, tenant_url):
     """ Create an Agave client
 
     Make a request to Agave to create an oauth client. Returns the client's api
