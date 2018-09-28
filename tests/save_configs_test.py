@@ -49,10 +49,18 @@ class TestSaveConfigs:
             cache_dir = tempfile.mkdtemp()
 
             a = Agave(tenant_id="sd2e")
+            a.client_name = "client-1"
+            a.username = "user-1"
             a.save_configs(cache_dir)
-            b = Agave(tenant_id="irec")
+
+            b = Agave(tenant_id="tacc.prod")
+            b.client_name = "client-2"
+            b.username = "user-2"
             b.save_configs(cache_dir)
+
             c = Agave(tenant_id="sd2e")
+            c.client_name = "client-3"
+            c.username = "user-3"
             c.save_configs(cache_dir)
 
             with open("{}/config.json".format(cache_dir), "r") as f:

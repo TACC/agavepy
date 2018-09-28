@@ -55,7 +55,7 @@ shell: build # Start a shell inside the build environment.
 	$(DOCKER_RUN_AGAVECLI) bash
 
 tests:
-	pytest -v --cache-clear tests/
+	pytest -vv --cache-clear tests/
 
 tests-py2:
-	python2 -m pytest -v tests
+	python2 -m pytest -vv tests

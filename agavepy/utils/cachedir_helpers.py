@@ -6,6 +6,8 @@ import json
 import requests
 import sys
 import os
+from collections import defaultdict
+
 
 
 def make_cache_dir(cache_dir):
@@ -23,7 +25,7 @@ def make_cache_dir(cache_dir):
         os.makedirs(cache_dir)
 
 
-def save_config(cache_dir, current_context):
+def save_config(cache_dir, current_context, client_name):
     """ Initiate an Agave Tenant
 
     Create or switch the current context to a specified Agave tenant.
@@ -40,20 +42,35 @@ def save_config(cache_dir, current_context):
     For example:
     {
         "current": {
-            "access_token": "some-token",
-            ...
-            "username": "user"
-        },
-        "tenants": {
-            "3dem": {
-                "access_token": "other-token",
+            "client-name": {
+                "access_token": "some-token",
                 ...
                 "username": "user"
+            }
+        },
+        "sessions": {
+            "3dem": {
+                "username": {
+                    "client-name": {
+                        "access_token": "other-token",
+                        ...
+                        "username": "user"
+                    },
+                    "client-name-2": {
+                        "access_token": "some-other-token",
+                        ...
+                        "username"
+                    }
+                }
             },
             "sd2e": {
-                "acces_token": "some-token",
-                ...
-                "usernamer":user"
+                "username": {
+                    "client-name": {
+                        "acces_token": "some-token",
+                        ...
+                        "usernamer":user"
+                    }
+                }
             }
         }
     }
@@ -73,33 +90,52 @@ def save_config(cache_dir, current_context):
         with open(config_file, "r") as f:
             agave_context = json.load(f)
     else:
-        agave_context = dict()
+        agave_context = defaultdict(lambda: defaultdict(dict))
 
 
     # Set up ~/.agave/config.json
 
     # We are saving configurations for the first time so we have to set 
     # "current" and add it to "tenants".
-    if "tenants" not in agave_context:
-        # No existing tenants, so we just add the current context.
-        agave_context["current"] = current_context
+    if "sessions" not in agave_context:
+        # No current session, so we just add the current context.
+        agave_context["current"][client_name] = current_context
         
-        # Create an empty dictionary for "tenants" key.
-        agave_context["tenants"] = dict()
         # Save current tenant context.
-        agave_context["tenants"][current_context["tenantid"]] = agave_context["current"]
-    # "tenants" already exist so we just have to put the current context
-    # back in.
-    else:
-        # Save current tenant context.
-        agave_context["tenants"][agave_context["current"]["tenantid"]] = agave_context["current"]
+        tenant_id = current_context["tenantid"]
+        username  = current_context["username"]
 
-        # Save current_context as such.
-        agave_context["current"] =  current_context
+        # Initialize fields as appropiate.
+        # Will save the saved current context, this already includes the client
+        # name.
+        agave_context["sessions"][tenant_id][username] = \
+            agave_context["current"]
+    # There are existing sessions already so we just have to properly save the
+    # current context.
+    else:
+        # Save current tenant context to sessions.
+        # The saved client should be the only entry in the current session.
+        saved_client = list(agave_context["current"].keys())[0]
+        tenant_id = agave_context["current"][saved_client]["tenantid"]
+        username  = agave_context["current"][saved_client]["username"]
+        
+        # Initialized sessions fields if they don't already exist.
+        if tenant_id not in agave_context["sessions"].keys():
+            agave_context["sessions"][tenant_id] = dict()
+        if username not in agave_context["sessions"][tenant_id].keys():
+            agave_context["sessions"][tenant_id][username] = dict()
+
+        # Save current context on sessions.
+        agave_context["sessions"][tenant_id][username][saved_client] = \
+            agave_context["current"][saved_client]
+
+        # Save "current_context".
+        del agave_context["current"][saved_client]
+        agave_context["current"][client_name] =  current_context
 
 
     # Save data to cache dir files.
     with open(config_file, "w") as f:
-        json.dump(agave_context, f, sort_keys=True, indent=4)
+        json.dump(agave_context, f, indent=4)
     with open(current_file, "w") as f:
-        json.dump(agave_context["current"], f, sort_keys=True)
+        json.dump(agave_context["current"][client_name], f, sort_keys=True)
