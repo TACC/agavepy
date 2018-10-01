@@ -1,5 +1,5 @@
 """
-    cachedir_helpers.py
+    save_configs.py
 """
 from __future__ import print_function
 import json
@@ -26,18 +26,18 @@ def make_cache_dir(cache_dir):
 
 
 def save_config(cache_dir, current_context, client_name):
-    """ Initiate an Agave Tenant
+    """ Save session configurations to file.
 
-    Create or switch the current context to a specified Agave tenant.
-    The current context along with all previous used are stored in a
-    local database (arguments.agavedb).
+    Create or switch the current session context.
 
     The ~/.agave/config.json file will have the following format:
         * "current" will specify the configuration to be used for the current 
-          session. The contents of this section should match those of 
-          ~/.agave/current.
-        * "tenants" will have one or more keys, and each key will have a json 
-          object related to it. Each key will correspond to a tenant id.
+          session. The contents of this section should include a nested json 
+          object wich will hold all session configurations. It matches the 
+          information of ~/.agave/current.
+        * "sessions" will be a series of nested json objects. Each session 
+        configuration will be indexed by tenant id, user name, and client name,
+        respectively.
 
     For example:
     {
@@ -77,6 +77,12 @@ def save_config(cache_dir, current_context, client_name):
 
     PARAMETERS
     ----------
+    cache_dir: string
+        Path to store session configuration.
+    current_context: dict
+        Session context.
+    client_name: string
+        Name of oauth client being used in the current session.
     """
     # Get location to store configuration.
     make_cache_dir(cache_dir)
