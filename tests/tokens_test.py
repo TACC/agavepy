@@ -1,13 +1,14 @@
 """
-    get_access_token_test.py
+    tokens_test.py
 
-Test Agavepy.get_access_token() method.
+Test Agavepy.get_access_token() and refresh_tokens() methods.
 """
 import pytest
 import cgi
 import json                                                                     
 import os
 import sys
+import time
 from http.server import BaseHTTPRequestHandler
 from testsuite_utils import MockServer
 from response_templates import response_template_to_json
@@ -22,18 +23,17 @@ from agavepy.agave import Agave
 
 
 # Agave will provide a response with the following format upon a
-# successfull attempt at creating an access token.
+# successfull attempt at creating an access token. Refreshing a token results
+# in a response with the same format.
 sample_token_create_response = response_template_to_json("auth-tokens-create.json")
 
 
 class MockServerTokenEndpoints(BaseHTTPRequestHandler):
-    """ Agave mock
-
-    Mock token managament endpoints.
+    """ Mock token managament endpoints.
     """
 
     def do_POST(self):
-        """ Test agave client creation
+        """ Test token creation and refreshing
         """
         # Get request data (curl's -d).
         form = cgi.FieldStorage(
@@ -41,28 +41,29 @@ class MockServerTokenEndpoints(BaseHTTPRequestHandler):
             headers = self.headers,
             environ={'REQUEST_METHOD': 'POST'})
 
-        # Check username is set.
+        # Check that username and password are set. Else, refresh_token should
+        # be set.
         username = form.getvalue("username", "")
-        if username == "":
-            self.send_response(400)
-            self.end_headers()
-            return
-
-        # Check password is set.
         password = form.getvalue("password", "")
-        if password == "":
-            self.send_response(400)
-            self.end_headers()
-            return
+        refresh_token = form.getvalue("refresh_token", "")
 
-        # CHeck grant type is set.
-        if form.getvalue("grant_type", "") == "":
+        if form.getvalue("grant_type", "") == "password":
+            if username == "" or password == "":
+                self.send_response(400)
+                self.end_headers()
+                return
+        elif form.getvalue("grant_type", "") == "refresh_token":
+            if refresh_token == "":
+                self.send_response(400)
+                self.end_headers()
+                return
+        else:
             self.send_response(400)
             self.end_headers()
             return
 
         # Check scope is set.
-        if form.getvalue("scope", "") == "":
+        if form.getvalue("scope", "") != "PRODUCTION":
             self.send_response(400)
             self.end_headers()
             return
@@ -92,9 +93,9 @@ class TestMockServer(MockServer):
         MockServer.serve.__func__(cls, MockServerTokenEndpoints)
 
 
-    @patch("agavepy.tokens.tokens.getpass.getpass")
+    @patch("agavepy.tokens.create_access_token.getpass.getpass")
     def test_get_access_token(self, mock_pass):
-        """ Test client create op
+        """ Test access token creation
 
         Patch username and password from user to send a client create request
         to mock server.
@@ -108,8 +109,27 @@ class TestMockServer(MockServer):
         ag.api_key = "somekey"
         ag.api_secret = "somesecret"
 
-        # Create client.
+        # Get access token.
         ag.get_access_token()
+
+        assert ag.token == "access token"
+        assert ag.refresh_token == "refresh token"
+
+
+    def test_refresh_tokens(self):
+        """ Test refresh token operation
+        """
+        local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
+        ag = Agave(api_server=local_uri)
+        ag.api_key = "xxx"
+        ag.api_secret = "xxx"
+        ag.refresh_token = "xxx"
+        # See agavepy/agave.py:refresh_tokens() for more info.
+        ag.created_at = str( int(time.time()) - 100 )
+        ag.expires_in = str(0)
+
+        # Refresh access token
+        ag.refresh_tokens()
 
         assert ag.token == "access token"
         assert ag.refresh_token == "refresh token"
