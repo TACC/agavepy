@@ -33,12 +33,13 @@ def get_tenants(url):
         sys.exit(1)
 
     # Handle bad status code.
+    print(resp.json())
     handle_bad_response_status_code(resp)
 
     return resp.json()
 
 
-def tenant_list(tenantsurl="https://api.tacc.utexas.edu/tenants"):
+def tenant_list(tenantsurl="https://agaveapi.co/tenants"):
     """ List Agave tenants
 
     List all Agave tenants for a given Agave host. Information listed is the

@@ -614,13 +614,14 @@ class Agave(object):
         self.expires_at    = session_context["expires_at"]
 
 
-    def list_tenants(self, tenantsurl="https://api.tacc.utexas.edu/tenants"):
+    def list_tenants(self, tenantsurl="https://agaveapi.co/tenants"):
         """ List Agave tenants
 
         PARAMETERS
         ----------
         tenantsurl: string (default: "https://api.tacc.utexas.edu/tenants")
-            Endpoint with Agave tenant information.
+            Endpoint with Agave tenant information. Another alternative is 
+            https://api.tacc.utexas.edu/tenants.
         """
         tenants = tenant_list(tenantsurl)
         print("{0:<20} {1:<40} {2:<50}".format("ID", "NAME", "URL"))
