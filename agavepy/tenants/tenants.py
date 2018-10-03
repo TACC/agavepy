@@ -38,7 +38,7 @@ def get_tenants(url):
     return resp.json()
 
 
-def tenant_list(tenantsurl="https://api.tacc.utexas.edu/tenants"):
+def tenant_list(tenantsurl="https://agaveapi.co/tenants"):
     """ List Agave tenants
 
     List all Agave tenants for a given Agave host. Information listed is the

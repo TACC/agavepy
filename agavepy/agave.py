@@ -518,7 +518,7 @@ class Agave(object):
         # (api_server).
         # Neither tenant ID nor tenant url are set.
         if self.tenant_id is None and self.api_server is None:
-            tenants = self.list_tenants(tenantsurl="https://api.tacc.utexas.edu/tenants")
+            tenants = self.list_tenants()
             value = input("\nPlease specify the ID for the tenant you wish to interact with: ")
             self.tenant_id  = tenants[value]["id"]
             tenant_url = tenants[value]["url"]
@@ -527,14 +527,14 @@ class Agave(object):
             self.api_server = tenant_url
         # Tenant ID was not set.
         elif self.tenant_id is None and self.api_server is not None:
-            tenants = tenant_list(tenantsurl="https://api.tacc.utexas.edu/tenants")
+            tenants = tenant_list()
 
             for _, tenant in tenants.items():
                 if self.api_server in tenant["url"]:
                     self.tenant_id = tenant["id"]
         # Tenant url was not set.
         elif self.api_server is None and self.tenant_id is not None:
-            tenants = tenant_list(tenantsurl="https://api.tacc.utexas.edu/tenants")
+            tenants = tenant_list()
 
             tenant_url = tenants[self.tenant_id]["url"]
             if tenant_url[-1] == '/':
@@ -614,13 +614,14 @@ class Agave(object):
         self.expires_at    = session_context["expires_at"]
 
 
-    def list_tenants(self, tenantsurl="https://api.tacc.utexas.edu/tenants"):
+    def list_tenants(self, tenantsurl="https://agaveapi.co/tenants"):
         """ List Agave tenants
 
         PARAMETERS
         ----------
         tenantsurl: string (default: "https://api.tacc.utexas.edu/tenants")
-            Endpoint with Agave tenant information.
+            Endpoint with Agave tenant information. Another alternative is 
+            https://api.tacc.utexas.edu/tenants.
         """
         tenants = tenant_list(tenantsurl)
         print("{0:<20} {1:<40} {2:<50}".format("ID", "NAME", "URL"))
