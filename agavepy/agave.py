@@ -598,19 +598,20 @@ class Agave(object):
         if cache_dir is None:
             cache_dir = os.path.expanduser("~/.agave")
 
-        session_context = load_config(cache_dir, tenant_id, username, client_name)
+        client_name, session_context = load_config(
+                cache_dir, tenant_id, username, client_name)
 
-        self.client_name   = list(session_context)[0]
-        self.tenant_id     = session_context[self.client_name]["tenantid"]
-        self.api_server    = session_context[self.client_name]["baseurl"]
-        self.api_secret    = session_context[self.client_name]["apisecret"]
-        self.api_key       = session_context[self.client_name]["apikey"]
-        self.username      = session_context[self.client_name]["username"]
-        self.token         = session_context[self.client_name]["access_token"]
-        self.refresh_token = session_context[self.client_name]["refresh_token"]
-        self.created_at    = session_context[self.client_name]["created_at"]
-        self.expires_in    = session_context[self.client_name]["expires_in"]
-        self.expires_at    = session_context[self.client_name]["expires_at"]
+        self.client_name   = client_name
+        self.tenant_id     = session_context["tenantid"]
+        self.api_server    = session_context["baseurl"]
+        self.api_secret    = session_context["apisecret"]
+        self.api_key       = session_context["apikey"]
+        self.username      = session_context["username"]
+        self.token         = session_context["access_token"]
+        self.refresh_token = session_context["refresh_token"]
+        self.created_at    = session_context["created_at"]
+        self.expires_in    = session_context["expires_in"]
+        self.expires_at    = session_context["expires_at"]
 
 
     def list_tenants(self, tenantsurl="https://api.tacc.utexas.edu/tenants"):

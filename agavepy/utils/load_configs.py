@@ -39,7 +39,7 @@ def load_config(cache_dir, tenant_id, username, client_name):
 
     # Return the current session context if no extra parameters are passed.
     if tenant_id is None or username is None or client_name is None:
-        return agave_context["current"]
+        client_name = list(agave_context["current"])[0]
+        return client_name, agave_context["current"][client_name]
     else:
-        print(agave_context)
-        return agave_context["sessions"][tenant_id][username]
+        return client_name, agave_context["sessions"][tenant_id][username][client_name]
