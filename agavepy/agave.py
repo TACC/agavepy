@@ -508,7 +508,7 @@ class Agave(object):
         return list(set(base))
 
 
-    def init(self):
+    def init(self, tenantsurl="https://agaveapi.co/tenants"):
         """ Initilize a session
 
         Initialize a session by setting parameters refering to the tenant you
@@ -518,7 +518,7 @@ class Agave(object):
         # (api_server).
         # Neither tenant ID nor tenant url are set.
         if self.tenant_id is None and self.api_server is None:
-            tenants = self.list_tenants()
+            tenants = self.list_tenants(tenantsurl=tenantsurl)
             value = input("\nPlease specify the ID for the tenant you wish to interact with: ")
             self.tenant_id  = tenants[value]["id"]
             tenant_url = tenants[value]["url"]
@@ -527,14 +527,14 @@ class Agave(object):
             self.api_server = tenant_url
         # Tenant ID was not set.
         elif self.tenant_id is None and self.api_server is not None:
-            tenants = tenant_list()
+            tenants = tenant_list(tenantsurl=tenantsurl)
 
             for _, tenant in tenants.items():
                 if self.api_server in tenant["url"]:
                     self.tenant_id = tenant["id"]
         # Tenant url was not set.
         elif self.api_server is None and self.tenant_id is not None:
-            tenants = tenant_list()
+            tenants = tenant_list(tenantsurl=tenantsurl)
 
             tenant_url = tenants[self.tenant_id]["url"]
             if tenant_url[-1] == '/':
