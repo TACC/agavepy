@@ -21,7 +21,7 @@ import requests
 
 from agavepy.tenants import tenant_list
 from agavepy.clients import clients_create, clients_list
-from agavepy.tokens import token_create
+from agavepy.tokens import token_create, refresh_token
 from agavepy.utils import load_config, save_config
 
 import sys
@@ -694,6 +694,30 @@ class Agave(object):
         self.expires_in    = token_data.get("expires_in")
         self.created_at    = token_data.get("created_at")
         self.expires_at    = token_data.get("expires_at")
+
+
+    def refresh_tokens(self):
+        """ Refresh oauth token
+        """
+        try:
+            created_t = int(self.created_at)
+            expires_t = int(self.expires_in)
+        except TypeError as err:
+            print("You must create a token first. Try get_access_token()")
+            return
+
+        expiration_t = created_t + expires_t
+        delta_t = int(time.time()) - expiration_t
+        if delta_t > -60:
+            print("Refreshing token...")
+            token_data = refresh_token(
+                    self.api_key, self.api_secret, self.refresh_token, self.api_server)
+
+            self.token  = token_data["access_token"]
+            self.refresh_token = token_data["refresh_token"]
+            self.expires_in    = token_data["expires_in"]
+            self.created_at    = token_data["created_at"]
+            self.expires_at    = token_data["expires_at"]
 
 
 
