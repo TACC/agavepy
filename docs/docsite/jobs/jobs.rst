@@ -1,6 +1,6 @@
-************
-agavepy.jobs
-************
+****
+Jobs
+****
 
 Summary: Run and manage jobs
 

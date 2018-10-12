@@ -1,6 +1,6 @@
-************
-agavepy.apps
-************
+****
+Apps
+****
 
 Summary: Register and manage apps
 

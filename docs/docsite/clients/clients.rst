@@ -1,6 +1,6 @@
-#######################
-Agave API OAuth Clients
-#######################
+#############
+OAuth Clients
+#############
 
 
 Creating a client
@@ -12,12 +12,13 @@ Generating OAuth credentials uses HTTP Basic authentication
 (requires username and password).
 
 Agave has a full OAuth provider server and supports 4 major grant types:
+
 1. `password`
 2. `authorization_code`
 3. `refresh_token`
 4. `implicit`
 
-For more information, see `supported authorization flows<http://developer.agaveapi.co/#supported-authorization-flows>`_.
+For more information, see `supported authorization flows <http://developer.agaveapi.co/#supported-authorization-flows>`_.
 
 The OAuth client will have access to all basic Agave APIs.
 
@@ -31,6 +32,7 @@ We can use ``agavepy`` to create an oauth client:
 
     >>> from agavepy.agave import Agave
     >>> ag = Agave(tenant_id="sd2e")
+    >>> ag.init()
     >>> ag.clients_create("client-name", "some description")
     API username: your-username
     API password:

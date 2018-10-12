@@ -1,6 +1,6 @@
-*********************
-agavepy.notifications
-*********************
+*************
+Notifications
+*************
 
 Summary: Subscribe to and manage notifications
 
