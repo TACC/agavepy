@@ -21,11 +21,19 @@ AgavePy is also the engine powering
 
     docsite/installation_guide/index
 
+
+.. toctree::                                                                    
+    :maxdepth: 2                                                                
+    :caption: Contributing to AgavePy                                           
+                                                                                
+    docsite/contributing_guide/index
+
+
 .. toctree::
    :maxdepth: 1
    :caption: Using AgavePy
 
-   docsite/clients/index
+   docsite/authentication/index
   
    docsite/systems/index
    docsite/files/index
@@ -39,10 +47,3 @@ AgavePy is also the engine powering
    docsite/profiles/index
 
    docsite/actors/index
-
-
-.. toctree::
-    :maxdepth: 2
-    :caption: Contributing to AgavePy
-
-    docsite/contributing_guide/index

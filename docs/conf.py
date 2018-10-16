@@ -48,7 +48,7 @@ master_doc = 'index'
 # General information about the project.
 project = u'AgavePy'
 copyright = u'2018 Texas Advanced Computing Center'
-author = u'Joe Stubbs, Walter Moreira, John Fonner, Matthew Vaughn'
+author = u'Texas Advanced Computing Center'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
