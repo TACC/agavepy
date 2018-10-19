@@ -1,16 +1,16 @@
-===================                                           
-Agave OAuth Clients
-===================                                           
-                                                                                
-The Agave services use the Oauth protocol to manage user authentication.
-In this section we descrie how ``Agavepy`` enables us to work with agave
-clients.
+=====
+Files
+=====
 
+Here we will describe how AgavePy allows us to interact with the API to store
+and manage data.
+The methods provided by AgavePy will allow us to setup the data for Agave apps
+to use, to share with collaborators, or to setup for long term storage.
                                                                                 
 .. toctree::                                                                    
    :maxdepth: 2                                                                 
-                                                                                
-   clients
+
+   files
 
 .. only::  subproject and html                                                  
                                                                                 
