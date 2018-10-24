@@ -8,6 +8,7 @@ Contributing Guide
 
 
 .. _reporting_bugs_and_asking_for_features:
+
 Reporting bugs and asking for features
 ``````````````````````````````````````
 
@@ -18,6 +19,7 @@ functionality you believe should be implemented please file an
 
 
 .. _getting_involved:
+
 Getting involved
 ````````````````
 

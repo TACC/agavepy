@@ -23,6 +23,8 @@ from agavepy.tenants import tenant_list
 from agavepy.clients import clients_create, clients_list
 from agavepy.tokens import token_create, refresh_token
 from agavepy.utils import load_config, save_config
+from agavepy.files import files_download
+
 
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
@@ -700,6 +702,9 @@ class Agave(object):
 
     def refresh_tokens(self):
         """ Refresh oauth token
+
+        Check if tokens need to be created or refreshed. If tokens need to be
+        refreshed then this method will do so. Otherwise, the method will exit.
         """
         try:
             created_t = int(self.created_at)
@@ -715,12 +720,21 @@ class Agave(object):
             token_data = refresh_token(
                     self.api_key, self.api_secret, self.refresh_token, self.api_server)
 
-            self.token  = token_data["access_token"]
+            self.token         = token_data["access_token"]
             self.refresh_token = token_data["refresh_token"]
             self.expires_in    = token_data["expires_in"]
             self.created_at    = token_data["created_at"]
             self.expires_at    = token_data["expires_at"]
 
+
+    def files_download(self, source, destination):
+        """ Download files from remote system
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # Download file.
+        files_download(self.api_server, self.token, source, destination)
 
 
 
