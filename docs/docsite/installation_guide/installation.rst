@@ -11,7 +11,7 @@ Installation Guide
 What will be installed
 ``````````````````````
 
-In this guide wewill cover how to get ``AgavePy`` into your machine.
+In this guide we will cover how to get ``AgavePy`` into your machine.
 We will cover how to install the latest official release.
 Also, we will cover how to install the latest from the development branch in 
 case you want to get the latest features and help the TACC team build the most 
@@ -22,7 +22,7 @@ useful and performant software that meets your needs.
 What version to install
 ```````````````````````
 ``AgavePy`` is under constant development. 
-Some features may be missing from ofifical releases but in general oficial
+Some features may be missing from oficial releases but in general oficial
 releases are pushed when the project has reached a stable state.
 
 .. _from_pipy:

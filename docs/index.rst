@@ -9,7 +9,7 @@ AgavePy documentation
 About AgavePy
 -------------
 
-AgavePy is a client that will allow you to script your interacttion with the
+AgavePy is a client that will allow you to script your interaction with the
 Agave API.
 AgavePy is also the engine powering 
 `TACC/Cloud/agave-cli <https://github.com/TACC-Cloud/agave-cli>`_.
