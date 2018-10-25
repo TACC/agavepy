@@ -1,6 +1,6 @@
-*****************
-Methods available
-*****************
+***********************
+Other methods available
+***********************
 
 Summary: Move and manage data
 
