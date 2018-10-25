@@ -25,6 +25,9 @@ except ImportError:
 from agavepy.agave import Agave
 
 
+# Sample successful responses from the agave api.
+sample_files_upload_response = response_template_to_json("files-upload.json")
+
 
 class MockServerFilesEndpoints(BaseHTTPRequestHandler):
     def send_headers(self):
@@ -75,6 +78,50 @@ class MockServerFilesEndpoints(BaseHTTPRequestHandler):
             shutil.copyfileobj(f, self.wfile)
 
 
+    def do_POST(self):
+        """ Upload file
+
+        Save uploaded file to current working directory and send a response.
+        """
+        # elements is a list of path elements, i.e., ["a", "b"] ~ "/a/b".
+        elements = self.send_headers()
+        if elements is None or not "/files/v2/media/system" in self.path:
+            return
+
+        # Submitted form data.
+        form = cgi.FieldStorage(
+            fp = self.rfile,
+            headers = self.headers,
+            environ = {
+                "REQUEST_METHOD": "POST",
+                "CONTENT_TYPE": self.headers["Content-Type"]
+            })
+
+        # Save uploaded file.
+        fname = form["fileToUpload"].filename
+        with open(fname, "wb") as flocal:
+            shutil.copyfileobj(form["fileToUpload"].file, flocal)
+
+        # Send response.
+        request_source = self.headers.get("HOST")
+        file_path      = "/".join(elements[5:] + [fname])
+        system_id      = elements[4]
+        request_url    = "".join(["https://tenant", self.path, "/", fname])
+        system_url     = "".join(["https://tenant", "/systems/v2/", system_id])
+        history_url    = "".join(["https://tenant", "/files/v2/history/system/", system_id, "/", file_path])
+        sample_files_upload_response["result"]["name"] = fname
+        sample_files_upload_response["result"]["source"] = request_source
+        sample_files_upload_response["result"]["path"] = file_path
+        sample_files_upload_response["result"]["systemId"] = system_id
+        sample_files_upload_response["result"]["_links"]["self"]["href"] = request_url
+        sample_files_upload_response["result"]["_links"]["system"]["href"] = system_url
+        sample_files_upload_response["result"]["_links"]["history"]["href"] = history_url
+        try: # python 2
+            self.wfile.write(json.dumps(sample_files_upload_response))
+        except TypeError:
+            self.wfile.write(json.dumps(sample_files_upload_response).encode())
+
+
 
 
 
@@ -119,6 +166,7 @@ class TestMockServer(MockServer):
             tmp.write("this emulates a file on a remote system\n")
         return tmp_filename
 
+
     def test_files_download(self):
         """ Test file copying from a remote to the local system
         """
@@ -137,6 +185,32 @@ class TestMockServer(MockServer):
         finally:
             assert filecmp.cmp(tmp_file, local_file)
 
+            # rm local file.
+            if os.path.exists(local_file):
+                os.remove(local_file)
             # rm dummy file in current working directory.
             if os.path.exists(tmp_file):
                 os.remove(tmp_file)
+
+
+    def test_files_upload(self):
+        """ Test file uload to remote systems
+        """
+        # Create a local dummy file.
+        tmp_file = self.create_local_dummy_file()
+
+        try:
+            local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
+            agave = Agave(api_server=local_uri)
+            agave.token = "mock-access-token"
+
+            agave.files_upload(tmp_file, "tacc-globalfs-user/")
+        finally:
+            _, tmp_filename = os.path.split(tmp_file)
+            assert filecmp.cmp(tmp_file, tmp_filename)
+
+            # rm dummy file.
+            os.remove(tmp_file)
+            # rm dummy file in current working directory.
+            if os.path.exists(tmp_filename):
+                os.remove(tmp_filename)
