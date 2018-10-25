@@ -1,7 +1,6 @@
 """
-    copy.py
+    download.py
 """
-from __future__ import print_function                                           
 import requests                                                                 
 from .exceptions import AgaveFilesError
 from ..utils import handle_bad_response_status_code

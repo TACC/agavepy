@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "message": null,
+  "version": "2.2.22-r7deb380",
+  "result": {
+    "name": "thisone",
+    "uuid": "7919503387600743960-242ac113-0001-002",
+    "owner": "username",
+    "internalUsername": null,
+    "lastModified": "2018-10-25T16:22:36.667-05:00",
+    "source": "http://000.000.00.000/thisone",
+    "path": "thisone",
+    "status": "STAGING_QUEUED",
+    "systemId": "",
+    "nativeFormat": "raw",
+    "_links": {
+      "self": {
+        "href": "https://api.sd2e.org/files/v2/media/system/tacc-globalfs"
+      },
+      "system": {
+        "href": "https://api.sd2e.org/systems/v2/tacc-globalfs"
+      },
+      "profile": {
+        "href": "https://api.sd2e.org/profiles/v2/username"
+      },
+      "history": {
+        "href": "https://api.sd2e.org/files/v2/history/system/tacc-globalfs"
+      },
+      "notification": []
+    }
+  }
+}
