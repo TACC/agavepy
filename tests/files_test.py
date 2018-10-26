@@ -17,10 +17,6 @@ try: # python 2
     from BaseHTTPServer import BaseHTTPRequestHandler
 except ImportError: # python 3
     from http.server import BaseHTTPRequestHandler
-try:
-    from unittest.mock import patch
-except ImportError:
-    from mock import patch
 
 from agavepy.agave import Agave
 
