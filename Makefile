@@ -29,6 +29,7 @@ clean:
 	rm -rf agavepy/tenants/*.pyc agavepy/tenants/__pycache__/
 	rm -rf agavepy/clients/*.pyc agavepy/clients/__pycache__/
 	rm -rf agavepy/tokens/*.pyc agavepy/tokens/__pycache__/
+	rm -rf agavepy/files/*.pyc agavepy/files/__pycache__/
 	rm -rf agavepy/utils/*.pyc agavepy/utils/__pycache__/
 	rm -rf agavepy/tests/__pycache__/
 	rm -rf agavepy/*.pyc
