@@ -23,7 +23,7 @@ from agavepy.tenants import tenant_list
 from agavepy.clients import clients_create, clients_list
 from agavepy.tokens import token_create, refresh_token
 from agavepy.utils import load_config, save_config
-from agavepy.files import files_download, files_upload
+from agavepy.files import files_download, files_list, files_upload
 
 
 import sys
@@ -735,6 +735,17 @@ class Agave(object):
 
         # Download file.
         files_download(self.api_server, self.token, source, destination)
+
+
+    def files_list(self, system_path, long_format=False):
+        """ List files on remote system
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # List files.
+        files_list(self.api_server, self.token, system_path, long_format=long_format)
+
 
     def files_upload(self, source, destination):
         """ Upload file to remote system
