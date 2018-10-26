@@ -1,0 +1,89 @@
+{
+  "status": "success",
+  "message": null,
+  "version": "2.2.22-r7deb380",
+  "result": [
+    {
+      "name": ".",
+      "path": "/tests",
+      "lastModified": "2018-08-24T13:44:12.000-05:00",
+      "length": 4096,
+      "permissions": "ALL",
+      "format": "folder",
+      "mimeType": "text/directory",
+      "type": "dir",
+      "system": "tacc-globalfs-username",
+      "_links": {
+        "self": {
+          "href": "https://api.sd2e.org/files/v2/media/system/tacc-globalfs-username//tests"
+        },
+        "system": {
+          "href": "https://api.sd2e.org/systems/v2/tacc-globalfs-username"
+        },
+        "metadata": {
+          "href": "https://api.sd2e.org/meta/v2/data?q=%7B%22associationIds%22%3A%222700041210-4a1300-02%2%D"
+        },
+        "history": {
+          "href": "https://api.sd2e.org/files/v2/history/system/tacc-globalfs-username//tests"
+        }
+      }
+    },
+    {
+      "name": "copy.txt",
+      "path": "/tests/copy.txt",
+      "lastModified": "2018-07-26T15:09:56.000-05:00",
+      "length": 10,
+      "permissions": "READ_WRITE",
+      "format": "raw",
+      "system": "tacc-globalfs-username",
+      "mimeType": "text/plain",
+      "type": "file",
+      "_links": {
+        "self": {
+          "href": "https://api.sd2e.org/files/v2/media/system/tacc-globalfs-username//tests/copy.txt"
+        },
+        "system": {
+          "href": "https://api.sd2e.org/systems/v2/tacc-globalfs-username"
+        }
+      }
+    },
+    {
+      "name": "sp1-copy.fq",
+      "path": "/tests/sp1-copy.fq",
+      "lastModified": "2018-08-22T15:12:32.000-05:00",
+      "length": 22471,
+      "permissions": "READ_WRITE",
+      "format": "raw",
+      "system": "tacc-globalfs-username",
+      "mimeType": "application/octet-stream",
+      "type": "file",
+      "_links": {
+        "self": {
+          "href": "https://api.sd2e.org/files/v2/media/system/tacc-globalfs-username//tests/sp1-copy.fq"
+        },
+        "system": {
+          "href": "https://api.sd2e.org/systems/v2/tacc-globalfs-username"
+        }
+      }
+    },
+    {
+      "name": "upload.txt",
+      "path": "/tests/upload.txt",
+      "lastModified": "2018-07-27T15:02:09.000-05:00",
+      "length": 15,
+      "permissions": "READ_WRITE",
+      "format": "raw",
+      "system": "tacc-globalfs-username",
+      "mimeType": "text/plain",
+      "type": "file",
+      "_links": {
+        "self": {
+          "href": "https://api.sd2e.org/files/v2/media/system/tacc-globalfs-username//tests/upload.txt"
+        },
+        "system": {
+          "href": "https://api.sd2e.org/systems/v2/tacc-globalfs-username"
+        }
+      }
+    }
+  ]
+}
