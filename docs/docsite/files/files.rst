@@ -73,3 +73,14 @@ the name ``cool_data.bin``.
 .. code-block:: pycon
 
     >>> agave.files_upload("./important_data.ext", "tacc-globalfs-username/cool_data.bin")
+
+
+Delete a file
+#############
+
+On the other hand, if there is a file or directory that you want to get rid
+off:
+
+.. code-block:: pycon
+
+    >>> agave.files_delete("tacc-globalfs-username/somefile-or-directory")
