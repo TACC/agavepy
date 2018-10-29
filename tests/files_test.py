@@ -65,6 +65,8 @@ class MockServerFilesEndpoints(BaseHTTPRequestHandler):
         # elements is a list of path elements, i.e., "/a/b" == ["a", "b"].
         elements = self.send_headers()
         if elements is None or not "/files/v2/media/system" in self.path:
+            self.send_response(400)
+            self.end_headers()
             return
 
         # Send contents of file to wfile object.
@@ -82,6 +84,8 @@ class MockServerFilesEndpoints(BaseHTTPRequestHandler):
         # elements is a list of path elements, i.e., ["a", "b"] ~ "/a/b".
         elements = self.send_headers()
         if elements is None or not "/files/v2/media/system" in self.path:
+            self.send_response(400)
+            self.end_headers()
             return
 
         # Submitted form data.
@@ -117,6 +121,29 @@ class MockServerFilesEndpoints(BaseHTTPRequestHandler):
         except TypeError:
             self.wfile.write(json.dumps(sample_files_upload_response).encode())
 
+
+    def do_DELETE(self):                                                          
+        """ Delete file                                                         
+        """                                                                     
+        # elements is a list of path elements, i.e., ["a", "b"] ~ "/a/b".       
+        elements = self.send_headers()                                          
+        if elements is None or not "/files/v2/media/system" in self.path:       
+            return
+
+        # Delete file or directory.
+        filename = elements[-1]
+        if "?pretty=true" in filename: filename = filename[:-len("?pretty=true")]
+        if os.path.isdir(filename):
+            # Delete directory.
+            shutil.rmtree(filename)
+            return
+        elif os.path.isfile(filename):
+            # Delete file.
+            os.remove(filename)
+            return
+        else:
+            self.send_response(400)
+            self.end_headers()
 
 
 
@@ -210,3 +237,22 @@ class TestMockServer(MockServer):
             # rm dummy file in current working directory.
             if os.path.exists(tmp_filename):
                 os.remove(tmp_filename)
+
+    def test_files_delete(self):
+        """ Test file copying from a remote to the local system
+        """
+        # Create a "remote" dummy file.
+        tmp_file = self.create_remote_dummy_file()
+
+        try:
+            local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
+            agave = Agave(api_server=local_uri)
+            agave.token = "mock-access-token"
+
+            agave.files_delete("tacc-globalfs-user/"+tmp_file)
+        finally:
+            assert os.path.exists(tmp_file) == False
+
+            # rm dummy file in current working directory.
+            if os.path.exists(tmp_file):
+                os.remove(tmp_file)

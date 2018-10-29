@@ -23,7 +23,7 @@ from agavepy.tenants import tenant_list
 from agavepy.clients import clients_create, clients_list
 from agavepy.tokens import token_create, refresh_token
 from agavepy.utils import load_config, save_config
-from agavepy.files import files_download, files_list, files_upload
+from agavepy.files import files_delete, files_download, files_list, files_upload
 
 
 import sys
@@ -727,6 +727,16 @@ class Agave(object):
             self.expires_at    = token_data["expires_at"]
 
 
+    def files_delete(self, file_path):
+        """ Delete a file from remote system
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # Delete file.
+        files_delete(self.api_server, self.token, file_path)
+
+    
     def files_download(self, source, destination):
         """ Download files from remote system
         """
