@@ -122,6 +122,44 @@ class MockServerFilesEndpoints(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(sample_files_upload_response).encode())
 
 
+    def do_PUT(self):
+        """ Mock endpoint to test files_copy method.
+        """
+        # elements is a list of path elements, i.e., ["a", "b"] ~ "/a/b".
+        elements = self.send_headers()
+        if elements is None or not "/files/v2/media/system" in self.path:
+            self.send_response(400)
+            self.end_headers()
+            return
+
+        # Submitted form data.
+        form = cgi.FieldStorage(
+            fp = self.rfile,
+            headers = self.headers,
+            environ = {
+                "REQUEST_METHOD": "POST",
+                "CONTENT_TYPE": self.headers["Content-Type"]
+            })
+
+        # Check access token is not empty.
+        token = self.headers.getheader("Authorization")
+        if token is None or token == "":
+            self.send_response(400)
+            self.end_headers()
+            return
+
+        # Check request data.
+        if form.getvalue("action", "") == "":
+            self.send_response(400)
+            self.end_headers()
+            return
+
+        if form.getvalue("path", "") == "":
+            self.send_response(400)
+            self.end_headers()
+            return
+
+
     def do_DELETE(self):                                                          
         """ Delete file                                                         
         """                                                                     
@@ -256,3 +294,15 @@ class TestMockServer(MockServer):
             # rm dummy file in current working directory.
             if os.path.exists(tmp_file):
                 os.remove(tmp_file)
+
+    def test_files_copy(self):
+        """ test files copying from remote to remote
+
+        The call to files_copy has no side effects on the host so the function
+        call should simply be able to return successfully.
+        """
+        local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
+        agave = Agave(api_server=local_uri)
+        agave.token = "mock-access-token"
+        
+        agave.files_copy("tacc-globalfs/file", "tacc-globalfs/file-copy")
