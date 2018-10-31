@@ -72,7 +72,21 @@ the name ``cool_data.bin``.
 
 .. code-block:: pycon
 
-    >>> agave.files_upload("./important_data.ext", "tacc-globalfs-username/cool_data.bin")
+    >>> agave.files_upload("./important_data.ext",
+            "tacc-globalfs-username/cool_data.bin")
+
+
+Make a copy of a file on a remote system
+########################################
+
+So now, you have a file called ``important_data.ext`` on your remote storage
+system ``tacc-globalfs-username``. Let's make a copy of it:
+
+
+.. code-block:: pycon
+
+    >>> agave.files_copy("tacc-globalfs-username/important_data.ext", 
+            "tacc-globalfs-username/important_data-copy.ext")
 
 
 Delete a file
