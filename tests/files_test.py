@@ -123,7 +123,7 @@ class MockServerFilesEndpoints(BaseHTTPRequestHandler):
 
 
     def do_PUT(self):
-        """ Mock endpoint to test files_copy method.
+        """ Mock endpoint to test files_copy and files_move method.
         """
         # elements is a list of path elements, i.e., ["a", "b"] ~ "/a/b".
         elements = self.send_headers()
@@ -306,3 +306,16 @@ class TestMockServer(MockServer):
         agave.token = "mock-access-token"
         
         agave.files_copy("tacc-globalfs/file", "tacc-globalfs/file-copy")
+
+
+    def test_files_move(self):
+        """ test files move method
+
+        The call to files_move has no side effects on the host so the function
+        call should simply be able to return successfully.
+        """
+        local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
+        agave = Agave(api_server=local_uri)
+        agave.token = "mock-access-token"
+
+        agave.files_copy("tacc-globalfs/file", "tacc-globalfs/another-file")

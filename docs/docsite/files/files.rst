@@ -89,6 +89,17 @@ system ``tacc-globalfs-username``. Let's make a copy of it:
             "tacc-globalfs-username/important_data-copy.ext")
 
 
+Move files
+##########
+
+To move files around on a remote storage system, you can do the following:
+
+.. code-block:: pycon
+
+    >>> agave.files_move("tacc-globalfs-username/file.ext", 
+            "tacc-globalfs-username/directory/file.ext")
+
+
 Delete a file
 #############
 
