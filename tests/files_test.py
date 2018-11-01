@@ -291,6 +291,7 @@ class TestMockServer(MockServer):
         finally:
             assert os.path.exists(tmp_file) == False
 
+
             # rm dummy file in current working directory.
             if os.path.exists(tmp_file):
                 os.remove(tmp_file)
