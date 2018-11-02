@@ -24,7 +24,7 @@ from agavepy.clients import clients_create, clients_list
 from agavepy.tokens import token_create, refresh_token
 from agavepy.utils import load_config, save_config
 from agavepy.files import (files_copy, files_delete, files_download, 
-    files_list, files_move, files_upload)
+    files_list, files_mkdir, files_move, files_upload)
 
 
 import sys
@@ -766,6 +766,16 @@ class Agave(object):
 
         # List files.
         files_list(self.api_server, self.token, system_path, long_format=long_format)
+
+
+    def files_mkdir(self, location):
+        """ Create an empty directory on a remote storage system
+        """
+        # Check if tokens need to be refreshed.                                 
+        self.refresh_tokens()
+
+        # Create directory.
+        files_mkdir(self.api_server, self.token, location)
 
 
     def files_move(self, source, destination):

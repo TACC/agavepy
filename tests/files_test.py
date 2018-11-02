@@ -137,7 +137,7 @@ class MockServerFilesEndpoints(BaseHTTPRequestHandler):
             fp = self.rfile,
             headers = self.headers,
             environ = {
-                "REQUEST_METHOD": "POST",
+                "REQUEST_METHOD": "PUT",
                 "CONTENT_TYPE": self.headers["Content-Type"]
             })
 
@@ -320,3 +320,16 @@ class TestMockServer(MockServer):
         agave.token = "mock-access-token"
 
         agave.files_copy("tacc-globalfs/file", "tacc-globalfs/another-file")
+
+
+    def test_files_mkdir(self):
+        """ test files mkdir method
+
+        The call to files_mkdir has no side effects on the host so the function
+        call should simply be able to return successfully.
+        """
+        local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
+        agave = Agave(api_server=local_uri)
+        agave.token = "mock-access-token"
+
+        agave.files_mkdir("tacc-globalfs/new/path")
