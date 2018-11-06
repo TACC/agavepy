@@ -28,7 +28,7 @@ def files_upload(tenant_url, access_token, source, destination):
         remote_filename = ntpath.basename(file_path)
 
     # Set request endpoint.
-    endpoint = "{0}/{1}/{2}".format(tenant_url, "files/v2/media/system", system_name)
+    endpoint = "{0}/{1}/{2}".format(tenant_url, "files/v2/media/system", destination)
 
     try:
         m = MultipartEncoder(
