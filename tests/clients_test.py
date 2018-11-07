@@ -35,6 +35,13 @@ class MockServerClientEndpoints(BaseHTTPRequestHandler):
     def do_GET(self):
         """ Mock oauth client listing.
         """
+        # Check that basic auth is used.
+        authorization = self.headers.get("Authorization")
+        if authorization == "" or authorization is None:
+            self.send_response(400)
+            self.end_headers()
+            return
+
         self.send_response(200)
         self.end_headers()
         self.wfile.write(json.dumps(sample_client_list_response).encode())
@@ -43,6 +50,13 @@ class MockServerClientEndpoints(BaseHTTPRequestHandler):
     def do_POST(self):
         """ Mock agave client creation
         """
+        # Check that basic auth is used.
+        authorization = self.headers.get("Authorization")
+        if authorization == "" or authorization is None:
+            self.send_response(400)
+            self.end_headers()
+            return
+
         # Get request data.
         form = cgi.FieldStorage(
             fp = self.rfile,
@@ -78,6 +92,20 @@ class MockServerClientEndpoints(BaseHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
         self.wfile.write(json.dumps(sample_client_create_response).encode())
+
+
+    def do_DELETE(self):
+        """ test clients_delete
+        """
+        # Check that basic auth is used.
+        authorization = self.headers.get("Authorization")
+        if authorization == "" or authorization is None:
+            self.send_response(400)
+            self.end_headers()
+            return
+
+        self.send_response(200)
+        self.end_headers()
 
 
 
@@ -118,6 +146,32 @@ class TestMockServer(MockServer):
 
         assert ag.api_key == "some api key"
         assert ag.api_secret == "some secret"
+
+
+    @patch("agavepy.agave.input")                                               
+    @patch("agavepy.clients.delete.getpass.getpass")
+    def test_client_delete(self, mock_input, mock_pass):
+        """ Test clients_delete op
+
+        Patch username and password from user to send a client create request
+        to mock server.
+        """
+        # Patch username and password.
+        mock_input.return_value = "user"
+        mock_pass.return_value = "pass"
+
+        # Instantiate Agave object making reference to local mock server.
+        local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
+        ag = Agave(api_server=local_uri)
+        ag.client_name = "client-name"
+        ag.api_key = "some api key"
+        ag.api_secret = "some secret"
+
+        # Create client.
+        ag.clients_delete()
+
+        assert ag.api_key == ""
+        assert ag.api_secret == ""
 
 
     @patch("agavepy.agave.input")

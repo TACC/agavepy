@@ -20,7 +20,7 @@ import dateutil.parser
 import requests
 
 from agavepy.tenants import tenant_list
-from agavepy.clients import clients_create, clients_list
+from agavepy.clients import clients_create, clients_delete, clients_list
 from agavepy.tokens import token_create, refresh_token
 from agavepy.utils import load_config, save_config
 from agavepy.files import (files_copy, files_delete, files_download, 
@@ -636,7 +636,7 @@ class Agave(object):
 
 
     def clients_create(self, client_name, description):
-        """ Create an Agave Oauth client
+        """ Create an Oauth client
 
         Save the api key and secret upon a successfull reuest to Agave.
 
@@ -660,8 +660,31 @@ class Agave(object):
         self.client_name = client_name
 
 
+    def clients_delete(self, client_name=None):
+        """ Delete an Oauth client
+
+        If no client_name is passed then we will try to delete the oauth client
+        stored in the current session.
+        """
+        # Set username.
+        if self.username == "" or self.username is None:
+            self.username = input("API username: ")
+
+        # If client_name is not set, then delete the current client, if it 
+        # exists.
+        if client_name is None:
+            client_name = self.client_name
+
+        # Delete client.
+        clients_delete(self.api_server, self.username, client_name)
+
+        # If we deleted the current client, then zero out its secret and key.
+        if self.client_name == client_name:
+            self.api_key, self.api_secret = "", ""
+
+
     def clients_list(self):
-        """ List all Agave oauth clients
+        """ List all oauth clients
         """
         # Set username.
         if self.username == "" or self.username is None:
