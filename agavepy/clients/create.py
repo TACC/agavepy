@@ -5,17 +5,14 @@ Functions to create Agave oauth clients.
 """
 from __future__ import print_function
 import getpass
-import json
 import requests
-import sys
-from os import path
 from .exceptions import AgaveClientError
 from ..utils import handle_bad_response_status_code
 
 
 
 def clients_create(username, client_name, description, tenant_url):
-    """ Create an Agave client
+    """ Create an oauth client
 
     Make a request to Agave to create an oauth client. Returns the client's api
     key and secret as a tuple.

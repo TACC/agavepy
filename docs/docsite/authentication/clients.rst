@@ -9,8 +9,8 @@ Creating a client
 #################
 
 
-Once you have soecified the tenant you wish to interact with :ref:`tenants`
-we can go ahead and create an oauth client, which in turn we will use to biant
+Once you have specified the tenant you wish to interact with :ref:`tenants`
+we can go ahead and create an oauth client, which in turn we will use to obtain
 and refresh tokens.
 
 To create a client use the method ``clients_create``.
@@ -47,3 +47,17 @@ To list all agave oauth clients registered for a given user, one can use the
     NAME                           DESCRIPTION
     client-name                    some description
     >>>
+
+
+Deleting a client
+#################
+
+If you want to delete an oauth client, you can do as such:
+
+.. code-block:: pycon
+
+    >>> ag.clients_delete("some-client-name")
+    API password:
+
+If you don't pass a client name to ``clients_delete``, then the ``Agave``
+object will try to delete the oauth client in its current session.

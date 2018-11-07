@@ -5,10 +5,7 @@ Functions to list agave oauth clients.
 """
 from __future__ import print_function
 import getpass
-import json
 import requests
-import sys
-from os import path
 from .exceptions import AgaveClientError
 from ..utils import handle_bad_response_status_code
 
