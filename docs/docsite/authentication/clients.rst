@@ -61,3 +61,17 @@ If you want to delete an oauth client, you can do as such:
 
 If you don't pass a client name to ``clients_delete``, then the ``Agave``
 object will try to delete the oauth client in its current session.
+
+
+Subscribing to an API
+#####################
+
+If you want to subscribe an oauth client to a TACC api, then you can do so as
+follows:
+
+.. code-block:: pycon
+
+    >>> ag.clients_subscribe("PublicKeys", "v2", "admin", client_name="client")
+
+If you don't set the ``client_name`` argument then the ``ag`` object will try
+to use the oauth client stored in your current session.

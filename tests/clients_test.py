@@ -48,7 +48,7 @@ class MockServerClientEndpoints(BaseHTTPRequestHandler):
 
 
     def do_POST(self):
-        """ Mock agave client creation
+        """ Mock agave client creation and subscription
         """
         # Check that basic auth is used.
         authorization = self.headers.get("Authorization")
@@ -63,35 +63,37 @@ class MockServerClientEndpoints(BaseHTTPRequestHandler):
             headers = self.headers,
             environ={'REQUEST_METHOD': 'POST'})
 
-        # Check client name is set.
+        # Check parameters for client creation.
         client_name = form.getvalue("clientName", "")
-        if client_name == "":
-            self.send_response(400)
-            self.end_headers()
-            return
-
-        # Check client description is set.
         client_description = form.getvalue("description", "")
-        if client_description == "":
-            self.send_response(400)
-            self.end_headers()
-            return
+        client_tier = form.getvalue("tier", "")
+        creation = True
+        if client_name == "" or client_description == "" or client_tier == "":
+            creation = False
 
-        # CHeck client tier is set.
-        if form.getvalue("tier", "") == "":
-            self.send_response(400)
-            self.end_headers()
-            return
-
-        # Update response fields.
+        # Update response fields for client creation.
         sample_client_create_response["result"]["name"] = client_name
         sample_client_create_response["result"]["description"] = client_description
         sample_client_create_response["result"]["consumerKey"] = "some api key"
         sample_client_create_response["result"]["consumerSecret"] = "some secret"
 
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(json.dumps(sample_client_create_response).encode())
+        # Check parameters for client subscription.
+        api_name = form.getvalue("apiName", "")
+        api_version = form.getvalue("apiVersion", "")
+        api_provider = form.getvalue("apiProvider", "")
+        subscription = True
+        if api_name == "" or api_version == "" or api_provider == "":
+            subscription = False
+
+        if creation or subscription:
+            self.send_response(200)
+            self.end_headers()
+            if creation:
+                self.wfile.write(json.dumps(sample_client_create_response).encode())
+        else:
+            self.send_response(400)
+            self.end_headers()
+        return
 
 
     def do_DELETE(self):
@@ -198,3 +200,25 @@ class TestMockServer(MockServer):
         out, err = capfd.readouterr()
         assert "DefaultApplication" in out
         assert "\"GET /clients/v2 HTTP/1.1\" 200" in err 
+
+
+    @patch("agavepy.agave.input")
+    @patch("agavepy.clients.subscribe.getpass.getpass")
+    def test_clients_subscribe(self, mock_input, mock_pass, capfd):
+        """ Test clients subscribe
+        """
+        # Patch username and password.
+        mock_input.return_value = "user"
+        mock_pass.return_value = "pass"
+
+        # Instantiate Agave object making reference to local mock server.
+        local_uri = "http://localhost:{port}".format(port=self.mock_server_port)
+        ag = Agave(api_server=local_uri)
+
+        # Subscribe a client.
+        ag.clients_subscribe("PublicKeys", "v2", "admin", client_name="client")
+
+        # Stdout should contain the putput from the command.
+        # Stderr will contain logs from the mock http server.
+        out, err = capfd.readouterr()
+        assert "200" in err
