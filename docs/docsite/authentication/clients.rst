@@ -66,6 +66,8 @@ object will try to delete the oauth client in its current session.
 Subscribing to an API
 #####################
 
+To subscribe to a TACC api you need to know the ``api name``, the 
+``api version``, and the ``api provider``.
 If you want to subscribe an oauth client to a TACC api, then you can do so as
 follows:
 
@@ -73,5 +75,33 @@ follows:
 
     >>> ag.clients_subscribe("PublicKeys", "v2", "admin", client_name="client")
 
-If you don't set the ``client_name`` argument then the ``ag`` object will try
-to use the oauth client stored in your current session.
+You can also specify the optional function argument ``client_name``. This
+should be a string and can be used to subscribe an oauth client not in the
+current session.
+
+
+List client subscriptions
+#########################
+
+To list client subscriptions you can use the ``clients_subscriptions`` method:
+
+.. code-block:: pycon
+
+    >>> ag.clients_subscribtions()
+    API password: 
+    NAME             VERSION  PROVIDER    
+    Apps                v2    admin    
+    Files               v2    admin   
+    Jobs                v2    admin   
+    Meta                v2    admin  
+    Monitors            v2    admin     
+    Notifications       v2    admin  
+    Postits             v2    admin   
+    Profiles            v2    admin   
+    Systems             v2    admin    
+    Transforms          v2    admin     
+    PublicKeys          v2    admin 
+
+Like ``clients_subscribe``, you can optionally specify the ``client_name``
+argument to list the subscriptions for another existing oauth client that you
+own.
