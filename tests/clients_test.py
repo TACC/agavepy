@@ -24,7 +24,7 @@ from agavepy.agave import Agave
 # Sample successful responses from the agave api.
 sample_client_create_response = response_template_to_json("clients-create.json")
 sample_client_list_response = response_template_to_json("clients-list.json")
-
+sample_client_subscription = response_template_to_json("clients-subscriptions.json")
 
 
 class MockServerClientEndpoints(BaseHTTPRequestHandler):
@@ -42,9 +42,14 @@ class MockServerClientEndpoints(BaseHTTPRequestHandler):
             self.end_headers()
             return
 
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(json.dumps(sample_client_list_response).encode())
+        if "/subscriptions" in self.path:
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(json.dumps(sample_client_subscription).encode())
+        else:
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(json.dumps(sample_client_list_response).encode())
 
 
     def do_POST(self):
@@ -221,4 +226,28 @@ class TestMockServer(MockServer):
         # Stdout should contain the putput from the command.
         # Stderr will contain logs from the mock http server.
         out, err = capfd.readouterr()
+        assert "200" in err
+
+
+    @patch("agavepy.agave.input")
+    @patch("agavepy.clients.subscribtions.getpass.getpass")
+    def test_clients_subscribtions(self, mock_input, mock_pass, capfd):
+        """ Test clients subscribtions
+        """
+        # Patch username and password.
+        mock_input.return_value = "user"
+        mock_pass.return_value = "pass"
+
+        # Instantiate Agave object making reference to local mock server.
+        local_uri = "http://localhost:{port}".format(port=self.mock_server_port)
+        ag = Agave(api_server=local_uri)
+        ag.client_name = "test"
+
+        # List subscriptions.
+        ag.clients_subscribtions()
+
+        # Stdout should contain the putput from the command.
+        # Stderr will contain logs from the mock http server.
+        out, err = capfd.readouterr()
+        assert "Apps" in out
         assert "200" in err

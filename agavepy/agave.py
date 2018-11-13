@@ -21,7 +21,7 @@ import requests
 
 from agavepy.tenants import tenant_list
 from agavepy.clients import (clients_create, clients_delete, clients_list, 
-    clients_subscribe)
+    clients_subscribe, clients_subscribtions)
 from agavepy.tokens import token_create, refresh_token
 from agavepy.utils import load_config, save_config
 from agavepy.files import (files_copy, files_delete, files_download, 
@@ -699,6 +699,22 @@ class Agave(object):
         # Subscribe client.
         clients_subscribe(self.username, client_name, self.api_server, 
             api_name, api_version, api_provider)
+
+
+    def clients_subscribtions(self, client_name=None):
+        """ List oauth client subscriptions
+        """
+        # Set username.
+        if self.username == "" or self.username is None:
+            self.username = input("API username: ")
+
+        # If client_name is not set, then delete the current client, if it
+        # exists.
+        if client_name is None:
+            client_name = self.client_name
+
+        # List subscriptions.
+        clients_subscribtions(self.username, client_name, self.api_server)
 
 
     def clients_list(self):
