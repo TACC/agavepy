@@ -1,3 +1,2 @@
-wsgiref>=0.1.2
 configparser
 futures>=3.1.0
