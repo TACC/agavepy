@@ -11,6 +11,7 @@ to use, to share with collaborators, or to setup for long term storage.
    :maxdepth: 2                                                                 
 
    files
+   admin
    files-listing
 
 .. only::  subproject and html                                                  
