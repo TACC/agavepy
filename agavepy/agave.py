@@ -25,7 +25,8 @@ from agavepy.clients import (clients_create, clients_delete, clients_list,
 from agavepy.tokens import token_create, refresh_token
 from agavepy.utils import load_config, save_config
 from agavepy.files import (files_copy, files_delete, files_download, 
-    files_list, files_mkdir, files_move, files_pems_list, files_upload)
+    files_list, files_mkdir, files_move, files_pems_delete, files_pems_list, 
+    files_upload)
 
 
 import sys
@@ -843,6 +844,20 @@ class Agave(object):
 
         # Move file.
         files_move(self.api_server, self.token, source, destination)
+
+
+    def files_pems_delete(self, path):
+        """ Remove user permissions associated with a file or folder.
+
+        These permissions are set at the API level and do not reflect *nix or 
+        other file system ACL.
+        Deletes all permissions on a file except those of the owner.
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # Delete api permissions.
+        files_pems_delete(self.api_server, self.token, path)
 
 
     def files_pems_list(self, path):
