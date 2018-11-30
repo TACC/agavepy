@@ -13,3 +13,9 @@ or other file system ACL.
     >>> ag.files_pems_list("system-id/some-dir")
     USER     READ   WRITE  EXEC
     username yes    yes    yes
+
+To remove all the permissions on a file, except those of the owner:
+
+.. code-block:: pycon
+
+    agave.files_pems_delete("system-id/some-dir")

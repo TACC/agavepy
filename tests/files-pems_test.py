@@ -24,9 +24,27 @@ class MockServerListingsEndpoints(BaseHTTPRequestHandler):
     """ Mock the Agave API
     """
     def do_GET(self):
+        # Check that basic auth is used.
+        authorization = self.headers.get("Authorization")
+        if authorization == "" or authorization is None:
+            self.send_response(400)
+            self.end_headers()
+            return
+
         self.send_response(200)
         self.end_headers()
         self.wfile.write(json.dumps(sample_files_pems_list_response).encode())
+
+    def do_DELETE(self):
+        # Check that basic auth is used.                                        
+        authorization = self.headers.get("Authorization")                       
+        if authorization == "" or authorization is None:                        
+            self.send_response(400)                                             
+            self.end_headers()                                                  
+            return
+
+        self.send_response(200)
+        self.end_headers()
 
 
 
@@ -44,7 +62,7 @@ class TestMockServer(MockServer):
 
 
     def test_files_pems_list(self, capfd):
-        """ Test files listings
+        """ Test permissions listings
         """
         local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
         agave = Agave(api_server=local_uri)
@@ -52,7 +70,7 @@ class TestMockServer(MockServer):
         agave.created_at = str(int(time.time()))
         agave.expires_in = str(14400)
 
-        # List files.
+        # List permissions.
         agave.files_pems_list("tacc-globalfs-username/")
 
         # Stdout should contain the putput from the command.
@@ -61,3 +79,16 @@ class TestMockServer(MockServer):
         assert "username" in out
         assert "yes" in out
         assert "200" in err 
+
+
+    def test_files_pems_list(self):
+        """ Test permissions deletion
+        """
+        local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
+        agave = Agave(api_server=local_uri)
+        agave.token = "mock-access-token"
+        agave.created_at = str(int(time.time()))
+        agave.expires_in = str(14400)
+
+        # Delete permissions.
+        agave.files_pems_delete("tacc-globalfs-username/")
