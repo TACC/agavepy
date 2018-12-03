@@ -6,4 +6,5 @@ from .mkdir import files_mkdir
 from .move import files_move
 from .pems_delete import files_pems_delete
 from .pems_list import files_pems_list
+from .pems_update import files_pems_update
 from .upload import files_upload
