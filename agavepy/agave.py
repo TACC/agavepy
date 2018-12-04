@@ -25,8 +25,8 @@ from agavepy.clients import (clients_create, clients_delete, clients_list,
 from agavepy.tokens import token_create, refresh_token
 from agavepy.utils import load_config, save_config
 from agavepy.files import (files_copy, files_delete, files_download, 
-    files_list, files_mkdir, files_move, files_pems_delete, files_pems_list, 
-    files_pems_update, files_upload)
+    files_history, files_list, files_mkdir, files_move, files_pems_delete, 
+    files_pems_list, files_pems_update, files_upload)
 
 
 import sys
@@ -513,7 +513,7 @@ class Agave(object):
         return list(set(base))
 
 
-    def init(self, tenantsurl="https://agaveapi.co/tenants"):
+    def init(self, tenantsurl="https://api.tacc.utexas.edu/tenants"):
         """ Initilize a session
 
         Initialize a session by setting parameters refering to the tenant you
@@ -619,7 +619,7 @@ class Agave(object):
         self.expires_at    = session_context["expires_at"]
 
 
-    def list_tenants(self, tenantsurl="https://agaveapi.co/tenants"):
+    def list_tenants(self, tenantsurl="https://api.tacc.utexas.edu/tenants"):
         """ List Agave tenants
 
         PARAMETERS
@@ -814,6 +814,16 @@ class Agave(object):
 
         # Download file.
         files_download(self.api_server, self.token, source, destination)
+
+
+    def files_history(self, path):
+        """ List the history of events for a specific file/folder
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # List events for path.
+        files_history(self.api_server, self.token, path)
 
 
     def files_list(self, system_path, long_format=False):
