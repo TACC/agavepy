@@ -25,8 +25,8 @@ from agavepy.clients import (clients_create, clients_delete, clients_list,
 from agavepy.tokens import token_create, refresh_token
 from agavepy.utils import load_config, save_config
 from agavepy.files import (files_copy, files_delete, files_download, 
-    files_history, files_list, files_mkdir, files_move, files_pems_delete, 
-    files_pems_list, files_pems_update, files_upload)
+    files_history, files_import, files_list, files_mkdir, files_move, 
+    files_pems_delete, files_pems_list, files_pems_update, files_upload)
 
 
 import sys
@@ -824,6 +824,19 @@ class Agave(object):
 
         # List events for path.
         files_history(self.api_server, self.token, path)
+
+
+    def files_import(self, source, destination):
+        """ Imports a remote URI to a remote storage system
+        
+        If 'source' is an agave source then prefix the uri with 'agave://'. For
+        example, source = 'agave://data-sd2e-community/test.txt'.
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # Import file.
+        files_import(self.api_server, self.token, source, destination)
 
 
     def files_list(self, system_path, long_format=False):

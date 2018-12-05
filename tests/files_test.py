@@ -77,7 +77,7 @@ class MockServerFilesEndpoints(BaseHTTPRequestHandler):
 
 
     def do_POST(self):
-        """ Upload file
+        """ Upload or import a file
 
         Save uploaded file to current working directory and send a response.
         """
@@ -97,29 +97,47 @@ class MockServerFilesEndpoints(BaseHTTPRequestHandler):
                 "CONTENT_TYPE": self.headers["Content-Type"]
             })
 
-        # Save uploaded file.
-        fname = form["fileToUpload"].filename
-        with open(fname, "wb") as flocal:
-            shutil.copyfileobj(form["fileToUpload"].file, flocal)
+        # Check if request is for uploading or importing a file.
+        action = ""
+        if form.getvalue("fileToUpload", "") != "":
+            action = "upload"
+        elif form.getvalue("urlToIngest", "") != "":
+            action = "import"
+        else:
+            self.send_response(400)
+            self.end_headers()
+            return
 
-        # Send response.
-        request_source = self.headers.get("HOST")
-        file_path      = "/".join(elements[5:] + [fname])
-        system_id      = elements[4]
-        request_url    = "".join(["https://tenant", self.path, "/", fname])
-        system_url     = "".join(["https://tenant", "/systems/v2/", system_id])
-        history_url    = "".join(["https://tenant", "/files/v2/history/system/", system_id, "/", file_path])
-        sample_files_upload_response["result"]["name"] = fname
-        sample_files_upload_response["result"]["source"] = request_source
-        sample_files_upload_response["result"]["path"] = file_path
-        sample_files_upload_response["result"]["systemId"] = system_id
-        sample_files_upload_response["result"]["_links"]["self"]["href"] = request_url
-        sample_files_upload_response["result"]["_links"]["system"]["href"] = system_url
-        sample_files_upload_response["result"]["_links"]["history"]["href"] = history_url
-        try: # python 2
-            self.wfile.write(json.dumps(sample_files_upload_response))
-        except TypeError:
-            self.wfile.write(json.dumps(sample_files_upload_response).encode())
+        if action == "upload":
+            # Save uploaded file.
+            fname = form["fileToUpload"].filename
+            with open(fname, "wb") as flocal:
+                shutil.copyfileobj(form["fileToUpload"].file, flocal)
+                
+            # Send response.
+            request_source = self.headers.get("HOST")
+            file_path      = "/".join(elements[5:] + [fname])
+            system_id      = elements[4]
+            request_url    = "".join(["https://tenant", self.path, "/", fname])
+            system_url     = "".join(["https://tenant", "/systems/v2/", system_id])
+            history_url    = "".join(["https://tenant", "/files/v2/history/system/", system_id, "/", file_path])
+            sample_files_upload_response["result"]["name"] = fname
+            sample_files_upload_response["result"]["source"] = request_source
+            sample_files_upload_response["result"]["path"] = file_path
+            sample_files_upload_response["result"]["systemId"] = system_id
+            sample_files_upload_response["result"]["_links"]["self"]["href"] = request_url
+            sample_files_upload_response["result"]["_links"]["system"]["href"] = system_url
+            sample_files_upload_response["result"]["_links"]["history"]["href"] = history_url
+            
+            try: # python 2
+                self.wfile.write(json.dumps(sample_files_upload_response))
+            except TypeError:
+                self.wfile.write(json.dumps(sample_files_upload_response).encode())
+        
+        elif action == "import":
+            self.send_response(200)
+            self.end_headers()
+            return
 
 
     def do_PUT(self):
@@ -241,6 +259,8 @@ class TestMockServer(MockServer):
             local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
             agave = Agave(api_server=local_uri)
             agave.token = "mock-access-token"
+            agave.created_at = str(int(time.time()))
+            agave.expires_in = str(14400)
 
             agave.files_download("tacc-globalfs-user/"+tmp_file, local_file)
         finally:
@@ -264,6 +284,8 @@ class TestMockServer(MockServer):
             local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
             agave = Agave(api_server=local_uri)
             agave.token = "mock-access-token"
+            agave.created_at = str(int(time.time()))
+            agave.expires_in = str(14400)
 
             agave.files_upload(tmp_file, "tacc-globalfs-user/")
         finally:
@@ -286,6 +308,8 @@ class TestMockServer(MockServer):
             local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
             agave = Agave(api_server=local_uri)
             agave.token = "mock-access-token"
+            agave.created_at = str(int(time.time()))
+            agave.expires_in = str(14400)
 
             agave.files_delete("tacc-globalfs-user/"+tmp_file)
         finally:
@@ -305,6 +329,8 @@ class TestMockServer(MockServer):
         local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
         agave = Agave(api_server=local_uri)
         agave.token = "mock-access-token"
+        agave.created_at = str(int(time.time()))
+        agave.expires_in = str(14400)
         
         agave.files_copy("tacc-globalfs/file", "tacc-globalfs/file-copy")
 
@@ -318,6 +344,8 @@ class TestMockServer(MockServer):
         local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
         agave = Agave(api_server=local_uri)
         agave.token = "mock-access-token"
+        agave.created_at = str(int(time.time()))
+        agave.expires_in = str(14400)
 
         agave.files_copy("tacc-globalfs/file", "tacc-globalfs/another-file")
 
@@ -331,5 +359,22 @@ class TestMockServer(MockServer):
         local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
         agave = Agave(api_server=local_uri)
         agave.token = "mock-access-token"
+        agave.created_at = str(int(time.time()))
+        agave.expires_in = str(14400)
 
         agave.files_mkdir("tacc-globalfs/new/path")
+
+
+    def test_files_import(self, capfd):
+        """ Test files import
+        """
+        local_uri = "http://localhost:{port}/".format(port=self.mock_server_port)
+        agave = Agave(api_server=local_uri)
+        agave.token = "mock-access-token"
+        agave.created_at = str(int(time.time()))
+        agave.expires_in = str(14400)
+
+        # Import file.
+        agave.files_import("agave://data-sd2e-community/test.txt", "tacc-globalfs-username/")
+        out, err = capfd.readouterr()
+        assert "200" in err

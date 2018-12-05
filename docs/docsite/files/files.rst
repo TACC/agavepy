@@ -109,6 +109,23 @@ off:
     >>> agave.files_delete("data-tacc-user/somefile-or-directory")
 
 
+Import files from ther systems
+##############################
+
+It may be useful to import data from other storage systems, e.g. from the
+community data space to your private data space.
+The ``files_import`` method can be used for that purpose.
+
+.. code-block:: pycon
+
+    agave.files_import("agave://data-community/test.txt", "system-id/")
+
+Please also note that even though you are able to import files from other Agave
+storage systems, you may not always need to import those files.
+Also, note that the source, the first argument, must be an agave compliant uri
+by prefixing the system if and path convination with the string ``agave://``.
+
+
 Making a directory
 ##################
 
