@@ -1,0 +1,227 @@
+{
+  "status": "success",
+  "message": "Client subscriptions retrieved successfully.",
+  "version": "2.0.0-SNAPSHOT-rc3fad",
+  "result": [
+    {
+      "apiName": "Apps",
+      "tier": "Unlimited",
+      "apiStatus": "PUBLISHED",
+      "apiProvider": "admin",
+      "apiContext": "/apps/v2",
+      "apiVersion": "v2",
+      "_links": {
+        "self": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs/subscriptions/"
+        },
+        "api": {
+          "href": "https://api.tacc.utexas.edu/apps/v2/"
+        },
+        "client": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs"
+        }
+      },
+      "businessOwner": null
+    },
+    {
+      "apiName": "Files",
+      "tier": "Unlimited",
+      "apiStatus": "PUBLISHED",
+      "apiProvider": "admin",
+      "apiContext": "/files/v2",
+      "apiVersion": "v2",
+      "_links": {
+        "self": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs/subscriptions/"
+        },
+        "api": {
+          "href": "https://api.tacc.utexas.edu/files/v2/"
+        },
+        "client": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs"
+        }
+      },
+      "businessOwner": null
+    },
+    {
+      "apiName": "Jobs",
+      "tier": "Unlimited",
+      "apiStatus": "PUBLISHED",
+      "apiProvider": "admin",
+      "apiContext": "/jobs/v2",
+      "apiVersion": "v2",
+      "_links": {
+        "self": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs/subscriptions/"
+        },
+        "api": {
+          "href": "https://api.tacc.utexas.edu/jobs/v2/"
+        },
+        "client": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs"
+        }
+      },
+      "businessOwner": null
+    },
+    {
+      "apiName": "Meta",
+      "tier": "Unlimited",
+      "apiStatus": "PUBLISHED",
+      "apiProvider": "admin",
+      "apiContext": "/meta/v2",
+      "apiVersion": "v2",
+      "_links": {
+        "self": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs/subscriptions/"
+        },
+        "api": {
+          "href": "https://api.tacc.utexas.edu/meta/v2/"
+        },
+        "client": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs"
+        }
+      },
+      "businessOwner": null
+    },
+    {
+      "apiName": "Monitors",
+      "tier": "Unlimited",
+      "apiStatus": "PUBLISHED",
+      "apiProvider": "admin",
+      "apiContext": "/monitors/v2",
+      "apiVersion": "v2",
+      "_links": {
+        "self": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs/subscriptions/"
+        },
+        "api": {
+          "href": "https://api.tacc.utexas.edu/monitors/v2/"
+        },
+        "client": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs"
+        }
+      },
+      "businessOwner": null
+    },
+    {
+      "apiName": "Notifications",
+      "tier": "Unlimited",
+      "apiStatus": "PUBLISHED",
+      "apiProvider": "admin",
+      "apiContext": "/notifications/v2",
+      "apiVersion": "v2",
+      "_links": {
+        "self": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs/subscriptions/"
+        },
+        "api": {
+          "href": "https://api.tacc.utexas.edu/notifications/v2/"
+        },
+        "client": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs"
+        }
+      },
+      "businessOwner": null
+    },
+    {
+      "apiName": "Postits",
+      "tier": "Unlimited",
+      "apiStatus": "PUBLISHED",
+      "apiProvider": "admin",
+      "apiContext": "/postits/v2",
+      "apiVersion": "v2",
+      "_links": {
+        "self": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs/subscriptions/"
+        },
+        "api": {
+          "href": "https://api.tacc.utexas.edu/postits/v2/"
+        },
+        "client": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs"
+        }
+      },
+      "businessOwner": null
+    },
+    {
+      "apiName": "Profiles",
+      "tier": "Unlimited",
+      "apiStatus": "PUBLISHED",
+      "apiProvider": "admin",
+      "apiContext": "/profiles/v2",
+      "apiVersion": "v2",
+      "_links": {
+        "self": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs/subscriptions/"
+        },
+        "api": {
+          "href": "https://api.tacc.utexas.edu/profiles/v2/"
+        },
+        "client": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs"
+        }
+      },
+      "businessOwner": null
+    },
+    {
+      "apiName": "Systems",
+      "tier": "Unlimited",
+      "apiStatus": "PUBLISHED",
+      "apiProvider": "admin",
+      "apiContext": "/systems/v2",
+      "apiVersion": "v2",
+      "_links": {
+        "self": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs/subscriptions/"
+        },
+        "api": {
+          "href": "https://api.tacc.utexas.edu/systems/v2/"
+        },
+        "client": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs"
+        }
+      },
+      "businessOwner": null
+    },
+    {
+      "apiName": "Transforms",
+      "tier": "Unlimited",
+      "apiStatus": "PUBLISHED",
+      "apiProvider": "admin",
+      "apiContext": "/transforms/v2",
+      "apiVersion": "v2",
+      "_links": {
+        "self": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs/subscriptions/"
+        },
+        "api": {
+          "href": "https://api.tacc.utexas.edu/transforms/v2/"
+        },
+        "client": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs"
+        }
+      },
+      "businessOwner": null
+    },
+    {
+      "apiName": "PublicKeys",
+      "tier": "Unlimited",
+      "apiStatus": "PUBLISHED",
+      "apiProvider": "admin",
+      "apiContext": "/keys/v2",
+      "apiVersion": "v2",
+      "_links": {
+        "self": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs/subscriptions/"
+        },
+        "api": {
+          "href": "https://api.tacc.utexas.edu/keys/v2/"
+        },
+        "client": {
+          "href": "https://api.tacc.utexas.edu/clients/v2/subs"
+        }
+      },
+      "businessOwner": null
+    }
+  ]
+}

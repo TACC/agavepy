@@ -1,6 +1,6 @@
-************
-agavepy.meta
-************
+********
+Metadata
+********
 
 Summary: Create and manage metadata
 

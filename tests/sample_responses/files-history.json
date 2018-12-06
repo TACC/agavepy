@@ -1,0 +1,61 @@
+{
+  "status": "success",
+  "message": null,
+  "version": "2.2.22-r7deb380",
+  "result": [
+    {
+      "status": "CREATED",
+      "created": "2018-11-02T10:08:54.000-05:00",
+      "createdBy": "username",
+      "description": "New directory created at https://api.sd2e.org/files/v2/media/system/tacc-globalfs-username//new-fir"
+    },
+    {
+      "status": "PERMISSION_REVOKE",
+      "created": "2018-11-30T11:22:01.000-06:00",
+      "createdBy": "username",
+      "description": "All permissions revoked"
+    },
+    {
+      "status": "PERMISSION_REVOKE",
+      "created": "2018-11-30T11:45:58.000-06:00",
+      "createdBy": "username",
+      "description": "All permissions revoked"
+    },
+    {
+      "status": "PERMISSION_REVOKE",
+      "created": "2018-11-30T11:46:53.000-06:00",
+      "createdBy": "username",
+      "description": "All permissions revoked"
+    },
+    {
+      "status": "PERMISSION_REVOKE",
+      "created": "2018-11-30T12:01:06.000-06:00",
+      "createdBy": "username",
+      "description": "All permissions revoked"
+    },
+    {
+      "status": "PERMISSION_REVOKE",
+      "created": "2018-12-03T10:09:19.000-06:00",
+      "createdBy": "username",
+      "description": "All permissions revoked for colabbo"
+    },
+    {
+      "status": "PERMISSION_GRANT",
+      "created": "2018-12-03T10:09:19.000-06:00",
+      "createdBy": "username",
+      "description": "OWNER permission granted to colabbo"
+    },
+    {
+      "status": "PERMISSION_REVOKE",
+      "created": "2018-12-03T10:11:07.000-06:00",
+      "createdBy": "username",
+      "description": "All permissions revoked for collab"
+    },
+    {
+      "status": "PERMISSION_GRANT",
+      "created": "2018-12-03T10:11:07.000-06:00",
+      "createdBy": "username",
+      "description": "OWNER permission granted to collab"
+    }
+  ]
+}

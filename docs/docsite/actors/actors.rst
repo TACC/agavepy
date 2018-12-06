@@ -1,6 +1,6 @@
-**************
-agavepy.actors
-**************
+******
+Actors
+******
 
 Summary: Create and manage actors.
 

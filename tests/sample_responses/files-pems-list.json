@@ -1,0 +1,28 @@
+{
+  "status": "success",
+  "message": null,
+  "version": "2.2.22-r7deb380",
+  "result": [
+    {
+      "username": "username",
+      "internalUsername": null,
+      "permission": {
+        "read": true,
+        "write": true,
+        "execute": true
+      },
+      "recursive": true,
+      "_links": {
+        "self": {
+          "href": "https://api.sd2e.org/files/v2/pems/system/system-id/?username.eq=username"
+        },
+        "file": {
+          "href": "https://api.sd2e.org/files/v2/media/system/system-id/"
+        },
+        "profile": {
+          "href": "https://api.sd2e.org/profiles/v2/username"
+        }
+      }
+    }
+  ]
+}

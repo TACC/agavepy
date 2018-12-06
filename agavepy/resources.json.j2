@@ -7542,10 +7542,42 @@
                                 "summary": "List user profiles",
                                 "nickname": "list",
                                 "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The profile information for a new user",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "SingleProfileResponse",
+                                "notes": "Internal users will not be returned",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies an invalid username format",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to create the user",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Create new user profile",
+                                "nickname": "create",
+                                "method": "POST"
                             }
                         ],
                         "path": "/profiles/v2",
-                        "description": "Retrieve a (paginated) list of profiles.",
+                        "description": "Create and list profiles.",
                         "has_websocket": false
                     },
                     {
@@ -7619,10 +7651,72 @@
                                 "summary": "Find api user profile by their api username",
                                 "nickname": "listByUsername",
                                 "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The username of a valid api user",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "username"
+                                    },
+                                    {
+                                        "description": "Updated profile information for a user",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "SingleProfileResponse",
+                                "notes": "Internal users will not be returned",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies an invalid username format",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The user profile cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the profile database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Update user profile",
+                                "nickname": "update",
+                                "method": "PUT"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The username of a valid api user",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "username"
+                                    }
+                                ],
+                                "type": "SingleProfileResponse",
+                                "notes": "Internal users will not be returned",
+                                "is_websocket": false,
+                                "summary": "Depete user profile",
+                                "nickname": "delete",
+                                "method": "DELETE"
                             }
                         ],
                         "path": "/profiles/v2/{username}",
-                        "description": "Retrieve the profile of an API user by their exact username.",
+                        "description": "Retrieve and update the profile of an API user by their exact username.",
                         "has_websocket": false
                     }
                 ],

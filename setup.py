@@ -35,15 +35,20 @@ if sys.version_info[0] == 2:
 
 setup(
     name='agavepy',
-    version='0.7.3',
+    version='0.8.0',
     description='SDK for Agave',
     long_description=readme,
-    author='Joe Stubbs, Walter Moreira',
-    author_email='jstubbs@tacc.utexas.edu, wmoreira@tacc.utexas.edu',
+    author='Texas Advanced Computing Center',
+    author_email='jstubbs@tacc.utexas.edu, jochoa@tacc.utexas.edu',
     url='https://github.com/TACC/agavepy',
     packages=[
         'agavepy',
-        'agavepy.swaggerpy'
+        'agavepy.swaggerpy',
+        "agavepy.tenants",
+        "agavepy.clients",
+        "agavepy.tokens",
+        "agavepy.files",
+        "agavepy.utils"
     ],
     package_dir={'agavepy': 'agavepy'},
     package_data={'agavepy': ['resources.json', 'resources.json.j2']},

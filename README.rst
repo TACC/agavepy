@@ -21,6 +21,7 @@ AgavePy
 - PyPI: https://pypi.python.org/pypi/agavepy
 - Free software: 3-Clause BSD License
 
+
 Installation
 ============
 
@@ -35,6 +36,17 @@ Install from GitHub checkout::
     python setup.py install
     # or #
     make install
+
+
+Contributing
+============
+In case you want to contribute, you should read our 
+`contributing guidelines`_ and we have a contributor's guide
+that explains `setting up a development environment and the contribution process`_.
+
+.. _contributing guidelines: CONTRIBUTING.md
+.. _setting up a development environment and the contribution process: docs/contributing/
+
 
 Quickstart
 ==========
@@ -65,38 +77,70 @@ keeping your access credentials and digital assets secure.
 This is covered in great detail in our `Developer Documentation`_ but some key
 concepts will be highlighted here, interleaved with Python code.
 
-The first step is to create a Python object ``ag`` pointing to an API server.
-Your project likely has its own API server, which are discoverable using 
-the ``tenants-list --rich`` command in the TACC Cloud CLI. For now, we can
-assume ``api.tacc.cloud`` (the default value) will work for you. 
+The first step is to create a Python object ``ag`` which will interact with an
+Agave tenant.
+
+.. code-block:: pycon
+
+    >>> from agavepy.agave import Agave
+    >>> ag = Agave()
+    CODE                 NAME                                     URL
+    3dem                 3dem Tenant                              https://api.3dem.org/
+    agave.prod           Agave Public Tenant                      https://public.agaveapi.co/
+    araport.org          Araport                                  https://api.araport.org/
+    designsafe           DesignSafe                               https://agave.designsafe-ci.org/
+    iplantc.org          CyVerse Science APIs                     https://agave.iplantc.org/
+    irec                 iReceptor                                https://irec.tenants.prod.tacc.cloud/
+    sd2e                 SD2E Tenant                              https://api.sd2e.org/
+    sgci                 Science Gateways Community Institute     https://sgci.tacc.cloud/
+    tacc.prod            TACC                                     https://api.tacc.utexas.edu/
+    vdjserver.org        VDJ Server                               https://vdj-agave-api.tacc.utexas.edu/
+    
+    Please specify the ID of a tenant to interact with: araport.org
+    >>> ag.api_server
+    'https://api.araport.org/'
+
+
+If you already now what tenant you want to work with, you can instantiate
+``Agave`` as follows:
 
 .. code-block:: pycon
 
    >>> from agavepy.agave import Agave
-   >>> ag = Agave(api_server='https://api.tacc.cloud')
+   >>> ag = Agave(api_server="https://api.tacc.cloud")
+
+or 
+
+.. code-block:: pycon
+
+    >>> from agavepy.agave import Agave
+    >>> ag = Agave(tenant_id="tacc.prod")
 
 Once the object is instantiated, interact with it according to the API 
 documentation and your specific usage needs. 
 
 Create a new Oauth client
 ^^^^^^^^^^^^^^^^^^^^^^^^^
+In order to interact with Agave, you'll need to first create an Oauth client so
+that later on you can create access tokens to do work.
+
+To create a client you can do the following:
 
 .. code-block:: pycon
 
-   >>> ag = Agave(api_server='https://api.tacc.cloud',
-   ...            username='mwvaughn',
-   ...            password='PaZ$w0r6!')
-   >>> ag.clients.create(body={'clientName': 'my_client'})
-   {u'consumerKey': u'kV4XLPhVBAv9RTf7a2QyBHhQAXca', u'_links': {u'subscriber':
-   {u'href': u'https://api.tacc.cloud/profiles/v2/mwvaughn'}, u'self': {u'href':
-    u'https://api.tacc.cloud/clients/v2/my_client'}, u'subscriptions': {u'href':
-    u'https://api.tacc.cloud/clients/v2/my_client/subscriptions/'}},
-    u'description': u'', u'tier': u'Unlimited', u'callbackUrl': u'',
-    u'consumerSecret': u'5EbjEOcyzzIsAAE3vBS7nspVqHQa', u'name': u'my_client'}
+    >>> from agavepy.agave import Agave
+    >>> ag = Agave(api_server='https://api.tacc.cloud')
+    >>> ag.clients_create("client-name", "some description")
+    API username: your-username
+    API password: 
+    >>> ag.api_key
+    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+    >>> ag.api_secret
+    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
-You use the **consumerKey** and **consumerSecret** to generate Oauth *tokens*, 
+You will use the api key and secret to generate Oauth *tokens*, 
 which are temporary credentials that you can use in place of putting your real 
-credentials into code that is scripting against the TACC APIs.
+credentials into code that is interacting with TACC APIs.
 
 Reuse an existing Oauth client
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -111,21 +155,54 @@ AgavePy up to use it works the same way:
 
    >>> from agavepy.agave import Agave
    >>> ag = Agave(api_server='https://api.tacc.cloud',
-   ...            username='mwvaughn', password='PaZ$w0r6!',
+   ...            username='mwvaughn',
    ...            client_name='my_client',
    ...            api_key='kV4XLPhVBAv9RTf7a2QyBHhQAXca',
    ...            api_secret='5EbjEOcyzzIsAAE3vBS7nspVqHQa')
 
 The Agave object ``ag`` is now configured to talk to all TACC Cloud services.
-Here's an example: Let's retrieve a the curent user's **profile**.
+
+
+
+Generate an Access Token
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In order to interact with the TACC cloud services in a more secure and
+controlled manner - without constantly using your username and password - we
+will use the oauth client, created in the previous step, to generate access
+tokens.
+
+The generated tokens will by defualt have a lifetime of 4 hours, or 14400
+seconds.
+
+To create a token
 
 .. code-block:: pycon
 
-   >>> ag.profiles.get()
-   {u'status': u'', u'username': u'mwvaughn', u'first_name': u'Matthew', 
-    u'last_name': u'Vaughn', u'phone': u'867-5309', u'mobile_phone': u'', 
-    u'create_time': u'20140515180317Z', u'full_name': u'vaughn', 
-    u'email': u'mwvaughn@devnull.com'}
+    >>> ag.get_access_token()
+    API password:
+    >>> ag.token
+    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+Keep in mind that you will need to create an oauth client first!
+
+
+
+Saving your credentials
+^^^^^^^^^^^^^^^^^^^^^^^
+
+To save your process (api key, api secret, access token, refresh token, tenant
+information) you can use the method ``Agave.save_configs()``
+
+.. code-block:: pycon
+
+    >>> ag.save_configs()
+
+By default, ``Agave.save_configs`` will store credentials in ``~/.agave``. 
+It will save all session in ``~/.agave/config.json`` and, for
+backwards-compatibility with other agave tooling, it will save the current
+session in ``~/.agave/current``.
+
 
 The refresh token
 ^^^^^^^^^^^^^^^^^
@@ -152,7 +229,6 @@ how you can access token data programmatically for your own purposes.
     >>> ag.token.token_info['refresh_token']
     u'b138c49046f67f80d49a1c10a12e44b'
 
-**To be continued**
 
 .. _Agave: https://agaveapi.co/
 .. _Abaco: http://useabaco.cloud/

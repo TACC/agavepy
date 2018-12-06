@@ -1,6 +1,6 @@
-*************
-agavepy.files
-*************
+***********************
+Other methods available
+***********************
 
 Summary: Move and manage data
 

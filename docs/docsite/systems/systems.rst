@@ -1,6 +1,6 @@
-***************
-agavepy.systems
-***************
+*******
+Systems
+*******
 
 Summary: Register and manage systems
 

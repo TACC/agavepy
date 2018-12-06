@@ -1,6 +1,6 @@
-****************
-agavepy.profiles
-****************
+********
+Profiles
+********
 
 Summary: Create and manage application users
 

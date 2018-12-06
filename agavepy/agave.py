@@ -1,3 +1,6 @@
+from __future__ import print_function
+from builtins import input
+
 import xml.etree.ElementTree as ElementTree
 from functools import wraps
 
@@ -16,12 +19,23 @@ import jinja2
 import dateutil.parser
 import requests
 
+from agavepy.tenants import tenant_list
+from agavepy.clients import (clients_create, clients_delete, clients_list, 
+    clients_subscribe, clients_subscribtions)
+from agavepy.tokens import token_create, refresh_token
+from agavepy.utils import load_config, save_config
+from agavepy.files import (files_copy, files_delete, files_download, 
+    files_history, files_import, files_list, files_mkdir, files_move, 
+    files_pems_delete, files_pems_list, files_pems_update, files_upload)
+
+
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
 
 from .swaggerpy.client import SwaggerClient
 from .swaggerpy.http_client import SynchronousHttpClient
 from .swaggerpy.processors import SwaggerProcessor
+
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -193,14 +207,16 @@ class Agave(object):
     ]
 
     def __init__(self, **kwargs):
+        
         for param, mandatory, attr, default in self.PARAMS:
             try:
-                value = (kwargs[param] if mandatory
-                         else kwargs.get(param, default))
+                value = (kwargs[param] if mandatory 
+                        else kwargs.get(param, default))
             except KeyError:
-                raise AgaveError(
-                    'parameter "{}" is mandatory'.format(param))
+                pass
+
             setattr(self, attr, value)
+
         if self.resources is None:
             self.resources = load_resource(self.api_server)
         self.host = urllib.parse.urlsplit(self.api_server).netloc
@@ -468,6 +484,421 @@ class Agave(object):
         if self.all is not None:
             base.extend(list(self.all.resources.keys()))
         return list(set(base))
+
+
+    def init(self, tenantsurl="https://api.tacc.utexas.edu/tenants"):
+        """ Initilize a session
+
+        Initialize a session by setting parameters refering to the tenant you
+        wish to interact with.
+        """
+        # The following sectionsets tenant ID (tenant_id) and tenant url
+        # (api_server).
+        # Neither tenant ID nor tenant url are set.
+        if self.tenant_id is None and self.api_server is None:
+            tenants = self.list_tenants(tenantsurl=tenantsurl)
+            value = input("\nPlease specify the ID for the tenant you wish to interact with: ")
+            self.tenant_id  = tenants[value]["id"]
+            tenant_url = tenants[value]["url"]
+            if tenant_url[-1] == '/':
+                tenant_url = tenant_url[:-1]
+            self.api_server = tenant_url
+        # Tenant ID was not set.
+        elif self.tenant_id is None and self.api_server is not None:
+            tenants = tenant_list(tenantsurl=tenantsurl)
+
+            for _, tenant in tenants.items():
+                if self.api_server in tenant["url"]:
+                    self.tenant_id = tenant["id"]
+        # Tenant url was not set.
+        elif self.api_server is None and self.tenant_id is not None:
+            tenants = tenant_list(tenantsurl=tenantsurl)
+
+            tenant_url = tenants[self.tenant_id]["url"]
+            if tenant_url[-1] == '/':
+                tenant_url = tenant_url[:-1]
+            self.api_server = tenant_url
+
+
+    def save_configs(self, cache_dir=None):
+        """ Save configs
+
+        Save configuration to AGAVE_CACHE_DIR. This will update 
+        AGAVE_CACHE_DIR/current and AGAVE_CACHE_DIR/config.json.
+        
+        PARAMETERS
+        ----------
+        cache_dir: string (default: None)
+            If no cache_dir is passed it will default to ~/.agave.
+        """
+        # Check that client name is set.
+        if self.client_name is None or isinstance(self.client_name, Resource):
+            print(
+                "You must set the client_name attribute before saving configurations with this method")
+            return
+
+        current_context = {
+            "tenantid": self.tenant_id,
+            "baseurl": self.api_server,
+            "devurl": "",
+            "apisecret": self.api_secret,
+            "apikey": self.api_key,
+            "username": self.username,
+            "access_token": self.token,
+            "refresh_token": self.refresh_token,
+            "created_at": self.created_at,
+            "expires_in": self.expires_in,
+            "expires_at": self.expires_at,
+        }
+
+        # Convert None values to empty strings.
+        for k, v in current_context.items():
+            if v is None or isinstance(v, Resource):
+                current_context[k] = ""
+
+        if cache_dir is None:
+            cache_dir = os.path.expanduser("~/.agave")
+        save_config(cache_dir, current_context, self.client_name)
+
+
+    def load_configs(self, cache_dir=None, tenant_id=None, username=None, client_name=None):
+        """ Load session cntext from configuration file
+
+        PARAMETERS
+        ----------
+        cache_dir: string (default: None)
+            Path to directory for storing sessions. It defaults to "~/.agave".
+        username: string (default: None)
+        client_name: string (default: None)
+            Name of oauth client.
+        """
+        # Set cache dir.
+        if cache_dir is None:
+            cache_dir = os.path.expanduser("~/.agave")
+
+        client_name, session_context = load_config(
+                cache_dir, tenant_id, username, client_name)
+
+        self.client_name   = client_name
+        self.tenant_id     = session_context["tenantid"]
+        self.api_server    = session_context["baseurl"]
+        self.api_secret    = session_context["apisecret"]
+        self.api_key       = session_context["apikey"]
+        self.username      = session_context["username"]
+        self.token         = session_context["access_token"]
+        self.refresh_token = session_context["refresh_token"]
+        self.created_at    = session_context["created_at"]
+        self.expires_in    = session_context["expires_in"]
+        self.expires_at    = session_context["expires_at"]
+
+
+    def list_tenants(self, tenantsurl="https://api.tacc.utexas.edu/tenants"):
+        """ List Agave tenants
+
+        PARAMETERS
+        ----------
+        tenantsurl: string (default: "https://api.tacc.utexas.edu/tenants")
+            Endpoint with Agave tenant information. Another alternative is 
+            https://api.tacc.utexas.edu/tenants.
+        """
+        tenants = tenant_list(tenantsurl)
+        print("{0:<20} {1:<40} {2:<50}".format("ID", "NAME", "URL"))
+        for _, tenant in tenants.items():
+            print("{0:<20} {1:<40} {2:<50}".format(
+                    tenant["id"], tenant["name"], tenant["url"]))
+
+        return tenants
+
+
+    def clients_create(self, client_name, description):
+        """ Create an Oauth client
+
+        Save the api key and secret upon a successfull reuest to Agave.
+
+        PARAMETERS
+        ----------
+        client_name: string
+            Name of the oauth client to be created.
+        description: string
+            Description of the client to be created.
+        """
+        # Set tenant url.
+        tenant_url = self.api_server
+        
+        # Set username.
+        if self.username == "" or self.username is None:
+            self.username = input("API username: ")
+
+        self.api_key, self.api_secret = clients_create(
+            self.username, client_name, description, tenant_url)
+        # Save client name upon successful return of function.
+        self.client_name = client_name
+
+
+    def clients_delete(self, client_name=None):
+        """ Delete an Oauth client
+
+        If no client_name is passed then we will try to delete the oauth client
+        stored in the current session.
+        """
+        # Set username.
+        if self.username == "" or self.username is None:
+            self.username = input("API username: ")
+
+        # If client_name is not set, then delete the current client, if it 
+        # exists.
+        if client_name is None:
+            client_name = self.client_name
+
+        # Delete client.
+        clients_delete(self.api_server, self.username, client_name)
+
+        # If we deleted the current client, then zero out its secret and key.
+        if self.client_name == client_name:
+            self.api_key, self.api_secret = "", ""
+
+
+    def clients_subscribe(self, api_name, api_version, api_provider, client_name=None):
+        """ Subscribe the oauth client to an api
+        """
+        # Set username.
+        if self.username == "" or self.username is None:
+            self.username = input("API username: ")
+
+        # If client_name is not set, then delete the current client, if it
+        # exists.
+        if client_name is None:
+            client_name = self.client_name
+
+        # Subscribe client.
+        clients_subscribe(self.username, client_name, self.api_server, 
+            api_name, api_version, api_provider)
+
+
+    def clients_subscribtions(self, client_name=None):
+        """ List oauth client subscriptions
+        """
+        # Set username.
+        if self.username == "" or self.username is None:
+            self.username = input("API username: ")
+
+        # If client_name is not set, then delete the current client, if it
+        # exists.
+        if client_name is None:
+            client_name = self.client_name
+
+        # List subscriptions.
+        clients_subscribtions(self.username, client_name, self.api_server)
+
+
+    def clients_list(self):
+        """ List all oauth clients
+        """
+        # Set username.
+        if self.username == "" or self.username is None:
+            self.username = input("API username: ")
+
+        # Set tenant url.
+        tenant_url = self.api_server
+
+        clients_list(self.username, tenant_url)
+
+
+    def get_access_token(self):
+        """ Generate an access token
+        """
+        # Check that a client for this session has been created by checking api
+        # key and secret.
+        if (self.api_key == "" or self.api_key is None or 
+                self.api_secret == "" or self.api_secret is None):
+            print("Please create a client first. See \"clients_create(client_name, description)\"\n")
+            return
+
+        # Set tenant url.
+        tenant_url = self.api_server
+
+        # Set username.
+        if self.username == "" or self.username is None:
+            self.username = input("API username: ")
+
+        # Create access token.
+        token_data = token_create(self.username, self.api_key, self.api_secret, tenant_url)
+
+        # Update client.
+        self.token         = token_data.get("access_token")
+        self.refresh_token = token_data.get("refresh_token")
+        self.expires_in    = token_data.get("expires_in")
+        self.created_at    = token_data.get("created_at")
+        self.expires_at    = token_data.get("expires_at")
+
+
+    def refresh_tokens(self):
+        """ Refresh oauth token
+
+        Check if tokens need to be created or refreshed. If tokens need to be
+        refreshed then this method will do so. Otherwise, the method will exit.
+        """
+        try:
+            created_t = int(self.created_at)
+            expires_t = int(self.expires_in)
+        except TypeError as err:
+            print("You must create a token first. Try get_access_token()")
+            return
+
+        expiration_t = created_t + expires_t
+        delta_t = int(time.time()) - expiration_t
+        if delta_t > -60:
+            print("Refreshing token...")
+            token_data = refresh_token(
+                    self.api_key, self.api_secret, self.refresh_token, self.api_server)
+
+            self.token         = token_data["access_token"]
+            self.refresh_token = token_data["refresh_token"]
+            self.expires_in    = token_data["expires_in"]
+            self.created_at    = token_data["created_at"]
+            self.expires_at    = token_data["expires_at"]
+
+
+    def files_copy(self, source, destination):
+        """ Copy a file from source to destination on a remote system
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # Make a copy of the file.
+        files_copy(self.api_server, self.token, source, destination)
+
+
+    def files_delete(self, file_path):
+        """ Delete a file from remote system
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # Delete file.
+        files_delete(self.api_server, self.token, file_path)
+
+    
+    def files_download(self, source, destination):
+        """ Download files from remote system
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # Download file.
+        files_download(self.api_server, self.token, source, destination)
+
+
+    def files_history(self, path):
+        """ List the history of events for a specific file/folder
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # List events for path.
+        files_history(self.api_server, self.token, path)
+
+
+    def files_import(self, source, destination):
+        """ Imports a remote URI to a remote storage system
+        
+        If 'source' is an agave source then prefix the uri with 'agave://'. For
+        example, source = 'agave://data-sd2e-community/test.txt'.
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # Import file.
+        files_import(self.api_server, self.token, source, destination)
+
+
+    def files_list(self, system_path, long_format=False):
+        """ List files on remote system
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # List files.
+        files_list(self.api_server, self.token, system_path, long_format=long_format)
+
+
+    def files_mkdir(self, location):
+        """ Create an empty directory on a remote storage system
+        """
+        # Check if tokens need to be refreshed.                                 
+        self.refresh_tokens()
+
+        # Create directory.
+        files_mkdir(self.api_server, self.token, location)
+
+
+    def files_move(self, source, destination):
+        """ Move a file in a remote system
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # Move file.
+        files_move(self.api_server, self.token, source, destination)
+
+
+    def files_pems_delete(self, path):
+        """ Remove user permissions associated with a file or folder.
+
+        These permissions are set at the API level and do not reflect *nix or 
+        other file system ACL.
+        Deletes all permissions on a file except those of the owner.
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # Delete api permissions.
+        files_pems_delete(self.api_server, self.token, path)
+
+
+    def files_pems_list(self, path):
+        """ List the user permissions associated with a file or folder
+
+        These permissions are set at the API level and do not reflect *nix or 
+        other file system ACL.
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # List api permissions.
+        files_pems_list(self.api_server, self.token, path)
+
+
+    def files_pems_update(self, path, username, perms, recursive=False):
+        """ Edit user permissions associated with a file or folder.
+        
+        These permissions are set at the API level and do not reflect *nix or 
+        other file system ACL.
+        Deletes all permissions on a file except those of the owner.
+        Valid values for setting permission with the -P flag are READ, WRITE, 
+        EXECUTE, READ_WRITE, READ_EXECUTE, WRITE_EXECUTE, ALL, and NONE.
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # Update api permissions.
+        files_pems_update(
+            self.api_server, self.token, 
+            path, username, perms, 
+            recursive=recursive)
+
+
+    def files_upload(self, source, destination):
+        """ Upload file to remote system
+        """
+        # Check if tokens need to be refreshed.
+        self.refresh_tokens()
+
+        # Upload file.
+        files_upload(self.api_server, self.token, source, destination)
+
+
+
 
 
 class Resource(object):
