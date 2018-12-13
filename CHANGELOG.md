@@ -1,6 +1,18 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.8.0 - 2018-12-13
+### Added
+- Authentication methods (i.e., `clients_create`, `get_access_token`).
+- Methods to interact with `files` endpoints.
+
+### Changed
+- Updated documentation layout.
+- Updated testing framework.
+
+### Removed
+- No change.
+
 ## 0.7.3 - 2018-09-13
 ### Added
 - No change.
