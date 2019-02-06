@@ -39,6 +39,19 @@ from .swaggerpy.processors import SwaggerProcessor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
+# last version of Agave before switching to Aloe
+LAST_PRE_ALOE_VERSION = '2.2.22-r7deb380'
+
+# response models which are dependent on the version of the API response -
+EXCEPTION_MODELS = {'Job': {
+                            'version_cutoff': LAST_PRE_ALOE_VERSION,
+                            'model': 'AloeJob'
+                            },
+                    'JobSummary': {
+                        'version_cutoff': LAST_PRE_ALOE_VERSION,
+                        'model': 'AloeJobSummary'
+                    }
+}
 
 def json_response(f):
     @wraps(f)
@@ -219,6 +232,7 @@ class Agave(object):
 
         if self.resources is None:
             self.resources = load_resource(self.api_server)
+        self.resource_exceptions = json.load(open(os.path.join(HERE, 'resource_exceptions.json'), 'r'))
         self.host = urllib.parse.urlsplit(self.api_server).netloc
         if self.token_callback and not hasattr(self.token_callback, '__call__'):
             raise AgaveError('token_callback must be callable.')
@@ -898,12 +912,15 @@ class Agave(object):
         files_upload(self.api_server, self.token, source, destination)
 
 
-
-
-
 class Resource(object):
 
     def __init__(self, resource, client):
+        """
+
+        :param resource:
+        :param client: the Agave instance associated with this resource
+        :return:
+        """
         self.resource = resource
         self.client = client
 
@@ -934,7 +951,6 @@ class Operation(object):
         self.resource = resource
         self.operation = operation
         self.client = client
-
         self.models = self.get_models()
         self.return_type = self.get_return_type()
 
@@ -981,7 +997,13 @@ class Operation(object):
             # if response is a result, return it directly as well:
             if (self.resource == 'actors' and self.operation == 'getOneExecutionResult'):
                 return resp
-            processed = self.post_process(resp.json(), self.return_type)
+            # get the version associated with this response; the version is used for post_processing, as
+            # some response models depend on the version.
+            try:
+                version = resp.json().get('version')
+            except:
+                version = None
+            processed = self.post_process(resp.json(), self.return_type, version)
             result = processed['result'] if 'result' in processed else None
             # if operation is clients.create, save name
             if self.resource == 'clients' and self.operation == 'create':
@@ -994,28 +1016,32 @@ class Operation(object):
             # the error message
             raise AgaveException(resp.json())
 
-    def post_process(self, obj, return_type):
+    def post_process(self, obj, return_type, version):
         if return_type is None:
             return self.process_untyped(obj)
+
         type_name = return_type['type'].lower()
         if type_name in self.PRIMITIVE_TYPES:
             f = getattr(self, 'process_{}'.format(type_name))
-            return f(obj, return_type)
-        return self.process_model(obj, return_type)
+            try:
+                return f(obj, return_type, version)
+            except:
+                return self.process_untyped(obj)
+        return self.process_model(obj, return_type, version)
 
-    def process_untyped(self, obj):
+    def process_untyped(self, obj, version=None):
         return obj
 
-    def process_dict(self, obj, return_type):
+    def process_dict(self, obj, return_type, version=None):
         return obj
 
-    def process_array(self, obj, return_type):
+    def process_array(self, obj, return_type, version):
         items = return_type['items']
         items_type = items.get('type', items.get('$ref'))
-        return [self.post_process(elem, {'type': items_type})
+        return [self.post_process(elem, {'type': items_type}, version)
                 for elem in obj]
 
-    def process_string(self, obj, return_type):
+    def process_string(self, obj, return_type, version=None):
         if obj is None:
             # why is agave returning null for a string type?
             return obj
@@ -1023,19 +1049,47 @@ class Operation(object):
             return dateutil.parser.parse(obj)
         return obj
 
-    def process_integer(self, obj, return_type):
+    def process_integer(self, obj, return_type, version=None):
         return obj
 
     process_int = process_integer
 
-    def process_boolean(self, obj, return_type):
+    def process_boolean(self, obj, return_type, version=None):
         return obj
 
-    def process_model(self, obj, return_type):
+    def get_model_spec(self, model_name, version):
+        """
+        Look up the model_spec associated with a model name and check for exceptions based on the version of
+         the response.
+        :param model_name:
+        :return:
+        """
+        if model_name in EXCEPTION_MODELS:
+            version_cutoff = EXCEPTION_MODELS[model_name]['version_cutoff']
+            if version > version_cutoff:
+                # the API version of this response was greater than the version cutoff, so we need to look up the
+                # the model spec in the exception_resources
+                new_model_name = EXCEPTION_MODELS[model_name]['model']
+                return self.client.resource_exceptions[new_model_name]['properties']
+        # if model was not an exception model OR the version was less than the version cutoff, just return the
+        # the model in the original models object -
+        return self.models[model_name]['properties']
+
+
+    def process_model(self, obj, return_type, version):
         model_name = return_type['type']
-        model_spec = self.models[model_name]['properties']
-        return AttrDict({k: self.post_process(obj[k], model_spec.get(k))
-                         for k in obj})
+
+        model_spec = self.get_model_spec(model_name, version)
+        # todo ---
+        try:
+            return AttrDict({k: self.post_process(obj[k], model_spec.get(k), version)
+                             for k in obj})
+        except Exception as e:
+            ex = e
+            import pdb; pdb.set_trace()
+        # ----
+        # return AttrDict({k: self.post_process(obj[k], model_spec.get(k), version)
+        #                  for k in obj})
 
 
 class AttrDict(dict):

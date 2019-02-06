@@ -1,0 +1,255 @@
+{
+                    "AloeJob": {
+                        "properties": {
+                            "remoteJobId": {
+                                "type": "string",
+                                "description": "The process or local job id of the job on the remote execution system.",
+                                "name": "remoteJobId"
+                            },
+                            "memoryPerNode": {
+                                "type": "string",
+                                "description": "The requested memory for this application to run given in GB.",
+                                "name": "memoryPerNode"
+                            },
+                            "archiveSystem": {
+                                "type": "string",
+                                "description": "The unique id of the storage system on which this job's output will be staged.",
+                                "name": "archiveSystem"
+                            },
+                            "processorsPerNode": {
+                                "type": "integer",
+                                "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.",
+                                "name": "processorsPerNode",
+                                "format": "int32"
+                            },
+                            "owner": {
+                                "type": "string",
+                                "description": "The job owner.",
+                                "name": "owner"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "The error message incurred when the job failed.",
+                                "name": "message"
+                            },
+                            "id": {
+                                "type": "string",
+                                "description": "The unique id of the job.",
+                                "name": "id"
+                            },
+                            "parameters": {
+                                "type": "JobParameters",
+                                "description": "The application specific parameters needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. The actual dataType will be determined by the application description.",
+                                "name": "parameters"
+                            },
+                            "archivePath": {
+                                "type": "string",
+                                "description": "The path of the archive folder for this job on the user's default storage sytem.",
+                                "name": "archivePath"
+                            },
+                            "archive": {
+                                "type": "boolean",
+                                "description": "Whether the output from this job should be archived. If true, all new files created by this application's execution will be archived to the archivePath in the user's default storage system.",
+                                "name": "archive"
+                            },
+                            "outputPath": {
+                                "type": "String",
+                                "description": "Relative path of the job's output data.",
+                                "name": "outputPath"
+                            },
+                            "maxHours": {
+                                "type": "string",
+                                "description": "The requested compute time needed for this application to complete given in HH:mm:ss format.",
+                                "name": "maxHours"
+                            },
+                            "status": {
+                                "type": "string",
+                                "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED",
+                                "name": "status"
+                            },
+                            "inputs": {
+                                "type": "JobInputs",
+                                "description": "The application specific input files needed for this job. These vary from application to application and should be entered as multiple individual parameters in the form. Inputs may be given as relative paths in the user's default storage system or as URI. If a URI is given, the data will be staged in by the IO service and made avaialble to the application at run time.",
+                                "name": "inputs"
+                            },
+                            "remoteSubmitted": {
+                                "type": "string",
+                                "description": "The date the job was submitted in ISO 8601 format.",
+                                "name": "remoteSubmitted",
+                                "format": "date-time"
+                            },
+                            "notifications": {
+                                "items": {
+                                    "$ref": "Notification"
+                                },
+                                "type": "array",
+                                "description": "An array of notifications you wish to receive.",
+                                "name": "notifications"
+                            },
+                            "systemId": {
+                                "type": "string",
+                                "description": "The system id of the execution system.",
+                                "name": "systemId"
+                            },
+                            "started": {
+                                "type": "string",
+                                "description": "The date the job started in ISO 8601 format.",
+                                "name": "started",
+                                "format": "date-time"
+                            },
+                            "appId": {
+                                "type": "string",
+                                "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.",
+                                "name": "appId"
+                            },
+                            "nodeCount": {
+                                "type": "integer",
+                                "description": "The number of processors this application should utilize while running. If the application is not of executionType PARALLEL, this should be 1.",
+                                "name": "nodeCount",
+                                "format": "int32"
+                            },
+                            "submitRetries": {
+                                "type": "integer",
+                                "description": "The number of retires it took to submit this job.",
+                                "name": "submitRetries",
+                                "format": "int32"
+                            },
+                            "failedStatusCheck": {
+                                "type": "integer",
+                                "description": "Number of failed times the remote system was queried for job status.",
+                                "name": "failedStatusCheck",
+                                "format": "int32"
+                            },
+                            "lastStatusCheck": {
+                                "type": "string",
+                                "description": "Last time a status check was attempted.",
+                                "name": "lastStatusCheck",
+                                "format": "date-time"
+                            },
+                            "lastStatusMessage": {
+                                "type": "string",
+                                "description": "Last message logged for this job.",
+                                "name": "lastStatusMessage",
+                                "format": "date-time"
+                            },
+                            "remoteEnded": {
+                                "type": "string",
+                                "description": "Time job finished running on remote system.",
+                                "name": "remoteEnded",
+                                "format": "date-time"
+                            },
+                            "remoteOutcome": {
+                                "type": "string",
+                                "description": "Best approximation of remote job’s outcome: FINISHED, FAILED, FAILED_SKIP_ARCHIVE",
+                                "name": "remoteOutcome"
+                            },
+                            "remoteStatusChecks": {
+                                "type": "integer",
+                                "description": "Number of successful times the remote system was queried for job status.",
+                                "name": "remoteStatusChecks",
+                                "format": "int32"
+                            },
+                            "appUuid": {
+                                "type": "string",
+                                "description": "Unique application ID.",
+                                "name": "appUuid"
+                            },
+                            "roles": {
+                                "type": "string",
+                                "description": "Roles assigned by authentication server to owner (comma-separated).",
+                                "name": "roles"
+                            },
+                            "schedulerJobId": {
+                                "type": "string",
+                                "description": "Optional ID given by the remote scheduler.",
+                                "name": "schedulerJobId"
+                            },
+                            "tenantQueue": {
+                                "type": "string",
+                                "description": "Tenant queue to which job was assigned.",
+                                "name": "tenantQueue"
+                            },
+                            "tenantId": {
+                                "type": "string",
+                                "description": "Current user’s tenant ID.",
+                                "name": "tenantId"
+                            },
+                            "visible": {
+                                "type": "boolean",
+                                "description": "User visibility of this job record.",
+                                "name": "visible"
+                            },
+                            "workPath": {
+                                "type": "string",
+                                "description": "The directory on the remote execution system from which the job is running.",
+                                "name": "workPath"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "The name of the job.",
+                                "name": "name"
+                            },
+                            "remoteQueue": {
+                                "type": "string",
+                                "description": "The queue to which this job should be submitted. This is optional and only applies when the execution system has a batch scheduler.",
+                                "name": "remoteQueue"
+                            },
+                            "ended": {
+                                "type": "string",
+                                "description": "The date the job stopped running due to termination, completion, or error in ISO 8601 format.",
+                                "name": "ended",
+                                "format": "date-time"
+                            }
+                        },
+                        "id": "Job",
+                        "name": ""
+                    },
+                    "AloeJobSummary": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "The status of the job. Possible values are: PENDING, STAGING_INPUTS, CLEANING_UP, ARCHIVING, STAGING_JOB, FINISHED, KILLED, FAILED, STOPPED, RUNNING, PAUSED, QUEUED, SUBMITTING, STAGED, PROCESSING_INPUTS, ARCHIVING_FINISHED, ARCHIVING_FAILED",
+                                "name": "status"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "The name of the job.",
+                                "name": "name"
+                            },
+                            "systemId": {
+                                "type": "string",
+                                "description": "The system id of the execution system.",
+                                "name": "systemId"
+                            },
+                            "started": {
+                                "type": "string",
+                                "description": "The date the job started in ISO 8601 format.",
+                                "name": "started",
+                                "format": "date-time"
+                            },
+                            "appId": {
+                                "type": "string",
+                                "description": "The unique name of the application being run by this job. This must be a valid application that the calling user has permission to run.",
+                                "name": "appId"
+                            },
+                            "owner": {
+                                "type": "string",
+                                "description": "The job owner.",
+                                "name": "owner"
+                            },
+                            "ended": {
+                                "type": "string",
+                                "description": "The date the job ended in ISO 8601 format.",
+                                "name": "ended",
+                                "format": "date-time"
+                            },
+                            "id": {
+                                "type": "string",
+                                "description": "The unique id of the job.",
+                                "name": "id"
+                            }
+                        },
+                        "id": "JobSummary",
+                        "name": ""
+                    }
+}
