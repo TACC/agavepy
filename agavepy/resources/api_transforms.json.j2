@@ -1,0 +1,337 @@
+{
+    "apis": [
+        {
+            "url": "http://localhost:9999/transforms",
+            "path": "/transforms",
+            "description": "Transform and stage data",
+            "api_declaration": {
+                "authorizations": [
+                    "oauth2"
+                ],
+                "swaggerVersion": "1.2",
+                "apis": [
+                    {
+                        "operations": [
+                            {
+                                "parameters": [],
+                                "nickname": "list",
+                                "notes": "",
+                                "is_websocket": false,
+                                "summary": "Find all transforms for use within the api.",
+                                "type": "MultipleTransformResponse",
+                                "method": "GET"
+                            }
+                        ],
+                        "path": "/transforms/v2/",
+                        "description": "Get a list of all available transforms",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The name of the transform requested.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "transformId"
+                                    }
+                                ],
+                                "nickname": "get",
+                                "notes": "This will perform a partial match on the name value returning everything with the given string in the name.",
+                                "is_websocket": false,
+                                "summary": "Find all transforms matching the given name.",
+                                "type": "MultipleTransformResponse",
+                                "method": "GET"
+                            }
+                        ],
+                        "path": "/transforms/v2/{transformId}",
+                        "description": "Get information about a specific transform.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The name of the transform to apply to the given file.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "transformId"
+                                    },
+                                    {
+                                        "description": "The name of the api user owning the file at the given path.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "owner"
+                                    },
+                                    {
+                                        "description": "The path to the file to be transformed and staged",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "filePath"
+                                    },
+                                    {
+                                        "defaultValue": "{\n\t\"url\": \"agave://demo.storage.example.com/apps/wc-1.00/picksumipsum.txt\",\n\t\"callbackUrl\": \"psherman@wallabydentistry.com.au\",\n\t\"nativeFormat\": \"raw\"\n}",
+                                        "description": "The transfer request details.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "TransformRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "nickname": "transformAndStage",
+                                "notes": "This allows you to fire and forget a data transform and staging task.",
+                                "is_websocket": false,
+                                "summary": "Transform a file and stage it to a specified location.",
+                                "type": "MultipleTransformResponse",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/transforms/v2/{transformId}/async/{owner}/{filePath}",
+                        "description": "Query for transforms available for a specific file",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The name of the transform to apply to the given file.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "transformId"
+                                    },
+                                    {
+                                        "description": "The name of the api user owning the file at the given path.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "owner"
+                                    },
+                                    {
+                                        "description": "The path to the file to be transformed and downloaded.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "filePath"
+                                    },
+                                    {
+                                        "defaultValue": "{\n\t\"url\": \"agave://demo.storage.example.com/apps/wc-1.00/picksumipsum.txt\",\n\t\"callbackUrl\": \"psherman@wallabydentistry.com.au\",\n\t\"nativeFormat\": \"raw\"\n}",
+                                        "description": "The transfer request details.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "TransformRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "produces": [
+                                    "application/octet-stream"
+                                ],
+                                "type": "void",
+                                "notes": "This allows you to synchronously transform and download a file. The download blocks until the transform has completed, so use caution when choosing this service as it is likely to time out for larger files.",
+                                "is_websocket": false,
+                                "summary": "Transform a file and download it directly.",
+                                "nickname": "transformAndDownload",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/transforms/v2/{transformId}/sync/{owner}/{filePath}",
+                        "description": "Transform and download files.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The tag to search for transforms on.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "tag"
+                                    }
+                                ],
+                                "nickname": "listByTag",
+                                "notes": "This will perform a partial match on the tag value returning everything with the given string in the tag.",
+                                "is_websocket": false,
+                                "summary": "Find all transforms with the given tag.",
+                                "type": "MultipleTransformResponse",
+                                "method": "GET"
+                            }
+                        ],
+                        "path": "/transforms/v2/tags/{tag}",
+                        "description": "Operations on a specific user.",
+                        "has_websocket": false
+                    }
+                ],
+                "models": {
+                    "Decoder": {
+                        "properties": {
+                            "description": {
+                                "type": "string",
+                                "description": "The description of what this decoder is and what it does.",
+                                "name": "description"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "The decoder name.",
+                                "name": "name"
+                            }
+                        },
+                        "id": "Decoder",
+                        "name": ""
+                    },
+                    "Transform": {
+                        "properties": {
+                            "description": {
+                                "type": "string",
+                                "description": "Description of this transform.",
+                                "name": "description"
+                            },
+                            "tags": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array",
+                                "description": "The tags describing this transform.",
+                                "name": "tags"
+                            },
+                            "decoders": {
+                                "items": {
+                                    "$ref": "Decoder"
+                                },
+                                "type": "array",
+                                "description": "The available decoders for this transform.",
+                                "name": "decoders"
+                            },
+                            "enabled": {
+                                "type": "boolean",
+                                "description": "Whether this transform is enabled or not.",
+                                "name": "enabled"
+                            },
+                            "encoder": {
+                                "type": "Encoder",
+                                "description": "The encoder to use to convert to this format.",
+                                "name": "encoder"
+                            },
+                            "descriptionurl": {
+                                "type": "string",
+                                "description": "The URL to find out more information.",
+                                "name": "descriptionurl"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "The name of this transform.",
+                                "name": "name"
+                            }
+                        },
+                        "id": "Transform",
+                        "name": ""
+                    },
+                    "Encoder": {
+                        "properties": {
+                            "description": {
+                                "type": "string",
+                                "description": "The description of what this encoder is and what it does.",
+                                "name": "description"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "The encoder name.",
+                                "name": "name"
+                            }
+                        },
+                        "id": "Encoder",
+                        "name": ""
+                    },
+                    "TransformRequest": {
+                        "properties": {
+                            "nativeFormat": {
+                                "type": "string",
+                                "description": "The original file type of the file. If not given, the file type is assumed to be raw.",
+                                "name": "nativeFormat"
+                            },
+                            "url": {
+                                "required": true,
+                                "type": "string",
+                                "description": "The uri to which the transformed file will be staged.",
+                                "name": "url"
+                            },
+                            "callbackUrl": {
+                                "type": "string",
+                                "description": "The URI to notify when the transfer is complete. This can be an email address or http URL. If a URL is given, a GET will be made to this address. URL templating is supported. Valid template values are: ${NAME}, ${SOURCE_FORMAT}, ${DEST_FORMAT}, ${STATUS}",
+                                "name": "callbackUrl"
+                            }
+                        },
+                        "id": "TransformRequest",
+                        "name": ""
+                    },
+                    "SingleTransformResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "Transform",
+                                "name": "result"
+                            }
+                        },
+                        "id": "SingleTransformResponse",
+                        "name": ""
+                    },
+                    "MultipleTransformResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "items": {
+                                    "$ref": "Transform"
+                                },
+                                "type": "array",
+                                "description": "response body",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MultipleTransformResponse",
+                        "name": ""
+                    }
+                },
+                "basePath": "https://{{ api_server_base }}",
+                "resourcePath": "/transforms/v2",
+                "apiVersion": "2.2.14"
+            },
+            "name": "transforms"
+        }
+    ]
+}

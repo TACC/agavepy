@@ -1,0 +1,264 @@
+{
+    "apis": [
+        {
+            "url": "http://localhost:9999/postits",
+            "path": "/postits",
+            "description": "Create pre-authenticated, disposable URLs",
+            "api_declaration": {
+                "authorizations": [
+                    "oauth2"
+                ],
+                "swaggerVersion": "1.2",
+                "apis": [
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "defaultValue": 250,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "limit"
+                                    },
+                                    {
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "offset"
+                                    }
+                                ],
+                                "type": "MultiplePostItResponse",
+                                "notes": "Retrieve a list of your active PostIts.",
+                                "is_websocket": false,
+                                "responseMessages": [],
+                                "summary": "List existing PostIts",
+                                "nickname": "list",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "defaultValue": "{\n\t\"url\": \"https://{{ api_server_base }}/files/v2/media/system/demo.storage.example.com/wc-1.00/picksumipsum.txt\",\n\t\"method\": \"GET\",\n\t\"maxUses\": 25,\n\t\"lifetime\": 3600,\n\t\"noauth\": false\n}",
+                                        "description": "The PostIt to create.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "PostItRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "PostIt",
+                                "notes": "A PostIt is a pre-authenticated URI that can be given to colleagues, third party services, or reused internally in leu of making a formal authenticated request to the destination URI. PostIts can be used one or more times, limited to a specific lifetime, or both.",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies an invalid username format",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The user profile cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the profile database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Create a new PostIt",
+                                "nickname": "create",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/postits/v2/",
+                        "description": "Create a new PostIt.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The nonce of this PostIt URL",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "nonce"
+                                    }
+                                ],
+                                "nickname": "delete",
+                                "notes": "",
+                                "is_websocket": false,
+                                "summary": "Immediately invalidates this PostIt URL.",
+                                "type": "SinglePostItResponse",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/postits/v2/{nonce}",
+                        "description": "Operations on a specific PostIt.",
+                        "has_websocket": false
+                    }
+                ],
+                "models": {
+                    "PostIt": {
+                        "properties": {
+                            "expires": {
+                                "type": "string",
+                                "description": "The expiration date in ISO 8601 format.",
+                                "name": "expires",
+                                "format": "date-time"
+                            },
+                            "creator": {
+                                "type": "string",
+                                "description": "The api user who made the PostIt creation request.",
+                                "name": "creator"
+                            },
+                            "url": {
+                                "type": "string",
+                                "description": "The url that will be invoked when the PostIt is redeemed.",
+                                "name": "url"
+                            },
+                            "remainingUses": {
+                                "type": "integer",
+                                "description": "The number of invocations remaining on this token. ",
+                                "name": "remainingUses",
+                                "format": "int32"
+                            },
+                            "postit": {
+                                "type": "string",
+                                "description": "The PostIt nonce.",
+                                "name": "postit"
+                            },
+                            "created": {
+                                "type": "string",
+                                "description": "The creation date in ISO 8601 format.",
+                                "name": "created",
+                                "format": "date-time"
+                            },
+                            "method": {
+                                "type": "string",
+                                "description": "The url that will be invoked when the PostIt is redeemed.",
+                                "name": "method"
+                            },
+                            "internalUsername": {
+                                "type": "string",
+                                "description": "The username of the internal user attached to this PostIt.",
+                                "name": "internalUsername"
+                            }
+                        },
+                        "id": "PostIt",
+                        "name": ""
+                    },
+                    "SinglePostItResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "PostIt",
+                                "name": "result"
+                            }
+                        },
+                        "id": "SinglePostItResponse",
+                        "name": ""
+                    },
+                    "PostItRequest": {
+                        "properties": {
+                            "url": {
+                                "required": true,
+                                "type": "string",
+                                "description": "The url that will be invoked when the PostIt is redeemed.",
+                                "name": "url"
+                            },
+                            "maxUses": {
+                                "type": "integer",
+                                "description": "The maximum number of invocations remaining on this PostIt. Defaults to no limit",
+                                "name": "maxUses",
+                                "format": "int32"
+                            },
+                            "noauth": {
+                                "type": "boolean",
+                                "description": "If true, the provided url will be called without authentication. Default is false",
+                                "name": "noauth"
+                            },
+                            "lifetime": {
+                                "minimum": 1,
+                                "type": "integer",
+                                "description": "The maximum lifetime in seconds of this PostIt on this token. Defaults to 2592000 (30 days)",
+                                "name": "lifetime",
+                                "format": "int32"
+                            },
+                            "method": {
+                                "enum": [
+                                    "GET",
+                                    "PUT",
+                                    "POST",
+                                    "DELETE"
+                                ],
+                                "type": "string",
+                                "description": "The method that will be invoked when the PostIt is redeemed.",
+                                "name": "method"
+                            },
+                            "internalUsername": {
+                                "type": "string",
+                                "description": "The username of the internal user attached to this PostIt.",
+                                "name": "internalUsername"
+                            }
+                        },
+                        "id": "PostItRequest",
+                        "name": ""
+                    },
+                    "MultiplePostItResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "items": {
+                                    "$ref": "PostIt"
+                                },
+                                "type": "array",
+                                "description": "list of postits",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MultiplePostItResponse",
+                        "name": ""
+                    }
+                },
+                "basePath": "https://{{ api_server_base }}",
+                "resourcePath": "/postits/v2",
+                "apiVersion": "2.2.14"
+            },
+            "name": "postits"
+        }    
+    ]
+}
