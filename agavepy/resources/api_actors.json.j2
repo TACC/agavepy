@@ -217,6 +217,34 @@
                                         "type": "string",
                                         "paramType": "path",
                                         "name": "actorId"
+                                    }
+                                ],
+                                "type": "ActorMessagesDeleteResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the actor database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Delete messages from an actor",
+                                "nickname": "deleteMessages",
+                                "method": "DELETE"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the actor.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "actorId"
                                     },
                                     {
                                         "description": "Optional dictionary of environmental variables",
@@ -667,6 +695,120 @@
                         ],
                         "path": "/actors/v2/{actorId}/nonces/{nonceId}",
                         "description": "Work with a specific nonce.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [],
+                                "type": "MultipleActorAliasResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the actor database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "List all current aliases",
+                                "nickname": "listAliases",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The name of the actor being aliased.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "body",
+                                        "name": "actorId"
+                                    },
+                                    {
+                                        "description": "The name of the new Alias",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "body",
+                                        "name": "aliasId"
+                                    },
+									{
+                                        "defaultValue": "",
+                                        "description": "The description of the nonce to add.",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "type": "AddAliasRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "nickname": "addAlias",
+                                "notes": "",
+                                "is_websocket": false,
+                                "summary": "Add an alias of an actor.",
+                                "type": "ActorAliasRequestResponse",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/actors/v2/aliases",
+                        "description": "Work with aliases.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the alias.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "aliasId"
+                                    }
+                                ],
+                                "type": "SingleActorAliasResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the actor database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Get the details of a specific alias.",
+                                "nickname": "getAlias",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The id of the alias.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "aliasId"
+                                    }
+                                ],
+                                "nickname": "deleteAlias",
+                                "notes": "",
+                                "is_websocket": false,
+                                "summary": "Delete an alias.",
+                                "type": "EmptyActorAliasRequestResponse",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/actors/v2/aliases/{aliasId}",
+                        "description": "Work with a specific alias.",
                         "has_websocket": false
                     },
                     {
