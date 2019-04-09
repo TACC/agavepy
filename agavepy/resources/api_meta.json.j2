@@ -1,0 +1,1494 @@
+{
+    "apis": [
+        {
+            "url": "http://localhost:9999/meta",
+            "path": "/meta",
+            "description": "Create and manage metadata",
+            "api_declaration": {
+                "authorizations": [
+                    "oauth2"
+                ],
+                "swaggerVersion": "1.2",
+                "apis": [
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The query to perform. Traditional MongoDB queries are supported",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "type": "string",
+                                        "paramType": "query",
+                                        "name": "q"
+                                    },
+                                    {
+                                        "defaultValue": 250,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "limit"
+                                    },
+                                    {
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "offset"
+                                    },
+                                    {
+                                        "defaultValue": true,
+                                        "description": "If false, implicit permissions are ignored and only records to which the user has explicit permissions are returned",
+                                        "required": false,
+                                        "type": "boolean",
+                                        "paramType": "query",
+                                        "name": "privileged"
+                                    }
+                                ],
+                                "type": "MultipleMetadataResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user does not supply a UUID or supplies an invalid JSON query",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Raised if the user is not authorized.",
+                                        "code": 401
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The specified metadata cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "List and/or search metadata.",
+                                "nickname": "listMetadata",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "defaultValue": "{\n\t\"name\": \"color\",\n\t\"value\": \"blue\"\n\t\"schemaId\": null,\n\t\"associatedIds\": []\n}",
+                                        "description": "The metadata to add.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "MetadataRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "MetadataResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies an invalid form",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Raised if the user is not authorized.",
+                                        "code": 401
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Update or Add new Metadata.",
+                                "nickname": "addMetadata",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/meta/v2/data",
+                        "description": "Search and manage metadata resources",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "defaultValue": 250,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "limit"
+                                    },
+                                    {
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "offset"
+                                    }
+                                ],
+                                "type": "MetadataResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user does not supply a UUID",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Raised if the user is not authorized.",
+                                        "code": 401
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The specified metadata cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Retrieve Metadata.",
+                                "nickname": "getMetadata",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "defaultValue": "{\n\t\"name\": \"color\",\n\t\"value\": \"blue\"\n\t\"schemaId\": null,\n\t\"associatedIds\": []\n}",
+                                        "description": "The metadata to update.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "MetadataRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "MetadataResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies an invalid form",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Raised if the user is not authorized.",
+                                        "code": 401
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Update or Add new Metadata.",
+                                "nickname": "updateMetadata",
+                                "method": "POST"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    }
+                                ],
+                                "type": "EmptyMetadataResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies no UUID",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Raised if the user is not authorized.",
+                                        "code": 401
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Remove Metadata from the system.",
+                                "nickname": "deleteMetadata",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/meta/v2/data/{uuid}",
+                        "description": "Query for the metadata with the given UUID",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata schema item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "defaultValue": 250,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "limit"
+                                    },
+                                    {
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "offset"
+                                    }
+                                ],
+                                "type": "MetadataSchemaResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user does not supply a Schema UUID",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the schema database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Retrieve Metadata Schemata.",
+                                "nickname": "searchSchema",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "defaultValue": "{\n\t\t\"title\": \"profile\",\n\t\t\"type\" : \"object\",\n\t\t\"properties\": {\n\t\t\t\"firstName\": {\n\t\t\t\t\"type\" : \"string\"\n\t\t\t},\n\t\t\t\"lastName\": {\n\t\t\t\t\"type\" : \"string\"\n\t\t\t},\n\t\t\t\"city\": {\n\t\t\t\t\"type\" : \"string\"\n\t\t\t},\n\t\t\t\"state\": {\n\t\t\t\t\"type\" : \"string\"\n\t\t\t},\n\t\t\t\"email\": {\n\t\t\t\t\"type\" : \"string\"\n\t\t\t},\n\t\t\t\"team\": {\n\t\t\t\t\"type\" : \"string\"\n\t\t\t},\n\t\t\t\"position\": {\n\t\t\t\t\"enum\": [ \n\t\t\t\t\t\t\"pitcher\",\n\t\t\t\t\t\t\"catcher\",\n\t\t\t\t\t\t\"first\",\n\t\t\t\t\t\t\"second\",\n\t\t\t\t\t\t\"third\",\n\t\t\t\t\t\t\"shortstop\",\n\t\t\t\t\t\t\"left\",\n\t\t\t\t\t\t\"right\",\n\t\t\t\t\t\t\"center\",\n\t\t\t\t\t\t\"manager\"\n\t\t\t\t\t] \n\t\t\t},\n\t\t\t\"wins\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"losses\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"era\": {\n\t\t\t\t\"type\" : \"number\"\n\t\t\t},\n\t\t\t\"so\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"ip\": {\n\t\t\t\t\"type\" : \"number\"\n\t\t\t},\n\t\t\t\"games\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"ba\": {\n\t\t\t\t\"type\" : \"number\"\n\t\t\t},\n\t\t\t\"hr\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"hits\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"runs\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"slg\": {\n\t\t\t\t\"type\" : \"number\"\n\t\t\t},\n\t\t\t\"obp\": {\n\t\t\t\t\"type\" : \"number\"\n\t\t\t},\n\t\t\t\"status\": {\n\t\t\t\t\t\"enum\": [ \n\t\t\t\t\t\t\"active\",\n\t\t\t\t\t\t\"retired\",\n\t\t\t\t\t\t\"disabled\",\n\t\t\t\t\t\t\"banned\"\n\t\t\t\t\t] \n\t\t\t}\n\t\t},\n\t\t\"required\" : [ \n\t\t\t\"firstName\", \n\t\t\t\"lastName\", \n\t\t\t\"email\",\n\t\t\t\"position\"\n\t\t]\n}",
+                                        "description": "A valid JSON Schema object",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "MetadataSchemaResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies an invalid form or JSON schema",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Raised if the user is not authorized.",
+                                        "code": 401
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the schema database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Add a new Metadata Schema.",
+                                "nickname": "addSchema",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/meta/v2/schemas",
+                        "description": "Operations on schemata.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata schema item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "defaultValue": 250,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "limit"
+                                    },
+                                    {
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "offset"
+                                    }
+                                ],
+                                "type": "MetadataSchemaResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user does not supply a Schema UUID",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the schema database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Retrieve Metadata Schemata.",
+                                "nickname": "getSchema",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata schema item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "defaultValue": "{\n\t\t\"title\": \"profile\",\n\t\t\"type\" : \"object\",\n\t\t\"properties\": {\n\t\t\t\"firstName\": {\n\t\t\t\t\"type\" : \"string\"\n\t\t\t},\n\t\t\t\"lastName\": {\n\t\t\t\t\"type\" : \"string\"\n\t\t\t},\n\t\t\t\"city\": {\n\t\t\t\t\"type\" : \"string\"\n\t\t\t},\n\t\t\t\"state\": {\n\t\t\t\t\"type\" : \"string\"\n\t\t\t},\n\t\t\t\"email\": {\n\t\t\t\t\"type\" : \"string\"\n\t\t\t},\n\t\t\t\"team\": {\n\t\t\t\t\"type\" : \"string\"\n\t\t\t},\n\t\t\t\"position\": {\n\t\t\t\t\"enum\": [ \n\t\t\t\t\t\t\"pitcher\",\n\t\t\t\t\t\t\"catcher\",\n\t\t\t\t\t\t\"first\",\n\t\t\t\t\t\t\"second\",\n\t\t\t\t\t\t\"third\",\n\t\t\t\t\t\t\"shortstop\",\n\t\t\t\t\t\t\"left\",\n\t\t\t\t\t\t\"right\",\n\t\t\t\t\t\t\"center\",\n\t\t\t\t\t\t\"manager\"\n\t\t\t\t\t] \n\t\t\t},\n\t\t\t\"wins\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"losses\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"era\": {\n\t\t\t\t\"type\" : \"number\"\n\t\t\t},\n\t\t\t\"so\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"ip\": {\n\t\t\t\t\"type\" : \"number\"\n\t\t\t},\n\t\t\t\"games\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"ba\": {\n\t\t\t\t\"type\" : \"number\"\n\t\t\t},\n\t\t\t\"hr\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"hits\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"runs\": {\n\t\t\t\t\"type\" : \"integer\"\n\t\t\t},\n\t\t\t\"slg\": {\n\t\t\t\t\"type\" : \"number\"\n\t\t\t},\n\t\t\t\"obp\": {\n\t\t\t\t\"type\" : \"number\"\n\t\t\t},\n\t\t\t\"status\": {\n\t\t\t\t\t\"enum\": [ \n\t\t\t\t\t\t\"active\",\n\t\t\t\t\t\t\"retired\",\n\t\t\t\t\t\t\"disabled\",\n\t\t\t\t\t\t\"banned\"\n\t\t\t\t\t] \n\t\t\t}\n\t\t},\n\t\t\"required\" : [ \n\t\t\t\"firstName\", \n\t\t\t\"lastName\", \n\t\t\t\"email\",\n\t\t\t\"position\"\n\t\t]\n}",
+                                        "description": "A valid JSON Schema object",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "MetadataSchemaResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies an invalid form or JSON schema",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Raised if the user is not authorized.",
+                                        "code": 401
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the schema database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Update or Add a new Metadata Schema.",
+                                "nickname": "updateSchema",
+                                "method": "POST"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata schema item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    }
+                                ],
+                                "type": "EmptyMetadataResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user does not supply a Schema UUID",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Raised if the user is not authorized.",
+                                        "code": 401
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the schema database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Remove Metadata Schema from the system.",
+                                "nickname": "deleteSchema",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/meta/v2/schemas/{uuid}",
+                        "description": "Operations on metadata schema.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "defaultValue": 250,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "limit"
+                                    },
+                                    {
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "offset"
+                                    }
+                                ],
+                                "type": "MultipleMetadataPermissionResponse",
+                                "notes": "Users must have read access to this metadata to view the permissions.",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a metadata UUID is not supplied or is invalid.",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user or the user is not authorized to access the specified metadata.",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The specified metadata cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Get the permission ACL for this metadata.",
+                                "nickname": "listMetadataPermissions",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "defaultValue": "{\n\t\"username\":\"\",\n\t\"permission\": \"READ\"\n}",
+                                        "description": "The metadata permission to update.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "MetadataPermissionRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "MetadataPermissionResponse",
+                                "notes": "To delete a single user, set their permission to NONE or an empty string",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a valid metadata UUID is not supplied or if the form is invalid.",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user or the user is not authorized to access the specified metadata.",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The specified user cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Add or update a user's permission for the given metadata.",
+                                "nickname": "updateMetadataPermissions",
+                                "method": "POST"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    }
+                                ],
+                                "type": "EmptyMetadataResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a metadata UUID is not supplied or is invalid.",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user or the user is not authorized to access the specified metadata.",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Deletes all permissions on the given metadata.",
+                                "nickname": "deleteMetadataPermission",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/meta/v2/data/{uuid}/pems",
+                        "description": "Query the permissions for the metadata with the given UUID",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "description": "The username of the permission owner",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "username"
+                                    }
+                                ],
+                                "type": "MetadataPermissionResponse",
+                                "notes": "Users must have read access to this metadata to view the permissions.",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a metadata UUID is not supplied or is invalid.",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user or the user is not authorized to access the specified metadata.",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The specified metadata cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Get the permission ACL for this metadata.",
+                                "nickname": "listMetadataPermissionsForUser",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "description": "The username of the permission owner",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "username"
+                                    },
+                                    {
+                                        "defaultValue": "{\n\t\"username\":\"\",\n\t\"permission\": \"READ\"\n}",
+                                        "description": "The metadata permission to update.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "MetadataPermissionRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "MetadataPermissionResponse",
+                                "notes": "To delete a single user, set their permission to NONE or an empty string",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a valid metadata UUID is not supplied or if the form is invalid.",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user or the user is not authorized to access the specified metadata.",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The specified user cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Add or update a user's permission for the given metadata.",
+                                "nickname": "updateMetadataPermissionsForUser",
+                                "method": "POST"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "description": "The username of the permission owner",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "username"
+                                    }
+                                ],
+                                "type": "EmptyMetadataResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a metadata UUID is not supplied or is invalid.",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user or the user is not authorized to access the specified metadata.",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Deletes all permissions on the given metadata.",
+                                "nickname": "deleteMetadataPermissionsForUser",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/meta/v2/data/{uuid}/pems/{username}",
+                        "description": "Query the permissions for the metadata with the given UUID",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata schema item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "defaultValue": 250,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "limit"
+                                    },
+                                    {
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "offset"
+                                    }
+                                ],
+                                "type": "MultipleMetadataSchemaPermissionResponse",
+                                "notes": "Users must have read access to this schema to view the permissions.",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a schema UUID is not supplied or is invalid.",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user or the user is not authorized to access the specified schema.",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The specified schema cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata schema database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Get the permission ACL for this schema.",
+                                "nickname": "listSchemaPermissions",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata schema item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "defaultValue": "{\n\t\"username\":\"\",\n\t\"permission\": \"READ\"\n}",
+                                        "description": "The schema permission to update.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "MetadataPermissionRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "MetadataSchemaPermissionResponse",
+                                "notes": "To delete a single user, set their permission to NONE or an empty string",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a valid schema UUID is not supplied or if the form is invalid.",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user or the user is not authorized to access the specified schema.",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The specified user cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata schema database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Add or update a user's permission for the given schema.",
+                                "nickname": "updateSchemaPermissions",
+                                "method": "POST"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata schema item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    }
+                                ],
+                                "type": "EmptyMetadataResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a schema UUID is not supplied or is invalid.",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user or the user is not authorized to access the specified schema.",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata schema database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Deletes all permissions on the given schema.",
+                                "nickname": "deleteSchemaPermissions",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/meta/v2/schemas/{uuid}/pems",
+                        "description": "Query the permissions for the metadata schema with the given UUID",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata schema item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "description": "The username of the permission owner",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "username"
+                                    }
+                                ],
+                                "type": "MetadataSchemaPermissionResponse",
+                                "notes": "Users must have read access to this schema to view the permissions.",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a schema UUID is not supplied or is invalid.",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user or the user is not authorized to access the specified schema.",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The specified schema cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata schema database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Get the permission ACL for this schema.",
+                                "nickname": "listSchemaPermissionsForUser",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata schema item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "description": "The username of the permission owner",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "username"
+                                    },
+                                    {
+                                        "defaultValue": "{\n\t\"username\":\"\",\n\t\"permission\": \"READ\"\n}",
+                                        "description": "The schema permission to update.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "MetadataPermissionRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "MetadataSchemaPermissionResponse",
+                                "notes": "To delete a single user, set their permission to NONE or an empty string",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a valid schema UUID is not supplied or if the form is invalid.",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user or the user is not authorized to access the specified schema.",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The specified user cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata schema database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Add or update a user's permission for the given metadata schema.",
+                                "nickname": "updateSchemaPermissionsForUser",
+                                "method": "POST"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The uuid of the metadata schema item",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "uuid"
+                                    },
+                                    {
+                                        "description": "The username of the permission owner",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "username"
+                                    }
+                                ],
+                                "type": "EmptyMetadataResponse",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a schema UUID is not supplied or is invalid.",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user or the user is not authorized to access the specified schema.",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata schema database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Deletes all permissions on the given metadata.",
+                                "nickname": "deleteSchemaPermissionsForUser",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/meta/v2/schemas/{uuid}/pems/{username}",
+                        "description": "Query the permissions for the metadata schema with the given UUID",
+                        "has_websocket": false
+                    }
+                ],
+                "models": {
+                    "EmptyMetadata": {
+                        "properties": {},
+                        "id": "EmptyMetadata",
+                        "name": ""
+                    },
+                    "MultipleMetadataResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "Error message caused by this request",
+                                "name": "message"
+                            },
+                            "version": {
+                                "type": "string",
+                                "description": "API version number",
+                                "name": "version"
+                            },
+                            "result": {
+                                "items": {
+                                    "$ref": "MetadataResponse"
+                                },
+                                "type": "array",
+                                "description": "Metadata resources matching the query.",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MultipleMetadataResponse",
+                        "name": ""
+                    },
+                    "MetadataSchemaPermissionResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "Error message caused by this request",
+                                "name": "message"
+                            },
+                            "version": {
+                                "type": "string",
+                                "description": "API version number",
+                                "name": "version"
+                            },
+                            "result": {
+                                "type": "Permission",
+                                "description": "Permissions granted on this schema resource.",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MetadataSchemaPermissionResponse",
+                        "name": ""
+                    },
+                    "Permission": {
+                        "properties": {
+                            "username": {
+                                "type": "string",
+                                "description": "Username associate with this permission",
+                                "name": "username"
+                            },
+                            "permission": {
+                                "type": "ACL",
+                                "name": "permission"
+                            }
+                        },
+                        "id": "Permission",
+                        "name": ""
+                    },
+                    "MultipleMetadataPermissionResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "Error message caused by this request",
+                                "name": "message"
+                            },
+                            "version": {
+                                "type": "string",
+                                "description": "API version number",
+                                "name": "version"
+                            },
+                            "result": {
+                                "items": {
+                                    "$ref": "Permission"
+                                },
+                                "type": "array",
+                                "description": "Permissions granted on this metadata resource.",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MultipleMetadataPermissionResponse",
+                        "name": ""
+                    },
+                    "MetadataSchema": {
+                        "properties": {
+                            "uuid": {
+                                "type": "string",
+                                "description": "The UUID for this Schema.",
+                                "name": "uuid"
+                            },
+                            "created": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "A timestamp indicating when this Metadata was created in the metadata schema store.",
+                                "name": "created"
+                            },
+                            "lastUpdated": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "A timestamp indicating when this Metadata was last updated in the metadata schema store.",
+                                "name": "lastUpdated"
+                            },
+                            "owner": {
+                                "type": "string",
+                                "description": "The API user who owns this Schema.",
+                                "name": "owner"
+                            },
+                            "internalUsername": {
+                                "type": "string",
+                                "description": "The name of the Internal User, if any, who owns this schema.",
+                                "name": "internalUsername"
+                            },
+                            "schema": {
+                                "type": "string",
+                                "description": "A JSON Schema",
+                                "name": "schema"
+                            }
+                        },
+                        "id": "MetadataSchema",
+                        "name": ""
+                    },
+                    "ACL": {
+                        "properties": {
+                            "read": {
+                                "type": "boolean",
+                                "description": "can read",
+                                "name": "read"
+                            },
+                            "write": {
+                                "type": "boolean",
+                                "description": "can write",
+                                "name": "write"
+                            }
+                        },
+                        "id": "ACL",
+                        "name": ""
+                    },
+                    "MultipleMetadataSchemaPermissionResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "Error message caused by this request",
+                                "name": "message"
+                            },
+                            "version": {
+                                "type": "string",
+                                "description": "API version number",
+                                "name": "version"
+                            },
+                            "result": {
+                                "items": {
+                                    "$ref": "Permission"
+                                },
+                                "type": "array",
+                                "description": "Permissions granted on this schema resource.",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MultipleMetadataSchemaPermissionResponse",
+                        "name": ""
+                    },
+                    "EmptyMetadataResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "Error message caused by this request",
+                                "name": "message"
+                            },
+                            "version": {
+                                "type": "string",
+                                "description": "API version number",
+                                "name": "version"
+                            },
+                            "result": {
+                                "type": "EmptyMetadata",
+                                "name": "result"
+                            }
+                        },
+                        "id": "EmptyMetadataResponse",
+                        "name": ""
+                    },
+                    "MetadataSchemaResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "Error message caused by this request",
+                                "name": "message"
+                            },
+                            "version": {
+                                "type": "string",
+                                "description": "API version number",
+                                "name": "version"
+                            },
+                            "result": {
+                                "type": "MetadataSchema",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MetadataSchemaResponse",
+                        "name": ""
+                    },
+                    "MetadataRequest": {
+                        "properties": {
+                            "schemaId": {
+                                "type": "string",
+                                "description": "The UUID of the schema that should be used to validate this request.",
+                                "name": "schemaId"
+                            },
+                            "name": {
+                                "required": true,
+                                "type": "string",
+                                "description": "The name of this metadata",
+                                "name": "name"
+                            },
+                            "value": {
+                                "required": true,
+                                "type": "string",
+                                "description": "A free text or JSON string containing the metadata stored for the given associationIds",
+                                "name": "value"
+                            },
+                            "associationIds": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array",
+                                "description": "UUIDs of associated Agave entities, including the Data to which this Metadata belongs.",
+                                "name": "associationIds"
+                            }
+                        },
+                        "id": "MetadataRequest",
+                        "name": ""
+                    },
+                    "MetadataResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "Error message caused by this request",
+                                "name": "message"
+                            },
+                            "version": {
+                                "type": "string",
+                                "description": "API version number",
+                                "name": "version"
+                            },
+                            "result": {
+                                "type": "Metadata",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MetadataResponse",
+                        "name": ""
+                    },
+                    "MetadataPermissionRequest": {
+                        "properties": {
+                            "username": {
+                                "required": true,
+                                "type": "string",
+                                "description": "The username of the api user whose permission is to be set.",
+                                "name": "username"
+                            },
+                            "permission": {
+                                "required": true,
+                                "type": "string",
+                                "description": "The permission to set",
+                                "enum": [
+                                    "READ",
+                                    "WRITE",
+                                    "READ_WRITE",
+                                    "ALL",
+                                    "NONE"
+                                ],
+                                "name": "permission"
+                            }
+                        },
+                        "id": "MetadataPermissionRequest",
+                        "name": ""
+                    },
+                    "MetadataPermissionResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "Error message caused by this request",
+                                "name": "message"
+                            },
+                            "version": {
+                                "type": "string",
+                                "description": "API version number",
+                                "name": "version"
+                            },
+                            "result": {
+                                "type": "Permission",
+                                "description": "Permissions granted on this metadata resource.",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MetadataPermissionResponse",
+                        "name": ""
+                    },
+                    "Metadata": {
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "The name of this metadata",
+                                "name": "name"
+                            },
+                            "created": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "A timestamp indicating when this Metadata was created in the metadata store.",
+                                "name": "created"
+                            },
+                            "uuid": {
+                                "type": "string",
+                                "description": "The UUID for this Metadata.",
+                                "name": "uuid"
+                            },
+                            "lastUpdated": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "A timestamp indicating when this Metadata was last updated in the metadata store.",
+                                "name": "lastUpdated"
+                            },
+                            "associationIds": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array",
+                                "description": "UUIDs of associated Agave entities, including the Data to which this Metadata belongs.",
+                                "name": "associationIds"
+                            },
+                            "value": {
+                                "type": "string",
+                                "description": "A free text or JSON string containing the metadata stored for the given associationIds",
+                                "name": "value"
+                            },
+                            "owner": {
+                                "type": "string",
+                                "description": "The API user who owns this Metadata.",
+                                "name": "owner"
+                            },
+                            "internalUsername": {
+                                "type": "string",
+                                "description": "The name of the Internal User, if any, who owns this metadata.",
+                                "name": "internalUsername"
+                            }
+                        },
+                        "id": "Metadata",
+                        "name": ""
+                    }
+                },
+                "basePath": "https://{{ api_server_base }}",
+                "resourcePath": "/meta/v2",
+                "apiVersion": "2.2.14"
+            },
+            "name": "meta"
+        }    
+    ]
+}
