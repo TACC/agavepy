@@ -1,0 +1,458 @@
+{
+    "apis": [
+        {
+            "url": "http://localhost:9999/clients",
+            "path": "/clients",
+            "description": "Create and manage API keys. Requires HTTP BASIC authentication",
+            "api_declaration": {
+                "authorizations": [
+                    "basicAuth"
+                ],
+                "swaggerVersion": "1.2",
+                "apis": [
+                    {
+                        "operations": [
+                            {
+                                "parameters": [],
+                                "type": "MultipleClientResponse",
+                                "notes": "Retrieve a list of your active clients. Requires HTTP BASIC authentication with your API username and password.",
+                                "is_websocket": false,
+                                "responseMessages": [],
+                                "summary": "List existing clients",
+                                "nickname": "list",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "defaultValue": "{\n\t\"name\": \"test-client\",\n\t\"description\": \"This is a demo client I created to kick around the APIs.\",\n\t\"tier\": \"UNLIMITED\",\n\t\"callbackUrl\": null\n}",
+                                        "description": "The api client to create",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "ClientRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "SingleClientResponse",
+                                "notes": "This will create a client and return your API keys. Your keys are necessary to obtain an access token and interact with the rest of the APIs. Requires HTTP BASIC authentication with your API username and password.",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies an invalid username format",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The user profile cannot be found",
+                                        "code": 404
+                                    },
+                                    {
+                                        "message": "The service was unable to query the profile database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Create a new client",
+                                "nickname": "create",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/clients/v2/",
+                        "description": "Create and list clients.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The name of the client to be deleted",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "clientName"
+                                    }
+                                ],
+                                "nickname": "getClientByName",
+                                "notes": "Requires HTTP BASIC authentication with your API username and password.",
+                                "is_websocket": false,
+                                "summary": "Returns a detailed description of a named client.",
+                                "type": "MultipleClientResponse",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The name of the client to be deleted",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "clientName"
+                                    }
+                                ],
+                                "nickname": "delete",
+                                "notes": "Requires HTTP BASIC authentication with your API username and password.",
+                                "is_websocket": false,
+                                "summary": "Immediately deletes this client and renders the API keys useless.",
+                                "type": "EmptyClientResponse",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/clients/v2/{clientName}",
+                        "description": "Manage a client",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The name of the client to be deleted",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "clientName"
+                                    }
+                                ],
+                                "nickname": "listSubscriptionsForClient",
+                                "notes": "Requires HTTP BASIC authentication with your API username and password.",
+                                "is_websocket": false,
+                                "summary": "Lists all APIs to which the client is subscribed",
+                                "type": "MultipleSubscriptionResponse",
+                                "method": "GET"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The name of the client to be subscribe to this api",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "clientName"
+                                    },
+                                    {
+                                        "defaultValue": "{\n\t\"apiName\": \"apps\",\n\t\"apiVersion\": \"v2\",\n\t\"apiProvider\": \"admin\",\n\t\"tier\": \"UNLIMITED\"\n}",
+                                        "description": "The api client to create",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "ClientSubscriptionRequest",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "nickname": "addSubscriptionForClient",
+                                "notes": "Requires HTTP BASIC authentication with your API username and password.",
+                                "is_websocket": false,
+                                "summary": "Lists all APIs to which the client is subscribed",
+                                "type": "SingleSubscriptionResponse",
+                                "method": "POST"
+                            },
+                            {
+                                "parameters": [
+                                    {
+                                        "description": "The name of the client to be deleted",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "clientName"
+                                    }
+                                ],
+                                "nickname": "deleteSubscriptionsForClient",
+                                "notes": "Requires HTTP BASIC authentication with your API username and password.",
+                                "is_websocket": false,
+                                "summary": "Unsubscribe the client from all APIs",
+                                "type": "EmptyClientResponse",
+                                "method": "DELETE"
+                            }
+                        ],
+                        "path": "/clients/v2/{clientName}/subscriptions",
+                        "description": "Manage client subscriptions",
+                        "has_websocket": false
+                    }
+                ],
+                "models": {
+                    "SingleSubscriptionResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "Subscription",
+                                "name": "result"
+                            }
+                        },
+                        "id": "SingleSubscriptionResponse",
+                        "name": ""
+                    },
+                    "MultipleClientResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "items": {
+                                    "$ref": "Client"
+                                },
+                                "type": "array",
+                                "description": "List of clients",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MultipleClientResponse",
+                        "name": ""
+                    },
+                    "EmptyClientResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "String",
+                                "name": "result"
+                            }
+                        },
+                        "id": "EmptyClientResponse",
+                        "name": ""
+                    },
+                    "EmptySubscriptionResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "String",
+                                "name": "result"
+                            }
+                        },
+                        "id": "EmptySubscriptionResponse",
+                        "name": ""
+                    },
+                    "ClientSubscriptionRequest": {
+                        "properties": {
+                            "tier": {
+                                "enum": [
+                                    "UNLIMITED",
+                                    "GOLD",
+                                    "SILVER",
+                                    "BRONZE"
+                                ],
+                                "type": "string",
+                                "description": "The access tier for this client.",
+                                "name": "tier"
+                            },
+                            "apiProvider": {
+                                "required": true,
+                                "type": "string",
+                                "description": "The user who registered the API.",
+                                "name": "apiProvider"
+                            },
+                            "apiVersion": {
+                                "required": true,
+                                "type": "string",
+                                "description": "The current major version of the API. This is appended to the api_context to create the base API url.",
+                                "name": "apiVersion"
+                            },
+                            "apiName": {
+                                "required": true,
+                                "type": "string",
+                                "description": "The name of the API.",
+                                "name": "apiName"
+                            }
+                        },
+                        "id": "ClientSubscriptionRequest",
+                        "name": ""
+                    },
+                    "MultipleSubscriptionResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "items": {
+                                    "$ref": "Subscription"
+                                },
+                                "type": "array",
+                                "description": "List of subscriptions",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MultipleSubscriptionResponse",
+                        "name": ""
+                    },
+                    "Client": {
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "The name of the client.",
+                                "name": "name"
+                            },
+                            "consumerKey": {
+                                "type": "string",
+                                "description": "The API key for this client.",
+                                "name": "consumerKey"
+                            },
+                            "tier": {
+                                "type": "string",
+                                "description": "The access tier for this client.",
+                                "name": "tier"
+                            },
+                            "callbackUrl": {
+                                "type": "string",
+                                "description": "Callback URL for OAuth authentication grant.",
+                                "name": "callbackUrl"
+                            },
+                            "consumerSecret": {
+                                "type": "string",
+                                "description": "The API secret for this client.",
+                                "name": "consumerSecret"
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "Description of the client. This will be shown to users when authentication via OAuth web flows",
+                                "name": "description"
+                            }
+                        },
+                        "id": "Client",
+                        "name": ""
+                    },
+                    "SingleClientResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "Client",
+                                "name": "result"
+                            }
+                        },
+                        "id": "SingleClientResponse",
+                        "name": ""
+                    },
+                    "ClientRequest": {
+                        "properties": {
+                            "tier": {
+                                "enum": [
+                                    "UNLIMITED",
+                                    "GOLD",
+                                    "SILVER",
+                                    "BRONZE"
+                                ],
+                                "type": "string",
+                                "description": "The access tier for this client.",
+                                "name": "tier"
+                            },
+                            "callbackUrl": {
+                                "type": "string",
+                                "description": "Callback URL for OAuth authentication grant.",
+                                "name": "callbackUrl"
+                            },
+                            "name": {
+                                "required": true,
+                                "type": "string",
+                                "description": "The name of the client.",
+                                "name": "name"
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "Description of the client. This will be shown to users when authentication via OAuth web flows",
+                                "name": "description"
+                            }
+                        },
+                        "id": "ClientRequest",
+                        "name": ""
+                    },
+                    "Subscription": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "The current status of the API.",
+                                "name": "status"
+                            },
+                            "apiProvider": {
+                                "type": "string",
+                                "description": "The user who registered the API.",
+                                "name": "apiProvider"
+                            },
+                            "apiContext": {
+                                "type": "string",
+                                "description": "The base url path of the API.",
+                                "name": "apiContext"
+                            },
+                            "apiVersion": {
+                                "type": "string",
+                                "description": "The current major version of the API. This is appended to the api_context to create the base API url.",
+                                "name": "apiVersion"
+                            },
+                            "apiName": {
+                                "type": "string",
+                                "description": "The name of the API.",
+                                "name": "apiName"
+                            },
+                            "tier": {
+                                "type": "string",
+                                "description": "The access tier for this client.",
+                                "name": "tier"
+                            }
+                        },
+                        "id": "Subscription",
+                        "name": ""
+                    }
+                },
+                "basePath": "https://{{ api_server_base }}",
+                "resourcePath": "/clients/v2",
+                "apiVersion": "2.0.0-SNAPSHOT-r1dc40"
+            },
+            "name": "clients"
+        }
+    ]
+}

@@ -1,0 +1,48 @@
+{
+    "info": {
+        "termsOfServiceUrl": "https://tacc.cloud/tacc-usage-policy",
+        "contact": "opensource@tacc.cloud",
+        "description": "Science-as-a-Service platform to accelerate research and discovery",
+        "licenseUrl": "https://tacc.cloud/license",
+        "title": "TACC Cloud APIs"
+    },
+    "authorizations": {
+        "oauth2": {
+            "scopes": [
+                {
+                    "scope": "PRODUCTION",
+                    "description": "catchall grant type for all api services."
+                }
+            ],
+            "type": "oauth2",
+            "grantTypes": {
+                "implicit": {
+                    "loginEndpoint": {
+                        "url": "https://{{ api_server_base }}/login"
+                    },
+                    "tokenName": "access_token"
+                },
+                "authorization_code": {
+                    "tokenRequestEndpoint": {
+                        "url": "https://{{ api_server_base }}/authorize",
+                        "clientSecretName": "client_secret",
+                        "clientIdName": "client_id"
+                    },
+                    "tokenEndpoint": {
+                        "url": "https://{{ api_server_base }}/token",
+                        "tokenName": "access_code"
+                    }
+                }
+            }
+        },
+        "basicAuth": {
+            "type": "basicAuth"
+        }
+    },
+    "swaggerVersion": "1.2",
+    "url": "https://{{ api_server_base }}/",
+    "produces": [
+        "application/json"
+    ],
+    "apiVersion": "2"
+}
