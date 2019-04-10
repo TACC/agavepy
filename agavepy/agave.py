@@ -276,6 +276,19 @@ class Agave(object):
         self.token = None
         if self.api_key is not None and self.api_secret is not None and self.jwt is None:
             self.set_client(self.api_key, self.api_secret)
+        elif self._token is not None:
+            self.token = Token(
+            self.username, self.password,
+            self.api_server, self.api_key, self.api_secret,
+            self.verify,
+            self,
+            self._token,
+            self._refresh_token,
+            self.token_username,
+            self.expires_at,
+            self.expires_in,
+            self.created_at)
+
         self.clients_resource = None
         self.all = None
         self.refresh_aris()
