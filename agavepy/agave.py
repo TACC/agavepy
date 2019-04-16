@@ -1126,16 +1126,13 @@ class Operation(object):
         model_name = return_type['type']
 
         model_spec = self.get_model_spec(model_name, version)
-        # todo ---
-        try:
-            return AttrDict({k: self.post_process(obj[k], model_spec.get(k), version)
-                             for k in obj})
-        except Exception as e:
-            ex = e
-            import pdb; pdb.set_trace()
-        # ----
-        # return AttrDict({k: self.post_process(obj[k], model_spec.get(k), version)
-        #                  for k in obj})
+        result = AttrDict({})
+        for k in obj:
+            try:
+                result[k] = self.post_process(obj[k], model_spec.get(k), version)
+            except Exception:
+                result[k] = obj
+        return result
 
 
 class AttrDict(dict):
