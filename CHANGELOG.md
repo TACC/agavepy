@@ -1,6 +1,22 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.9.0 - 2019-04-16
+### Added
+- The jobs() methods have been updated to detect the version of the Jobs API and, when appropriate, use the Aloe
+  definition of the Jobs API.
+- Support was added for managing Actor aliases through the listAliases(), getAlias(), addAlias(), and deleteAlias()
+  functions.
+
+### Changed
+- The JSON definitions of the API resources have been split into separate physical files to simplify management.
+- Exception handling in the process_model was updated so that, in the case where an API response does not agree with the
+  corresponding model spec, the library will now return a Python object instead of an exception.
+
+### Removed
+- No change.
+
+
 ## 0.8.0 - 2018-12-13
 ### Added
 - Authentication methods (i.e., `clients_create`, `get_access_token`).

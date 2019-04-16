@@ -35,7 +35,7 @@ if sys.version_info[0] == 2:
 
 setup(
     name='agavepy',
-    version='0.8.0',
+    version='0.9.0',
     description='SDK for Agave',
     long_description=readme,
     author='Texas Advanced Computing Center',
