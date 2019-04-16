@@ -720,25 +720,9 @@
                             },
                             {
                                 "parameters": [
-                                    {
-                                        "description": "The name of the actor being aliased.",
-                                        "allowMultiple": false,
-                                        "required": true,
-                                        "type": "string",
-                                        "paramType": "body",
-                                        "name": "actorId"
-                                    },
-                                    {
-                                        "description": "The name of the new Alias",
-                                        "allowMultiple": false,
-                                        "required": true,
-                                        "type": "string",
-                                        "paramType": "body",
-                                        "name": "aliasId"
-                                    },
 									{
                                         "defaultValue": "",
-                                        "description": "The description of the nonce to add.",
+                                        "description": "The description of the alias to add.",
                                         "allowMultiple": false,
                                         "required": false,
                                         "type": "AddAliasRequest",
@@ -768,7 +752,7 @@
                                         "required": true,
                                         "type": "string",
                                         "paramType": "path",
-                                        "name": "aliasId"
+                                        "name": "alias"
                                     }
                                 ],
                                 "type": "SingleActorAliasResponse",
@@ -796,7 +780,7 @@
                                         "required": true,
                                         "type": "string",
                                         "paramType": "path",
-                                        "name": "aliasId"
+                                        "name": "alias"
                                     }
                                 ],
                                 "nickname": "deleteAlias",
@@ -807,7 +791,7 @@
                                 "method": "DELETE"
                             }
                         ],
-                        "path": "/actors/v2/aliases/{aliasId}",
+                        "path": "/actors/v2/aliases/{alias}",
                         "description": "Work with a specific alias.",
                         "has_websocket": false
                     },
@@ -1449,6 +1433,122 @@
                             }
                         },
                         "id": "ActorWorkersRequestResponse",
+                        "name": ""
+                    },
+                    "SingleActorAliasResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "ActorAlias",
+                                "name": "result"
+                            }
+                        },
+                        "id": "SingleActorAliasResponse",
+                        "name": ""
+                    },
+                    "MultipleActorAliasResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "items": {
+                                    "$ref": "ActorAlias"
+                                },
+                                "type": "array",
+                                "description": "response body",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MultipleActorAliasResponse",
+                        "name": ""
+                    },
+                    "EmptyActorAliasRequestResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "String",
+                                "name": "result"
+                            }
+                        },
+                        "id": "EmptyActorAliasRequestResponse",
+                        "name": ""
+                    },
+                    "AddAliasRequest": {
+                        "properties": {
+                            "actorId": {
+                                "type": "string",
+                                "description": "The id of the actor to associate with this alias.",
+                                "name": "actorId"
+                            },
+                            "alias": {
+                                "type": "string",
+                                "description": "The alias to create.",
+                                "name": "alias"
+                            }
+                        },
+                        "id": "AddAliasRequest",
+                        "name": ""
+                    },
+                    "ActorAliasRequestResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "message"
+                            },
+                            "result": {
+                                "type": "ActorAlias",
+                                "name": "result"
+                            }
+                        },
+                        "id": "ActorAliasRequestResponse",
+                        "name": ""
+                    },
+                    "ActorAlias": {
+                        "properties": {
+                            "alias": {
+                                "type": "string",
+                                "description": "The alias.",
+                                "name": "id"
+                            },
+                            "actorId": {
+                                "type": "string",
+                                "description": "Actor id associated with the alias.",
+                                "name": "level"
+                            }
+                        },
+                        "id": "ActorAlias",
                         "name": ""
                     },
                     "ActorNonce": {
