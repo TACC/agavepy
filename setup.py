@@ -38,7 +38,7 @@ data_files = [('', ['requirements.txt', 'requirements-py2.txt'])]
 
 setup(
     name='agavepy',
-    version='0.9.2',
+    version='0.9.3',
     description='SDK for Agave',
     long_description=readme,
     author='Texas Advanced Computing Center',
