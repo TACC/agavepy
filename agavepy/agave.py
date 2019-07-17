@@ -20,12 +20,12 @@ import dateutil.parser
 import requests
 
 from agavepy.tenants import tenant_list
-from agavepy.clients import (clients_create, clients_delete, clients_list, 
-    clients_subscribe, clients_subscribtions)
+from agavepy.clients import (clients_create, clients_delete, clients_list,
+    clients_subscribe, clients_subscriptions)
 from agavepy.tokens import token_create, refresh_token
-from agavepy.utils import load_config, save_config
-from agavepy.files import (files_copy, files_delete, files_download, 
-    files_history, files_import, files_list, files_mkdir, files_move, 
+from agavepy.utils import load_config, save_config, get_username, get_password
+from agavepy.files import (files_copy, files_delete, files_download,
+    files_history, files_import, files_list, files_mkdir, files_move,
     files_pems_delete, files_pems_list, files_pems_update, files_upload)
 
 
@@ -253,10 +253,10 @@ class Agave(object):
     ]
 
     def __init__(self, **kwargs):
-        
+
         for param, mandatory, attr, default in self.PARAMS:
             try:
-                value = (kwargs[param] if mandatory 
+                value = (kwargs[param] if mandatory
                         else kwargs.get(param, default))
             except KeyError:
                 pass
@@ -583,9 +583,9 @@ class Agave(object):
     def save_configs(self, cache_dir=None):
         """ Save configs
 
-        Save configuration to AGAVE_CACHE_DIR. This will update 
+        Save configuration to AGAVE_CACHE_DIR. This will update
         AGAVE_CACHE_DIR/current and AGAVE_CACHE_DIR/config.json.
-        
+
         PARAMETERS
         ----------
         cache_dir: string (default: None)
@@ -658,7 +658,7 @@ class Agave(object):
         PARAMETERS
         ----------
         tenantsurl: string (default: "https://api.tacc.utexas.edu/tenants")
-            Endpoint with Agave tenant information. Another alternative is 
+            Endpoint with Agave tenant information. Another alternative is
             https://api.tacc.utexas.edu/tenants.
         """
         tenants = tenant_list(tenantsurl)
@@ -670,10 +670,11 @@ class Agave(object):
         return tenants
 
 
-    def clients_create(self, client_name, description):
+    def clients_create(self, client_name, description,
+                       username=None, password=None, quiet=False):
         """ Create an Oauth client
 
-        Save the api key and secret upon a successfull reuest to Agave.
+        Save the api key and secret upon a successfull request to Agave.
 
         PARAMETERS
         ----------
@@ -684,18 +685,18 @@ class Agave(object):
         """
         # Set tenant url.
         tenant_url = self.api_server
-        
+
         # Set username.
         if self.username == "" or self.username is None:
-            self.username = input("API username: ")
+            self.username = get_username(username)
 
         self.api_key, self.api_secret = clients_create(
-            self.username, client_name, description, tenant_url)
+            client_name, description, tenant_url,
+            username=self.username, password=password, quiet=quiet)
         # Save client name upon successful return of function.
         self.client_name = client_name
 
-
-    def clients_delete(self, client_name=None):
+    def clients_delete(self, client_name=None, username=None, password=None, quiet=False):
         """ Delete an Oauth client
 
         If no client_name is passed then we will try to delete the oauth client
@@ -703,27 +704,30 @@ class Agave(object):
         """
         # Set username.
         if self.username == "" or self.username is None:
-            self.username = input("API username: ")
+            self.username = get_username(username)
 
-        # If client_name is not set, then delete the current client, if it 
+        # If client_name is not set, then delete the current client, if it
         # exists.
         if client_name is None:
             client_name = self.client_name
 
         # Delete client.
-        clients_delete(self.api_server, self.username, client_name)
+        clients_delete(self.api_server, client_name,
+                       self.username, password=password, quiet=quiet)
 
         # If we deleted the current client, then zero out its secret and key.
         if self.client_name == client_name:
             self.api_key, self.api_secret = "", ""
 
 
-    def clients_subscribe(self, api_name, api_version, api_provider, client_name=None):
+    def clients_subscribe(self, api_name, api_version,
+                          api_provider, client_name=None,
+                          username=None, password=None, quiet=False):
         """ Subscribe the oauth client to an api
         """
         # Set username.
         if self.username == "" or self.username is None:
-            self.username = input("API username: ")
+            self.username = get_username(username)
 
         # If client_name is not set, then delete the current client, if it
         # exists.
@@ -731,16 +735,18 @@ class Agave(object):
             client_name = self.client_name
 
         # Subscribe client.
-        clients_subscribe(self.username, client_name, self.api_server, 
-            api_name, api_version, api_provider)
+        clients_subscribe(
+            client_name, self.api_server, api_name, api_version, api_provider,
+            username=self.username, password=password, quiet=quiet)
 
 
-    def clients_subscribtions(self, client_name=None):
+    def clients_subscriptions(self, client_name=None,
+                              username=None, password=None, quiet=False):
         """ List oauth client subscriptions
         """
         # Set username.
         if self.username == "" or self.username is None:
-            self.username = input("API username: ")
+            self.username = get_username(username)
 
         # If client_name is not set, then delete the current client, if it
         # exists.
@@ -748,28 +754,29 @@ class Agave(object):
             client_name = self.client_name
 
         # List subscriptions.
-        clients_subscribtions(self.username, client_name, self.api_server)
+        clients_subscriptions(client_name, self.api_server,
+                              username=self.username,
+                              password=password, quiet=quiet)
 
 
-    def clients_list(self):
+    def clients_list(self, username=None, password=None, quiet=False):
         """ List all oauth clients
         """
         # Set username.
         if self.username == "" or self.username is None:
-            self.username = input("API username: ")
+            self.username = get_username(username)
 
         # Set tenant url.
         tenant_url = self.api_server
 
-        clients_list(self.username, tenant_url)
+        clients_list(tenant_url, username=self.username, password=password, quiet=quiet)
 
-
-    def get_access_token(self):
+    def get_access_token(self, username=None, password=None, quiet=False):
         """ Generate an access token
         """
         # Check that a client for this session has been created by checking api
         # key and secret.
-        if (self.api_key == "" or self.api_key is None or 
+        if (self.api_key == "" or self.api_key is None or
                 self.api_secret == "" or self.api_secret is None):
             print("Please create a client first. See \"clients_create(client_name, description)\"\n")
             return
@@ -779,10 +786,12 @@ class Agave(object):
 
         # Set username.
         if self.username == "" or self.username is None:
-            self.username = input("API username: ")
+            self.username = get_username(username)
 
         # Create access token.
-        token_data = token_create(self.username, self.api_key, self.api_secret, tenant_url)
+        token_data = token_create(self.api_key, self.api_secret,
+                                  tenant_url, username=self.username,
+                                  password=password, quiet=quiet)
 
         # Update client.
         self.token         = token_data.get("access_token")
@@ -838,7 +847,7 @@ class Agave(object):
         # Delete file.
         files_delete(self.api_server, self.token, file_path)
 
-    
+
     def files_download(self, source, destination):
         """ Download files from remote system
         """
@@ -861,7 +870,7 @@ class Agave(object):
 
     def files_import(self, source, destination):
         """ Imports a remote URI to a remote storage system
-        
+
         If 'source' is an agave source then prefix the uri with 'agave://'. For
         example, source = 'agave://data-sd2e-community/test.txt'.
         """
@@ -885,7 +894,7 @@ class Agave(object):
     def files_mkdir(self, location):
         """ Create an empty directory on a remote storage system
         """
-        # Check if tokens need to be refreshed.                                 
+        # Check if tokens need to be refreshed.
         self.refresh_tokens()
 
         # Create directory.
@@ -905,7 +914,7 @@ class Agave(object):
     def files_pems_delete(self, path):
         """ Remove user permissions associated with a file or folder.
 
-        These permissions are set at the API level and do not reflect *nix or 
+        These permissions are set at the API level and do not reflect *nix or
         other file system ACL.
         Deletes all permissions on a file except those of the owner.
         """
@@ -919,7 +928,7 @@ class Agave(object):
     def files_pems_list(self, path):
         """ List the user permissions associated with a file or folder
 
-        These permissions are set at the API level and do not reflect *nix or 
+        These permissions are set at the API level and do not reflect *nix or
         other file system ACL.
         """
         # Check if tokens need to be refreshed.
@@ -931,11 +940,11 @@ class Agave(object):
 
     def files_pems_update(self, path, username, perms, recursive=False):
         """ Edit user permissions associated with a file or folder.
-        
-        These permissions are set at the API level and do not reflect *nix or 
+
+        These permissions are set at the API level and do not reflect *nix or
         other file system ACL.
         Deletes all permissions on a file except those of the owner.
-        Valid values for setting permission with the -P flag are READ, WRITE, 
+        Valid values for setting permission with the -P flag are READ, WRITE,
         EXECUTE, READ_WRITE, READ_EXECUTE, WRITE_EXECUTE, ALL, and NONE.
         """
         # Check if tokens need to be refreshed.
@@ -943,8 +952,8 @@ class Agave(object):
 
         # Update api permissions.
         files_pems_update(
-            self.api_server, self.token, 
-            path, username, perms, 
+            self.api_server, self.token,
+            path, username, perms,
             recursive=recursive)
 
 

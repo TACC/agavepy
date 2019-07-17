@@ -1,25 +1,17 @@
 """
-    list.py
+    subscriptions.py
 
-Functions to list agave oauth clients.
+List Oauth client subscriptions.
 """
-from __future__ import print_function
 import requests
 from .exceptions import AgaveClientError
 from ..utils import (handle_bad_response_status_code,
                      get_username, get_password)
 
 
-def clients_list(tenant_url, username=None, password=None, quiet=False):
-    """ List Tapis Oauth clients
-
-    List all Tapis Oauth clients registered to the designated user on
-    the specified tenant.
-
-    PARAMETERS
-    ----------
-    tenant_url: string
-        URL of agave tenant to interact with.
+def clients_subscriptions(client_name, tenant_url,
+                          username=None, password=None, quiet=False):
+    """ List Tapis Oauth client subscriptions
 
     KEYWORD ARGUMENTS
     -----------------
@@ -35,13 +27,16 @@ def clients_list(tenant_url, username=None, password=None, quiet=False):
         TAPIS_PASSWORD. If the variable is not set, the user is
         prompted interactively for a value.
     """
-
-    # Get user's credentials
-    uname = get_username(username)
-    passwd = get_password(password, quiet=quiet)
+    # Make sure client_name is valid.
+    if client_name == "" or client_name is None:
+        raise AgaveClientError("Error accessing client: invalid client_name")
 
     # Set request endpoint.
-    endpoint = tenant_url + "/clients/v2"
+    endpoint = "{}/clients/v2/{}/subscriptions".format(tenant_url, client_name)
+
+    # Get user basic auth credentials
+    uname = get_username(username)
+    passwd = get_password(password, quiet=quiet)
 
     # Make request.
     try:
@@ -55,7 +50,7 @@ def clients_list(tenant_url, username=None, password=None, quiet=False):
     handle_bad_response_status_code(resp)
 
     # Print results.
-    print("{0:<30} {1:<80}".format("NAME", "DESCRIPTION"))
-    for client in resp.json().get("result", []):
-        description = client["description"] if client["description"] else ""
-        print("{0:<30} {1:<80}".format(client["name"], description))
+    print("{0:<16} {1:^8} {2:<20}".format("NAME", "VERSION", "PROVIDER"))
+    for api in resp.json().get("result", []):
+        print("{0:<16} {1:^8} {2:<20}".format(
+            api["apiName"], api["apiVersion"], api["apiProvider"]))

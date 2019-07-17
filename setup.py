@@ -10,6 +10,7 @@ import sys
 
 HERE = os.path.dirname(__file__)
 
+
 class PyTest(TestCommand):
 
     def finalize_options(self):
@@ -38,11 +39,11 @@ data_files = [('', ['requirements.txt', 'requirements-py2.txt'])]
 
 setup(
     name='agavepy',
-    version='0.9.3',
-    description='SDK for Agave',
+    version='0.9.4',
+    description='SDK for TACC Tapis (formerly Agave)',
     long_description=readme,
     author='Texas Advanced Computing Center',
-    author_email='jstubbs@tacc.utexas.edu, jochoa@tacc.utexas.edu',
+    author_email='jstubbs@tacc.utexas.edu, jochoa@tacc.utexas.edu, vaughn@tacc.utexas.edu',
     url='https://github.com/TACC/agavepy',
     packages=[
         'agavepy',
@@ -54,7 +55,8 @@ setup(
         "agavepy.utils",
     ],
     package_dir={'agavepy': 'agavepy'},
-    package_data={'agavepy': ['resources.json', 'resources.json.j2', 'resource_exceptions.json', 'resources/*.j2']},
+    package_data={'agavepy': [
+        'resources.json', 'resources.json.j2', 'resource_exceptions.json', 'resources/*.j2']},
     data_files=data_files,
     install_requires=requires,
     license="BSD",

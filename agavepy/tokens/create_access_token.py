@@ -1,7 +1,7 @@
 """
     tokens.py
 
-Functions to Agave access tokens. 
+Functions to Agave access tokens.
 """
 from __future__ import print_function
 import getpass
@@ -10,40 +10,60 @@ import requests
 import sys
 import time
 from os import path
-from .exceptions import AgaveTokenError 
-from ..utils import handle_bad_response_status_code
+from .exceptions import AgaveTokenError
+from ..utils import (handle_bad_response_status_code,
+                     get_username, get_password)
 
 
-
-def token_create(username, api_key, api_secret, tenant_url):
+def token_create(api_key, api_secret, tenant_url,
+                 username=None, password=None, quiet=False):
     """ Create an access token
 
     PARAMETERS
     ----------
-    username: string
     api_key: string
     api_secret: string
     tenant_url: string
 
+    KEYWORD ARGUMENTS
+    -----------------
+    username: string
+        The user's username. If the API username is not passed as a keyword
+        argument, it will be retrieved from the environment variable
+        TAPIS_USERNAME. If the variable is not set, the user is
+        prompted interactively for a value.
+
+    password: string
+        The user's password. If the API username is not passed as a keyword
+        argument, it will be retrieved from the environment variable
+        TAPIS_PASSWORD. If the variable is not set, the user is
+        prompted interactively for a value.
+
     RETURNS
     -------
     token_data: dictionary
-        Contains access_token, refresh_token, expires_in, created_at, and 
+        Contains access_token, refresh_token, expires_in, created_at, and
         expires_at.
     """
+
     # Set request endpoint.
     endpoint = "{0}{1}".format(tenant_url, "/token")
+
+    # Get user basic auth credentials
+    uname = get_username(username)
+    passwd = get_password(password, username=uname, quiet=quiet)
 
     # Make request.
     try:
         data = {
-            "username": username,
-            "password": getpass.getpass(prompt="API password: "),
+            "username": uname,
+            "password": passwd,
             "grant_type": "password",
             "scope": "PRODUCTION"
         }
-        params   = {"pretty": "true"}
-        resp = requests.post(endpoint, data=data, params=params, auth=(api_key, api_secret))
+        params = {"pretty": "true"}
+        resp = requests.post(endpoint, data=data,
+                             params=params, auth=(api_key, api_secret))
         del data
     except Exception as err:
         del data
@@ -51,7 +71,7 @@ def token_create(username, api_key, api_secret, tenant_url):
 
     # Handle bad status code.
     handle_bad_response_status_code(resp)
-    
+
     # Process response data.
     response = resp.json()
     now = int(time.time())

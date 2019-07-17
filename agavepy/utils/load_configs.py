@@ -6,7 +6,6 @@ import json
 import os
 
 
-
 def load_config(cache_dir, tenant_id, username, client_name):
     """ Load configurations from file
 
@@ -38,7 +37,11 @@ def load_config(cache_dir, tenant_id, username, client_name):
             errno.ENOENT, os.strerror(errno.ENOENT), config_file)
 
     # Return the current session context if no extra parameters are passed.
-    if tenant_id is None or username is None or client_name is None:
+    if client_name in agave_context["current"]:
+        current = agave_context["current"][client_name]
+        if current.get('tenantid', '') == tenant_id and current.get('username', '') == username:
+            return client_name, current
+    elif tenant_id is None or username is None or client_name is None:
         client_name = list(agave_context["current"])[0]
         return client_name, agave_context["current"][client_name]
     else:
