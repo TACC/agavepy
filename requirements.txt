@@ -1,6 +1,7 @@
 Jinja2>=2.7.3
 backports.ssl-match-hostname>=3.4.0.2
 py>=1.4.26
+petname==2.2
 pytest>=2.7.0
 python-dateutil>=2.4.2
 requests>=2.6.0
