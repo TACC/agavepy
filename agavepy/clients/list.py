@@ -5,43 +5,37 @@ Functions to list agave oauth clients.
 """
 from __future__ import print_function
 import requests
-from .exceptions import AgaveClientError
+from ..constants import PLATFORM
 from ..utils import (handle_bad_response_status_code,
-                     get_username, get_password)
+                     prompt_username, prompt_password)
+from .exceptions import AgaveClientError
+from .utils import clients_url
 
 
 def clients_list(tenant_url, username=None, password=None, quiet=False):
-    """ List Tapis Oauth clients
+    """ List Oauth clients
 
-    List all Tapis Oauth clients registered to the designated user on
+    List all Oauth clients registered to the designated user on
     the specified tenant.
 
     PARAMETERS
     ----------
     tenant_url: string
-        URL of agave tenant to interact with.
+        URL of the API tenant to interact with.
 
     KEYWORD ARGUMENTS
     -----------------
     username: string
-        The user's username. If the API username is not passed as a keyword
-        argument, it will be retrieved from the environment variable
-        TAPIS_USERNAME. If the variable is not set, the user is
-        prompted interactively for a value.
-
+        The user's username.
     password: string
-        The user's password. If the API username is not passed as a keyword
-        argument, it will be retrieved from the environment variable
-        TAPIS_PASSWORD. If the variable is not set, the user is
-        prompted interactively for a value.
+        The user's password
     """
+    # Set request endpoint.
+    endpoint = clients_url(tenant_url)
 
     # Get user's credentials
-    uname = get_username(username)
-    passwd = get_password(password, quiet=quiet)
-
-    # Set request endpoint.
-    endpoint = tenant_url + "/clients/v2"
+    uname = prompt_username(username)
+    passwd = prompt_password(password, quiet=quiet)
 
     # Make request.
     try:

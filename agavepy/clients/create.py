@@ -5,45 +5,35 @@ Functions to create Agave oauth clients.
 """
 from __future__ import print_function
 import requests
-from .exceptions import AgaveClientError
+from ..constants import PLATFORM
 from ..utils import (handle_bad_response_status_code,
-                     get_username, get_password)
+                     prompt_username, prompt_password)
+from .exceptions import AgaveClientError
+from .utils import clients_url
 
 
 def clients_create(client_name, description, tenant_url,
                    username=None, password=None, quiet=False):
-    """ Create a Tapis Oauth client
+    """ Create an Oauth client
 
-    Make a request to Agave to create an oauth client. Returns the client's api
-    key and secret as a tuple.
-
-    PARAMETERS
-    ----------
-    tenant_url: string
-        URL of agave tenant to interact with.
+    Make a request to the API to create an Oauth client. Returns the client
+    API key and secret as a tuple.
 
     PARAMETERS
     ----------
     client_name: string
-        Name for agave client.
+        Name for Oauth client.
     description: string
-        Description of the agave client.
+        Description of the Oauth client.
     tenant_url: string
-        URL of agave tenant to interact with.
+        URL of the API tenant to interact with.
 
     KEYWORD ARGUMENTS
     -----------------
     username: string
-        The user's username. If the API username is not passed as a keyword
-        argument, it will be retrieved from the environment variable
-        TAPIS_USERNAME. If the variable is not set, the user is
-        prompted interactively for a value.
-
+        The user's username.
     password: string
-        The user's password. If the API username is not passed as a keyword
-        argument, it will be retrieved from the environment variable
-        TAPIS_PASSWORD. If the variable is not set, the user is
-        prompted interactively for a value.
+        The user's password
 
     RETURNS
     -------
@@ -52,16 +42,18 @@ def clients_create(client_name, description, tenant_url,
     """
 
     # Set request endpoint.
-    endpoint = tenant_url + "/clients/v2"
+    endpoint = clients_url(tenant_url)
 
     # Make sure client_name is not empty
     # TODO - add additional validation to client_name
     if client_name == "" or client_name is None:
-        raise AgaveClientError("Error creating client: Invalid client_name")
+        raise AgaveClientError(
+            '{0} client {1} failed: Invalid name {2}'.format(
+                PLATFORM, 'creation', client_name))
 
     # Get user basic auth credentials
-    uname = get_username(username)
-    passwd = get_password(password, quiet=quiet)
+    uname = prompt_username(username)
+    passwd = prompt_password(password, quiet=quiet)
 
     # Make request.
     try:
@@ -86,6 +78,7 @@ def clients_create(client_name, description, tenant_url,
     api_secret = response.get("consumerSecret", "")
     if api_key == "" or api_secret == "":
         raise AgaveClientError(
-            "Error creating client: Tapis API key and secret will be empty")
+            '{0} client {1} failed: No key/secret issued for {2}'.format(
+                PLATFORM, 'creation', client_name))
 
     return api_key, api_secret

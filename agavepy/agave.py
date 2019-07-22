@@ -1,9 +1,7 @@
 from __future__ import print_function
 from builtins import input
-
 import xml.etree.ElementTree as ElementTree
 from functools import wraps
-
 from future import standard_library
 standard_library.install_aliases()
 
@@ -20,14 +18,19 @@ import dateutil.parser
 import requests
 
 from agavepy.tenants import tenant_list
-from agavepy.clients import (clients_create, clients_delete, clients_list,
-    clients_subscribe, clients_subscriptions)
+from agavepy.clients import (clients_create, clients_delete,
+                             clients_list, clients_subscribe,
+                             clients_subscriptions)
 from agavepy.tokens import token_create, refresh_token
-from agavepy.utils import load_config, save_config, get_username, get_password
+from agavepy.utils import (load_config,
+                           save_config,
+                           prompt_username,
+                           prompt_password,
+                           client_cache_path,
+                           sessions_cache_path)
 from agavepy.files import (files_copy, files_delete, files_download,
     files_history, files_import, files_list, files_mkdir, files_move,
     files_pems_delete, files_pems_list, files_pems_update, files_upload)
-
 
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
@@ -366,7 +369,33 @@ class Agave(object):
                 if 'verify' not in client:
                     # default to verifying SSL:
                     client['verify'] = True
+                if client.get('client_name', None) is None:
+                    try:
+                        client['client_name'] = Agave.match_session_to_current(client)
+                    except Exception:
+                        pass
         return clients
+
+    @classmethod
+    def match_session_to_current(cls, client):
+        """Attempts to find client_name in config.json by matching API keys
+
+        Scans contents of config.json and retrieves the name of a client
+        that was set up by loading from current. This is needed to help keep
+        current and config in place while we migrate away from using current.
+        """
+        configs = dict()
+        if Agave.agpy_path() == Agave.agavecurrent_path():
+            configs = dict()
+            configs = json.load(
+                open(os.path.join(
+                    os.path.dirname(
+                        Agave.agavecurrent_path()), 'config.json'), 'r'))
+        for k, v in configs['sessions'][client['tenantid']][client['username']].items():
+            if v.get('apikey') == client['apikey']:
+                return k
+        raise ValueError(
+            'No matching session for client key {}'.format(client['apikey']))
 
     @classmethod
     def _restore_client(cls, **kwargs):
@@ -386,8 +415,10 @@ class Agave(object):
     @classmethod
     def restore(cls, api_key=None, client_name=None, tenant_id=None):
         """Public API to restore an agave client from a file."""
+        # This works with both .agpy and config.json formats
         if api_key:
             return Agave._restore_client(api_key=api_key)
+        # Reads from the .agpy format
         elif client_name:
             return Agave._restore_client(client_name=client_name)
         elif tenant_id:
@@ -621,7 +652,8 @@ class Agave(object):
         save_config(cache_dir, current_context, self.client_name)
 
 
-    def load_configs(self, cache_dir=None, tenant_id=None, username=None, client_name=None):
+    def load_configs(self, cache_dir=None,
+        tenant_id=None, username=None, client_name=None):
         """ Load session cntext from configuration file
 
         PARAMETERS
@@ -651,6 +683,22 @@ class Agave(object):
         self.expires_in    = session_context["expires_in"]
         self.expires_at    = session_context["expires_at"]
 
+    def load_client(self, cache_dir=None,
+                    tenant_id=None, username=None,
+                    client_name=None):
+        session_context = json.load(
+            open(client_cache_path(cache_dir), 'r'))
+        self.client_name = None
+        self.tenant_id = session_context["tenantid"]
+        self.api_server = session_context["baseurl"]
+        self.api_secret = session_context["apisecret"]
+        self.api_key = session_context["apikey"]
+        self.username = session_context["username"]
+        self.token = session_context["access_token"]
+        self.refresh_token = session_context["refresh_token"]
+        self.created_at = session_context["created_at"]
+        self.expires_in = session_context["expires_in"]
+        self.expires_at = session_context["expires_at"]
 
     def list_tenants(self, tenantsurl="https://api.tacc.utexas.edu/tenants"):
         """ List Agave tenants
@@ -688,7 +736,7 @@ class Agave(object):
 
         # Set username.
         if self.username == "" or self.username is None:
-            self.username = get_username(username)
+            self.username = prompt_username(username)
 
         self.api_key, self.api_secret = clients_create(
             client_name, description, tenant_url,
@@ -704,7 +752,7 @@ class Agave(object):
         """
         # Set username.
         if self.username == "" or self.username is None:
-            self.username = get_username(username)
+            self.username = prompt_username(username)
 
         # If client_name is not set, then delete the current client, if it
         # exists.
@@ -727,7 +775,7 @@ class Agave(object):
         """
         # Set username.
         if self.username == "" or self.username is None:
-            self.username = get_username(username)
+            self.username = prompt_username(username)
 
         # If client_name is not set, then delete the current client, if it
         # exists.
@@ -746,7 +794,7 @@ class Agave(object):
         """
         # Set username.
         if self.username == "" or self.username is None:
-            self.username = get_username(username)
+            self.username = prompt_username(username)
 
         # If client_name is not set, then delete the current client, if it
         # exists.
@@ -764,11 +812,10 @@ class Agave(object):
         """
         # Set username.
         if self.username == "" or self.username is None:
-            self.username = get_username(username)
+            self.username = prompt_username(username)
 
         # Set tenant url.
         tenant_url = self.api_server
-
         clients_list(tenant_url, username=self.username, password=password, quiet=quiet)
 
     def get_access_token(self, username=None, password=None, quiet=False):
@@ -786,7 +833,7 @@ class Agave(object):
 
         # Set username.
         if self.username == "" or self.username is None:
-            self.username = get_username(username)
+            self.username = prompt_username(username)
 
         # Create access token.
         token_data = token_create(self.api_key, self.api_secret,

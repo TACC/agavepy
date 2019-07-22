@@ -2,19 +2,17 @@
     refresh_tokens.py
 """
 from __future__ import print_function
-import getpass
-import json
 import requests
-import sys
 import time
-from os import path
+from ..utils import (handle_bad_response_status_code,
+                     prompt_username, prompt_password)
+from . import grants
 from .exceptions import AgaveTokenError
-from ..utils import handle_bad_response_status_code
-
+from .utils import tokens_url
 
 
 def refresh_token(api_key, api_secret, refresh_token, tenant_url):
-    """ Retrieve a new Oauth bearer token
+    """ Retrieve a new Oauth bearer token using the refresh token
 
     PARAMETERS
     ----------
@@ -26,26 +24,26 @@ def refresh_token(api_key, api_secret, refresh_token, tenant_url):
     RETURNS
     -------
     token_data: dict
-        access_token: str 
-        refresh_token: str 
-        expires_in: str 
-        created_at: str 
+        access_token: str
+        refresh_token: str
+        expires_in: str
+        created_at: str
         expires_at: str
     """
     # Set request endpoint.
-    endpoint = "{0}{1}".format(tenant_url, "/token")
-    
+    endpoint = tokens_url(tenant_url)
+
     # Make request.
     try:
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         data = {
-            "grant_type": "refresh_token",
             "refresh_token": refresh_token,
-            "scope": "PRODUCTION"
+            "grant_type": grants.REFRESH_TOKEN_GRANT,
+            "scope": grants.SCOPE
         }
 
-        resp = requests.post(endpoint, headers=headers, data=data, 
-                auth=(api_key, api_secret))
+        resp = requests.post(endpoint, headers=headers, data=data,
+                             auth=(api_key, api_secret))
     except requests.exceptions.MissingSchema as err:
         raise AgaveTokenError(err)
 
@@ -57,7 +55,7 @@ def refresh_token(api_key, api_secret, refresh_token, tenant_url):
 
     now = int(time.time())
     expires_at = now + int(response["expires_in"])
-    
+
     token_data = {
         "access_token": response["access_token"],
         "refresh_token": response["refresh_token"],

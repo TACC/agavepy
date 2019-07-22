@@ -1,14 +1,13 @@
 """
-    response_hanlders.py
+    response_handlers.py
 """
 from __future__ import print_function
-import sys
-
 
 
 class AgaveAPICallError(Exception):
     """ Handle bad responses from Agave
     """
+
     def __init__(self, msg):
         self.msg = msg
 
@@ -16,8 +15,8 @@ class AgaveAPICallError(Exception):
         return repr(self.msg)
 
 
-def handle_bad_response_status_code(r):                                         
-    """ Handle a response with a bad status code                                
+def handle_bad_response_status_code(r):
+    """ Handle a response with a bad status code
     """
     if not r.ok:
         error_msg = "Bad {0} request to {1}, status code {2}\n".format(

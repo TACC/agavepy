@@ -4,39 +4,37 @@
 List Oauth client subscriptions.
 """
 import requests
-from .exceptions import AgaveClientError
+from ..constants import PLATFORM
 from ..utils import (handle_bad_response_status_code,
-                     get_username, get_password)
+                     prompt_username, prompt_password)
+from .exceptions import AgaveClientError
+from .utils import clients_url
 
 
 def clients_subscriptions(client_name, tenant_url,
                           username=None, password=None, quiet=False):
-    """ List Tapis Oauth client subscriptions
+    """ List Oauth client subscriptions
 
     KEYWORD ARGUMENTS
     -----------------
     username: string
-        The user's username. If the API username is not passed as a keyword
-        argument, it will be retrieved from the environment variable
-        TAPIS_USERNAME. If the variable is not set, the user is
-        prompted interactively for a value.
-
+        The user's username.
     password: string
-        The user's password. If the API username is not passed as a keyword
-        argument, it will be retrieved from the environment variable
-        TAPIS_PASSWORD. If the variable is not set, the user is
-        prompted interactively for a value.
+        The user's password.
     """
+    # Set request endpoint.
+    endpoint = "{0}/{1}/subscriptions".format(
+        clients_url(tenant_url), client_name)
+
     # Make sure client_name is valid.
     if client_name == "" or client_name is None:
-        raise AgaveClientError("Error accessing client: invalid client_name")
-
-    # Set request endpoint.
-    endpoint = "{}/clients/v2/{}/subscriptions".format(tenant_url, client_name)
+        raise AgaveClientError(
+            '{0} client {1} failed: Invalid name {2}'.format(
+                PLATFORM, 'subscription listing', client_name))
 
     # Get user basic auth credentials
-    uname = get_username(username)
-    passwd = get_password(password, quiet=quiet)
+    uname = prompt_username(username)
+    passwd = prompt_password(password, quiet=quiet)
 
     # Make request.
     try:

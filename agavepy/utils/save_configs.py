@@ -3,11 +3,12 @@
 """
 from __future__ import print_function
 import json
-import requests
-import sys
 import os
 from collections import defaultdict
+from .paths import (credentials_cache_dir,
+                    sessions_cache_path, client_cache_path)
 
+__all__ = ['make_cache_dir', 'save_config']
 
 
 def make_cache_dir(cache_dir):
@@ -31,11 +32,11 @@ def save_config(cache_dir, current_context, client_name):
     Create or switch the current session context.
 
     The ~/.agave/config.json file will have the following format:
-        * "current" will specify the configuration to be used for the current 
-          session. The contents of this section should include a nested json 
-          object wich will hold all session configurations. It matches the 
+        * "current" will specify the configuration to be used for the current
+          session. The contents of this section should include a nested json
+          object wich will hold all session configurations. It matches the
           information of ~/.agave/current.
-        * "sessions" will be a series of nested json objects. Each session 
+        * "sessions" will be a series of nested json objects. Each session
         configuration will be indexed by tenant id, user name, and client name,
         respectively.
 
@@ -86,10 +87,8 @@ def save_config(cache_dir, current_context, client_name):
     """
     # Get location to store configuration.
     make_cache_dir(cache_dir)
-    current_file = "{}/current".format(cache_dir)
-    config_file = "{}/config.json".format(cache_dir)
-    config_files = [current_file, config_file]
-
+    current_file = client_cache_path(cache_dir)
+    config_file = sessions_cache_path(cache_dir)
 
     # Read in configuration from cache dir if it exist, else create one.
     if os.path.isfile(config_file):
@@ -98,18 +97,17 @@ def save_config(cache_dir, current_context, client_name):
     else:
         agave_context = defaultdict(lambda: defaultdict(dict))
 
-
     # Set up ~/.agave/config.json
 
-    # We are saving configurations for the first time so we have to set 
+    # We are saving configurations for the first time so we have to set
     # "current" and add it to "tenants".
     if "sessions" not in agave_context:
         # No current session, so we just add the current context.
         agave_context["current"][client_name] = current_context
-        
+
         # Save current tenant context.
         tenant_id = current_context["tenantid"]
-        username  = current_context["username"]
+        username = current_context["username"]
 
         # Initialize fields as appropiate.
         # Will save the saved current context, this already includes the client
@@ -123,8 +121,8 @@ def save_config(cache_dir, current_context, client_name):
         # The saved client should be the only entry in the current session.
         saved_client = list(agave_context["current"].keys())[0]
         tenant_id = agave_context["current"][saved_client]["tenantid"]
-        username  = agave_context["current"][saved_client]["username"]
-        
+        username = agave_context["current"][saved_client]["username"]
+
         # Initialized sessions fields if they don't already exist.
         if tenant_id not in agave_context["sessions"].keys():
             agave_context["sessions"][tenant_id] = dict()
@@ -137,8 +135,7 @@ def save_config(cache_dir, current_context, client_name):
 
         # Save "current_context".
         del agave_context["current"][saved_client]
-        agave_context["current"][client_name] =  current_context
-
+        agave_context["current"][client_name] = current_context
 
     # Save data to cache dir files.
     with open(config_file, "w") as f:

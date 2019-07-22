@@ -4,20 +4,18 @@
 Functions to Agave access tokens.
 """
 from __future__ import print_function
-import getpass
-import json
 import requests
-import sys
 import time
-from os import path
-from .exceptions import AgaveTokenError
 from ..utils import (handle_bad_response_status_code,
-                     get_username, get_password)
+                     prompt_username, prompt_password)
+from . import grants
+from .exceptions import AgaveTokenError
+from .utils import tokens_url
 
 
 def token_create(api_key, api_secret, tenant_url,
                  username=None, password=None, quiet=False):
-    """ Create an access token
+    """ Create an Oauth access token
 
     PARAMETERS
     ----------
@@ -28,16 +26,9 @@ def token_create(api_key, api_secret, tenant_url,
     KEYWORD ARGUMENTS
     -----------------
     username: string
-        The user's username. If the API username is not passed as a keyword
-        argument, it will be retrieved from the environment variable
-        TAPIS_USERNAME. If the variable is not set, the user is
-        prompted interactively for a value.
-
+        The user's username.
     password: string
-        The user's password. If the API username is not passed as a keyword
-        argument, it will be retrieved from the environment variable
-        TAPIS_PASSWORD. If the variable is not set, the user is
-        prompted interactively for a value.
+        The user's password
 
     RETURNS
     -------
@@ -47,19 +38,19 @@ def token_create(api_key, api_secret, tenant_url,
     """
 
     # Set request endpoint.
-    endpoint = "{0}{1}".format(tenant_url, "/token")
+    endpoint = tokens_url(tenant_url)
 
     # Get user basic auth credentials
-    uname = get_username(username)
-    passwd = get_password(password, username=uname, quiet=quiet)
+    uname = prompt_username(username)
+    passwd = prompt_password(password, username=uname, quiet=quiet)
 
     # Make request.
     try:
         data = {
             "username": uname,
             "password": passwd,
-            "grant_type": "password",
-            "scope": "PRODUCTION"
+            "grant_type": grants.PASSWORD_GRANT,
+            "scope": grants.SCOPE
         }
         params = {"pretty": "true"}
         resp = requests.post(endpoint, data=data,

@@ -2,46 +2,43 @@
     clients.py
 """
 import requests
-from .exceptions import AgaveClientError
+from ..constants import PLATFORM
 from ..utils import (handle_bad_response_status_code,
-                     get_username, get_password)
+                     prompt_username, prompt_password)
+from .exceptions import AgaveClientError
+from .utils import clients_url
 
 
 def clients_delete(tenant_url, client_name,
                    username=None, password=None, quiet=False):
-    """Deletes a Tapis Oauth client
+    """Deletes an Oauth client
 
     PARAMETERS
     ----------
     client_name: string
-        Plaintext name for the Oauth client.
+        Name of the Oauth client.
     tenant_url: string
-        URL of agave tenant to interact with.
+        URL of the API tenant to interact with.
 
     KEYWORD ARGUMENTS
     -----------------
     username: string
-        The user's username. If the API username is not passed as a keyword
-        argument, it will be retrieved from the environment variable
-        TAPIS_USERNAME. If the variable is not set, the user is
-        prompted interactively for a value.
-
+        The user's username.
     password: string
-        The user's password. If the API username is not passed as a keyword
-        argument, it will be retrieved from the environment variable
-        TAPIS_PASSWORD. If the variable is not set, the user is
-        prompted interactively for a value.
+        The user's password
     """
+    # Set the endpoint.
+    endpoint = "{0}/{1}".format(clients_url(tenant_url), client_name)
+
     # Make sure client_name is valid.
     if client_name == "" or client_name is None:
-        raise AgaveClientError("Error accessing client: invalid client_name")
-
-    # Set the endpoint.
-    endpoint = "{}/clients/v2/{}".format(tenant_url, client_name)
+        raise AgaveClientError(
+            '{0} client {1} failed: Invalid name {2}'.format(
+                PLATFORM, 'deletion', client_name))
 
     # Get user's password.
-    uname = get_username(username)
-    passwd = get_password(password, quiet=quiet)
+    uname = prompt_username(username)
+    passwd = prompt_password(password, quiet=quiet)
 
     # Make request.
     try:

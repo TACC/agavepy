@@ -2,10 +2,13 @@
     exceptions.py
 """
 
+__all__ = ['AgaveClientError']
+
 
 class AgaveClientError(Exception):
     """ Handle Agave-related client operations
     """
+
     def __init__(self, msg):
         self.msg = msg
 
