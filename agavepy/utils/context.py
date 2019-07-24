@@ -11,6 +11,9 @@ ALLOWED_KEYS = ('tenantid', 'baseurl', 'username', 'apikey',
                 'expires_in', 'created_at', 'access_token',
                 'refresh_token', 'devurl')
 
+DEFAULT_KEYS = ('tenantid', 'baseurl', 'username',
+                'access_token', 'refresh_token', 'apikey', 'apisecret')
+
 __all__ = ['bootstrap_context']
 
 
@@ -55,6 +58,10 @@ def _context_from_sessions_file(sessions_file, **kwargs):
 
 
 def bootstrap_context(cache_dir=None, precedence='sessions', **kwargs):
+
+    # Populate a reasonable context event if no key names are passed
+    if len(kwargs) == 0:
+        kwargs = {k: None for k in DEFAULT_KEYS}
     # current
     client_file = client_cache_path(cache_dir)
     # config.json
