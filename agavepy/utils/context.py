@@ -2,6 +2,7 @@ from __future__ import print_function
 import errno
 import json
 import os
+from copy import copy
 from .paths import (sessions_cache_path, client_cache_path,
                     credentials_cache_dir)
 
@@ -27,7 +28,9 @@ def _context_from_client_file(client_file, context={}, **kwargs):
             # Allow loaded value to override passed value if not None
             if kwarg_val != val and kwarg_val is None:
                 context[k] = val
-    return context
+        return context
+    else:
+        raise FileNotFoundError('Sessions file not found')
 
 
 def _context_from_sessions_file(sessions_file, **kwargs):
@@ -46,7 +49,9 @@ def _context_from_sessions_file(sessions_file, **kwargs):
             # Allow loaded value to override passed value if not None
             if kwarg_val != val and kwarg_val is None:
                 context[k] = val
-    return context
+        return context
+    else:
+        raise FileNotFoundError('Sessions file not found')
 
 
 def bootstrap_context(cache_dir=None, precedence='sessions', **kwargs):
@@ -54,10 +59,18 @@ def bootstrap_context(cache_dir=None, precedence='sessions', **kwargs):
     client_file = client_cache_path(cache_dir)
     # config.json
     sessions_file = sessions_cache_path(cache_dir)
-    client_context = _context_from_client_file(
-        client_file, **kwargs)
-    sessions_current_context = _context_from_sessions_file(
-        sessions_file, **kwargs)
+
+    try:
+        client_context = _context_from_client_file(
+            client_file, **kwargs)
+    except FileNotFoundError:
+        pass
+
+    try:
+        sessions_current_context = _context_from_sessions_file(
+            sessions_file, **kwargs)
+    except FileNotFoundError:
+        sessions_current_context = copy(client_context)
 
     if precedence == 'sessions':
         client_context.update(sessions_current_context)
