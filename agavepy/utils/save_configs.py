@@ -4,11 +4,14 @@
 from __future__ import print_function
 import json
 import os
+import logging
 from collections import defaultdict
 from .paths import (credentials_cache_dir,
                     sessions_cache_path, client_cache_path)
 
 __all__ = ['make_cache_dir', 'save_config']
+
+logger = logging.getLogger(__name__)
 
 
 def make_cache_dir(cache_dir):
@@ -138,7 +141,16 @@ def save_config(cache_dir, current_context, client_name):
         agave_context["current"][client_name] = current_context
 
     # Save data to cache dir files.
-    with open(config_file, "w") as f:
-        json.dump(agave_context, f, indent=4)
-    with open(current_file, "w") as f:
-        json.dump(agave_context["current"][client_name], f, sort_keys=True)
+    try:
+        with open(config_file, "w") as f:
+            json.dump(agave_context, f, indent=4)
+    except PermissionError:
+        logger.warning(
+            'Did not have permission to write sessions cache {0}'.format(config_file))
+
+    try:
+        with open(current_file, "w") as f:
+            json.dump(agave_context["current"][client_name], f, sort_keys=True)
+    except PermissionError:
+        logger.warning(
+            'Did not have permission to write current cache {0}'.format(current_file))
