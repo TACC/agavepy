@@ -71,7 +71,7 @@ def bootstrap_context(cache_dir=None, precedence='sessions', **kwargs):
         client_context = _context_from_client_file(
             client_file, **kwargs)
     except FileNotFoundError:
-        pass
+        client_context = copy(kwargs)
 
     try:
         sessions_current_context = _context_from_sessions_file(
