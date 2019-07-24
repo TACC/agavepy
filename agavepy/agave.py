@@ -21,7 +21,7 @@ from agavepy.tenants import tenant_list
 from agavepy.clients import (clients_create, clients_delete,
                              clients_list, clients_subscribe,
                              clients_subscriptions)
-from agavepy.tokens import token_create, refresh_token
+from agavepy.tokens import (token_create, refresh_token, ACCESS_TOKEN_TTL)
 from agavepy.utils import (load_config,
                            save_config,
                            prompt_username,
@@ -185,7 +185,7 @@ class Token(object):
         try:
             expires_in = int(self.token_info.get('expires_in'))
         except ValueError:
-            expires_in = 3600
+            expires_in = ACCESS_TOKEN_TTL
         created_at = int(time.time())
         self.token_info['created_at'] = created_at
         self.token_info['expiration'] = created_at + expires_in
@@ -863,7 +863,9 @@ class Agave(object):
 
         expiration_t = created_t + expires_t
         delta_t = int(time.time()) - expiration_t
-        if delta_t > -60:
+        # This is set in agavepy.tokens
+        if int(time.time()) >= created_t + ACCESS_TOKEN_TTL:
+        # if delta_t > -60:
             print("Refreshing token...")
             token_data = refresh_token(
                     self.api_key, self.api_secret, self.refresh_token, self.api_server)
