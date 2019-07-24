@@ -622,11 +622,11 @@ class Agave(object):
         cache_dir: string (default: None)
             If no cache_dir is passed it will default to ~/.agave.
         """
-        # Check that client name is set.
-        if self.client_name is None or isinstance(self.client_name, Resource):
-            print(
-                "You must set the client_name attribute before saving configurations with this method")
-            return
+        # # Check that client name is set.
+        # if self.client_name is None or isinstance(self.client_name, Resource):
+        #     print(
+        #         "You must set the client_name attribute before saving configurations with this method")
+        #     return
 
         current_context = {
             "tenantid": self.tenant_id,
@@ -848,7 +848,7 @@ class Agave(object):
         self.expires_at    = token_data.get("expires_at")
 
 
-    def refresh_tokens(self):
+    def refresh_tokens(self, force=False):
         """ Refresh oauth token
 
         Check if tokens need to be created or refreshed. If tokens need to be
@@ -864,9 +864,9 @@ class Agave(object):
         expiration_t = created_t + expires_t
         delta_t = int(time.time()) - expiration_t
         # This is set in agavepy.tokens
-        if int(time.time()) >= created_t + ACCESS_TOKEN_TTL:
+        if int(time.time()) >= created_t + ACCESS_TOKEN_TTL or force is True:
         # if delta_t > -60:
-            print("Refreshing token...")
+            # print("Refreshing token...")
             token_data = refresh_token(
                     self.api_key, self.api_secret, self.refresh_token, self.api_server)
 

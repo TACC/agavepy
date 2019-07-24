@@ -52,6 +52,7 @@ def _context_from_sessions_file(sessions_file, **kwargs):
             # Allow loaded value to override passed value if not None
             if kwarg_val != val and kwarg_val is None:
                 context[k] = val
+        context['client_name'] = client_name
         return context
     else:
         raise FileNotFoundError('Sessions file not found')

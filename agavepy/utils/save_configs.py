@@ -6,6 +6,7 @@ import json
 import os
 import logging
 from collections import defaultdict
+from agavepy import agave
 from .paths import (credentials_cache_dir,
                     sessions_cache_path, client_cache_path)
 
@@ -88,6 +89,7 @@ def save_config(cache_dir, current_context, client_name):
     client_name: string
         Name of oauth client being used in the current session.
     """
+
     # Get location to store configuration.
     make_cache_dir(cache_dir)
     current_file = client_cache_path(cache_dir)
@@ -141,16 +143,21 @@ def save_config(cache_dir, current_context, client_name):
         agave_context["current"][client_name] = current_context
 
     # Save data to cache dir files.
-    try:
-        with open(config_file, "w") as f:
-            json.dump(agave_context, f, indent=4)
-    except PermissionError:
-        logger.warning(
-            'Did not have permission to write sessions cache {0}'.format(config_file))
+    # Check that client name is set.
+    if client_name is not None and not isinstance(client_name, agave.Resource):
+        try:
+            with open(config_file, "w") as f:
+                json.dump(agave_context, f, indent=4)
+        except PermissionError:
+            logger.warning(
+                'Did not have permission to write sessions cache {0}'.format(config_file))
+    else:
+        logger.warn(
+            'Parameter "client_name" was not provided, which prevented writing of a session file')
 
     try:
         with open(current_file, "w") as f:
-            json.dump(agave_context["current"][client_name], f, sort_keys=True)
+            json.dump(current_context, f, sort_keys=True)
     except PermissionError:
         logger.warning(
             'Did not have permission to write current cache {0}'.format(current_file))
