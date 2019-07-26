@@ -6,7 +6,6 @@ import json
 import os
 import logging
 from collections import defaultdict
-from agavepy import agave
 from .paths import (credentials_cache_dir,
                     sessions_cache_path, client_cache_path)
 
@@ -144,7 +143,7 @@ def save_config(cache_dir, current_context, client_name):
 
     # Save data to cache dir files.
     # Check that client name is set.
-    if client_name is not None and not isinstance(client_name, agave.Resource):
+    if client_name is not None and isinstance(client_name, str):
         try:
             with open(config_file, "w") as f:
                 json.dump(agave_context, f, indent=4)
