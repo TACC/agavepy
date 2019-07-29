@@ -33,7 +33,7 @@ def _context_from_client_file(client_file, context={}, **kwargs):
                 context[k] = val
         return context
     else:
-        raise FileNotFoundError('Sessions file not found')
+        raise IOError('Sessions file not found')
 
 
 def _context_from_sessions_file(sessions_file, **kwargs):
@@ -57,7 +57,7 @@ def _context_from_sessions_file(sessions_file, **kwargs):
             context['client_name'] = client_name
         return context
     else:
-        raise FileNotFoundError('Sessions file not found')
+        raise IOError('Sessions file not found')
 
 
 def bootstrap_context(cache_dir=None, precedence='sessions', **kwargs):
@@ -73,13 +73,13 @@ def bootstrap_context(cache_dir=None, precedence='sessions', **kwargs):
     try:
         client_context = _context_from_client_file(
             client_file, **kwargs)
-    except FileNotFoundError:
+    except IOError:
         client_context = copy(kwargs)
 
     try:
         sessions_current_context = _context_from_sessions_file(
             sessions_file, **kwargs)
-    except FileNotFoundError:
+    except IOError:
         sessions_current_context = copy(client_context)
 
     if precedence == 'sessions':

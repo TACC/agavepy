@@ -35,7 +35,7 @@ def load_config(cache_dir, tenant_id, username, client_name):
         with open(config_file, 'r') as f:
             agave_context = json.load(f)
     else:
-        raise FileNotFoundError(
+        raise IOError(
             errno.ENOENT, os.strerror(errno.ENOENT), config_file)
 
     # Return the current session context if no extra parameters are passed.
