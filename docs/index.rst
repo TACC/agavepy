@@ -33,6 +33,8 @@ AgavePy is also the engine powering
    :maxdepth: 1
    :caption: Using AgavePy
 
+   docsite/querying/index
+
    docsite/authentication/index
   
    docsite/systems/index
