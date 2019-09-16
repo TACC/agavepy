@@ -45,6 +45,11 @@ Install latest development code from GitHub::
     git checkout develop
     python setup.py install
 
+Configure a testing client, either by writing a `tests/configuration.json` file
+or by setting environment variables as documented in the [auth fixture](https://github.com/TACC/agavepy/blob/cli/tests/fixtures/auth.py#L13)
+
+Run unit tests with ``python -m pytest tests``
+
 Quickstart
 ==========
 
