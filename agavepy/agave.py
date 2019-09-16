@@ -29,8 +29,8 @@ from . import settings
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=settings.LOG_LEVEL)
-logger.setLevel(settings.LOG_LEVEL)
+# logging.basicConfig(level=settings.LOG_LEVEL)
+logger.setLevel(logging.DEBUG)
 
 # last version of Agave before switching to Aloe
 LAST_PRE_ALOE_VERSION = "2.2.22-r7deb380"

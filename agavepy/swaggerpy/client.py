@@ -12,6 +12,7 @@ import urllib.request
 import urllib.parse
 import urllib.error
 import swaggerpy
+import sys
 from numbers import Real
 
 from requests_toolbelt import MultipartEncoder
@@ -19,10 +20,11 @@ from requests_toolbelt import MultipartEncoder
 from swaggerpy.http_client import SynchronousHttpClient
 from swaggerpy.processors import WebsocketProcessor, SwaggerProcessor
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))  # noqa
 from .. import settings
 
 log = logging.getLogger(__name__)
-log.setLevel(settings.SWAGGERPY_LOG_LEVEL)
+log.setLevel(70)
 
 
 class ClientProcessor(SwaggerProcessor):
