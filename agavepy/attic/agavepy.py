@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 """
 
 AgavePy
@@ -33,6 +32,7 @@ def verb(verb_name):
         if not resp.ok:
             raise Exception(resp.text)
         return resp.json()
+
     return _verb
 
 
@@ -51,7 +51,6 @@ def method(verb):
         a_client.foo(arg1, kwarg='')
 
     """
-
     def decorator(f):
         @functools.wraps(f)
         def wrapper(self, *args, **kwargs):
@@ -61,7 +60,9 @@ def method(verb):
             headers.update(self.bearer(token))
             meth = functools.partial(getattr(self, verb), headers=headers)
             return f(self, meth, *args, **kwargs)
+
         return wrapper
+
     return decorator
 
 
@@ -115,10 +116,12 @@ class AgaveAPI(object):
         """Request a token by sending credentials."""
 
         url = self._url('token')
-        data = {'grant_type': 'password',
-                'username': self.user,
-                'password': self.password,
-                'scope': 'PRODUCTION'}
+        data = {
+            'grant_type': 'password',
+            'username': self.user,
+            'password': self.password,
+            'scope': 'PRODUCTION'
+        }
         client_data = self.clients[client]
         consumer_key = client_data['response']['consumerKey']
         consumer_secret = client_data['response']['consumerSecret']
@@ -131,9 +134,11 @@ class AgaveAPI(object):
         url = self._url('token')
         client_data = self.clients[client]
         refresh_token = client_data['token']['refresh_token']
-        data = {'grant_type': 'refresh_token',
-                'scope': 'PRODUCTION',
-                'refresh_token': refresh_token}
+        data = {
+            'grant_type': 'refresh_token',
+            'scope': 'PRODUCTION',
+            'refresh_token': refresh_token
+        }
         consumer_key = client_data['response']['consumerKey']
         consumer_secret = client_data['response']['consumerSecret']
         auth = requests.auth.HTTPBasicAuth(consumer_key, consumer_secret)
@@ -160,7 +165,7 @@ class AgaveAPI(object):
 
     def reset_token(self, client):
         try:
-            client_data =  self.clients[client]
+            client_data = self.clients[client]
             del client_data['token']
             self.clients[client] = client_data
         except KeyError:
@@ -171,8 +176,7 @@ class AgaveAPI(object):
 
     def clients_create(self, client_name, **kwargs):
         url = self._url('clients/v2')
-        data = {'clientName': client_name,
-                'tier': 'Unlimited'}
+        data = {'clientName': client_name, 'tier': 'Unlimited'}
         data.update(kwargs)
         resp = self.POST(url, data=data, auth=self.auth)
         if resp['status'] == 'success':
@@ -223,7 +227,6 @@ class AgaveAPI(object):
 
     # --- Files ---
 
-
     @method('GET')
     def listings(self, method, path, system=None):
         url = self._url('files/v2/listings', optional_system(system), path)
@@ -250,5 +253,4 @@ class AgaveAPI(object):
     @method('POST')
     def apps_create(self, method, app_data):
         url = self._url('apps/v2/')
-        return method(url,
-                      files={'fileToUpload': json.dumps(app_data)})
+        return method(url, files={'fileToUpload': json.dumps(app_data)})

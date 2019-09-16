@@ -7,8 +7,8 @@ import agavepy.agave as a
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
-class TestData(object):
 
+class TestData(object):
     def __init__(self, credentials):
         self.local_data = credentials
 
@@ -21,7 +21,8 @@ class TestData(object):
         """
         storage = self.file_to_json('test-storage.json')
         storage['id'] = self.local_data['storage']
-        storage['storage']['auth']['privateKey'] = self.local_data['storage_key']
+        storage['storage']['auth']['privateKey'] = self.local_data[
+            'storage_key']
         return storage
 
     def get_test_compute_system(self):
@@ -30,8 +31,10 @@ class TestData(object):
         """
         compute = self.file_to_json('test-compute.json')
         compute['id'] = self.local_data['execution']
-        compute['login']['auth']['privateKey'] = self.local_data['execution_key']
-        compute['storage']['auth']['privateKey'] = self.local_data['storage_key']
+        compute['login']['auth']['privateKey'] = self.local_data[
+            'execution_key']
+        compute['storage']['auth']['privateKey'] = self.local_data[
+            'storage_key']
         return compute
 
     def get_test_app_from_file(self):
@@ -49,5 +52,6 @@ class TestData(object):
         test_stor = self.get_test_storage_system()
         job = self.file_to_json('test-job.json')
         job['appId'] = test_app['name'] + '-' + test_app['version']
-        job['inputs']['wf'] = "agave://{}//data/algebra.yml".format(test_stor['id'])
+        job['inputs']['wf'] = "agave://{}//data/algebra.yml".format(
+            test_stor['id'])
         return job

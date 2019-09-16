@@ -60,3 +60,12 @@ tests:
 
 tests-py2:
 	python2 -m pytest -vv tests
+
+.PHONY: format format-code format-tests
+format: format-code format-tests
+
+format-code:
+	yapf --recursive --style pep8 -i agavepy
+
+format-tests:
+	yapf --recursive --style pep8 -i tests

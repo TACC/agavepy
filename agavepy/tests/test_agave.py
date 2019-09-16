@@ -17,7 +17,6 @@
 #    py.test test_agave.py::test_list_single_job_many_times
 #    py.test -k jobs
 
-
 import datetime
 import json
 import os
@@ -27,7 +26,7 @@ import pytest
 import requests
 
 import agavepy.agave as a
-from agavepy.async import AgaveAsyncResponse
+from agavepy. async import AgaveAsyncResponse
 from . import testdata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -43,8 +42,8 @@ def credentials():
     credentials = {}
     # credential store
     if os.environ.get('AGAVE_CACHE_DIR', None) is not None:
-        ag_cred_store = os.path.join(
-            os.environ.get('AGAVE_CACHE_DIR'), 'current')
+        ag_cred_store = os.path.join(os.environ.get('AGAVE_CACHE_DIR'),
+                                     'current')
     else:
         ag_cred_store = os.path.expanduser('~/.agave/current')
 
@@ -64,12 +63,12 @@ def credentials():
     credentials_file = os.environ.get('creds', 'test_credentials.json')
     print(("Loading file: {}".format(credentials_file)))
     if os.path.exists(credentials_file):
-        credentials = json.load(open(
-            os.path.join(HERE, credentials_file), 'r'))
+        credentials = json.load(open(os.path.join(HERE, credentials_file),
+                                     'r'))
     # environment
-    for env in ('apikey', 'apisecret', 'username', 'password',
-                'apiserver', 'verify_certs', 'refresh_token',
-                'token', 'client_name', 'tenantid'):
+    for env in ('apikey', 'apisecret', 'username', 'password', 'apiserver',
+                'verify_certs', 'refresh_token', 'token', 'client_name',
+                'tenantid'):
         for varname_root in ['_AGAVE_', 'AGAVE_']:
             varname = varname_root + env.upper()
             if os.environ.get(varname, None) is not None:
@@ -96,17 +95,21 @@ def agave(credentials):
 def test_app(credentials):
     return testdata.TestData(credentials).get_test_app_from_file()
 
+
 @pytest.fixture(scope='session')
 def test_job(credentials):
     return testdata.TestData(credentials).get_test_job_from_file()
+
 
 @pytest.fixture(scope='session')
 def test_compute_system(credentials):
     return testdata.TestData(credentials).get_test_compute_system()
 
+
 @pytest.fixture(scope='session')
 def test_storage_system(credentials):
     return testdata.TestData(credentials).get_test_storage_system()
+
 
 def validate_app(app):
     assert app.id
@@ -116,10 +119,12 @@ def validate_app(app):
     assert type(app.revision) is int and app.revision > 0
     assert app.version
 
+
 def validate_client(client):
     pass
     # todo - this should turned back on when the clients service is working again.
     # assert client.consumerKey
+
 
 def validate_file(file):
     assert file.format
@@ -130,20 +135,24 @@ def validate_file(file):
     assert file.path
     assert file.system
 
+
 def validate_history_rec(rec):
     assert rec.description
+
 
 def validate_job(job):
     assert job.appId
     if 'endTime' in job:
-        assert job.endTime is None or  type(job.endTime) is datetime.datetime
+        assert job.endTime is None or type(job.endTime) is datetime.datetime
     assert job.executionSystem
     assert job.id
     assert job.name
     assert job.owner
     if 'startTime' in job:
-        assert job.startTime is None or type(job.startTime) is datetime.datetime
+        assert job.startTime is None or type(
+            job.startTime) is datetime.datetime
     assert job.status
+
 
 def validate_system(system):
     assert type(system.public) is bool
@@ -151,17 +160,21 @@ def validate_system(system):
     assert system.status
     assert system.type
 
+
 def validate_profile(prof, user):
     assert prof.username == user
+
 
 def validate_meta(md, name, value):
     assert md.name == name
     assert md.value == value
 
+
 def validate_monitor(m):
     assert m.id
     assert m.target
     assert m.frequency
+
 
 def validate_file_pem(pem):
     assert pem.permission
@@ -169,12 +182,14 @@ def validate_file_pem(pem):
     assert 'read' in pem.permission
     assert 'write' in pem.permission
 
+
 def test_add_compute_system(agave, test_compute_system):
     system = agave.systems.add(body=test_compute_system)
     # set system as default for subsequent testing
     url = agave.api_server + '/systems/v2/' + test_compute_system['id']
     try:
-        rsp = requests.put(url, data={'action':'setDefault'},
+        rsp = requests.put(url,
+                           data={'action': 'setDefault'},
                            headers={'Authorization': 'Bearer ' + agave._token},
                            verify=agave.verify)
     except requests.exceptions.HTTPError as exc:
@@ -182,23 +197,27 @@ def test_add_compute_system(agave, test_compute_system):
         raise exc
     validate_system(system)
 
+
 def test_add_storage_system(agave, test_storage_system):
     system = agave.systems.add(body=test_storage_system)
     # set system as default for subsequent testing
     url = agave.api_server + '/systems/v2/' + test_storage_system['id']
     try:
-        rsp = requests.put(url, data={'action':'setDefault'},
-                       headers={'Authorization': 'Bearer ' + agave._token},
-                       verify=agave.verify)
+        rsp = requests.put(url,
+                           data={'action': 'setDefault'},
+                           headers={'Authorization': 'Bearer ' + agave._token},
+                           verify=agave.verify)
     except requests.exceptions.HTTPError as exc:
         print(("Error trying to set storage system as default:", str(exc)))
         raise exc
     validate_system(system)
 
+
 def test_list_apps(agave):
     apps = agave.apps.list()
     for app in apps:
         validate_app(app)
+
 
 def test_list_public_apps(agave):
     apps = agave.apps.list(publicOnly=True)
@@ -206,15 +225,18 @@ def test_list_public_apps(agave):
         validate_app(app)
         assert app.isPublic
 
+
 def test_list_private_apps(agave):
     apps = agave.apps.list(privateOnly=True)
     for app in apps:
         validate_app(app)
         assert not app.isPublic
 
+
 def test_add_app(agave, test_app):
     app = agave.apps.add(body=test_app)
     validate_app(app)
+
 
 def test_list_clients(agave, credentials):
     if not credentials.get('username') or not credentials.get('password'):
@@ -224,55 +246,74 @@ def test_list_clients(agave, credentials):
     for client in clients:
         validate_client(client)
 
+
 def test_list_files(agave, credentials):
-    files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
+    files = agave.files.list(filePath=credentials['storage_user'],
+                             systemId=credentials['storage'])
     for file in files:
         validate_file(file)
 
+
 def test_get_file_history(agave, credentials):
-    history = agave.files.getHistory(filePath=credentials['storage_user'], systemId=credentials['storage'])
+    history = agave.files.getHistory(filePath=credentials['storage_user'],
+                                     systemId=credentials['storage'])
     for rec in history:
         validate_history_rec(rec)
 
+
 def test_list_file_pems(agave, credentials):
-    pems = agave.files.listPermissions(filePath=credentials['storage_user'], systemId=credentials['storage'])
+    pems = agave.files.listPermissions(filePath=credentials['storage_user'],
+                                       systemId=credentials['storage'])
     for pem in pems:
         validate_file_pem(pem)
+
 
 def test_add_file_permissions(agave, credentials):
-    body = {'permission': 'ALL',
-            'recursive': True,
-            'username': 'jstubbs'}
+    body = {'permission': 'ALL', 'recursive': True, 'username': 'jstubbs'}
     pems = agave.files.updatePermissions(systemId=credentials['storage'],
-                                         filePath=credentials['storage_user'], body=body)
+                                         filePath=credentials['storage_user'],
+                                         body=body)
     for pem in pems:
         validate_file_pem(pem)
 
+
 def test_update_file_pems(agave, credentials):
-    body = {'permission': 'READ', 'recursive': False, 'username': credentials['storage_user']}
+    body = {
+        'permission': 'READ',
+        'recursive': False,
+        'username': credentials['storage_user']
+    }
     rsp = agave.files.updatePermissions(systemId=credentials['storage'],
                                         filePath=credentials['storage_user'],
                                         body=body)
 
+
 def test_upload_file(agave, credentials):
     rsp = agave.files.importData(systemId=credentials['storage'],
                                  filePath=credentials['storage_user'],
-                                 fileToUpload=open('test_file_upload_python_sdk', 'rb'))
+                                 fileToUpload=open(
+                                     'test_file_upload_python_sdk', 'rb'))
     arsp = AgaveAsyncResponse(agave, rsp)
     status = arsp.result(timeout=120)
     assert status == 'FINISHED'
 
+
 def test_download_file(agave, credentials):
-    rsp = agave.files.download(systemId=credentials['storage'],
-                               filePath='{}/test_file_upload_python_sdk'.format(credentials['storage_user']))
+    rsp = agave.files.download(
+        systemId=credentials['storage'],
+        filePath='{}/test_file_upload_python_sdk'.format(
+            credentials['storage_user']))
     assert rsp.status_code == 200
 
+
 def test_download_file_range(agave, credentials):
-    rsp = agave.files.download(systemId=credentials['storage'],
-                               filePath='{}/test_file_upload_python_sdk'.format(credentials['storage_user']),
-                               headers={'range': 'bytes=1-5'}
-                               )
+    rsp = agave.files.download(
+        systemId=credentials['storage'],
+        filePath='{}/test_file_upload_python_sdk'.format(
+            credentials['storage_user']),
+        headers={'range': 'bytes=1-5'})
     assert rsp.status_code == 200
+
 
 # def test_transfer_file(agave, credentials):
 #     agave.files.importData(systemId=credentials['storage'],
@@ -281,21 +322,26 @@ def test_download_file_range(agave, credentials):
 #                            urlToIngest='agave://{}/{}/test_dest_transfer_python_sdk'.format(credentials['storage'],
 #                                                               credentials['storage_user']))
 
+
 def test_upload_binary_file(agave, credentials):
     rsp = agave.files.importData(systemId=credentials['storage'],
                                  filePath=credentials['storage_user'],
-                                 fileToUpload=open('test_upload_python_sdk_g_art.mov', 'rb'))
+                                 fileToUpload=open(
+                                     'test_upload_python_sdk_g_art.mov', 'rb'))
     arsp = AgaveAsyncResponse(agave, rsp)
     status = arsp.result(timeout=120)
     assert status == 'FINISHED'
 
+
 def test_download_agave_uri(agave, credentials):
-    remote_path = '{}/test_file_upload_python_sdk'.format(credentials['storage_user'])
+    remote_path = '{}/test_file_upload_python_sdk'.format(
+        credentials['storage_user'])
     local_path = os.path.join(HERE, 'local_test_download')
     uri = 'agave://{}/{}'.format(credentials['storage'], remote_path)
     rsp = agave.download_uri(uri, local_path)
     assert os.path.exists(local_path)
     os.remove(local_path)
+
 
 def test_download_job_output_listings_uri(agave):
     # this test currently does not work on other tenants.
@@ -307,6 +353,7 @@ def test_download_job_output_listings_uri(agave):
     agave.download_uri(uri, local_path)
     assert os.path.exists(local_path)
     os.remove(local_path)
+
 
 def test_download_job_output_media_uri(agave):
     # this test currently does not work on other tenants.
@@ -320,30 +367,40 @@ def test_download_job_output_media_uri(agave):
     assert os.path.exists(local_path)
     os.remove(local_path)
 
+
 def test_list_uploaded_file(agave, credentials):
-    files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
+    files = agave.files.list(filePath=credentials['storage_user'],
+                             systemId=credentials['storage'])
     for f in files:
         if 'test_file_upload_python_sdk' in f.path:
             break
     else:
         assert False
 
+
 def test_list_uploaded_binary_file(agave, credentials):
-    files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
+    files = agave.files.list(filePath=credentials['storage_user'],
+                             systemId=credentials['storage'])
     for f in files:
         if 'test_upload_python_sdk_g_art.mov' in f.path:
             break
     else:
         assert False
 
+
 def test_delete_uploaded_files(agave, credentials):
-    uploaded_files = ['test_file_upload_python_sdk', 'test_upload_python_sdk_g_art.mov']
+    uploaded_files = [
+        'test_file_upload_python_sdk', 'test_upload_python_sdk_g_art.mov'
+    ]
     for f in uploaded_files:
         agave.files.delete(systemId=credentials['storage'],
-                           filePath='{}/{}'.format(credentials['storage_user'], f))
+                           filePath='{}/{}'.format(credentials['storage_user'],
+                                                   f))
         # make sure file isn't still there:
-        files = agave.files.list(filePath=credentials['storage_user'], systemId=credentials['storage'])
+        files = agave.files.list(filePath=credentials['storage_user'],
+                                 systemId=credentials['storage'])
         assert f not in [fl.path for fl in files]
+
 
 def test_submit_job(agave, test_job):
     job = agave.jobs.submit(body=test_job)
@@ -353,10 +410,12 @@ def test_submit_job(agave, test_job):
     # block until job finishes with a timeout of 3 minutes.
     assert arsp.result(180) == 'FINISHED'
 
+
 def test_list_jobs(agave):
     jobs = agave.jobs.list()
     for job in jobs:
         validate_job(job)
+
 
 def test_list_jobs_multiple(agave):
     for i in range(1, 15):
@@ -364,11 +423,13 @@ def test_list_jobs_multiple(agave):
         for job in jobs:
             validate_job(job)
 
+
 def test_list_single_job_many_times(agave):
     jobs = agave.jobs.list()
     job = jobs[0]
     for i in range(1, 15):
         agave.jobs.get(jobId=job.id)
+
 
 def test_search_jobs(agave):
     # get the id of the first job from the full list
@@ -377,15 +438,18 @@ def test_search_jobs(agave):
     jobs = agave.jobs.list(search={'id.like': id})
     assert len(jobs) == 1
 
+
 def validate_pem(pem):
     assert pem.username
     assert pem.permission
+
 
 def test_list_job_permissions(agave):
     job = agave.jobs.list()[0]
     pems = agave.jobs.listPermissions(jobId=job.id)
     for pem in pems:
         validate_pem(pem)
+
 
 def test_submit_archive_job(agave, test_job, credentials):
     test_job['archive'] = True
@@ -405,20 +469,24 @@ def test_geturl(agave):
     job_rsp = agave.geturl(url)
     assert job_rsp.json().get('result').get('id') is not None
 
+
 def test_get_profile(agave, credentials):
     prof = agave.profiles.get()
     if credentials.get('username'):
         validate_profile(prof, credentials['username'])
+
 
 def test_list_profiles(agave, credentials):
     prof = agave.profiles.listByUsername(username='me')
     if credentials.get('username'):
         validate_profile(prof, credentials['username'])
 
+
 def test_list_systems(agave):
     systems = agave.systems.list()
     for system in systems:
         validate_system(system)
+
 
 def test_list_public_systems(agave):
     systems = agave.systems.list(public=True)
@@ -426,11 +494,13 @@ def test_list_public_systems(agave):
         validate_system(system)
         assert system.public
 
+
 def test_list_default_systems(agave):
     systems = agave.systems.list(default=True)
     for system in systems:
         validate_system(system)
         assert system.default
+
 
 def test_list_private_systems(agave):
     systems = agave.systems.list(public=False)
@@ -438,43 +508,50 @@ def test_list_private_systems(agave):
         validate_system(system)
         assert not system.public
 
+
 def test_list_default_systems(agave):
     systems = agave.systems.list(default=True)
     for system in systems:
         validate_system(system)
         assert system.get('default')
 
+
 def validate_role(role):
     assert role.username
     assert role.role
+
 
 def test_list_system_roles(agave, credentials):
     roles = agave.systems.listRoles(systemId=credentials['storage'])
     for role in roles:
         validate_role(role)
 
+
 def test_get_system_role_for_user(agave, credentials):
-    role = agave.systems.getRoleForUser(systemId=credentials['storage'], username=credentials['username'])
+    role = agave.systems.getRoleForUser(systemId=credentials['storage'],
+                                        username=credentials['username'])
     validate_role(role)
+
 
 def test_list_metadata(agave):
     md = agave.meta.listMetadata()
     # there may not be any meta data in the system, so simply ensure the response code is a 20x.
 
+
 def test_list_metadata_with_query_empty(agave):
-    md = agave.meta.listMetadata(q = "{'name': 'foofymcfoofoo'}")
+    md = agave.meta.listMetadata(q="{'name': 'foofymcfoofoo'}")
     assert len(md) == 0
+
 
 def test_add_list_delete_metadata(agave):
     # add a new one
     name = 'python-sdk-test-metadata'
     value = 'test value'
-    d = {'name': name,
-         'value': value}
+    d = {'name': name, 'value': value}
     md = agave.meta.addMetadata(body=json.dumps(d))
     validate_meta(md, name, value)
     # find it in the list:
-    mds = agave.meta.listMetadata(q = '')
+    mds = agave.meta.listMetadata(q='')
     for md in mds:
         if md.name == 'python-sdk-test-metadata' and \
         md.value == 'test value':
@@ -485,15 +562,15 @@ def test_add_list_delete_metadata(agave):
     # delete it
     md = agave.meta.deleteMetadata(uuid=uuid)
     # make sure it's really gone
-    mds = agave.meta.listMetadata(q = '')
+    mds = agave.meta.listMetadata(q='')
     assert uuid not in [md.uuid for md in mds]
+
 
 def test_metadata_admin_pems(agave, credentials):
     # first, lets add a new metadata using the normal user's client
     name = 'python-sdk-test-metadata-admin-pems'
     value = 'test value'
-    d = {'name': name,
-         'value': value}
+    d = {'name': name, 'value': value}
     md = agave.meta.addMetadata(body=json.dumps(d))
     uuid = md.uuid
     # let's make sure it is there
@@ -523,10 +600,12 @@ def test_list_monitors(agave):
     for m in ms:
         validate_monitor(m)
 
+
 def test_add_monitor(agave, credentials):
-    body = {'active': True,
-            'target': credentials['storage'],
-            }
+    body = {
+        'active': True,
+        'target': credentials['storage'],
+    }
     m = agave.monitors.add(body=json.dumps(body))
     validate_monitor(m)
     # check monitor is in listing
@@ -536,6 +615,7 @@ def test_add_monitor(agave, credentials):
             break
     else:
         assert False
+
 
 def test_delete_monitor(agave, credentials):
     # get monitor id from listing:
@@ -553,15 +633,18 @@ def test_delete_monitor(agave, credentials):
         if m.target == credentials['storage']:
             assert False
 
+
 def validate_postit(postit):
     assert postit.url
     assert postit.method
 
+
 def test_create_postit(agave, credentials):
-    body = {'url':'{}/systems/v2'.format(credentials['apiserver']),
-            'maxUses': 2,
-            'noauth': False,
-            'method': 'GET'
+    body = {
+        'url': '{}/systems/v2'.format(credentials['apiserver']),
+        'maxUses': 2,
+        'noauth': False,
+        'method': 'GET'
     }
     agave.postits.create(body=body)
 
@@ -571,10 +654,12 @@ def test_list_postits(agave):
     for postit in postits:
         validate_postit(postit)
 
+
 def validate_notification(n):
     assert n.id
     assert n.event
     assert n.url
+
 
 # def test_create_notification_to_email(agave, credentials):
 # todo - replace with a "fake email"
@@ -596,6 +681,7 @@ def validate_notification(n):
 #     else:
 #         assert False
 
+
 def test_create_notification_to_url(agave, credentials, test_storage_system):
     # first, create a request bin
     base_url = 'https://requestb.in/api/v1/bins'
@@ -603,13 +689,14 @@ def test_create_notification_to_url(agave, credentials, test_storage_system):
     bin_name = rsp.json().get('name')
     bin_url = '{}/{}'.format(base_url, bin_name)
     # create notification
-     # get uuid of storage system
+    # get uuid of storage system
     stor = agave.systems.get(systemId=credentials['storage'])
     assert stor.uuid
-    body = {"associatedUuid": stor.uuid,
-            "event": "*",
-            "persistent": True,
-            "url": bin_url
+    body = {
+        "associatedUuid": stor.uuid,
+        "event": "*",
+        "persistent": True,
+        "url": bin_url
     }
     n = agave.notifications.add(body=json.dumps(body))
 
@@ -638,6 +725,7 @@ def test_delete_notification(agave, credentials):
         if n.id == id:
             assert False
 
+
 def test_notification_to_url(agave, credentials, test_storage_system):
     # first, create a request bin
     base_url = 'https://requestb.in/api/v1/bins'
@@ -646,13 +734,14 @@ def test_notification_to_url(agave, credentials, test_storage_system):
     bin_url = '{}/{}'.format(base_url, bin_name)
     notification_target = 'https://requestb.in/{}'.format(bin_name)
     # create notification
-     # get uuid of storage system
+    # get uuid of storage system
     stor = agave.systems.get(systemId=credentials['storage'])
     assert stor.uuid
-    body = {"associatedUuid": stor.uuid,
-            "event": "*",
-            "persistent": True,
-            "url": notification_target
+    body = {
+        "associatedUuid": stor.uuid,
+        "event": "*",
+        "persistent": True,
+        "url": notification_target
     }
     n = agave.notifications.add(body=json.dumps(body))
     # wait for notification to be propagated
@@ -667,10 +756,11 @@ def test_notification_to_url(agave, credentials, test_storage_system):
     # delete the notification
     agave.notifications.delete(uuid=n.id)
 
+
 token_callback_calls = 0
 
-def test_token_callback(agave, credentials):
 
+def test_token_callback(agave, credentials):
     def sample_token_callback(**kwargs):
         global token_callback_calls
         token_callback_calls += 1
@@ -681,12 +771,12 @@ def test_token_callback(agave, credentials):
 
     # create a client with a token callback:
     ag = a.Agave(username=credentials.get('username'),
-                  password=credentials.get('password'),
-                  api_server=credentials.get('apiserver'),
-                  api_key=credentials.get('apikey'),
-                  api_secret=credentials.get('apisecret'),
-                  verify=credentials.get('verify_certs', True),
-                  token_callback=sample_token_callback)
+                 password=credentials.get('password'),
+                 api_server=credentials.get('apiserver'),
+                 api_key=credentials.get('apikey'),
+                 api_secret=credentials.get('apisecret'),
+                 verify=credentials.get('verify_certs', True),
+                 token_callback=sample_token_callback)
     # once created, let's force a refresh
     ag.token.refresh()
     global token_callback_calls

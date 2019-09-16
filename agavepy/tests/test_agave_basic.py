@@ -7,7 +7,7 @@ import pytest
 import requests
 
 import agavepy.agave as a
-from agavepy.async import AgaveAsyncResponse
+from agavepy. async import AgaveAsyncResponse
 from . import testdata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -23,8 +23,8 @@ def credentials():
     credentials = {}
     # credential store
     if os.environ.get('AGAVE_CACHE_DIR', None) is not None:
-        ag_cred_store = os.path.join(
-            os.environ.get('AGAVE_CACHE_DIR'), 'current')
+        ag_cred_store = os.path.join(os.environ.get('AGAVE_CACHE_DIR'),
+                                     'current')
     else:
         ag_cred_store = os.path.expanduser('~/.agave/current')
 
@@ -45,12 +45,12 @@ def credentials():
     credentials_file = os.environ.get('creds', 'test_credentials.json')
     print(("Loading file: {}".format(credentials_file)))
     if os.path.exists(credentials_file):
-        credentials = json.load(open(
-            os.path.join(HERE, credentials_file), 'r'))
+        credentials = json.load(open(os.path.join(HERE, credentials_file),
+                                     'r'))
     # environment
-    for env in ('apikey', 'apisecret', 'username', 'password',
-                'apiserver', 'verify_certs', 'refresh_token',
-                'token', 'client_name', 'tenantid'):
+    for env in ('apikey', 'apisecret', 'username', 'password', 'apiserver',
+                'verify_certs', 'refresh_token', 'token', 'client_name',
+                'tenantid'):
         for varname_root in ['_AGAVE_', 'AGAVE_']:
             varname = varname_root + env.upper()
             if os.environ.get(varname, None) is not None:

@@ -1,7 +1,6 @@
 #
 # Copyright (c) 2013, Digium, Inc.
 #
-
 """Code for handling the base Swagger API model.
 """
 
@@ -32,7 +31,6 @@ SWAGGER_PRIMITIVES = [
 class ValidationProcessor(SwaggerProcessor):
     """A processor that validates the Swagger model.
     """
-
     def process_resource_listing(self, resources, context):
         required_fields = ['apis', 'swaggerVersion']
         validate_required_fields(resources, required_fields, context)
@@ -49,10 +47,7 @@ class ValidationProcessor(SwaggerProcessor):
             raise SwaggerError("Path must start with /", context)
 
     def process_api_declaration(self, resources, resource, context):
-        required_fields = [
-            'swaggerVersion', 'resourcePath', 'apis',
-            'models'
-        ]
+        required_fields = ['swaggerVersion', 'resourcePath', 'apis', 'models']
         validate_required_fields(resource, required_fields, context)
         # Check model name and id consistency
         for (model_name, model) in list(resource['models'].items()):
@@ -96,8 +91,7 @@ class ValidationProcessor(SwaggerProcessor):
         for (prop_name, prop) in list(model['properties'].items()):
             prop['name'] = prop_name
 
-    def process_property(self, resources, resource, model, prop,
-                         context):
+    def process_property(self, resources, resource, model, prop, context):
         required_fields = ['type']
         validate_required_fields(prop, required_fields, context)
 
@@ -132,7 +126,6 @@ class Loader(object):
     :param processors: List of processors to apply to the API.
     :type  processors: list of SwaggerProcessor
     """
-
     def __init__(self, http_client, processors=None):
         self.http_client = http_client
         if processors is None:
@@ -185,8 +178,8 @@ class Loader(object):
         """
         path = api_dict.get('path').replace('{format}', 'json')
         api_dict['url'] = urllib.parse.urljoin(base_url + '/', path.strip('/'))
-        api_dict['api_declaration'] = json_load_url(
-            self.http_client, api_dict['url'])
+        api_dict['api_declaration'] = json_load_url(self.http_client,
+                                                    api_dict['url'])
 
     def process_resource_listing(self, resources):
         """Apply processors to a resource listing.
@@ -209,8 +202,8 @@ def validate_required_fields(json, required_fields, context):
     missing_fields = [f for f in required_fields if not f in json]
 
     if missing_fields:
-        raise SwaggerError(
-            "Missing fields: %s" % ', '.join(missing_fields), context)
+        raise SwaggerError("Missing fields: %s" % ', '.join(missing_fields),
+                           context)
 
 
 def load_file(resource_listing_file, http_client=None, processors=None):
@@ -227,12 +220,17 @@ def load_file(resource_listing_file, http_client=None, processors=None):
     url = urllib.parse.urljoin('file:', urllib.request.pathname2url(file_path))
     # When loading from files, everything is relative to the resource listing
     dir_path = os.path.dirname(file_path)
-    base_url = urllib.parse.urljoin('file:', urllib.request.pathname2url(dir_path))
-    return load_url(url, http_client=http_client, processors=processors,
+    base_url = urllib.parse.urljoin('file:',
+                                    urllib.request.pathname2url(dir_path))
+    return load_url(url,
+                    http_client=http_client,
+                    processors=processors,
                     base_url=base_url)
 
 
-def load_url(resource_listing_url, http_client=None, processors=None,
+def load_url(resource_listing_url,
+             http_client=None,
+             processors=None,
              base_url=None):
     """Loads a resource listing, applying the given processors.
 
@@ -250,8 +248,8 @@ def load_url(resource_listing_url, http_client=None, processors=None,
         http_client = SynchronousHttpClient()
 
     loader = Loader(http_client=http_client, processors=processors)
-    return loader.load_resource_listing(
-        resource_listing_url, base_url=base_url)
+    return loader.load_resource_listing(resource_listing_url,
+                                        base_url=base_url)
 
 
 def load_json(resource_listing, http_client=None, processors=None):

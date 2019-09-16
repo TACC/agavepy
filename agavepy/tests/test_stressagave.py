@@ -18,7 +18,6 @@
 #    py.test test_agave.py::test_list_single_job_many_times
 #    py.test -k jobs
 
-
 import datetime
 import json
 import os
@@ -28,17 +27,18 @@ import pytest
 import requests
 
 import agavepy.agave as a
-from agavepy.async import AgaveAsyncResponse
+from agavepy. async import AgaveAsyncResponse
 import testdata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
 
 @pytest.fixture(scope='session')
 def credentials():
     credentials_file = os.environ.get('creds', 'test_credentials.json')
     print "Using: {}".format(credentials_file)
-    return json.load(open(
-        os.path.join(HERE, credentials_file)))
+    return json.load(open(os.path.join(HERE, credentials_file)))
+
 
 @pytest.fixture(scope='session')
 def agave(credentials):
@@ -56,8 +56,8 @@ def agave(credentials):
 def test_upload_large_file(agave, credentials):
     rsp = agave.files.importData(systemId=credentials['storage'],
                                  filePath=credentials['storage_user'],
-                                 fileToUpload=open('test_largefile_upload_python_sdk', 'rb'))
+                                 fileToUpload=open(
+                                     'test_largefile_upload_python_sdk', 'rb'))
     arsp = AgaveAsyncResponse(agave, rsp)
     status = arsp.result(timeout=120)
     assert status == 'FINISHED'
-

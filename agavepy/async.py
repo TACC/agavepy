@@ -1,10 +1,13 @@
 import time
 
+
 class Error(Exception):
     pass
 
+
 class TimeoutError(Error):
     pass
+
 
 class AgaveAsyncResponse(object):
     """
@@ -19,20 +22,25 @@ class AgaveAsyncResponse(object):
         self.retries = 0
         self.url = response._links.get('history').get('href')
         if not self.url:
-            raise Error("Error parsing response object: no URL detected. response: " + str(response))
+            raise Error(
+                "Error parsing response object: no URL detected. response: " +
+                str(response))
         # url's returned by agave sometimes point to docker.example.com
-        self.url = self.url.replace('https://docker.example.com', self.ag.api_server)
+        self.url = self.url.replace('https://docker.example.com',
+                                    self.ag.api_server)
         # url's returned by agave sometimes have the version as 2.0, so we replace that here
-        self.url = self.url.replace('/2.0/','/v2/')
+        self.url = self.url.replace('/2.0/', '/v2/')
 
     def _update_status(self):
         rsp = self.ag.geturl(self.url)
-        if (rsp.status_code == 404 or rsp.status_code == 403) and self.retries < 10:
+        if (rsp.status_code == 404
+                or rsp.status_code == 403) and self.retries < 10:
             time.sleep(1.5)
             self.retries += 1
             return self._update_status()
         if not rsp.status_code == 200:
-            raise Error("Error updating status; invalid status code:  " + str(rsp.status_code) + str(rsp.content))
+            raise Error("Error updating status; invalid status code:  " +
+                        str(rsp.status_code) + str(rsp.content))
         result = rsp.json().get('result')
         if not result:
             raise Error("Error updating status: " + str(rsp))

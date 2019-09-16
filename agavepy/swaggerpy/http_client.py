@@ -3,7 +3,6 @@
 #
 # Copyright (c) 2013, Digium, Inc.
 #
-
 """HTTP client abstractions.
 """
 
@@ -19,12 +18,11 @@ log = logging.getLogger(__name__)
 class HttpClient(object):
     """Interface for a minimal HTTP client.
     """
-
     def close(self):
         """Close this client resource.
         """
-        raise NotImplementedError(
-            "%s: Method not implemented", self.__class__.__name__)
+        raise NotImplementedError("%s: Method not implemented",
+                                  self.__class__.__name__)
 
     def request(self, method, url, params=None, data=None):
         """Issue an HTTP request.
@@ -39,8 +37,8 @@ class HttpClient(object):
         :type  data: Dictionary, bytes, or file-like object
         :return: Implementation specific response object
         """
-        raise NotImplementedError(
-            "%s: Method not implemented", self.__class__.__name__)
+        raise NotImplementedError("%s: Method not implemented",
+                                  self.__class__.__name__)
 
     def ws_connect(self, url, params=None):
         """Create a WebSocket connection.
@@ -51,8 +49,8 @@ class HttpClient(object):
         :type  params: dict
         :return: Implmentation specific WebSocket connection object
         """
-        raise NotImplementedError(
-            "%s: Method not implemented", self.__class__.__name__)
+        raise NotImplementedError("%s: Method not implemented",
+                                  self.__class__.__name__)
 
     def set_basic_auth(self, host, username, password):
         """Configures client to use HTTP Basic authentication.
@@ -61,8 +59,8 @@ class HttpClient(object):
         :param username: Username
         :param password: Password
         """
-        raise NotImplementedError(
-            "%s: Method not implemented", self.__class__.__name__)
+        raise NotImplementedError("%s: Method not implemented",
+                                  self.__class__.__name__)
 
     def set_api_key(self, host, api_key, param_name='api_key'):
         """Configures client to use api_key authentication.
@@ -73,8 +71,8 @@ class HttpClient(object):
         :param api_key: Value for api_key.
         :param param_name: Parameter name to use in query string.
         """
-        raise NotImplementedError(
-            "%s: Method not implemented", self.__class__.__name__)
+        raise NotImplementedError("%s: Method not implemented",
+                                  self.__class__.__name__)
 
 
 class Authenticator(object):
@@ -82,7 +80,6 @@ class Authenticator(object):
 
     :param host: Host to authenticate for.
     """
-
     def __init__(self, host):
         self.host = host
 
@@ -115,7 +112,6 @@ class BasicAuthenticator(Authenticator):
     :param username: Username.
     :param password: Password
     """
-
     def __init__(self, host, username, password):
         super(BasicAuthenticator, self).__init__(host)
         self.auth = requests.auth.HTTPBasicAuth(username, password)
@@ -134,7 +130,6 @@ class ApiKeyAuthenticator(Authenticator):
     :param api_key: API key.
     :param param_name: Query parameter specifying the API key.
     """
-
     def __init__(self, host, api_key, param_name='api_key'):
         super(ApiKeyAuthenticator, self).__init__(host)
         self.param_name = param_name
@@ -145,13 +140,13 @@ class ApiKeyAuthenticator(Authenticator):
 
 
 class TokenAuthenticator(Authenticator):
-
     def __init__(self, host, token):
         super(TokenAuthenticator, self).__init__(host)
         self.token = token
 
     def apply(self, request):
         request.headers['Authorization'] = 'Bearer {}'.format(self.token)
+
 
 class NonceAuthenticator(Authenticator):
     """ The NonceAuthenticator can be used when no authentication credentials are present at the time
@@ -164,8 +159,8 @@ class NonceAuthenticator(Authenticator):
     def apply(self, request):
         pass
 
-class JwtAuthenticator(Authenticator):
 
+class JwtAuthenticator(Authenticator):
     def __init__(self, host, header_name, jwt):
         super(JwtAuthenticator, self).__init__(host)
         self.jwt = jwt
@@ -175,11 +170,11 @@ class JwtAuthenticator(Authenticator):
         request.headers[self.header_name] = self.jwt
         request.url = request.url.strip('/v2')
 
+
 # noinspection PyDocstring
 class SynchronousHttpClient(HttpClient):
     """Synchronous HTTP client implementation.
     """
-
     def __init__(self, verify=None):
         self.session = requests.Session()
         self.authenticator = None
@@ -191,16 +186,17 @@ class SynchronousHttpClient(HttpClient):
         # There's no WebSocket factory to close; close connections individually
 
     def set_basic_auth(self, host, username, password):
-        self.authenticator = BasicAuthenticator(
-            host=host, username=username, password=password)
+        self.authenticator = BasicAuthenticator(host=host,
+                                                username=username,
+                                                password=password)
 
     def set_api_key(self, host, api_key, param_name='api_key'):
-        self.authenticator = ApiKeyAuthenticator(
-            host=host, api_key=api_key, param_name=param_name)
+        self.authenticator = ApiKeyAuthenticator(host=host,
+                                                 api_key=api_key,
+                                                 param_name=param_name)
 
     def set_token(self, host, token):
-        self.authenticator = TokenAuthenticator(
-            host=host, token=token)
+        self.authenticator = TokenAuthenticator(host=host, token=token)
 
     def set_jwt(self, host, header_name, jwt):
         self.authenticator = JwtAuthenticator(host, header_name, jwt)
@@ -208,19 +204,29 @@ class SynchronousHttpClient(HttpClient):
     def set_nonce(self, host):
         self.authenticator = NonceAuthenticator(host)
 
-    def request(self, method, url, params=None, data=None,
-                headers=None, files=None, proxies=None):
+    def request(self,
+                method,
+                url,
+                params=None,
+                data=None,
+                headers=None,
+                files=None,
+                proxies=None):
         """Requests based implementation.
 
         :return: Requests response
         :rtype:  requests.Response
         """
-        req = requests.Request(
-            method=method, url=url, params=params, data=data,
-            headers=headers, files=files)
+        req = requests.Request(method=method,
+                               url=url,
+                               params=params,
+                               data=data,
+                               headers=headers,
+                               files=files)
         self.apply_authentication(req)
         return self.session.send(self.session.prepare_request(req),
-                                 verify=self.verify, proxies=proxies)
+                                 verify=self.verify,
+                                 proxies=proxies)
 
     def ws_connect(self, url, params=None):
         """Websocket-client based implementation.
@@ -235,9 +241,10 @@ class SynchronousHttpClient(HttpClient):
         # and authenticators can manipulate headers
         preped_req = proto_req.prepare()
         # Pull the Authorization header, if needed
-        header = ["%s: %s" % (k, v)
-                  for (k, v) in list(preped_req.headers.items())
-                  if k == 'Authorization']
+        header = [
+            "%s: %s" % (k, v) for (k, v) in list(preped_req.headers.items())
+            if k == 'Authorization'
+        ]
         # Pull the URL, which includes query params
         url = preped_req.url
         return websocket.create_connection(url, header=header)

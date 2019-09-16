@@ -1,7 +1,6 @@
 #
 # Copyright (c) 2013, Digium, Inc.
 #
-
 """Swagger processors enrich and validate the Swagger data model.
 
 This can be to make templating easier, or ensure values required for a
@@ -16,7 +15,6 @@ class ParsingContext(object):
     This object is immutable. To change contexts (like adding an item to the
     stack), use the next() and next_stack() functions to build a new one.
     """
-
     def __init__(self):
         self.type_stack = []
         self.id_stack = []
@@ -73,7 +71,6 @@ class SwaggerError(Exception):
     """Raised when an error is encountered mapping the JSON objects into the
     model.
     """
-
     def __init__(self, msg, context, cause=None):
         """Ctor.
 
@@ -90,7 +87,6 @@ class SwaggerProcessor(object):
     This processor can add fields to model objects for additional
     information to use in the templates.
     """
-
     def apply(self, resources):
         """Apply this processor to a loaded Swagger definition.
 
@@ -250,7 +246,6 @@ class SwaggerProcessor(object):
 class WebsocketProcessor(SwaggerProcessor):
     """Process the WebSocket extension for Swagger
     """
-
     def process_resource_api(self, resources, resource, api, context):
         api.setdefault('has_websocket', False)
 
@@ -271,7 +266,6 @@ class FlatenningProcessor(SwaggerProcessor):
 
     Mustache requires a regular schema.
     """
-
     def process_api_declaration(self, resources, resource, context):
         resource.model_list = list(resource.models.values())
 

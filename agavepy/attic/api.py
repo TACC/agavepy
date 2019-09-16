@@ -8,7 +8,6 @@ import requests
 
 
 class Agave(object):
-
     def __init__(self, base, token, swagger):
         self.base = base
         self.token = token
@@ -19,7 +18,6 @@ class Agave(object):
 
 
 class Endpoint(object):
-
     def __init__(self, endpoint, agave):
         self.endpoint = endpoint
         self.agave = agave
@@ -29,7 +27,6 @@ class Endpoint(object):
 
 
 class Operation(object):
-
     def __init__(self, nickname, endpoint):
         self.nickname = nickname
         self.endpoint = endpoint
@@ -46,10 +43,10 @@ class Operation(object):
         url = urllib.parse.urljoin(self.endpoint.agave.base, path)
         parameters = operation['parameters']
 
-        params = {}             # query parameters
-        data_form = {}          # form parameters
-        data_body = {}          # body parameter
-        paths = {}              # path parameters
+        params = {}  # query parameters
+        data_form = {}  # form parameters
+        data_body = {}  # body parameter
+        paths = {}  # path parameters
         for parameter in parameters:
             name = parameter['name']
             param_type = parameter['paramType']
@@ -72,10 +69,10 @@ class Operation(object):
             if param_type == 'path':
                 paths[name] = param
         if kwargs:
-            raise Exception('unknown parameters: {}'
-                            .format(list(kwargs.keys())))
-        req = self.build_request(method, url, paths,
-                                 data_form, data_body, params)
+            raise Exception('unknown parameters: {}'.format(list(
+                kwargs.keys())))
+        req = self.build_request(method, url, paths, data_form, data_body,
+                                 params)
         if req.ok:
             response_model = self.swagger.get_model(
                 self.operation['operation']['type'], self.endpoint.endpoint)
@@ -97,8 +94,9 @@ class Operation(object):
         if return_type['type'] == 'array':
             items = return_type['items']
             items_type = items.get('type', items.get('$ref'))
-            return [self.deserialize(elem, {'type': items_type})
-                    for elem in dic]
+            return [
+                self.deserialize(elem, {'type': items_type}) for elem in dic
+            ]
         if return_type['type'] == 'string':
             assert isinstance(dic, str) or dic is None
             return dic
@@ -115,8 +113,10 @@ class Operation(object):
                 pass
             model_spec = self.swagger.get_model(
                 return_type['type'], self.endpoint.endpoint)['properties']
-            deserialized_dic = {k: self.deserialize(dic[k], model_spec[k])
-                                for k in dic}
+            deserialized_dic = {
+                k: self.deserialize(dic[k], model_spec[k])
+                for k in dic
+            }
             return ModelGenerator(model_spec)(**deserialized_dic)
 
 
@@ -124,8 +124,10 @@ def serialize(obj):
     """Model -> dict"""
 
     if isinstance(obj, Model):
-        return {k: serialize(v)
-                for k, v in obj.__dict__.items() if not k.startswith('_')}
+        return {
+            k: serialize(v)
+            for k, v in obj.__dict__.items() if not k.startswith('_')
+        }
     if isinstance(obj, str):
         return obj
     if isinstance(obj, collections.abc.Sequence):
@@ -134,12 +136,11 @@ def serialize(obj):
 
 
 class Swagger(object):
-
     def __init__(self, url):
         self.url = url
         self.parsed_url = urllib.parse.urlparse(url)
-        self.get = (self.file_get if self.parsed_url.scheme == 'file'
-                    else self.requests_get)
+        self.get = (self.file_get
+                    if self.parsed_url.scheme == 'file' else self.requests_get)
         index = self.get('index.html')
         self.apis = {}
         for api in index['apis']:
@@ -163,13 +164,12 @@ class Swagger(object):
             url_path = api['path']
             for operation in api['operations']:
                 if operation['nickname'] == nickname:
-                    return {'path': url_path,
-                            'operation': operation}
+                    return {'path': url_path, 'operation': operation}
         raise Exception('nickname "{}" not found'.format(nickname))
 
     def get_parameter(self, name, nickname, endpoint):
-        parameters = self.get_nickname(
-            nickname, endpoint)['operation']['parameters']
+        parameters = self.get_nickname(nickname,
+                                       endpoint)['operation']['parameters']
         for parameter in parameters:
             if parameter['name'] == name:
                 return parameter
@@ -194,7 +194,6 @@ class Model(object):
 
 
 class ModelGenerator(object):
-
     def __init__(self, spec):
         self._spec = spec
 
@@ -211,8 +210,8 @@ class ModelGenerator(object):
             self._check(param, param_spec)
             setattr(model, key, param)
         if kwargs:
-            raise Exception('unknown parameter(s): {}'
-                            .format(list(kwargs.keys())))
+            raise Exception('unknown parameter(s): {}'.format(
+                list(kwargs.keys())))
         return model
 
     def _check(self, param, param_spec):

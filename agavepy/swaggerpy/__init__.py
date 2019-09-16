@@ -1,7 +1,6 @@
 #
 # Copyright (c) 2013, Digium, Inc.
 #
-
 """Swagger processing libraries.
 
 More information on Swagger can be found `on the Swagger website

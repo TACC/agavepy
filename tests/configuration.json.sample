@@ -1,0 +1,16 @@
+{
+    "apikey": "Duo9BMmFbQKmsiP92aPVxk2oGlIa",
+    "apisecret": "YPT3QiKdYgHo45Pn_bA0sRsy2P8at",
+    "username": "tacctest",
+    "password": "xo9T5xRK15PZvH0u",
+    "apiserver": "https://api.tacc.cloud",
+    "storage": "test-storage-id",
+    "storage_key": "key for the storage system",
+    "execution": "test-compute-id",
+    "execution_key": "key for the execution system",
+    "app_name": "agavepy-sdk",
+    "deployment_path": "apps/wc-1.00",
+    "jwt_header": "X-JWT-Assertion-agave-prod",
+    "jwt": "",
+    "verify_certs": true
+}

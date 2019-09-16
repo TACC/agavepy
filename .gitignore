@@ -35,3 +35,7 @@ docs/_build/
 .idea
 test_credentials.json
 .pytest_cache/
+env/*
+env2/*
+tests-wip/*
+.vscode/*

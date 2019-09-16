@@ -1,7 +1,6 @@
 #
 # Copyright (c) 2013, Digium, Inc.
 #
-
 """Swagger client library.
 """
 
@@ -9,7 +8,9 @@ import json
 import logging
 import os.path
 import re
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 import swaggerpy
 from numbers import Real
 
@@ -18,13 +19,15 @@ from requests_toolbelt import MultipartEncoder
 from swaggerpy.http_client import SynchronousHttpClient
 from swaggerpy.processors import WebsocketProcessor, SwaggerProcessor
 
+from .. import settings
+
 log = logging.getLogger(__name__)
+log.setLevel(settings.SWAGGERPY_LOG_LEVEL)
 
 
 class ClientProcessor(SwaggerProcessor):
     """Enriches swagger models for client processing.
     """
-
     def process_resource_listing_api(self, resources, listing_api, context):
         """Add name to listing_api.
 
@@ -40,7 +43,6 @@ class ClientProcessor(SwaggerProcessor):
 class Operation(object):
     """Operation object.
     """
-
     def __init__(self, uri, operation, http_client):
         self.uri = uri
         self.json = operation
@@ -61,7 +63,8 @@ class Operation(object):
         :param kwargs: ARI operation arguments.
         :return: Implementation specific response or WebSocket connection
         """
-        log.info("%s?%r" % (self.json['nickname'], urllib.parse.urlencode(kwargs)))
+        log.info("%s?%r" %
+                 (self.json['nickname'], urllib.parse.urlencode(kwargs)))
         # http method must be native string (for Python 2.x, bytes). This must be done to prevent errors when trying to
         # upload binary data because when unicode is passed, the concatenated request string gets decoded using the
         # default encoding (ASCII) and that breaks on binary data. See the bottom of this thread:
@@ -85,8 +88,8 @@ class Operation(object):
                 params.update(kwargs.pop('query'))
             except ValueError:
                 raise AssertionError("Parameter query must be of type dict.")
-        accepts_multipart = ('multipart/form-data' in
-                             self.json.get('consumes', []))
+        accepts_multipart = ('multipart/form-data' in self.json.get(
+            'consumes', []))
         # allow passing an `x-nonce`
         if kwargs.get('nonce'):
             nonce = kwargs.get('nonce')
@@ -102,7 +105,8 @@ class Operation(object):
                     try:
                         params.update(value)
                     except ValueError:
-                        raise AssertionError("Parameter {} must be of type dict.".format(pname))
+                        raise AssertionError(
+                            "Parameter {} must be of type dict.".format(pname))
             # Turn list params into comma separated values
             if isinstance(value, list):
                 value = ",".join(value)
@@ -118,8 +122,11 @@ class Operation(object):
                         try:
                             file_name = os.path.basename(value.name)
                         except AttributeError:
-                            raise TypeError("File upload object must have a name attribute.")
-                        m = MultipartEncoder(fields = {pname: (file_name, value, 'text/plain')})
+                            raise TypeError(
+                                "File upload object must have a name attribute."
+                            )
+                        m = MultipartEncoder(
+                            fields={pname: (file_name, value, 'text/plain')})
                         headers['Content-type'] = m.content_type
                         data = m
                     else:
@@ -134,15 +141,15 @@ class Operation(object):
                         except TypeError:
                             data = value
                             if not headers.get('Content-type') \
-                                or headers.get('Content-type') == 'application/octet-stream':
+                                    or headers.get('Content-type') == 'application/octet-stream':
                                 isjson = False
-                                headers['Content-type'] = 'application/octet-stream'
+                                headers[
+                                    'Content-type'] = 'application/octet-stream'
                     if isjson:
                         headers['Content-type'] = 'application/json'
                 else:
-                    raise AssertionError(
-                        "Unsupported paramType %s" %
-                        param_type)
+                    raise AssertionError("Unsupported paramType %s" %
+                                         param_type)
                 del kwargs[pname]
             else:
                 if param['required']:
@@ -175,9 +182,13 @@ class Operation(object):
             uri = re.sub('^http', "ws", uri)
             return self.http_client.ws_connect(uri, params=params)
         else:
-            return self.http_client.request(
-                method, uri, params=params,
-                data=data, headers=headers, files=files, proxies=proxies)
+            return self.http_client.request(method,
+                                            uri,
+                                            params=params,
+                                            data=data,
+                                            headers=headers,
+                                            files=files,
+                                            proxies=proxies)
 
 
 class Resource(object):
@@ -186,7 +197,6 @@ class Resource(object):
     :param resource: Resource model
     :param http_client: HTTP client API
     """
-
     def __init__(self, resource, http_client):
         log.debug("Building resource '%s'" % resource['name'])
         self.json = resource
@@ -194,8 +204,8 @@ class Resource(object):
         self.http_client = http_client
         self.operations = {
             oper['nickname']: self._build_operation(decl, api, oper)
-            for api in decl['apis']
-            for oper in api['operations']}
+            for api in decl['apis'] for oper in api['operations']
+        }
 
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, self.json['name'])
@@ -238,8 +248,8 @@ class Resource(object):
         :param api: API entry.
         :param operation: Operation.
         """
-        log.debug("Building operation %s.%s" % (
-            self.get_name(), operation['nickname']))
+        log.debug("Building operation %s.%s" %
+                  (self.get_name(), operation['nickname']))
         uri = decl['basePath'] + api['path']
         return Operation(uri, operation, self.http_client)
 
@@ -253,9 +263,10 @@ class SwaggerClient(object):
     :param http_client: HTTP client API
     :type  http_client: HttpClient
     """
-
-    def __init__(self, url_or_resource,
-                 http_client=None, extra_processors=None):
+    def __init__(self,
+                 url_or_resource,
+                 http_client=None,
+                 extra_processors=None):
         if not http_client:
             http_client = SynchronousHttpClient()
         self.http_client = http_client
@@ -275,7 +286,8 @@ class SwaggerClient(object):
 
         self.resources = {
             resource['name']: Resource(resource, http_client)
-            for resource in self.api_docs['apis']}
+            for resource in self.api_docs['apis']
+        }
 
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, self.api_docs['basePath'])

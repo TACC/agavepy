@@ -68,6 +68,7 @@ def get_context():
     context.update(os.environ)
     return context
 
+
 def get_binary_message():
     """Read the full binary message sent via the abaco named pipe."""
     fd = os.open('/_abaco_binary_data', os.O_RDONLY | os.O_NONBLOCK)
@@ -79,6 +80,7 @@ def get_binary_message():
         else:
             return msg
 
+
 def _read_bytes(fifo, n=4069):
     """Read at most n bytes from a pipe at path `fifo`."""
     try:
@@ -87,6 +89,7 @@ def _read_bytes(fifo, n=4069):
         # an empty fifo will return a Resource temporarily unavailable OSError (Errno 11)
         # since we explicitly support a single message protocol, this means we are done
         return None
+
 
 def update_state(state):
     """Update the actor's state with the new value of `state`. The `state` variable should be JSON serializable."""
@@ -109,6 +112,7 @@ def send_python_result(obj):
         raise AgaveError(msg)
     send_bytes_result(b)
 
+
 def send_bytes_result(b):
     """
     Send a result `b` which should be a bytes object to the Abaco system.
@@ -127,6 +131,7 @@ def send_bytes_result(b):
         print(msg)
         raise AgaveError(msg)
 
+
 def _get_results_socket():
     """Instantiate the results socket for sending binary results."""
     client = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
@@ -142,22 +147,22 @@ def _get_results_socket():
 
 class AbacoExecutor(object):
     """Executor class that leverages an Abaco actor for executions"""
-
-    def __init__(self,
-                 # the agave oauth client to use to connect to the abaco instance
-                 ag,
-                 # use an existing actor; it must have been defined with an allowable image.
-                 actor_id=None,
-                 # specify an image to use for the abaco actor. it must be able to accept a message that contains a
-                 # callable and parameters and execute the callable.
-                 image=None,
-                 # if not specifying an image, one of a pre-defined set of strings that determines the image to use for the actor
-                 context=None,
-                 # the number of abaco workers to use for the actor
-                 num_workers=1,
-                 # timeout (in seconds) to wait for actor to be READY; for very large images, may need to increase this
-                 # to allow for longer download times on the abaco side.
-                 timeout=60):
+    def __init__(
+            self,
+            # the agave oauth client to use to connect to the abaco instance
+            ag,
+            # use an existing actor; it must have been defined with an allowable image.
+            actor_id=None,
+            # specify an image to use for the abaco actor. it must be able to accept a message that contains a
+            # callable and parameters and execute the callable.
+            image=None,
+            # if not specifying an image, one of a pre-defined set of strings that determines the image to use for the actor
+            context=None,
+            # the number of abaco workers to use for the actor
+            num_workers=1,
+            # timeout (in seconds) to wait for actor to be READY; for very large images, may need to increase this
+            # to allow for longer download times on the abaco side.
+            timeout=60):
         self.ag = ag
         self.timeout = timeout
         if actor_id:
@@ -187,11 +192,15 @@ class AbacoExecutor(object):
                 self.image = 'abacosamples/py3_func:dev'
             # register an Abaco actor with the appropriate image:
             try:
-                rsp = ag.actors.add(body={'image': self.image,
-                                          'stateless': True,
-                                          'name': 'agpy_abaco_executor'})
+                rsp = ag.actors.add(
+                    body={
+                        'image': self.image,
+                        'stateless': True,
+                        'name': 'agpy_abaco_executor'
+                    })
             except Exception as e:
-                raise AgaveError("Unable to register the actor; exception: {}".format(e))
+                raise AgaveError(
+                    "Unable to register the actor; exception: {}".format(e))
             self.actor_id = rsp['id']
             self.status = 'SUBMITTED'
 
@@ -207,7 +216,8 @@ class AbacoExecutor(object):
             # this is an issue in agavepy; swallow these for now until it is fixed
             pass
         except Exception as e:
-            raise AgaveError("Unable to add workers for actor. Exceptoion: {}".format(e))
+            raise AgaveError(
+                "Unable to add workers for actor. Exceptoion: {}".format(e))
 
     def _update_status(self):
         status = self.ag.actors.get(actorId=self.actor_id).get('status')
@@ -235,14 +245,25 @@ class AbacoExecutor(object):
             args = []
         if not kwargs:
             kwargs = {}
-        message = cloudpickle.dumps({'func': fn, 'args': args, 'kwargs': kwargs})
+        message = cloudpickle.dumps({
+            'func': fn,
+            'args': args,
+            'kwargs': kwargs
+        })
         headers = {'Content-Type': 'application/octet-stream'}
-        rsp = self.ag.actors.sendBinaryMessage(actorId=self.actor_id, message=message, headers=headers)
+        rsp = self.ag.actors.sendBinaryMessage(actorId=self.actor_id,
+                                               message=message,
+                                               headers=headers)
         execution_id = rsp.get('executionId')
         if not execution_id:
-            raise AgaveError("Error submitting function call. Did not get an execution id; response: {}".format(rsp))
-        return AbacoAsyncResponse(self.ag, self.actor_id, execution_id, )
-
+            raise AgaveError(
+                "Error submitting function call. Did not get an execution id; response: {}"
+                .format(rsp))
+        return AbacoAsyncResponse(
+            self.ag,
+            self.actor_id,
+            execution_id,
+        )
 
     def map(self, fn, args_list=[], kwargs_list=None):
         """
@@ -253,12 +274,14 @@ class AbacoExecutor(object):
             kwargs_list = [{} for i in args_list]
         if not len(args_list) == len(kwargs_list):
             raise AgaveError("map requires lists of equal length")
-        return [self.submit(fn, *args, **kwargs) for args, kwargs in zip(args_list, kwargs_list)]
+        return [
+            self.submit(fn, *args, **kwargs)
+            for args, kwargs in zip(args_list, kwargs_list)
+        ]
 
     def delete(self):
         """ Delete this executor completely."""
         self.ag.actors.delete(actorId=self.actor_id)
-
 
     def blocking_call(self, fn, *args, **kwargs):
         """Execute fn(*args, **kwargs) and block until the result completes. """
@@ -269,20 +292,21 @@ class AbacoExecutor(object):
 # max time, in seconds, to sleep between status check calls for an execution
 MAX_SLEEP = 60
 
+
 def exp_backoff(prev, count):
     # exponentially increase the sleep amount via the equation 2^(0.2*prev) every 10th time:
     next = prev
     if (count % 10) == 0:
-        next = 2.0 ** (prev * 0.2)
+        next = 2.0**(prev * 0.2)
     if next > MAX_SLEEP:
         return MAX_SLEEP
     return next
+
 
 class AbacoAsyncResponse(object):
     """
     Future class encapsulating an asynchronous execution performed via an Abaco actor.
     """
-
     def __init__(self, ag, actor_id, execution_id):
         self.ag = ag
         self.actor_id = actor_id
@@ -290,7 +314,8 @@ class AbacoAsyncResponse(object):
         self.status = 'SUBMITTED'
 
     def _update_status(self):
-        status = self.ag.actors.getExecution(actorId=self.actor_id, executionId=self.execution_id).get('status')
+        status = self.ag.actors.getExecution(
+            actorId=self.actor_id, executionId=self.execution_id).get('status')
         self.status = status
         return status
 
@@ -327,9 +352,9 @@ class AbacoAsyncResponse(object):
         # result should be ready:
         results = []
         while True:
-            result = self.ag.actors.getOneExecutionResult(actorId=self.actor_id, executionId=self.execution_id).content
+            result = self.ag.actors.getOneExecutionResult(
+                actorId=self.actor_id, executionId=self.execution_id).content
             if not result:
                 break
             results.append(cloudpickle.loads(result))
         return results
-
