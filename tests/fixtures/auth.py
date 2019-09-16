@@ -24,7 +24,6 @@ def credentials():
     try:
         creds = json.load(open(CREDENTIALS, 'r'))
     except Exception:
-        raise
         creds = dict()
     client = dict()
     for e, k, d in ENV_KEY_MAP:
