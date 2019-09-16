@@ -1,2 +1,6 @@
 from .agave import Agave
-from . import settings
+
+import sys # noqa
+from agavepy import asynchronous # noqa
+sys.modules['agavepy.async'] = asynchronous # noqa
+

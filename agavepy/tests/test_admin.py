@@ -34,7 +34,7 @@ import pytest
 import requests
 
 import agavepy.agave as a
-from agavepy. async import AgaveAsyncResponse
+from agavepy.asynchronous import AgaveAsyncResponse
 import testdata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
