@@ -39,20 +39,15 @@ data_files = [('', ['requirements.txt', 'requirements-py2.txt'])]
 
 setup(
     name='agavepy',
-    version='0.9.4',
+    version='1.0.0',
     description='SDK for TACC Tapis (formerly Agave)',
     long_description=readme,
     author='Texas Advanced Computing Center',
-    author_email='jstubbs@tacc.utexas.edu, jochoa@tacc.utexas.edu, vaughn@tacc.utexas.edu',
+    author_email='jstubbs@tacc.utexas.edu, vaughn@tacc.utexas.edu',
     url='https://github.com/TACC/agavepy',
     packages=[
         'agavepy',
-        'agavepy.swaggerpy',
-        "agavepy.tenants",
-        "agavepy.clients",
-        "agavepy.tokens",
-        "agavepy.files",
-        "agavepy.utils",
+        'agavepy.swaggerpy'
     ],
     package_dir={'agavepy': 'agavepy'},
     package_data={'agavepy': [
