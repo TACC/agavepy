@@ -78,8 +78,8 @@ Configure a new Auth Cache
    >>> from agavepy.agave import Agave
    >>> ag = Agave(tenant_id=<tenant_id>, username=<username>, password=<password>, api_key=<api_key>, api_secret=<api_secret>, api_server=<api_server>)
 
-Advanced Mode: Client from Environment
---------------------------------------
+Advanced: Client from Environment
+---------------------------------
 
 There are many cases where it is not feasible or acceptable to load or save
 cached credentials. Examples include public Docker container images, source
@@ -87,8 +87,34 @@ code repositories, or continuous integration jobs.
 
 Handily, AgavePy supports loading an active client from the environment. To
 take advantage of this, set the following environment variables:
-``TAPIS_BASE_URL``, ``TAPIS_TENANT_ID`, ``TAPIS_USERNAME``, ``TAPIS_PASSWORD``,
-``TAPIS_API_KEY``, and ``TAPIS_API_SECRET``.
+
+.. code-block::
+
+   TAPIS_BASE_URL=https://<api_server>
+   TAPIS_TENANT_ID=<api_secret>
+   TAPIS_USERNAME=<username>
+   TAPIS_PASSWORD=<password>
+   TAPIS_API_KEY=<api_key>
+   TAPIS_API_SECRET=<api_secret>
+
+With these variable set, the standard ``restore()`` method will load a client
+
+.. code-block:: pycon
+
+   >>> from agavepy.agave import Agave
+   >>> ag = Agave.restore()
+   >>> ag.token.api_key
+   <api_key>
+
+Advanced: Manually Refresh a Token
+----------------------------------
+
+.. code-block:: pycon
+
+   >>> from agavepy.agave import Agave
+   >>> ag = Agave.restore()
+   >>> ag.token.refresh()
+   '8776fba39858957ce72110135947af9f'
 
 .. _Agave: https://agaveapi.co/
 .. _Abaco: http://useabaco.cloud/
