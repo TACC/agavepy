@@ -5,12 +5,13 @@ __all__ = [
     'SESSIONS_FILENAME', 'AGPY_FILENAME', 'CACHES_DIR_NAME', 'ENV_USERNAME',
     'ENV_PASSWORD', 'ENV_TOKEN', 'ENV_REFRESH_TOKEN', 'ENV_BASE_URL',
     'ENV_API_KEY', 'ENV_API_SECRET', 'ENV_TENANT_ID', 'TOKEN_SCOPE',
-    'TOKEN_TTL'
+    'TOKEN_TTL', 'TENANTS_URL'
 ]
 
 # General
 PLATFORM = 'Tapis'
 BASE_URL = 'https://api.tacc.utexas.edu'
+TENANTS_URL = BASE_URL + '/tenants'
 
 # Variable names usable in lieu of passed values to allow environment-driven
 # configuration of the library

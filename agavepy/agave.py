@@ -11,9 +11,9 @@ from functools import wraps
 
 from future import standard_library
 standard_library.install_aliases()  # noqa
-from urllib.parse import urlparse, urlencode, urljoin, urlsplit # noqa
-from urllib.request import urlopen, getproxies, Request # noqa
-from urllib.error import HTTPError # noqa
+from urllib.parse import urlparse, urlencode, urljoin, urlsplit  # noqa
+from urllib.request import urlopen, getproxies, Request  # noqa
+from urllib.error import HTTPError  # noqa
 
 sys.path.insert(0, os.path.dirname(__file__))  # noqa
 from .swaggerpy.processors import SwaggerProcessor  # noqa
@@ -23,7 +23,7 @@ from .constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
                         SESSIONS_FILENAME, TOKEN_SCOPE, TOKEN_TTL,
                         ENV_BASE_URL, ENV_TOKEN, ENV_REFRESH_TOKEN,
                         ENV_USERNAME, ENV_PASSWORD, ENV_API_KEY,
-                        ENV_API_SECRET, ENV_TENANT_ID)
+                        ENV_API_SECRET, ENV_TENANT_ID, TENANTS_URL)
 from . import settings
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -89,9 +89,8 @@ def load_resource(api_server):
                                  lstrip_blocks=True)
 
         new_rsrcs = json.loads(
-            conf.compile(
-                {"api_server_base": urlparse(api_server).netloc},
-                env))
+            conf.compile({"api_server_base": urlparse(api_server).netloc},
+                         env))
         updateDict(rsrcs, new_rsrcs)
 
     logger.debug('load_resource finished')
@@ -114,7 +113,7 @@ def updateDict(base_dict, new_dict):
 
 def with_refresh(client, f, *args, **kwargs):
     """Call function ``f`` and refresh token if needed."""
-    logger.info('with_refresh()...')
+    logger.debug('with_refresh()...')
     try:
         return f(*args, **kwargs)
     except requests.exceptions.HTTPError as exc:
@@ -122,6 +121,7 @@ def with_refresh(client, f, *args, **kwargs):
         try:
             # Old versions of APIM return errors in XML:
             code = ElementTree.fromstring(exc.response.text)[0].text
+            # raise SystemError(code)
         except Exception:
             # Any error here means the response was not XML.
             try:
@@ -130,7 +130,7 @@ def with_refresh(client, f, *args, **kwargs):
                 # if so, check if it is an expired token error (new versions of APIM return JSON errors):
                 if "Invalid Credentials" in exc_json.get("fault").get(
                         "message"):
-                    logger.debug('client.token.refresh() and retry...')
+                    logger.info('client.token.refresh() and retry...')
                     client.token.refresh()
                     return f(*args, **kwargs)
                 #  otherwise, return the JSON
@@ -144,7 +144,7 @@ def with_refresh(client, f, *args, **kwargs):
             logger.error('Unexpected error code: {0}'.format(code))
             raise
 
-        logger.debug('client.token.refresh() and retry...')
+        logger.info('Fallback: client.token.refresh() and retry...')
         client.token.refresh()
         return f(*args, **kwargs)
 
@@ -622,6 +622,7 @@ class Agave(object):
                 agpy.write(json.dumps(new_clients))
 
     def refresh_aris(self):
+        logger.debug('Agave.refresh_aris()...')
         self.clients_ari()
         # the resources are defined with a different authenticator in case
         # a jwt is passed in, hence we need to refresh using a different method
@@ -654,6 +655,7 @@ class Agave(object):
         self.all = self.resource("jwt", "host", "header_name", "jwt")
 
     def resource(self, auth_type, *args):
+        logger.debug('Agave.resource({0})...'.format(auth_type))
         args_values = [getattr(self, arg) for arg in args]
         if all(args_values):
             http_client = SynchronousHttpClient(verify=self.verify)
@@ -842,6 +844,7 @@ class Operation(object):
             return response
 
         kwargs["proxies"] = self.client.proxies
+        logger.debug('Agave.__call__()...')
         resp = with_refresh(self.client, operation)
         if resp.ok:
             # if response is 204 (no content) return none directly

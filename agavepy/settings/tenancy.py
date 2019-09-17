@@ -1,3 +1,3 @@
-__all__ = ['TACC_TENANTS_SERVER']
+__all__ = ['TENANTS_URL']
 
-TACC_TENANTS_SERVER = 'https://api.tacc.utexas.edu/tenants'
+TENANTS_URL = 'https://api.tacc.utexas.edu/tenants'

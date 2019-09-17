@@ -10,14 +10,14 @@ PARENT = os.path.dirname(HERE)
 GPARENT = os.path.dirname(PARENT)
 CREDENTIALS = os.path.join(PARENT, 'configuration.json')
 
-ENV_KEY_MAP = [
-    ('TEST_TAPIS_API_KEY', 'apikey', None),
-    ('TEST_TAPIS_API_SECRET', 'apisecret', None),
-    ('TEST_TAPIS_USERNAME', 'username', None),
-    ('TEST_TAPIS_PASSWORD', 'password', None),
-    ('TEST_TAPIS_BASE_URL', 'apiserver', 'https://api.tacc.utexas.edu'),
-    ('TEST_TAPIS_TENANT_ID', 'tenantid', 'tacc.prod')
-]
+ENV_KEY_MAP = [('TEST_TAPIS_API_KEY', 'apikey', None),
+               ('TEST_TAPIS_API_SECRET', 'apisecret', None),
+               ('TEST_TAPIS_USERNAME', 'username', None),
+               ('TEST_TAPIS_PASSWORD', 'password', None),
+               ('TEST_TAPIS_BASE_URL', 'apiserver',
+                'https://api.tacc.utexas.edu'),
+               ('TEST_TAPIS_TENANT_ID', 'tenantid', 'tacc.prod')]
+
 
 @pytest.fixture(scope='function')
 def credentials():
@@ -30,13 +30,16 @@ def credentials():
         client[k] = creds.get(k, os.environ.get(e, d))
     return client
 
+
 @pytest.fixture(scope='function')
 def test_username(credentials):
     return credentials.get('username')
 
+
 @pytest.fixture(scope='function')
 def test_password(credentials):
     return credentials.get('password')
+
 
 @pytest.fixture(scope='function')
 def test_tenant_id(credentials):
@@ -59,7 +62,8 @@ def test_api_server(credentials):
 
 
 @pytest.fixture(scope='function')
-def test_client(test_api_key, test_api_secret, test_username, test_password, test_tenant_id, test_api_server):
+def test_client(test_api_key, test_api_secret, test_username, test_password,
+                test_tenant_id, test_api_server):
     return {
         'TAPIS_API_KEY': test_api_key,
         'TAPIS_API_SECRET': test_api_secret,
