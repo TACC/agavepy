@@ -3,9 +3,10 @@
 import requests
 from .. import settings
 
-__all__ = ['list_tenants', 'api_server_by_id']
+__all__ = ['list_tenants', 'api_server_by_id', 'id_by_api_server']
 
 
+# TODO - Cache with functools lru_cache
 def list_tenants(url=None):
     """List available Tapis tenants
 
@@ -40,3 +41,10 @@ def api_server_by_id(tenant_id, url=None):
     for t in tenants:
         if t.get('code').lower() == tenant_id.lower():
             return t.get('baseUrl')
+
+def id_by_api_server(api_server, url=None):
+    tenants = list_tenants(url)
+    for t in tenants:
+        # TODO - ignore presence/absence of trailing slash
+        if t.get('baseUrl').lower() == api_server.lower():
+            return t.get('code')
