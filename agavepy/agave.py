@@ -25,6 +25,7 @@ from .constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
                         ENV_USERNAME, ENV_PASSWORD, ENV_API_KEY,
                         ENV_API_SECRET, ENV_TENANT_ID, TENANTS_URL)
 from . import settings
+from .tenants import api_server_by_id, id_by_api_server
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -422,9 +423,15 @@ class Agave(object):
         return places[0]
 
     @classmethod
-    def _read_current(cls):
+    def _read_current(cls, agave_kwargs=False):
         with open(Agave.tapis_current_path()) as tcp:
             current = json.loads(tcp.read())
+            if agave_kwargs:
+                current['tenant_id'] = current.pop('tenantid', '')
+                current['api_secret'] = current.pop('apisecret', '')
+                current['api_key'] = current.pop('apikey', '')
+                current['api_server'] = current.pop('baseurl', '')
+                current['token'] = current.pop('access_token', '')
         return current
 
     @classmethod
@@ -573,6 +580,12 @@ class Agave(object):
             # refresh logic?
             old_data["access_token"] = new_data["access_token"]
             old_data["refresh_token"] = new_data["refresh_token"]
+
+            # Some Tapis client managers drop tenant_id - this fixes that issue
+            if self.tenant_id is None:
+                self.tenant_id = id_by_api_server(self.api_server)
+                new_data['tenantid'] = self.tenant_id
+
             with open(Agave.agpy_path(), "w") as agpy:
                 agpy.write(json.dumps(new_data))
             logger.debug('"current" cache file written')
