@@ -11,6 +11,11 @@ def test_import_module():
 def test_import_classes():
     from agavepy.agave import Agave, AgaveError, AgaveException
 
+@pytest.mark.smoketest
+def test_import_subs():
+    from agavepy import tenants
+    from agavepy import swaggerpy
+    from agavepy import settings
 
 @pytest.mark.smoketest
 def test_temp_dir(temp_dir):

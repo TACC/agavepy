@@ -23,9 +23,11 @@ from swaggerpy.processors import WebsocketProcessor, SwaggerProcessor
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))  # noqa
 # from .. import settings
 
+# logging.basicConfig(level=logging.ERROR)
+# log.setLevel(logging.ERROR)
+logging.getLogger(__name__).setLevel(os.environ.get('TAPISPY_LOG_LEVEL', logging.INFO))
+logging.getLogger("urllib3").setLevel(os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
 log = logging.getLogger(__name__)
-log.setLevel(50)
-
 
 class ClientProcessor(SwaggerProcessor):
     """Enriches swagger models for client processing.

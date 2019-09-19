@@ -1,7 +1,6 @@
 """Utilities for working with Tapis tenants
 """
 import requests
-from .. import settings
 
 __all__ = ['list_tenants', 'api_server_by_id', 'id_by_api_server']
 
@@ -23,7 +22,7 @@ def list_tenants(url=None):
         If request was successful, return the json response as a dict.
     """
     if url is None:
-        url = settings.TENANTS_URL
+        url = 'http://api.tacc.utexas.edu/tenants'
 
     try:
         resp = requests.get(url)

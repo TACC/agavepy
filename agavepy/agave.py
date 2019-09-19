@@ -30,8 +30,7 @@ from .tenants import api_server_by_id, id_by_api_server
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 logger = logging.getLogger(__name__)
-# logging.basicConfig(level=settings.LOG_LEVEL)
-logger.setLevel(logging.DEBUG)
+logging.getLogger(__name__).setLevel(os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
 
 # last version of Agave before switching to Aloe
 LAST_PRE_ALOE_VERSION = "2.2.22-r7deb380"
