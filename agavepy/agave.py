@@ -24,7 +24,7 @@ from .constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
                         ENV_BASE_URL, ENV_TOKEN, ENV_REFRESH_TOKEN,
                         ENV_USERNAME, ENV_PASSWORD, ENV_API_KEY,
                         ENV_API_SECRET, ENV_TENANT_ID, TENANTS_URL)
-from . import settings
+# from . import settings
 from .tenants import api_server_by_id, id_by_api_server
 
 HERE = os.path.dirname(os.path.abspath(__file__))
