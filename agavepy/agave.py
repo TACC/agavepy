@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import dateutil.parser
 import jinja2
 import json
@@ -15,17 +16,18 @@ from urllib.parse import urlparse, urlencode, urljoin, urlsplit  # noqa
 from urllib.request import urlopen, getproxies, Request  # noqa
 from urllib.error import HTTPError  # noqa
 
-sys.path.insert(0, os.path.dirname(__file__))  # noqa
-from .swaggerpy.processors import SwaggerProcessor  # noqa
-from .swaggerpy.http_client import SynchronousHttpClient  # noqa
-from .swaggerpy.client import SwaggerClient  # noqa
-from .constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
+from agavepy.constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
                         SESSIONS_FILENAME, TOKEN_SCOPE, TOKEN_TTL,
                         ENV_BASE_URL, ENV_TOKEN, ENV_REFRESH_TOKEN,
                         ENV_USERNAME, ENV_PASSWORD, ENV_API_KEY,
                         ENV_API_SECRET, ENV_TENANT_ID, TENANTS_URL)
-# from . import settings
-from .tenants import api_server_by_id, id_by_api_server
+from agavepy.tenants import api_server_by_id, id_by_api_server
+
+sys.path.insert(0, os.path.dirname(__file__))  # noqa
+from .swaggerpy.processors import SwaggerProcessor  # noqa
+from .swaggerpy.http_client import SynchronousHttpClient  # noqa
+from .swaggerpy.client import SwaggerClient  # noqa
+
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 

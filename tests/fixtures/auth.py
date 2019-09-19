@@ -15,7 +15,7 @@ ENV_KEY_MAP = [('TEST_TAPIS_API_KEY', 'apikey', None),
                ('TEST_TAPIS_USERNAME', 'username', None),
                ('TEST_TAPIS_PASSWORD', 'password', None),
                ('TEST_TAPIS_BASE_URL', 'apiserver',
-                'https://api.tacc.utexas.edu'),
+                'https://api.tacc.utexas.edu/'),
                ('TEST_TAPIS_TENANT_ID', 'tenantid', 'tacc.prod')]
 
 
