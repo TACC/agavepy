@@ -21,10 +21,10 @@ from swaggerpy.http_client import SynchronousHttpClient
 from swaggerpy.processors import WebsocketProcessor, SwaggerProcessor
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))  # noqa
-from .. import settings
+# from .. import settings
 
 log = logging.getLogger(__name__)
-log.setLevel(70)
+log.setLevel(50)
 
 
 class ClientProcessor(SwaggerProcessor):
