@@ -383,15 +383,17 @@ class Agave(object):
         """Return the path to the credentials cache directory
         """
         agcachedir = os.environ.get("TAPIS_CACHE_DIR",
-                                    os.environ.get("AGAVE_CACHE_DIR", None))
-        if agcachedir is not None:
-            if os.path.isdir(agcachedir):
-                return agcachedir
-            else:
-                raise ValueError(
-                    "{0} does not appear to be a directory".format(agcachedir))
+                                    os.environ.get("AGAVE_CACHE_DIR",
+                                    os.path.expanduser(
+                                        "~/{0}/".format(CACHES_DOT_DIR))))
+        if os.path.isdir(agcachedir):
+            return agcachedir
+        elif not os.path.exists(agcachedir):
+            os.makedirs(agcachedir)
+            return agcachedir
         else:
-            return os.path.expanduser("~/{0}/".format(CACHES_DOT_DIR))
+            raise ValueError(
+                "{0} does not appear to be a directory".format(agcachedir))
 
     @classmethod
     def tapis_current_path(self):
