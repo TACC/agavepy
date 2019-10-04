@@ -4,6 +4,7 @@
 """Swagger client library.
 """
 
+import curlify
 import json
 import logging
 import os.path
@@ -29,6 +30,11 @@ logging.getLogger(__name__).setLevel(os.environ.get('TAPISPY_LOG_LEVEL', logging
 logging.getLogger("urllib3").setLevel(os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
 log = logging.getLogger(__name__)
 
+def print_stderr(message):
+    # TODO - Support Python2 implementation
+    print('{0}'.format(message), file=sys.stderr)
+
+
 class ClientProcessor(SwaggerProcessor):
     """Enriches swagger models for client processing.
     """
@@ -47,13 +53,20 @@ class ClientProcessor(SwaggerProcessor):
 class Operation(object):
     """Operation object.
     """
-    def __init__(self, uri, operation, http_client):
+    def __init__(self, uri, operation, http_client, show_curl=False):
         self.uri = uri
         self.json = operation
         self.http_client = http_client
+        self.show_curl = show_curl
 
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, self.json['nickname'])
+
+    def __show_curl(self, response_object):
+        """Render an HTTP request as a cURL to STDERR
+        """
+        if self.show_curl:
+            print_stderr(curlify.to_curl(response_object.request))
 
     def file_like(self, obj):
         """Try to decide if we should put this object in multipart."""
@@ -186,13 +199,15 @@ class Operation(object):
             uri = re.sub('^http', "ws", uri)
             return self.http_client.ws_connect(uri, params=params)
         else:
-            return self.http_client.request(method,
-                                            uri,
-                                            params=params,
-                                            data=data,
-                                            headers=headers,
-                                            files=files,
-                                            proxies=proxies)
+            req = self.http_client.request(method,
+                                           uri,
+                                           params=params,
+                                           data=data,
+                                           headers=headers,
+                                           files=files,
+                                           proxies=proxies)
+            self.__show_curl(req)
+            return req
 
 
 class Resource(object):
@@ -201,13 +216,13 @@ class Resource(object):
     :param resource: Resource model
     :param http_client: HTTP client API
     """
-    def __init__(self, resource, http_client):
+    def __init__(self, resource, http_client, show_curl=False):
         log.debug("Building resource '%s'" % resource['name'])
         self.json = resource
         decl = resource['api_declaration']
         self.http_client = http_client
         self.operations = {
-            oper['nickname']: self._build_operation(decl, api, oper)
+            oper['nickname']: self._build_operation(decl, api, oper, show_curl=show_curl)
             for api in decl['apis'] for oper in api['operations']
         }
 
@@ -245,7 +260,7 @@ class Resource(object):
         """
         return self.json.get('name')
 
-    def _build_operation(self, decl, api, operation):
+    def _build_operation(self, decl, api, operation, show_curl=False):
         """Build an operation object
 
         :param decl: API declaration.
@@ -255,7 +270,7 @@ class Resource(object):
         log.debug("Building operation %s.%s" %
                   (self.get_name(), operation['nickname']))
         uri = decl['basePath'] + api['path']
-        return Operation(uri, operation, self.http_client)
+        return Operation(uri, operation, self.http_client, show_curl=show_curl)
 
 
 class SwaggerClient(object):
@@ -270,7 +285,8 @@ class SwaggerClient(object):
     def __init__(self,
                  url_or_resource,
                  http_client=None,
-                 extra_processors=None):
+                 extra_processors=None,
+                 show_curl=False):
         if not http_client:
             http_client = SynchronousHttpClient()
         self.http_client = http_client
@@ -289,7 +305,7 @@ class SwaggerClient(object):
             loader.process_resource_listing(self.api_docs)
 
         self.resources = {
-            resource['name']: Resource(resource, http_client)
+            resource['name']: Resource(resource, http_client, show_curl=show_curl)
             for resource in self.api_docs['apis']
         }
 

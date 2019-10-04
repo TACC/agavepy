@@ -15,7 +15,7 @@ standard_library.install_aliases()  # noqa
 from urllib.parse import urlparse, urlencode, urljoin, urlsplit  # noqa
 from urllib.request import urlopen, getproxies, Request  # noqa
 from urllib.error import HTTPError  # noqa
-
+from agavepy import settings
 from agavepy.constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
                         SESSIONS_FILENAME, TOKEN_SCOPE, TOKEN_TTL,
                         ENV_BASE_URL, ENV_TOKEN, ENV_REFRESH_TOKEN,
@@ -309,6 +309,8 @@ class Agave(object):
     ]
 
     def __init__(self, **kwargs):
+
+        self.show_curl = settings.SHOW_CURL
 
         for param, mandatory, attr, default in self.PARAMS:
             try:
@@ -683,6 +685,7 @@ class Agave(object):
                 self.resources,
                 http_client=http_client,
                 extra_processors=[AgaveProcessor()],
+                show_curl=self.show_curl
             )
 
     def set_client(self, key, secret):
