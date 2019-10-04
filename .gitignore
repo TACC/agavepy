@@ -39,3 +39,4 @@ env/*
 env2/*
 tests-wip/*
 .vscode/*
+.env
