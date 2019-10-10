@@ -1,5 +1,6 @@
 """Utilities for working with Tapis tenants
 """
+from agavepy.settings import TENANTS_URL
 import requests
 
 __all__ = ['list_tenants', 'api_server_by_id', 'id_by_api_server']
@@ -13,7 +14,7 @@ def list_tenants(url=None):
 
     PARAMETERS
     ----------
-    url: string (default: "https://api.tacc.utexas.edu/tenants")
+    url: string (default: settings.TENANTS_URL)
         URL to send GET request to. This resource should list all tenants.
 
     RETURNS
@@ -22,7 +23,7 @@ def list_tenants(url=None):
         If request was successful, return the json response as a dict.
     """
     if url is None:
-        url = 'http://api.tacc.utexas.edu/tenants'
+        url = TENANTS_URL
 
     try:
         resp = requests.get(url)
@@ -42,6 +43,8 @@ def api_server_by_id(tenant_id, url=None):
             return t.get('baseUrl')
 
 def id_by_api_server(api_server, url=None):
+    """Resolve tenant id by its API server
+    """
     tenants = list_tenants(url)
     for t in tenants:
         # TODO - ignore presence/absence of trailing slash

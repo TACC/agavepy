@@ -2,16 +2,17 @@
 """
 __all__ = [
     'PLATFORM', 'BASE_URL', 'SESSION_CACHE_DIRS', 'CACHE_FILENAME',
-    'SESSIONS_FILENAME', 'AGPY_FILENAME', 'CACHES_DIR_NAME', 'ENV_USERNAME',
+    'SESSIONS_FILENAME', 'AGPY_FILENAME', 'ENV_USERNAME',
     'ENV_PASSWORD', 'ENV_TOKEN', 'ENV_REFRESH_TOKEN', 'ENV_BASE_URL',
     'ENV_API_KEY', 'ENV_API_SECRET', 'ENV_TENANT_ID', 'TOKEN_SCOPE',
-    'TOKEN_TTL', 'TENANTS_URL'
+    'TOKEN_TTL', 'ENV_TENANTS_URL', 'DEFAULT_TENANTS_URL', 'DEFAULT_TENANT_ID'
 ]
 
 # General
 PLATFORM = 'Tapis'
 BASE_URL = 'https://api.tacc.utexas.edu'
-TENANTS_URL = BASE_URL + '/tenants'
+DEFAULT_TENANTS_URL = BASE_URL + '/tenants'
+DEFAULT_TENANT_ID = 'tacc.prod'
 
 # Variable names usable in lieu of passed values to allow environment-driven
 # configuration of the library
@@ -23,6 +24,7 @@ ENV_BASE_URL = 'TAPIS_BASE_URL'
 ENV_TENANT_ID = 'TAPIS_TENANT_ID'
 ENV_API_KEY = 'TAPIS_API_KEY'
 ENV_API_SECRET = 'TAPIS_API_SECRET'
+ENV_TENANTS_URL = 'TAPIS_TENANTS_URL'
 
 # Cache and session maangement
 SESSION_CACHE_DIRS = ('TAPIS_CACHE_DIR', 'TAPIS_CACHE', 'AGAVE_CACHE_DIR')
