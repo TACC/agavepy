@@ -4,10 +4,10 @@ from agavepy.constants import (ENV_TENANTS_URL,
                                DEFAULT_TENANTS_URL,
                                DEFAULT_TENANT_ID)
 
-__all__ = ['TENANTS_URL', 'TENANT_ID']
+__all__ = ['TAPIS_TENANTS_URL', 'TAPIS_DEFAULT_TENANT_ID']
 
-TENANTS_URL = os.environ.get(
+TAPIS_TENANTS_URL = os.environ.get(
     ENV_TENANTS_URL, DEFAULT_TENANTS_URL)
 
-TENANT_ID = os.environ.get(
+TAPIS_DEFAULT_TENANT_ID = os.environ.get(
     ENV_TENANT_ID, DEFAULT_TENANT_ID)

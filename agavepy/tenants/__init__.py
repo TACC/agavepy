@@ -1,6 +1,6 @@
 """Utilities for working with Tapis tenants
 """
-from agavepy.settings import TENANTS_URL
+from agavepy.settings import TAPIS_TENANTS_URL
 import requests
 
 __all__ = ['list_tenants', 'api_server_by_id', 'id_by_api_server']
@@ -14,7 +14,7 @@ def list_tenants(url=None):
 
     PARAMETERS
     ----------
-    url: string (default: settings.TENANTS_URL)
+    url: string (default: settings.TAPIS_TENANTS_URL)
         URL to send GET request to. This resource should list all tenants.
 
     RETURNS
@@ -23,7 +23,7 @@ def list_tenants(url=None):
         If request was successful, return the json response as a dict.
     """
     if url is None:
-        url = TENANTS_URL
+        url = TAPIS_TENANTS_URL
 
     try:
         resp = requests.get(url)
