@@ -268,7 +268,7 @@ class Agave(object):
 
         if self.resources is None:
             self.resources = load_resource(self.api_server)
-        self.resource_exceptions = json.load(open(os.path.join(HERE, 'resource_exceptions.json'), 'r'))
+        self.resource_exceptions = json.load(open(os.path.join(HERE, 'resource_exceptions.json'), 'r', encoding='utf-8'))
         self.host = urllib.parse.urlsplit(self.api_server).netloc
         if self.token_callback and not hasattr(self.token_callback, '__call__'):
             raise AgaveError('token_callback must be callable.')
