@@ -3,7 +3,7 @@
 #
 """Swagger client library.
 """
-
+from __future__ import print_function
 import curlify
 import json
 import logging
