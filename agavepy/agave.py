@@ -859,11 +859,27 @@ class Operation(object):
         def operation():
             f = self.get_operation()
             response = f(*args, **kwargs)
-            response.raise_for_status()
+            try:
+                response.raise_for_status()
+            except requests.exceptions.HTTPError as h:
+                if settings.VERBOSE_ERRORS:
+                    # Extract the API JSON message and attach it
+                    # to the HTTPError object before raising it
+                    code = h.response.status_code
+                    reason = h.response.reason + ' for ' + h.response.url
+                    try:
+                        message = h.response.json().get('message')
+                    except Exception:
+                        message = h.response.text
+                    raise requests.exceptions.HTTPError(code, reason, message,
+                                                        response=h.response,
+                                                        request=h.request)
+                else:
+                    raise h
             return response
 
         kwargs["proxies"] = self.client.proxies
-        logger.debug('Agave.__call__()...')
+        logger.debug('Operation.__call__()...')
         resp = with_refresh(self.client, operation)
         if resp.ok:
             # if response is 204 (no content) return none directly
@@ -988,3 +1004,49 @@ class AgaveProcessor(SwaggerProcessor):
 
     def process_model(self, resources, resource, model, context):
         pass
+
+def _handle_tapis_error(h):
+    if h.code not in (400, 404):
+        h.msg = h.msg + ' [{0}]'.format(h.response.text)
+    raise
+
+def __handle_tapis_error(http_error_object):
+    """Raise a more detailed HTTPError from Tapis error response
+    """
+    h = http_error_object
+    # extract HTTP response code
+    code = -1
+    try:
+        code = h.response.status_code
+        assert isinstance(code, int)
+    except Exception:
+        # we have no idea what happened
+        code = 418
+
+    # extract HTTP reason
+    reason = 'UNKNOWN ERROR'
+    try:
+        reason = h.response.reason
+    except Exception:
+        pass
+
+    # Tapis APIs will give JSON responses if the target web service is at all
+    # capable of fulfilling the request. Therefore, try first to extract fields
+    # from the JSON response, then fall back to returning the plain text from
+    # the response.
+    err_msg = 'Unexpected encountered by the web service'
+    status_msg = 'error'
+    version_msg = 'unknown'
+    try:
+        j = h.response.json()
+        if 'message' in j:
+            err_msg = j['message']
+        if 'status' in j:
+            status_msg = j['status']
+        if 'version' in j:
+            version_msg = j['version']
+    except Exception:
+        err_msg = h.response.text
+
+    httperror = '{0}'.format(err_msg)
+    raise HTTPError(code, httperror)
