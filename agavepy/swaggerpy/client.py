@@ -11,7 +11,7 @@ import os.path
 import re
 import urllib.request
 import urllib.parse
-import urllib.err
+import urllib.error
 import swaggerpy
 import sys
 from numbers import Real
