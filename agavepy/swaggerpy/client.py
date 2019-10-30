@@ -69,7 +69,7 @@ class Operation(object):
             try:
                 curl_text = curlify.to_curl(response_object.request)
             except Exception as err:
-                curl_text = 'Curl command generation failed: {0}'.format(err)
+                curl_text = 'Failed to render curl command: {0}'.format(err)
             print_stderr(curl_text)
 
     def file_like(self, obj):
