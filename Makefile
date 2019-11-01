@@ -42,9 +42,9 @@ clean-docs:
 
 
 docs:
+	python scripts/swagger_to_rst.py
 	pip install sphinx-rtd-theme>=0.4.0
 	make -C docs/ html
-
 
 install:
 	python setup.py install

@@ -1,0 +1,13 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/AddRoleToAccountRequest.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "role_id": {
+      "description": "The id of the role to add to the service account.",
+      "type": "string"
+    }
+  },
+  "required": [],
+  "title": "AgavePy AddRoleToAccountRequest schema",
+  "type": "object"
+}

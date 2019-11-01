@@ -1,0 +1,1878 @@
+{
+    "apis": [
+        {
+            "api_declaration": {
+                "apiVersion": "0.5.2",
+                "apis": [
+                    {
+                        "description": "Retrieve a (paginated) list of actors.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "list",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": 250,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "min": 0,
+                                        "name": "limit",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "min": 0,
+                                        "name": "offset",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "integer"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "List actors",
+                                "type": "MultipleActorResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "POST",
+                                "nickname": "add",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": "",
+                                        "description": "The description of the actor to add.",
+                                        "name": "body",
+                                        "paramType": "body",
+                                        "required": true,
+                                        "type": "Actor"
+                                    }
+                                ],
+                                "summary": "Register an actor.",
+                                "type": "SingleActorResponse"
+                            }
+                        ],
+                        "path": "/actors/v2"
+                    },
+                    {
+                        "description": "Manage a specific actor.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "get",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Retrieve details about a specific actor.",
+                                "type": "SingleActorResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "PUT",
+                                "nickname": "update",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": "",
+                                        "description": "The description of the actor to update.",
+                                        "name": "body",
+                                        "paramType": "body",
+                                        "required": true,
+                                        "type": "Actor"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Retrieve details about a specific actor.",
+                                "type": "SingleActorResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "DELETE",
+                                "nickname": "delete",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Delete a specific actor.",
+                                "type": "EmptyActorResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}"
+                    },
+                    {
+                        "description": "Work with actor messages.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "getMessages",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Get the current number of messages for an actor.",
+                                "type": "ActorMessagesResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "DELETE",
+                                "nickname": "deleteMessages",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Delete messages from an actor",
+                                "type": "ActorMessagesDeleteResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "POST",
+                                "nickname": "sendMessage",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "Optional dictionary of environmental variables",
+                                        "name": "environment",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "dict"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": "",
+                                        "description": "The description of the message to add.",
+                                        "name": "body",
+                                        "paramType": "body",
+                                        "required": true,
+                                        "type": "MessageRequest"
+                                    }
+                                ],
+                                "summary": "Send a message to an actor mailbox.",
+                                "type": "ActorMessageRequestResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "POST",
+                                "nickname": "sendBinaryMessage",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "Optional dictionary of environmental variables",
+                                        "name": "environment",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "dict"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": "",
+                                        "description": "The description of the message to add.",
+                                        "name": "message",
+                                        "paramType": "body",
+                                        "required": true,
+                                        "type": "MessageRequest"
+                                    }
+                                ],
+                                "summary": "Send a message to an actor mailbox.",
+                                "type": "ActorMessageRequestResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/messages"
+                    },
+                    {
+                        "description": "Work with an actor's state.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "getState",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Get the current state for an actor.",
+                                "type": "ActorStateResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "POST",
+                                "nickname": "updateState",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": "",
+                                        "description": "The value of the state. Should be JSON-serializable.",
+                                        "name": "body",
+                                        "paramType": "body",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "summary": "Update an actor's state with a JSON-serializable object.",
+                                "type": "ActorStateRequestResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/state"
+                    },
+                    {
+                        "description": "Work with an actor's permissions.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "getPermissions",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Get the current permissions for an actor.",
+                                "type": "ActorPermissionsResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "POST",
+                                "nickname": "updatePermissions",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": "",
+                                        "description": "The permission record; user and level fields required.",
+                                        "name": "body",
+                                        "paramType": "body",
+                                        "required": true,
+                                        "type": "PermissionsUpdateRequest"
+                                    }
+                                ],
+                                "summary": "Update an actor's permissions with a new permission for a user.",
+                                "type": "ActorPermissionsRequestResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/permissions"
+                    },
+                    {
+                        "description": "Work with actor workers.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "listWorkers",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "List the current workers for an actor.",
+                                "type": "MultipleActorWorkerResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "POST",
+                                "nickname": "addWorker",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": "",
+                                        "description": "The description of the workers to add.",
+                                        "name": "body",
+                                        "paramType": "body",
+                                        "required": true,
+                                        "type": "AddWorkersRequest"
+                                    }
+                                ],
+                                "summary": "Add a worker to an actor.",
+                                "type": "ActorWorkersRequestResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/workers"
+                    },
+                    {
+                        "description": "Work with a specific worker.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "getWorker",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the worker.",
+                                        "name": "workerId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Get the details about a specific worker for an actor.",
+                                "type": "SingleActorWorkerResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "DELETE",
+                                "nickname": "deleteWorker",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the worker.",
+                                        "name": "workerId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "summary": "Delete a worker.",
+                                "type": "EmptyActorWorkerRequestResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/workers/{workerId}"
+                    },
+                    {
+                        "description": "Work with actor nonces.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "listNonces",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "List the current nonces for an actor.",
+                                "type": "MultipleActorNonceResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "POST",
+                                "nickname": "addNonce",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": "",
+                                        "description": "The description of the nonce to add.",
+                                        "name": "body",
+                                        "paramType": "body",
+                                        "required": false,
+                                        "type": "AddNonceRequest"
+                                    }
+                                ],
+                                "summary": "Add a nonce to an actor.",
+                                "type": "ActorNonceRequestResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/nonces"
+                    },
+                    {
+                        "description": "Work with a specific nonce.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "getNonce",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the nonce.",
+                                        "name": "nonceId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Get the details about a specific nonce for an actor.",
+                                "type": "SingleActorNonceResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "DELETE",
+                                "nickname": "deleteNonce",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the nonce.",
+                                        "name": "nonceId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "summary": "Delete a nonce.",
+                                "type": "EmptyActorNonceRequestResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/nonces/{nonceId}"
+                    },
+                    {
+                        "description": "Work with aliases.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "listAliases",
+                                "notes": "",
+                                "parameters": [],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "List all current aliases",
+                                "type": "MultipleActorAliasResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "POST",
+                                "nickname": "addAlias",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": "",
+                                        "description": "The description of the alias to add.",
+                                        "name": "body",
+                                        "paramType": "body",
+                                        "required": false,
+                                        "type": "AddAliasRequest"
+                                    }
+                                ],
+                                "summary": "Add an alias of an actor.",
+                                "type": "ActorAliasRequestResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/aliases"
+                    },
+                    {
+                        "description": "Work with a specific alias.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "getAlias",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the alias.",
+                                        "name": "alias",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Get the details of a specific alias.",
+                                "type": "SingleActorAliasResponse"
+                            },
+                            {
+                                "is_websocket": false,
+                                "method": "DELETE",
+                                "nickname": "deleteAlias",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the alias.",
+                                        "name": "alias",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "summary": "Delete an alias.",
+                                "type": "EmptyActorAliasRequestResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/aliases/{alias}"
+                    },
+                    {
+                        "description": "Worker with actor executions.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "listExecutions",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": 250,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "min": 0,
+                                        "name": "limit",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "min": 0,
+                                        "name": "offset",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "integer"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Summary data of all actor executions.",
+                                "type": "ExecutionsSummaryResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/executions"
+                    },
+                    {
+                        "description": "Manage a specific execution for a specific actor.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "getExecution",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the execution.",
+                                        "name": "executionId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Retrieve details about a specific actor execution.",
+                                "type": "SingleActorExecutionResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/executions/{executionId}"
+                    },
+                    {
+                        "description": "Get result for a specific execution.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "getOneExecutionResult",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the execution.",
+                                        "name": "executionId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Get result for a specific actor execution.",
+                                "type": "string"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/executions/{executionId}/results"
+                    },
+                    {
+                        "description": "Manage logs for a specific execution.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "getExecutionLogs",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the actor.",
+                                        "name": "actorId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The id of the execution.",
+                                        "name": "executionId",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Get logs for a specific actor execution.",
+                                "type": "ExecutionLogsResponse"
+                            }
+                        ],
+                        "path": "/actors/v2/{actorId}/executions/{executionId}/logs"
+                    }
+                ],
+                "authorizations": [
+                    "oauth2"
+                ],
+                "basePath": "https://api.tacc.cloud",
+                "models": {
+                    "Actor": {
+                        "id": "Actor",
+                        "name": "",
+                        "properties": {
+                            "defaultEnvironment": {
+                                "description": "Default environmental variables and values.",
+                                "name": "defaultEnvironment",
+                                "type": "dict"
+                            },
+                            "description": {
+                                "description": "Description of this actor.",
+                                "name": "description",
+                                "type": "string"
+                            },
+                            "id": {
+                                "description": "The unique id of the actor.",
+                                "name": "id",
+                                "type": "string"
+                            },
+                            "image": {
+                                "description": "Docker image associated with the actor.",
+                                "name": "image",
+                                "type": "string"
+                            },
+                            "owner": {
+                                "description": "username of the owner of the actor.",
+                                "name": "owner",
+                                "type": "string"
+                            },
+                            "privileged": {
+                                "description": "Whether this actor runs in privileged mode.",
+                                "name": "privileged",
+                                "type": "boolean"
+                            },
+                            "stateless": {
+                                "description": "Whether the actor stores private state.",
+                                "name": "stateless",
+                                "type": "boolean"
+                            },
+                            "status": {
+                                "description": "Current status of the actor.",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorAlias": {
+                        "id": "ActorAlias",
+                        "name": "",
+                        "properties": {
+                            "actorId": {
+                                "description": "Actor id associated with the alias.",
+                                "name": "level",
+                                "type": "string"
+                            },
+                            "alias": {
+                                "description": "The alias.",
+                                "name": "id",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorAliasRequestResponse": {
+                        "id": "ActorAliasRequestResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "ActorAlias"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorMessageRequestResponse": {
+                        "id": "ActorMessageRequestResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "ActorMessageResponse"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorMessageResponse": {
+                        "id": "ActorMessageResponse",
+                        "name": "",
+                        "properties": {
+                            "executionId": {
+                                "description": "The id of the resulting execution.",
+                                "name": "executionId",
+                                "type": "string"
+                            },
+                            "msg": {
+                                "description": "The message variable for the execution.",
+                                "name": "msg",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorMessages": {
+                        "id": "ActorMessages",
+                        "name": "",
+                        "properties": {
+                            "messages": {
+                                "description": "The number of messages waiting in queue to be processed by this actor.",
+                                "name": "messages",
+                                "type": "int"
+                            }
+                        }
+                    },
+                    "ActorMessagesResponse": {
+                        "id": "ActorMessagesResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "ActorMessages"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorNonce": {
+                        "id": "ActorNonce",
+                        "name": "",
+                        "properties": {
+                            "actor_id": {
+                                "description": "Actor id associated with nonce.",
+                                "name": "actor_id",
+                                "type": "string"
+                            },
+                            "create_time": {
+                                "description": "Time stamp when nonce was created.",
+                                "name": "create_time",
+                                "type": "string"
+                            },
+                            "id": {
+                                "description": "The unique id of the nonce.",
+                                "name": "id",
+                                "type": "string"
+                            },
+                            "last_use_time": {
+                                "description": "Last time nonce was used.",
+                                "name": "last_use_time",
+                                "type": "string"
+                            },
+                            "level": {
+                                "description": "Permission level associated with nonce.",
+                                "name": "level",
+                                "type": "string"
+                            },
+                            "max_uses": {
+                                "description": "Max number of uses for this nonce.",
+                                "name": "max_uses",
+                                "type": "string"
+                            },
+                            "remaining_uses": {
+                                "description": "Remaining uses of nonce.",
+                                "name": "remaining_uses",
+                                "type": "int"
+                            }
+                        }
+                    },
+                    "ActorNonceRequestResponse": {
+                        "id": "ActorNonceRequestResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "EmptyActorNonceRequestResponse"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorPermissions": {
+                        "id": "ActorPermissions",
+                        "name": "",
+                        "properties": {
+                            "permissions": {
+                                "description": "The dictionary of permissions associated with the actor.",
+                                "name": "permissions",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorPermissionsRequestResponse": {
+                        "id": "ActorPermissionsRequestResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "ActorPermissionsResponse"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorPermissionsResponse": {
+                        "id": "ActorPermissionsResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "ActorPermissions"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorState": {
+                        "id": "ActorState",
+                        "name": "",
+                        "properties": {
+                            "state": {
+                                "description": "The current state of the actor.",
+                                "name": "state",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorStateRequestResponse": {
+                        "id": "ActorStateRequestResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "ActorState"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorStateResponse": {
+                        "id": "ActorStateResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "ActorState"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorWorker": {
+                        "id": "ActorWorker",
+                        "name": "",
+                        "properties": {
+                            "cid": {
+                                "description": "Container id of this worker.",
+                                "name": "cid",
+                                "type": "string"
+                            },
+                            "host_id": {
+                                "description": "id of the host where this worker is running.",
+                                "name": "host_id",
+                                "type": "string"
+                            },
+                            "host_ip": {
+                                "description": "IP address of the host where this worker is running.",
+                                "name": "host_id",
+                                "type": "string"
+                            },
+                            "id": {
+                                "description": "The unique id of this worker.",
+                                "name": "id",
+                                "type": "string"
+                            },
+                            "image": {
+                                "description": "Docker image associated with the actor.",
+                                "name": "image",
+                                "type": "string"
+                            },
+                            "last_execution": {
+                                "description": "Last execution for this worker.",
+                                "name": "last_execution",
+                                "type": "int"
+                            },
+                            "location": {
+                                "description": "Location of docker daemon that this worker is using.",
+                                "name": "location",
+                                "type": "string"
+                            },
+                            "status": {
+                                "description": "status of the worker.",
+                                "name": "status",
+                                "type": "string"
+                            },
+                            "tenant": {
+                                "description": "tenant this worker belongs to.",
+                                "name": "tenant",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ActorWorkersRequestResponse": {
+                        "id": "ActorWorkersRequestResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "EmptyActorWorkerRequestResponse"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "AddAliasRequest": {
+                        "id": "AddAliasRequest",
+                        "name": "",
+                        "properties": {
+                            "actorId": {
+                                "description": "The id of the actor to associate with this alias.",
+                                "name": "actorId",
+                                "type": "string"
+                            },
+                            "alias": {
+                                "description": "The alias to create.",
+                                "name": "alias",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "AddNonceRequest": {
+                        "id": "AddNonceRequest",
+                        "name": "",
+                        "properties": {
+                            "level": {
+                                "description": "Permissions level associated with this nonce (default is EXECUTE).",
+                                "name": "num",
+                                "type": "string"
+                            },
+                            "maxUses": {
+                                "description": "Max number of times nonce can be redeemed.",
+                                "name": "num",
+                                "type": "int"
+                            }
+                        }
+                    },
+                    "AddWorkersRequest": {
+                        "id": "AddWorkersRequest",
+                        "name": "",
+                        "properties": {
+                            "num": {
+                                "description": "The number of workers to ensure are running.",
+                                "name": "num",
+                                "type": "int"
+                            }
+                        }
+                    },
+                    "EmptyActorAliasRequestResponse": {
+                        "id": "EmptyActorAliasRequestResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "String"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "EmptyActorNonceRequestResponse": {
+                        "id": "EmptyActorNonceRequestResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "String"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "EmptyActorResponse": {
+                        "id": "EmptyActorResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "String"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "EmptyActorWorkerRequestResponse": {
+                        "id": "EmptyActorWorkerRequestResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "String"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "Execution": {
+                        "id": "Execution",
+                        "name": "",
+                        "properties": {
+                            "actorId": {
+                                "description": "The id of the associated actor.",
+                                "name": "actorId",
+                                "type": "string"
+                            },
+                            "cpu": {
+                                "description": "CPU usage, in user jiffies, of this execution.",
+                                "name": "cpu",
+                                "type": "int"
+                            },
+                            "id": {
+                                "description": "The id of this executions.",
+                                "name": "id",
+                                "type": "string"
+                            },
+                            "io": {
+                                "description": "Block I/O usage, in number of 512-byte sectors read from and written to, by this execution.",
+                                "name": "io",
+                                "type": "int"
+                            },
+                            "owner": {
+                                "description": "username of the owner of the actor.",
+                                "name": "owner",
+                                "type": "string"
+                            },
+                            "runtime": {
+                                "description": "Runtime, in milliseconds, of this execution.",
+                                "name": "runtime",
+                                "type": "int"
+                            },
+                            "status": {
+                                "description": "status of the execution.",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ExecutionLogs": {
+                        "id": "ExecutionLogs",
+                        "name": "",
+                        "properties": {
+                            "logs": {
+                                "description": "The logs (standard out) of this execution.",
+                                "name": "id",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ExecutionLogsResponse": {
+                        "id": "ExecutionLogsResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "ExecutionLogs"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ExecutionsSummary": {
+                        "id": "ExecutionsSummary",
+                        "name": "",
+                        "properties": {
+                            "actorId": {
+                                "description": "The id of the associated actor.",
+                                "name": "actorId",
+                                "type": "string"
+                            },
+                            "ids": {
+                                "description": "The ids of all executions.",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "name": "ids",
+                                "type": "array"
+                            },
+                            "owner": {
+                                "description": "username of the owner of the actor.",
+                                "name": "owner",
+                                "type": "string"
+                            },
+                            "totalCpu": {
+                                "description": "CPU usage, in user jiffies, of all executions.",
+                                "name": "totalCpu",
+                                "type": "int"
+                            },
+                            "totalIo": {
+                                "description": "Block I/O usage, in number of 512-byte sectors read from and written to, by all executions.",
+                                "name": "totalIo",
+                                "type": "int"
+                            },
+                            "totalRuntime": {
+                                "description": "Runtime, in milliseconds, of all executions.",
+                                "name": "totalRuntime",
+                                "type": "int"
+                            }
+                        }
+                    },
+                    "ExecutionsSummaryResponse": {
+                        "id": "ExecutionsSummaryResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "ExecutionsSummary"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "MessageRequest": {
+                        "id": "MessageRequest",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "The message to send to the actor.",
+                                "name": "message",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "MultipleActorAliasResponse": {
+                        "id": "MultipleActorAliasResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "description": "response body",
+                                "items": {
+                                    "$ref": "ActorAlias"
+                                },
+                                "name": "result",
+                                "type": "array"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "MultipleActorNonceResponse": {
+                        "id": "MultipleActorNonceResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "description": "response body",
+                                "items": {
+                                    "$ref": "ActorNonce"
+                                },
+                                "name": "result",
+                                "type": "array"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "MultipleActorResponse": {
+                        "id": "MultipleActorResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "description": "response body",
+                                "items": {
+                                    "$ref": "Actor"
+                                },
+                                "name": "result",
+                                "type": "array"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "MultipleActorWorkerResponse": {
+                        "id": "MultipleActorWorkerResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "description": "response body",
+                                "items": {
+                                    "$ref": "ActorWorker"
+                                },
+                                "name": "result",
+                                "type": "array"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "MultipleExecutionResponse": {
+                        "id": "MultipleExecutionResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "description": "response body",
+                                "items": {
+                                    "$ref": "Execution"
+                                },
+                                "name": "result",
+                                "type": "array"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "PermissionsUpdateRequest": {
+                        "id": "PermissionsUpdateRequest",
+                        "name": "",
+                        "properties": {
+                            "level": {
+                                "description": "The level associated with the permission.",
+                                "name": "level",
+                                "type": "string"
+                            },
+                            "user": {
+                                "description": "The user associated with the permission.",
+                                "name": "user",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "SingleActorAliasResponse": {
+                        "id": "SingleActorAliasResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "ActorAlias"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "SingleActorExecutionResponse": {
+                        "id": "SingleActorExecutionResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "Execution"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "SingleActorNonceResponse": {
+                        "id": "SingleActorNonceResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "ActorNonce"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "SingleActorResponse": {
+                        "id": "SingleActorResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "Actor"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "SingleActorWorkerResponse": {
+                        "id": "SingleActorWorkerResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "success or failure",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "ActorWorker"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "resourcePath": "/actors/v2",
+                "swaggerVersion": "1.2"
+            },
+            "description": "Create and manage actors.",
+            "name": "actors",
+            "path": "/actors",
+            "url": "http://localhost:9999/actors"
+        }
+    ]
+}

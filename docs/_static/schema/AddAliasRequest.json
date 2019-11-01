@@ -1,0 +1,17 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/AddAliasRequest.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "actorId": {
+      "description": "The id of the actor to associate with this alias.",
+      "type": "string"
+    },
+    "alias": {
+      "description": "The alias to create.",
+      "type": "string"
+    }
+  },
+  "required": [],
+  "title": "AgavePy AddAliasRequest schema",
+  "type": "object"
+}

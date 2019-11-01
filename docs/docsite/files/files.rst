@@ -1,137 +1,401 @@
-.. _files:
+*****
+files
+*****
 
-##################
-Working with files
-##################
+Summary: Move and manage data
 
-If you have already initiated a session, `authentication`, and have a storage
-system setup then you start working with files.
+deleteFromDefaultSystem: Deletes a file or folder.
+==================================================
+``files.deleteFromDefaultSystem(sourcefilePath=<SOURCEFILEPATH>)``
 
-
-Listing files and directories
-#############################
-
-Before we even get started, we should know what it is we are going to be
-working with.
-To see any files or directories in your remote storage system, let's say this
-is called ``data-tacc-user``.
-
-.. code-block:: pycon
-
-    >>> agave.files_list("/data-tacc-user")
-    ./                 .slurm/            apps/              benchmarks/
-    bigfile            cptests/           users/             myotherfile
-    old-sd2e-apps/     rpmbuild/          sd2e-apps/         sd2e-data/
-    singularity-test/  somefile           SP1-copy.fq        SP1.fq 
-    tests/             
-
-For more details, such as permissions and size:
-
-.. code-block:: pycon
-
-    >>> agave.files_list("data-tacc-user/", long_format=True)
-    drwx       4096 Oct 25 14:47 ./
-    drwx       4096 May 25 16:13 .slurm/
-    drwx       4096 Jun  5 10:14 apps/ 
-    drwx       4096 Jun  9 18:39 benchmarks/
-    -rw- 1073741824 Oct 25 14:48 bigfile
-    drwx       4096 Jul 13 09:17 cptests/
-    drwx       4096 Aug  1 14:26 users/ 
-    -rw-         24 Oct 25 14:42 myotherfile 
-    drwx       4096 Jul 10 11:27 old-sd2e-apps/   
-    drwx       4096 Jun 29 10:40 rpmbuild/    
-    drwx       4096 Jul 13 15:41 sd2e-apps/
-    drwx       4096 Jul  7 20:43 sd2e-data/   
-    drwx       4096 Jul  9 16:50 singularity-test/  
-    -rw-         24 Oct 25 14:20 somefile
-    -rw-      22471 Aug 22 14:40 SP1-copy.fq   
-    -rw-      22471 Jul  7 20:42 SP1.fq 
-    drwx       4096 Aug 24 13:44 tests/   
-    
-
-Download a file
-###############
-
-Let's say you have a file named ``SP1.fq`` on your remote storage system,
-``data-tacc-user``.
-
-You can download the file, ``SP1.fq``, to your host and specify the location of
-where you want to store the file (i.e., ``/opt/data/SP1.fq``) as such:
-
-.. code-block:: pycon
-
-    >>> agave.files_download("data-tacc-user/SP1.fq", "/opt/data/SP1.fq")
+Keyword Args:
+-------------
+    * **sourcefilePath**: The path of the file relative to the user's default storage location. (string)
 
 
-Upload a file
-#############
+Response:
+---------
+    * *String*
 
-Similarly, if you want to upload a file, ``data.ext``, and you
-want to save it on your stoorage system named, ``data-tacc-user`` under
-the name ``cool_data.bin``.
+downloadFromDefaultSystem: Download a file from the user's default storage location.
+====================================================================================
+``files.downloadFromDefaultSystem(sourcefilePath=<SOURCEFILEPATH>)``
 
-.. code-block:: pycon
-
-    >>> agave.files_upload("./data.ext", "data-tacc-user/cool.ext")
-
-
-Make a copy of a file on a remote system
-########################################
-
-So now, you have a ``cool.ext`` file on your remote storage
-system, ``data-tacc-user``. Let's make a copy of it!
+Keyword Args:
+-------------
+    * **sourcefilePath**: The path of the file relative to the user's default storage location. (string)
 
 
-.. code-block:: pycon
+Response:
+---------
+    * *None*
 
-    >>> agave.files_copy("data-tacc-user/cool.ext", "data-tacc-user/copy.ext")
+importToDefaultSystem: Import a file via direct upload or importing from a url to the user's default storage location.
+======================================================================================================================
+``files.importToDefaultSystem(sourcefilePath=<SOURCEFILEPATH>, callbackURL=None, fileName=None, fileToUpload=None, fileType=None, urlToIngest=None)``
 
-
-Move files
-##########
-
-To move files around on a remote storage system, you can do so as follows:
-
-.. code-block:: pycon
-
-    >>> agave.files_move("data-tacc-user/file.ext", "data-tacc-user/dir/file.ext")
-
-
-
-Delete a file
-#############
-
-On the other hand, if there is a file or directory that you want to get rid
-off:
-
-.. code-block:: pycon
-
-    >>> agave.files_delete("data-tacc-user/somefile-or-directory")
+Keyword Args:
+-------------
+    * **sourcefilePath**: The path of the file relative to the user's default storage location. (string)
+    * **fileType**: The file format this file is in. Defaults to raw. This will be used in file transform operations. (string)
+    * **callbackURL**: The URI to notify when the import is complete. This can be an email address or http URL. If a URL is given, a GET will be made to this address. URL templating is supported. Valid template values are: ${NAME}, ${SOURCE_FORMAT}, ${DEST_FORMAT}, ${STATUS} (string)
+    * **fileName**: The name of the file after importing. If not specified, the uploaded file name will be used. (string)
+    * **urlToIngest**: The URL to import the file from. This parameter is used if not file is uploaded with this post. (string)
+    * **fileToUpload**: The file object to import. (void)
 
 
-Import files from ther systems
-##############################
+Response:
+---------
+    * *A single RemoteFile object*
 
-It may be useful to import data from other storage systems, e.g. from the
-community data space to your private data space.
-The ``files_import`` method can be used for that purpose.
+manageOnDefaultSystem: Perform an action on a file or folder.
+=============================================================
+``files.manageOnDefaultSystem(body=<BODY>, sourcefilePath=<SOURCEFILEPATH>)``
 
-.. code-block:: pycon
-
-    agave.files_import("agave://data-community/test.txt", "system-id/")
-
-Please also note that even though you are able to import files from other Agave
-storage systems, you may not always need to import those files.
-Also, note that the source, the first argument, must be an agave compliant uri
-by prefixing the system if and path convination with the string ``agave://``.
+Keyword Args:
+-------------
+    * **sourcefilePath**: The path of the file relative to the user's default storage location. (string)
+    * **body**: The operation to perform.  (JSON, FileOperationRequest)
 
 
-Making a directory
-##################
+**FileOperationRequest schema**
 
-``AgavePy`` also provides ``mkdir``-like functionality.
-To create a directory on a remote storage system:
+.. code-block:: javascript
 
-.. code-block:: pycon
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FileOperationRequest.json",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "properties": {
+        "action": {
+          "description": "Action to perform on the file or folder.",
+          "enum": [
+            "mkdir",
+            "rename",
+            "copy",
+            "move"
+          ],
+          "type": "string"
+        },
+        "path": {
+          "description": "Destination file or folder.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "title": "AgavePy FileOperationRequest schema",
+      "type": "object"
+    }
 
-    >>> agave.files_mkdir("data-tacc-user/new_dir")
+Response:
+---------
+    * *String*
+
+delete: Deletes a file or folder.
+=================================
+``files.delete(filePath=<FILEPATH>, systemId=<SYSTEMID>)``
+
+Keyword Args:
+-------------
+    * **systemId**: The unique id of the system on which the data resides. (string)
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+
+
+Response:
+---------
+    * *String*
+
+download: Download a file from the user's default storage location.
+===================================================================
+``files.download(filePath=<FILEPATH>, systemId=<SYSTEMID>)``
+
+Keyword Args:
+-------------
+    * **systemId**: The unique id of the system on which the data resides. (string)
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+
+
+Response:
+---------
+    * *None*
+
+importData: Import a file via direct upload or importing from a url to the user's default storage location.
+===========================================================================================================
+``files.importData(filePath=<FILEPATH>, systemId=<SYSTEMID>, callbackURL=None, fileName=None, fileToUpload=None, fileType=None, notifications=[], urlToIngest=None)``
+
+Keyword Args:
+-------------
+    * **systemId**: The unique id of the system on which the data resides. (string)
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **fileType**: The file format this file is in. Defaults to raw. This will be used in file transform operations. (string)
+    * **callbackURL**: The URI to notify when the import is complete. This can be an email address or http URL. If a URL is given, a GET will be made to this address. URL templating is supported. Valid template values are: ${NAME}, ${SOURCE_FORMAT}, ${DEST_FORMAT}, ${STATUS} (string)
+    * **fileName**: The name of the file after importing. If not specified, the uploaded file name will be used. (string)
+    * **urlToIngest**: The URL to import the file from. This parameter is used if not file is uploaded with this post. (string)
+    * **fileToUpload**: The file object to import. (void)
+    * **notifications**: A list of notification objects to apply to the transfer.  (FileNotificationRequest)
+
+
+Response:
+---------
+    * *A single RemoteFile object*
+
+manage: Perform an action on a file or folder.
+==============================================
+``files.manage(body=<BODY>, filePath=<FILEPATH>, systemId=<SYSTEMID>)``
+
+Keyword Args:
+-------------
+    * **systemId**: The unique id of the system on which the data resides. (string)
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **body**: The operation to perform.  (JSON, FileOperationRequest)
+
+
+**FileOperationRequest schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FileOperationRequest.json",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "properties": {
+        "action": {
+          "description": "Action to perform on the file or folder.",
+          "enum": [
+            "mkdir",
+            "rename",
+            "copy",
+            "move"
+          ],
+          "type": "string"
+        },
+        "path": {
+          "description": "Destination file or folder.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "title": "AgavePy FileOperationRequest schema",
+      "type": "object"
+    }
+
+Response:
+---------
+    * *String*
+
+listOnDefaultSystem: Get a remote directory listing.
+====================================================
+``files.listOnDefaultSystem(filePath=<FILEPATH>, limit=250, offset=0)``
+
+Keyword Args:
+-------------
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **limit**: The max number of results. (integer)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+
+
+Response:
+---------
+    * *Array of RemoteFile objects*
+
+list: Get a remote directory listing on a specific system.
+==========================================================
+``files.list(filePath=<FILEPATH>, systemId=<SYSTEMID>, limit=250, offset=0)``
+
+Keyword Args:
+-------------
+    * **systemId**: The unique id of the system on which the data resides. (string)
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **limit**: The max number of results. (integer)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+
+
+Response:
+---------
+    * *Array of RemoteFile objects*
+
+getHistoryOnDefaultSystem: Download a file from the user's default storage location.
+====================================================================================
+``files.getHistoryOnDefaultSystem(filePath=<FILEPATH>, limit=250, offset=0)``
+
+Keyword Args:
+-------------
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **limit**: The max number of results. (integer)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+
+
+Response:
+---------
+    * *Array of FileHistory objects*
+
+getHistory: Return history of api actions.
+==========================================
+``files.getHistory(filePath=<FILEPATH>, systemId=<SYSTEMID>, limit=250, offset=0)``
+
+Keyword Args:
+-------------
+    * **systemId**: The unique id of the system on which the data resides. (string)
+    * **filePath**: The path of the file relative to the given system root location. (string)
+    * **limit**: The max number of results. (integer)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+
+
+Response:
+---------
+    * *Array of FileHistory objects*
+
+listPermissionsOnDefaultSystem: List all the share permissions for a file or folder.
+====================================================================================
+``files.listPermissionsOnDefaultSystem(filePath=<FILEPATH>, limit=250, offset=0)``
+
+Keyword Args:
+-------------
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **limit**: The max number of results. (integer)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+
+
+Response:
+---------
+    * *Array of FilePermission objects*
+
+updatePermissionsOnDefaultSystem: Update permissions for a single user.
+=======================================================================
+``files.updatePermissionsOnDefaultSystem(body=<BODY>, filePath=<FILEPATH>)``
+
+Keyword Args:
+-------------
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **body**: The permission add or update.  (JSON, FilePermissionRequest)
+
+
+**FilePermissionRequest schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FilePermissionRequest.json",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "properties": {
+        "permission": {
+          "description": "The permission to set",
+          "enum": [
+            "READ",
+            "WRITE",
+            "EXECUTE",
+            "READ_WRITE",
+            "READ_EXECUTE",
+            "WRITE_EXECUTE",
+            "ALL",
+            "NONE"
+          ],
+          "type": "string"
+        },
+        "recursive": {
+          "description": "Should updated permissions be applied recursively. Defaults to false.",
+          "type": "boolean"
+        },
+        "username": {
+          "description": "The username of the api user whose permission is to be set.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "username",
+        "permission"
+      ],
+      "title": "AgavePy FilePermissionRequest schema",
+      "type": "object"
+    }
+
+Response:
+---------
+    * *String*
+
+deletePermissions: Deletes all permissions on a file except those of the owner.
+===============================================================================
+``files.deletePermissions(filePath=<FILEPATH>, systemId=<SYSTEMID>)``
+
+Keyword Args:
+-------------
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **systemId**: The unique id of the system on which the data resides. (string)
+
+
+Response:
+---------
+    * *String*
+
+listPermissions: List all the share permissions for a file or folder.
+=====================================================================
+``files.listPermissions(filePath=<FILEPATH>, systemId=<SYSTEMID>, limit=250, offset=0)``
+
+Keyword Args:
+-------------
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **limit**: The max number of results. (integer)
+    * **systemId**: The unique id of the system on which the data resides. (string)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+
+
+Response:
+---------
+    * *Array of FilePermission objects*
+
+updatePermissions: Update permissions for a single user.
+========================================================
+``files.updatePermissions(body=<BODY>, filePath=<FILEPATH>, systemId=<SYSTEMID>)``
+
+Keyword Args:
+-------------
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **systemId**: The unique id of the system on which the data resides. (string)
+    * **body**: The permission add or update.  (JSON, FilePermissionRequest)
+
+
+**FilePermissionRequest schema**
+
+.. code-block:: javascript
+
+    {
+      "$id": "http://agavepy.readthedocs.io/en/latest/FilePermissionRequest.json",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "properties": {
+        "permission": {
+          "description": "The permission to set",
+          "enum": [
+            "READ",
+            "WRITE",
+            "EXECUTE",
+            "READ_WRITE",
+            "READ_EXECUTE",
+            "WRITE_EXECUTE",
+            "ALL",
+            "NONE"
+          ],
+          "type": "string"
+        },
+        "recursive": {
+          "description": "Should updated permissions be applied recursively. Defaults to false.",
+          "type": "boolean"
+        },
+        "username": {
+          "description": "The username of the api user whose permission is to be set.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "username",
+        "permission"
+      ],
+      "title": "AgavePy FilePermissionRequest schema",
+      "type": "object"
+    }
+
+Response:
+---------
+    * *Array of FilePermission objects*
+

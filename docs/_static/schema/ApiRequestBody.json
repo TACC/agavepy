@@ -1,0 +1,37 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/ApiRequestBody.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "api_name": {
+      "description": "Name of the API, which will also be used to identify the API.",
+      "type": "string"
+    },
+    "auth": {
+      "description": "List of quth type per method from (none, oauth). Can also be single string for all methods.",
+      "type": "array"
+    },
+    "context": {
+      "description": "Root path (context) for the API, starting with a slash character.",
+      "type": "string"
+    },
+    "methods": {
+      "description": "List of allowed methods from (GET, POST, PUT, DELETE, HEAD).",
+      "type": "array"
+    },
+    "roles": {
+      "description": "List of required roles to subscribe to API (required when visibility is 'restricted')",
+      "type": "array"
+    },
+    "url": {
+      "description": "Fully qualified production URL for the backend service (should include http or https).",
+      "type": "string"
+    },
+    "visibility": {
+      "description": "Optionally set the visibility to 'public' or 'restricted' (default is public).",
+      "type": "string"
+    }
+  },
+  "required": [],
+  "title": "AgavePy ApiRequestBody schema",
+  "type": "object"
+}

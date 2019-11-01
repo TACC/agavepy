@@ -11,7 +11,7 @@ About AgavePy
 
 AgavePy is a client that will allow you to script your interaction with the
 Agave API.
-AgavePy is also the engine powering 
+AgavePy is also the engine powering
 `TACC/Cloud/agave-cli <https://github.com/TACC-Cloud/agave-cli>`_.
 
 
@@ -22,10 +22,10 @@ AgavePy is also the engine powering
     docsite/installation_guide/index
 
 
-.. toctree::                                                                    
-    :maxdepth: 2                                                                
-    :caption: Contributing to AgavePy                                           
-                                                                                
+.. toctree::
+    :maxdepth: 2
+    :caption: Contributing to AgavePy
+
     docsite/contributing_guide/index
 
 
@@ -36,16 +36,16 @@ AgavePy is also the engine powering
    docsite/querying/index
 
    docsite/authentication/index
-  
+
    docsite/systems/index
    docsite/files/index
-   
    docsite/apps/index
    docsite/jobs/index
-
-   docsite/metadata/index
+   docsite/meta/index
    docsite/notifications/index
-
+   docsite/postits/index
    docsite/profiles/index
-
    docsite/actors/index
+
+   docsite/admin/index
+   docsite/clients/index

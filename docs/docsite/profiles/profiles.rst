@@ -1,15 +1,28 @@
 ********
-Profiles
+profiles
 ********
 
 Summary: Create and manage application users
 
+create: Create new user profile
+===============================
+``profiles.create(body=<BODY>)``
+
+Keyword Args:
+-------------
+    * **body**: The profile information for a new user (JSON, string)
+
+
+Response:
+---------
+    * *A single Profile object*
+
 list: List user profiles
 ========================
-``agavepy.profiles.list(email=None, first_name=None, full_name=None, last_name=None, limit=250, name=None, offset=0, status=None, username=None)``
+``profiles.list(email=None, first_name=None, full_name=None, last_name=None, limit=250, name=None, offset=0, status=None, username=None)``
 
-Parameters:
------------
+Keyword Args:
+-------------
     * **limit**: The max number of results. (integer)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
     * **name**: Filter results by name. (string)
@@ -25,164 +38,24 @@ Response:
 ---------
     * *Array of Profile objects*
 
-**Profile schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/Profile.json", 
-      "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {
-        "city": {
-          "description": "The api user's city.", 
-          "type": "string"
-        }, 
-        "country": {
-          "description": "The api user's country.", 
-          "type": "string"
-        }, 
-        "department": {
-          "description": "The api user's institutional department.", 
-          "type": "string"
-        }, 
-        "email": {
-          "description": "The api user's unique email address.", 
-          "type": "string"
-        }, 
-        "fax": {
-          "description": "The api user's fax number.", 
-          "type": "string"
-        }, 
-        "firstName": {
-          "description": "The api user's first name.", 
-          "type": "string"
-        }, 
-        "gender": {
-          "description": "The api user's gender. male or female.", 
-          "type": "string"
-        }, 
-        "institution": {
-          "description": "The api user's home institution", 
-          "type": "string"
-        }, 
-        "lastName": {
-          "description": "The api user's last name.", 
-          "type": "string"
-        }, 
-        "phone": {
-          "description": "The api user's phone number.", 
-          "type": "string"
-        }, 
-        "position": {
-          "description": "The api user's position of employment.", 
-          "type": "string"
-        }, 
-        "researchArea": {
-          "description": "The api user's primary area of research.", 
-          "type": "string"
-        }, 
-        "state": {
-          "description": "The api user's state.", 
-          "type": "string"
-        }, 
-        "username": {
-          "description": "The api user's unique username.", 
-          "type": "string"
-        }
-      }, 
-      "required": [], 
-      "title": "AgavePy Profile schema", 
-      "type": "object"
-    }
-
 get: Find authenticated user profile
 ====================================
-``agavepy.profiles.get()``
+``profiles.get()``
 
-Parameters:
------------
+Keyword Args:
+-------------
 
 
 Response:
 ---------
     * *A single Profile object*
 
-**Profile schema**
+delete: Depete user profile
+===========================
+``profiles.delete(username=<USERNAME>)``
 
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/Profile.json", 
-      "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {
-        "city": {
-          "description": "The api user's city.", 
-          "type": "string"
-        }, 
-        "country": {
-          "description": "The api user's country.", 
-          "type": "string"
-        }, 
-        "department": {
-          "description": "The api user's institutional department.", 
-          "type": "string"
-        }, 
-        "email": {
-          "description": "The api user's unique email address.", 
-          "type": "string"
-        }, 
-        "fax": {
-          "description": "The api user's fax number.", 
-          "type": "string"
-        }, 
-        "firstName": {
-          "description": "The api user's first name.", 
-          "type": "string"
-        }, 
-        "gender": {
-          "description": "The api user's gender. male or female.", 
-          "type": "string"
-        }, 
-        "institution": {
-          "description": "The api user's home institution", 
-          "type": "string"
-        }, 
-        "lastName": {
-          "description": "The api user's last name.", 
-          "type": "string"
-        }, 
-        "phone": {
-          "description": "The api user's phone number.", 
-          "type": "string"
-        }, 
-        "position": {
-          "description": "The api user's position of employment.", 
-          "type": "string"
-        }, 
-        "researchArea": {
-          "description": "The api user's primary area of research.", 
-          "type": "string"
-        }, 
-        "state": {
-          "description": "The api user's state.", 
-          "type": "string"
-        }, 
-        "username": {
-          "description": "The api user's unique username.", 
-          "type": "string"
-        }
-      }, 
-      "required": [], 
-      "title": "AgavePy Profile schema", 
-      "type": "object"
-    }
-
-listByUsername: Find api user profile by their api username
-===========================================================
-``agavepy.profiles.listByUsername(username)``
-
-Parameters:
------------
+Keyword Args:
+-------------
     * **username**: The username of a valid api user (string)
 
 
@@ -190,73 +63,30 @@ Response:
 ---------
     * *A single Profile object*
 
-**Profile schema**
+listByUsername: Find api user profile by their api username
+===========================================================
+``profiles.listByUsername(username=<USERNAME>)``
 
-.. code-block:: javascript
+Keyword Args:
+-------------
+    * **username**: The username of a valid api user (string)
 
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/Profile.json", 
-      "$schema": "http://json-schema.org/draft-07/schema#", 
-      "properties": {
-        "city": {
-          "description": "The api user's city.", 
-          "type": "string"
-        }, 
-        "country": {
-          "description": "The api user's country.", 
-          "type": "string"
-        }, 
-        "department": {
-          "description": "The api user's institutional department.", 
-          "type": "string"
-        }, 
-        "email": {
-          "description": "The api user's unique email address.", 
-          "type": "string"
-        }, 
-        "fax": {
-          "description": "The api user's fax number.", 
-          "type": "string"
-        }, 
-        "firstName": {
-          "description": "The api user's first name.", 
-          "type": "string"
-        }, 
-        "gender": {
-          "description": "The api user's gender. male or female.", 
-          "type": "string"
-        }, 
-        "institution": {
-          "description": "The api user's home institution", 
-          "type": "string"
-        }, 
-        "lastName": {
-          "description": "The api user's last name.", 
-          "type": "string"
-        }, 
-        "phone": {
-          "description": "The api user's phone number.", 
-          "type": "string"
-        }, 
-        "position": {
-          "description": "The api user's position of employment.", 
-          "type": "string"
-        }, 
-        "researchArea": {
-          "description": "The api user's primary area of research.", 
-          "type": "string"
-        }, 
-        "state": {
-          "description": "The api user's state.", 
-          "type": "string"
-        }, 
-        "username": {
-          "description": "The api user's unique username.", 
-          "type": "string"
-        }
-      }, 
-      "required": [], 
-      "title": "AgavePy Profile schema", 
-      "type": "object"
-    }
+
+Response:
+---------
+    * *A single Profile object*
+
+update: Update user profile
+===========================
+``profiles.update(body=<BODY>, username=<USERNAME>)``
+
+Keyword Args:
+-------------
+    * **username**: The username of a valid api user (string)
+    * **body**: Updated profile information for a user (JSON, string)
+
+
+Response:
+---------
+    * *A single Profile object*
 

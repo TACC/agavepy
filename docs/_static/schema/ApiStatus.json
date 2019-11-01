@@ -1,0 +1,13 @@
+{
+  "$id": "http://agavepy.readthedocs.io/en/latest/ApiStatus.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "status": {
+      "description": "Status of the API: one of (CREATED, PUBLISHED, RETIRED).",
+      "type": "string"
+    }
+  },
+  "required": [],
+  "title": "AgavePy ApiStatus schema",
+  "type": "object"
+}
