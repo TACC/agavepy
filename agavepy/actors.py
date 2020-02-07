@@ -6,8 +6,8 @@ Module to facilitate writing actor containers for the abaco platform. See https:
 import ast
 from concurrent.futures import TimeoutError
 import cloudpickle
+import getpass
 import os
-import requests
 import socket
 import time
 
@@ -139,6 +139,33 @@ def _get_results_socket():
         raise AgaveError(msg)
     return client
 
+def is_tapis_notebook():
+    """
+    Determine whether this code is running from within a Tapis notebook. This can be used for automatically
+    determining the image to use for the asynchronous executor.
+    """
+    # are we running as the jupyter user
+    if not getpass.getuser() == 'jupyter':
+        return False
+    # do we have a MyData:
+    try:
+        os.listdir('/home/jupyter/MyData')
+    except:
+        try:
+            os.listdir('/home/jupyter/mydata')
+        except:
+            return False
+    return True
+
+def get_tapis_abaco_image(base_url):
+    """
+    Determine the docker image name for a tapis notebook associated with a base_url.
+    """
+    # designsafe tenant:
+    if 'agave.designsafe-ci.org' in base_url:
+        return 'taccsciapps/jupyteruser-ds-abaco:1.2.14'
+    return None
+
 
 class AbacoExecutor(object):
     """Executor class that leverages an Abaco actor for executions"""
@@ -165,37 +192,51 @@ class AbacoExecutor(object):
             rsp = ag.actors.get(actorId=actor_id)
             self.actor_id = actor_id
             self.status = rsp.get('status')
-            self.image = rsp.get('image')
+            self.image = rsp.get('image')       
         else:
-            # this is a new actor:
-            self.image = None
-            if image:
-                self.image = image
-            elif context and hasattr(context, 'lower'):
-                # basic py3 image:
-                if context.lower() == 'py3':
-                    self.image = 'abacosamples/py3_func:dev'
-                # docker image with many scientific libraries pre-installed
-                elif context.lower() == 'py3-scipy':
-                    self.image = 'abacosamples/py3_sci_base_func'
-                # docker image used for the sd2e jupyter hub
-                elif context.lower() == 'sd2e-jupyter':
-                    self.image = 'sd2e/jupyteruser_func'
-                # add support for other contexts as needed...
-            # provide a sensible default image
-            if not self.image:
-                self.image = 'abacosamples/py3_func:dev'
-            # register an Abaco actor with the appropriate image:
-            try:
-                rsp = ag.actors.add(body={'image': self.image,
-                                          'stateless': True,
-                                          'name': 'agpy_abaco_executor'})
-            except Exception as e:
-                raise AgaveError("Unable to register the actor; exception: {}".format(e))
-            self.actor_id = rsp['id']
-            self.status = 'SUBMITTED'
+            # first, determine the image that should be used:
+            if not image:
+                # if no image provided, check to see if we are running from within a Tapis jupyter notebook:
+                if is_tapis_notebook():
+                    image = get_tapis_abaco_image(ag.api_server)
 
-        self.wait_until_ready()
+            # next, check if a user already has an agpy_abaco_executor for the correct image:
+            actors = ag.actors.list()
+            for a in actors:
+                if a.get('name') == 'agpy_abaco_executor':
+                    # check fot the image:
+                    if not image or image == a.get('image'):
+                        self.actor_id = a.get('id')
+            if not self.actor_id:
+                # this is a new actor:
+                self.image = None
+                if image:
+                    self.image = image
+                elif context and hasattr(context, 'lower'):
+                    # basic py3 image:
+                    if context.lower() == 'py3':
+                        self.image = 'abacosamples/py3_func:dev'
+                    # docker image with many scientific libraries pre-installed
+                    elif context.lower() == 'py3-scipy':
+                        self.image = 'abacosamples/py3_sci_base_func'
+                    # docker image used for the sd2e jupyter hub
+                    elif context.lower() == 'sd2e-jupyter':
+                        self.image = 'sd2e/jupyteruser_func'
+                    # add support for other contexts as needed...
+                # provide a sensible default image
+                if not self.image:
+                    self.image = 'abacosamples/py3_func:dev'
+                # register an Abaco actor with the appropriate image:
+                try:
+                    rsp = ag.actors.add(body={'image': self.image,
+                                              'stateless': True,
+                                              'name': 'agpy_abaco_executor'})
+                except Exception as e:
+                    raise AgaveError("Unable to register the actor; exception: {}".format(e))
+                self.actor_id = rsp['id']
+                self.status = 'SUBMITTED'
+
+                self.wait_until_ready()
         self.num_workers = num_workers
         if self.num_workers <= 1:
             return
