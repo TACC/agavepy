@@ -1,4 +1,4 @@
-"""Provides global constants to the AgavePy package
+"""Global constants for the AgavePy package
 """
 __all__ = [
     'PLATFORM', 'BASE_URL', 'SESSION_CACHE_DIRS', 'CACHE_FILENAME',
@@ -38,3 +38,4 @@ SESSIONS_FILENAME = 'config.json'
 # Oauth access tokens
 TOKEN_SCOPE = 'PRODUCTION'
 TOKEN_TTL = 3600
+

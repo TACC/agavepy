@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 import dateutil.parser
-import jinja2
 import json
 import logging
 import os
@@ -8,110 +7,39 @@ import requests
 import sys
 import time
 import xml.etree.ElementTree as ElementTree
-from functools import wraps
 
 from future import standard_library
 standard_library.install_aliases()  # noqa
-from urllib.parse import urlparse, urlencode, urljoin, urlsplit  # noqa
-from urllib.request import urlopen, getproxies, Request  # noqa
+from urllib.parse import urlsplit  # noqa
+from urllib.request import getproxies  # noqa
 from urllib.error import HTTPError  # noqa
+
 from agavepy import settings
+
 from agavepy.constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
                         SESSIONS_FILENAME, TOKEN_SCOPE, TOKEN_TTL,
                         ENV_BASE_URL, ENV_TOKEN, ENV_REFRESH_TOKEN,
                         ENV_USERNAME, ENV_PASSWORD, ENV_API_KEY,
                         ENV_API_SECRET, ENV_TENANT_ID)
-from agavepy.tenants import api_server_by_id, id_by_api_server
+
+from agavepy.aloe import (LAST_PRE_ALOE_VERSION, EXCEPTION_MODELS)
+from agavepy.configgen import (ConfigGen, load_resource)
+from agavepy.exceptions import (AgaveError, AgaveException)
+from agavepy.tenants import id_by_api_server
+from agavepy.token import Token
+from agavepy.util import AttrDict, json_response
 
 sys.path.insert(0, os.path.dirname(__file__))  # noqa
 from .swaggerpy.processors import SwaggerProcessor  # noqa
 from .swaggerpy.http_client import SynchronousHttpClient  # noqa
 from .swaggerpy.client import SwaggerClient  # noqa
 
-
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 logger = logging.getLogger(__name__)
 logging.getLogger(__name__).setLevel(os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
 
-# last version of Agave before switching to Aloe
-LAST_PRE_ALOE_VERSION = "2.2.22-r7deb380"
-
-# response models which are dependent on the version of the API response -
-EXCEPTION_MODELS = {
-    "Job": {
-        "version_cutoff": LAST_PRE_ALOE_VERSION,
-        "model": "AloeJob"
-    },
-    "JobSummary": {
-        "version_cutoff": LAST_PRE_ALOE_VERSION,
-        "model": "AloeJobSummary"
-    },
-}
-
-
-def json_response(f):
-    @wraps(f)
-    def _f(*args, **kwargs):
-        resp = f(*args, **kwargs)
-        resp.raise_for_status()
-        return resp.json()
-
-    return _f
-
-
-def load_resource(api_server):
-    """Load a default resource file.
-
-    :type api_server: str
-    :rtype: dict
-    """
-    logger.debug('load_resource({0})...'.format(api_server))
-    rsrcs = {}
-    rsrc_files = [
-        "resources/misc.json.j2",
-        "resources/api_clients.json.j2",
-        "resources/api_apps.json.j2",
-        "resources/api_files.json.j2",
-        "resources/api_jobs.json.j2",
-        "resources/api_meta.json.j2",
-        "resources/api_monitors.json.j2",
-        "resources/api_notifications.json.j2",
-        "resources/api_postits.json.j2",
-        "resources/api_profiles.json.j2",
-        "resources/api_systems.json.j2",
-        "resources/api_transforms.json.j2",
-        "resources/api_actors.json.j2",
-        "resources/api_admin.json.j2",
-    ]
-    for rsrc_file in rsrc_files:
-        conf = ConfigGen(rsrc_file)
-        env = jinja2.Environment(loader=jinja2.FileSystemLoader(HERE),
-                                 trim_blocks=True,
-                                 lstrip_blocks=True)
-
-        new_rsrcs = json.loads(
-            conf.compile({"api_server_base": urlparse(api_server).netloc},
-                         env))
-        updateDict(rsrcs, new_rsrcs)
-
-    logger.debug('load_resource finished')
-    return rsrcs
-
-
-def updateDict(base_dict, new_dict):
-    for key, val in new_dict.items():
-        if isinstance(val, dict):
-            base_dict[key] = updateDict(base_dict.get(key, {}), val)
-        elif isinstance(val, list):
-            if key not in base_dict:
-                base_dict[key] = []
-            for list_dict in val:
-                base_dict[key].append(list_dict)
-        else:
-            base_dict[key] = val
-    return base_dict
-
+__all__ = ['Agave']
 
 def with_refresh(client, f, *args, **kwargs):
     """Call function ``f`` and refresh token if needed."""
@@ -149,137 +77,6 @@ def with_refresh(client, f, *args, **kwargs):
         logger.info('Fallback: client.token.refresh() and retry...')
         client.token.refresh()
         return f(*args, **kwargs)
-
-
-class ConfigGen(object):
-    def __init__(self, template_str):
-        self.template_str = template_str
-
-    def compile(self, configs, env):
-        template = env.get_template(self.template_str)
-        return template.render(configs)
-
-
-class Token(object):
-    def __init__(
-            self,
-            username,
-            password,
-            api_server,
-            api_key,
-            api_secret,
-            verify,
-            parent,
-            _token=None,
-            _refresh_token=None,
-            token_username=None,
-            expires_at=None,
-            expires_in=None,
-            created_at=None,
-    ):
-        self.username = username
-        self.password = password
-        self.api_server = api_server
-        self.api_key = api_key
-        self.api_secret = api_secret
-        self.token_username = token_username
-        # Agave object that created this token
-        self.parent = parent
-        self.verify = verify
-        if _token and _refresh_token:
-            self.token_info = {
-                "access_token": _token,
-                "refresh_token": _refresh_token
-            }
-            self.token_info["expires_at"] = expires_at
-            self.token_info["expires_in"] = expires_in
-            self.token_info["created_at"] = created_at
-            self.parent._token = _token
-
-        self.token_url = urljoin(str(self.api_server), "token")
-        logger.debug('Token URL: {0}'.format(self.token_url))
-
-    def _token(self, data):
-        logger.debug('Token._token({0})...'.format(data))
-        auth = requests.auth.HTTPBasicAuth(self.api_key, self.api_secret)
-        resp = requests.post(
-            self.token_url,
-            data=data,
-            auth=auth,
-            verify=self.verify,
-            proxies=self.parent.proxies,
-        )
-        resp.raise_for_status()
-        self.token_info = resp.json()
-        logger.debug('self.token_info: {0}'.format(self.token_info))
-
-        # The following enforces a maximum *reported* token TTL
-        #
-        # For clients that consult the expiration data in the auth
-        # cache to determine whether to refresh, this will solve most of
-        # their credential expiry issues
-        expires_in = int(self.token_info.get("expires_in", TOKEN_TTL))
-        if expires_in > TOKEN_TTL:
-            expires_in = TOKEN_TTL
-        logger.debug('expires_in: {0} seconds'.format(expires_in))
-
-        created_at = int(time.time())
-        self.token_info["expires_in"] = expires_in
-        self.token_info["created_at"] = created_at
-        self.token_info["expiration"] = created_at + expires_in
-        self.token_info["expires_at"] = time.ctime(created_at + expires_in)
-        token = self.token_info["access_token"]
-        logger.debug('token: {0}'.format(token))
-
-        # Update parent with new token data
-        self.parent._token = token
-        self.parent.refresh_token = self.token_info["refresh_token"]
-        self.parent.created_at = self.token_info["created_at"]
-        self.parent.expiration = self.token_info["expiration"]
-        self.parent.expires_at = self.token_info["expires_at"]
-        self.parent.expires_in = self.token_info["expires_in"]
-
-        # try to persist the token data
-        try:
-            self.parent._write_client()
-        except Exception as exc:
-            # failing to writing the cache file cannot block use.
-            logger.warning('Failed to write client: {0}'.format(exc))
-            pass
-
-        if self.parent.token_callback:
-            self.parent.token_callback(**self.token_info)
-        self.parent.refresh_aris()
-        return token
-
-    def create(self):
-        logger.debug('Token.create()...')
-        data = {
-            "grant_type": "password",
-            "username": self.username,
-            "password": self.password,
-            "scope": TOKEN_SCOPE,
-        }
-        if self.token_username:
-            data["grant_type"] = "admin_password"
-            data["token_username"] = self.token_username
-
-        return self._token(data)
-
-    def refresh(self):
-        logger.debug('Token.refresh()...')
-        data = {
-            "grant_type": "refresh_token",
-            "scope": TOKEN_SCOPE,
-            "refresh_token": self.token_info["refresh_token"],
-        }
-
-        logger.debug('Token.refresh() finished')
-        return self._token(data)
-
-
-class AgaveError(Exception):
-    pass
 
 
 class Agave(object):
@@ -321,7 +118,7 @@ class Agave(object):
 
             setattr(self, attr, value)
 
-        if self.resources is None:
+        if getattr(self, 'resources', None) is None:
             self.resources = load_resource(self.api_server)
         self.resource_exceptions = json.load(
             open(os.path.join(HERE, "resource_exceptions.json"), "r"))
@@ -818,11 +615,6 @@ class Resource(object):
                     self.resource].operations.keys()))
         return base
 
-
-class AgaveException(Exception):
-    pass
-
-
 class Operation(object):
 
     PRIMITIVE_TYPES = ["array", "string", "integer", "int", "boolean", "dict"]
@@ -989,14 +781,6 @@ class Operation(object):
         return result
 
 
-class AttrDict(dict):
-    def __getattr__(self, key):
-        return self[key]
-
-    def __setattr__(self, key, value):
-        self[key] = value
-
-
 class AgaveProcessor(SwaggerProcessor):
     def process_property(self, resources, resource, model, prop, context):
         if prop.get("format", None) == "date-time":
@@ -1008,7 +792,7 @@ class AgaveProcessor(SwaggerProcessor):
 def _handle_tapis_error(h):
     if h.code not in (400, 404):
         h.msg = h.msg + ' [{0}]'.format(h.response.text)
-    raise
+    raise h
 
 def __handle_tapis_error(http_error_object):
     """Raise a more detailed HTTPError from Tapis error response
