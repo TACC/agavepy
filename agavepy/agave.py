@@ -9,18 +9,18 @@ import time
 import xml.etree.ElementTree as ElementTree
 
 from future import standard_library
-standard_library.install_aliases()  # noqa
-from urllib.parse import urlsplit  # noqa
-from urllib.request import getproxies  # noqa
-from urllib.error import HTTPError  # noqa
+standard_library.install_aliases()    # noqa
+from urllib.parse import urlsplit    # noqa
+from urllib.request import getproxies    # noqa
+from urllib.error import HTTPError    # noqa
 
 from agavepy import settings
 
 from agavepy.constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
-                        SESSIONS_FILENAME, TOKEN_SCOPE, TOKEN_TTL,
-                        ENV_BASE_URL, ENV_TOKEN, ENV_REFRESH_TOKEN,
-                        ENV_USERNAME, ENV_PASSWORD, ENV_API_KEY,
-                        ENV_API_SECRET, ENV_TENANT_ID)
+                               SESSIONS_FILENAME, TOKEN_SCOPE, TOKEN_TTL,
+                               ENV_BASE_URL, ENV_TOKEN, ENV_REFRESH_TOKEN,
+                               ENV_USERNAME, ENV_PASSWORD, ENV_API_KEY,
+                               ENV_API_SECRET, ENV_TENANT_ID)
 
 from agavepy.aloe import (LAST_PRE_ALOE_VERSION, EXCEPTION_MODELS)
 from agavepy.configgen import (ConfigGen, load_resource)
@@ -29,17 +29,19 @@ from agavepy.tenants import id_by_api_server
 from agavepy.token import Token
 from agavepy.util import AttrDict, json_response
 
-sys.path.insert(0, os.path.dirname(__file__))  # noqa
-from .swaggerpy.processors import SwaggerProcessor  # noqa
-from .swaggerpy.http_client import SynchronousHttpClient  # noqa
-from .swaggerpy.client import SwaggerClient  # noqa
+sys.path.insert(0, os.path.dirname(__file__))    # noqa
+from .swaggerpy.processors import SwaggerProcessor    # noqa
+from .swaggerpy.http_client import SynchronousHttpClient    # noqa
+from .swaggerpy.client import SwaggerClient    # noqa
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 logger = logging.getLogger(__name__)
-logging.getLogger(__name__).setLevel(os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
+logging.getLogger(__name__).setLevel(
+    os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
 
 __all__ = ['Agave']
+
 
 def with_refresh(client, f, *args, **kwargs):
     """Call function ``f`` and refresh token if needed."""
@@ -82,7 +84,7 @@ def with_refresh(client, f, *args, **kwargs):
 class Agave(object):
 
     PARAMS = [
-        # param name, mandatory?, attr_name, default
+    # param name, mandatory?, attr_name, default
         ("username", False, "username", None),
         ("password", False, "password", None),
         ("token_username", False, "token_username", None),
@@ -181,10 +183,11 @@ class Agave(object):
     def tapis_cache_path(self):
         """Return the path to the credentials cache directory
         """
-        agcachedir = os.environ.get("TAPIS_CACHE_DIR",
-                                    os.environ.get("AGAVE_CACHE_DIR",
-                                    os.path.expanduser(
-                                        "~/{0}/".format(CACHES_DOT_DIR))))
+        agcachedir = os.environ.get(
+            "TAPIS_CACHE_DIR",
+            os.environ.get("AGAVE_CACHE_DIR",
+                           os.path.expanduser(
+                               "~/{0}/".format(CACHES_DOT_DIR))))
         if os.path.isdir(agcachedir):
             return agcachedir
         elif not os.path.exists(agcachedir):
@@ -478,12 +481,10 @@ class Agave(object):
             # auth method will be one of: set_basic_auth, set_token,
             # or set_jwt depending on params passed to the constructor.
             auth(*args_values)
-            return SwaggerClient(
-                self.resources,
-                http_client=http_client,
-                extra_processors=[AgaveProcessor()],
-                show_curl=self.show_curl
-            )
+            return SwaggerClient(self.resources,
+                                 http_client=http_client,
+                                 extra_processors=[AgaveProcessor()],
+                                 show_curl=self.show_curl)
 
     def set_client(self, key, secret):
         """
@@ -615,6 +616,7 @@ class Resource(object):
                     self.resource].operations.keys()))
         return base
 
+
 class Operation(object):
 
     PRIMITIVE_TYPES = ["array", "string", "integer", "int", "boolean", "dict"]
@@ -663,7 +665,9 @@ class Operation(object):
                         message = h.response.json().get('message')
                     except Exception:
                         message = h.response.text
-                    raise requests.exceptions.HTTPError(code, reason, message,
+                    raise requests.exceptions.HTTPError(code,
+                                                        reason,
+                                                        message,
                                                         response=h.response,
                                                         request=h.request)
                 else:
@@ -789,10 +793,12 @@ class AgaveProcessor(SwaggerProcessor):
     def process_model(self, resources, resource, model, context):
         pass
 
+
 def _handle_tapis_error(h):
     if h.code not in (400, 404):
         h.msg = h.msg + ' [{0}]'.format(h.response.text)
     raise h
+
 
 def __handle_tapis_error(http_error_object):
     """Raise a more detailed HTTPError from Tapis error response

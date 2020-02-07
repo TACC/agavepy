@@ -3,8 +3,10 @@
 
 __all__ = ['AgaveError', 'AgaveException']
 
+
 class AgaveError(Exception):
     pass
+
 
 class AgaveException(Exception):
     pass

@@ -7,19 +7,21 @@ import requests
 import time
 
 from future import standard_library
-standard_library.install_aliases()  # noqa
-from urllib.parse import urlparse, urlencode, urljoin, urlsplit  # noqa
+standard_library.install_aliases()    # noqa
+from urllib.parse import urlparse, urlencode, urljoin, urlsplit    # noqa
 
 from agavepy.constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
-                        SESSIONS_FILENAME, TOKEN_SCOPE, TOKEN_TTL,
-                        ENV_BASE_URL, ENV_TOKEN, ENV_REFRESH_TOKEN,
-                        ENV_USERNAME, ENV_PASSWORD, ENV_API_KEY,
-                        ENV_API_SECRET, ENV_TENANT_ID)
+                               SESSIONS_FILENAME, TOKEN_SCOPE, TOKEN_TTL,
+                               ENV_BASE_URL, ENV_TOKEN, ENV_REFRESH_TOKEN,
+                               ENV_USERNAME, ENV_PASSWORD, ENV_API_KEY,
+                               ENV_API_SECRET, ENV_TENANT_ID)
 
 logger = logging.getLogger(__name__)
-logging.getLogger(__name__).setLevel(os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
+logging.getLogger(__name__).setLevel(
+    os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
 
 __all__ = ['Token']
+
 
 class Token(object):
     def __init__(

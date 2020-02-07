@@ -16,4 +16,3 @@ EXCEPTION_MODELS = {
         "model": "AloeJobSummary"
     },
 }
-

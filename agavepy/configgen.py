@@ -4,15 +4,17 @@ import logging
 import os
 
 from future import standard_library
-standard_library.install_aliases()  # noqa
-from urllib.parse import urlparse, urlencode, urljoin, urlsplit  # noqa
+standard_library.install_aliases()    # noqa
+from urllib.parse import urlparse, urlencode, urljoin, urlsplit    # noqa
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 logger = logging.getLogger(__name__)
-logging.getLogger(__name__).setLevel(os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
+logging.getLogger(__name__).setLevel(
+    os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
 
 __all__ = ['ConfigGen', 'load_resource', 'updateDict']
+
 
 class ConfigGen(object):
     def __init__(self, template_str):
@@ -21,6 +23,7 @@ class ConfigGen(object):
     def compile(self, configs, env):
         template = env.get_template(self.template_str)
         return template.render(configs)
+
 
 def updateDict(base_dict, new_dict):
     for key, val in new_dict.items():
@@ -34,6 +37,7 @@ def updateDict(base_dict, new_dict):
         else:
             base_dict[key] = val
     return base_dict
+
 
 def load_resource(api_server):
     """Load a default resource file.
