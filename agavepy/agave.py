@@ -24,7 +24,8 @@ from agavepy.constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
 
 from agavepy.aloe import (LAST_PRE_ALOE_VERSION, EXCEPTION_MODELS)
 from agavepy.configgen import (ConfigGen, load_resource)
-from agavepy.exceptions import (AgaveError, AgaveException)
+from agavepy.errors import (AgaveError, AgaveException, __handle_tapis_error,
+                            _handle_tapis_error)
 from agavepy.tenants import id_by_api_server
 from agavepy.token import Token
 from agavepy.util import AttrDict, json_response
@@ -387,7 +388,7 @@ class Agave(object):
             old_data["refresh_token"] = new_data["refresh_token"]
 
             # Some Tapis client managers drop tenant_id - this fixes that issue
-            if self.tenant_id is None:
+            if getattr(self, 'tenant_id', None) is None:
                 self.tenant_id = id_by_api_server(self.api_server)
                 new_data['tenantid'] = self.tenant_id
 
@@ -792,51 +793,3 @@ class AgaveProcessor(SwaggerProcessor):
 
     def process_model(self, resources, resource, model, context):
         pass
-
-
-def _handle_tapis_error(h):
-    if h.code not in (400, 404):
-        h.msg = h.msg + ' [{0}]'.format(h.response.text)
-    raise h
-
-
-def __handle_tapis_error(http_error_object):
-    """Raise a more detailed HTTPError from Tapis error response
-    """
-    h = http_error_object
-    # extract HTTP response code
-    code = -1
-    try:
-        code = h.response.status_code
-        assert isinstance(code, int)
-    except Exception:
-        # we have no idea what happened
-        code = 418
-
-    # extract HTTP reason
-    reason = 'UNKNOWN ERROR'
-    try:
-        reason = h.response.reason
-    except Exception:
-        pass
-
-    # Tapis APIs will give JSON responses if the target web service is at all
-    # capable of fulfilling the request. Therefore, try first to extract fields
-    # from the JSON response, then fall back to returning the plain text from
-    # the response.
-    err_msg = 'Unexpected encountered by the web service'
-    status_msg = 'error'
-    version_msg = 'unknown'
-    try:
-        j = h.response.json()
-        if 'message' in j:
-            err_msg = j['message']
-        if 'status' in j:
-            status_msg = j['status']
-        if 'version' in j:
-            version_msg = j['version']
-    except Exception:
-        err_msg = h.response.text
-
-    httperror = '{0}'.format(err_msg)
-    raise HTTPError(code, httperror)
