@@ -11,6 +11,7 @@
     "app_name": "agavepy-sdk",
     "deployment_path": "apps/wc-1.00",
     "jwt_header": "X-JWT-Assertion-agave-prod",
+    "forever_token": "68611a6fa8ff44a96d90628eb59cc160",
     "jwt": "",
     "verify_certs": true
 }
