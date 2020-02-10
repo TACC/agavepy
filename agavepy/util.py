@@ -51,8 +51,9 @@ def with_refresh(client, f, *args, **kwargs):
                 # if so, check if it is an expired token error (new versions of APIM return JSON errors):
                 if "Invalid Credentials" in exc_json.get("fault").get(
                         "message"):
-                    logger.info('client.token.refresh() and retry...')
-                    client.token.refresh()
+                    logger.info('client.refresh_token() and retry...')
+                    #client.token.refresh()
+                    client.refresh_token()
                     return f(*args, **kwargs)
                 #  otherwise, return the JSON
                 return exc.response
@@ -65,6 +66,8 @@ def with_refresh(client, f, *args, **kwargs):
             logger.error('Unexpected error code: {0}'.format(code))
             raise
 
-        logger.info('Fallback: client.token.refresh() and retry...')
-        client.token.refresh()
+        if client.can_refresh:
+            logger.info('Fallback: client.token.refresh() and retry...')
+            client.refresh_token()
+
         return f(*args, **kwargs)

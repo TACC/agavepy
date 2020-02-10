@@ -778,7 +778,7 @@ def test_token_callback(agave, credentials):
                  verify=credentials.get('verify_certs', True),
                  token_callback=sample_token_callback)
     # once created, let's force a refresh
-    ag.token.refresh()
+    ag.refresh_token()
     global token_callback_calls
     assert token_callback_calls >= 1
 

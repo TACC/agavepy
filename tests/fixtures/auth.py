@@ -96,3 +96,10 @@ def temp_testing_env(test_client, temp_cache_env, monkeypatch):
     """
     for k, v in test_client.items():
         monkeypatch.setenv(k, v)
+
+@pytest.fixture(scope='function')
+def temp_cache_empty_env(temp_cache_empty, monkeypatch):
+    """Set credentials cache to a temp directory
+    """
+    monkeypatch.setenv('TAPIS_CACHE_DIR', temp_cache_empty)
+    return temp_cache_empty

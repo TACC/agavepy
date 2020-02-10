@@ -70,3 +70,11 @@ def test_profiles_api(temp_testing_env, test_username):
     from agavepy.agave import Agave
     client = Agave.restore()
     assert 'username' in client.profiles.listByUsername(username=test_username)
+
+@pytest.mark.smoketest
+def test_empty_cachedir_fail(temp_cache_empty_env):
+    """Empty cache directory causes restore() to fail
+    """
+    from agavepy.agave import Agave
+    with pytest.raises(FileNotFoundError):
+        Agave.restore()

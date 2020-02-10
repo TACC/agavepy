@@ -48,6 +48,8 @@ __all__ = ['Agave']
 
 class Agave(object):
 
+    can_refresh = True
+
     PARAMS = [
     # param name, mandatory?, attr_name, default
         ("username", False, "username", None),
@@ -84,6 +86,12 @@ class Agave(object):
                 pass
 
             setattr(self, attr, value)
+
+        # Mark the client as unrefreshable if api server and token are
+        # provided, as it is considered a 'bare' client
+        if self.api_key is None and self.api_secret is None:
+            if self.api_server is not None and self._token is not None:
+                setattr(self, 'can_refresh', False)
 
         if getattr(self, 'resources', None) is None:
             self.resources = load_resource(self.api_server)
@@ -305,23 +313,42 @@ class Agave(object):
         raise AgaveError("No matching client found.")
 
     @classmethod
-    def restore(cls, api_key=None, client_name=None, tenant_id=None):
+    def _restore_direct(cls, **kwargs):
+        """Initialize a non-refreshable client from server and token
+        """
+        ag = Agave(api_server=kwargs['api_server'], token=kwargs['token'])
+        ag.can_refresh = False
+        return ag
+
+    @classmethod
+    def restore(cls,
+                api_key=None,
+                client_name=None,
+                tenant_id=None,
+                token=None,
+                api_server=None):
         """Public API to restore an agave client from a file."""
         # This works with both .agpy and config.json formats
         logger.debug(
             'Agave.restore(api_key={0}, client_name={1}, tenant_id={2})...'.
             format(api_key, client_name, tenant_id))
 
+        # Resolve from cache by API key
         if api_key:
             logger.debug('By key {0}'.format(api_key))
             return Agave._restore_client(api_key=api_key)
-        # Reads from the .agpy format
+        # Resolve from cache by client name
         elif client_name:
             logger.debug('By name {0}'.format(client_name))
             return Agave._restore_client(client_name=client_name)
+        # Resolve from cache by tenant
         elif tenant_id:
             logger.debug('By tenant {0}'.format(tenant_id))
             return Agave._restore_client(tenant_id=tenant_id)
+        # Return a 'bare' API client that cannot be refreshed
+        elif api_server and token:
+            logger.debug('By server and token')
+            return Agave._restore_direct(api_server=api_server, token=token)
         else:
             logger.debug('Default client')
             return Agave._restore_client()
@@ -552,3 +579,19 @@ class Agave(object):
         if self.all is not None:
             base.extend(list(self.all.resources.keys()))
         return list(set(base))
+
+    def refresh_token(self):
+        """If possible, attempt to refresh the Oauth token
+
+        This is the function that should be used to 
+        regenerate an Oauth token as it can deal with 
+        cases where no refresh capability is configured. 
+        """
+        if getattr(self, 'token') is not None:
+            return self.token.refresh()
+        else:
+            if not self.can_refresh:
+                return getattr(self, '_token', None)
+            else:
+                raise Exception(
+                    'Oauth client is not configured to refresh tokens')
