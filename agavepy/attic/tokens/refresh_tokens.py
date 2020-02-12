@@ -11,7 +11,7 @@ from .exceptions import AgaveTokenError
 from .utils import tokens_url
 
 
-def refresh_token(api_key, api_secret, refresh_token, tenant_url):
+def refresh(api_key, api_secret, refresh_token, tenant_url):
     """ Retrieve a new Oauth bearer token using the refresh token
 
     PARAMETERS

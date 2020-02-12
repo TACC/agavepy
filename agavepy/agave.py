@@ -294,6 +294,7 @@ class Agave(object):
         try:
             env_client = Agave._read_env()
             if env_client is not None:
+                logger.debug('restored from os.env()')
                 return Agave(**env_client)
         except KeyError:
             pass
@@ -347,7 +348,7 @@ class Agave(object):
             return Agave._restore_client(tenant_id=tenant_id)
         # Return a 'bare' API client that cannot be refreshed
         elif api_server and token:
-            logger.debug('By server and token')
+            logger.debug('By server + token')
             return Agave._restore_direct(api_server=api_server, token=token)
         else:
             logger.debug('Default client')
@@ -360,6 +361,9 @@ class Agave(object):
         # use the older, less descriptive JSON format
         logger.debug('Agave._write_client()...')
         logger.debug('Target: {0}'.format(Agave.tapis_current_path()))
+
+        if self.can_refresh is False:
+            raise NotImplementedError('Cannot cache credentials if client is not configured for token refresh')
 
         if Agave.agpy_path() == Agave.tapis_current_path():
             logger.debug('writing "current" cache file...')
@@ -580,7 +584,7 @@ class Agave(object):
             base.extend(list(self.all.resources.keys()))
         return list(set(base))
 
-    def refresh_token(self):
+    def refresh(self):
         """If possible, attempt to refresh the Oauth token
 
         This is the function that should be used to 

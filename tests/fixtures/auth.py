@@ -16,7 +16,8 @@ ENV_KEY_MAP = [('TEST_TAPIS_API_KEY', 'apikey', None),
                ('TEST_TAPIS_PASSWORD', 'password', None),
                ('TEST_TAPIS_BASE_URL', 'apiserver',
                 'https://api.tacc.utexas.edu/'),
-               ('TEST_TAPIS_TENANT_ID', 'tenantid', 'tacc.prod')]
+               ('TEST_TAPIS_TENANT_ID', 'tenantid', 'tacc.prod'),
+               ('TEST_TAPIS_TOKEN', 'token', None)]
 
 
 @pytest.fixture(scope='function')
@@ -60,6 +61,10 @@ def test_api_secret(credentials):
 def test_api_server(credentials):
     return credentials.get('apiserver')
 
+@pytest.fixture(scope='function')
+def test_forever_token(credentials):
+    return credentials.get('token')
+
 
 @pytest.fixture(scope='function')
 def test_client(test_api_key, test_api_secret, test_username, test_password,
@@ -71,6 +76,13 @@ def test_client(test_api_key, test_api_secret, test_username, test_password,
         'TAPIS_PASSWORD': test_password,
         'TAPIS_TENANT_ID': test_tenant_id,
         'TAPIS_BASE_URL': test_api_server
+    }
+
+@pytest.fixture(scope='function')
+def token_only_client(test_api_server, test_forever_token):
+    return {
+        'TAPIS_BASE_URL': test_api_server,
+        'TAPIS_TOKEN': test_forever_token
     }
 
 

@@ -59,7 +59,7 @@ def prompt_access_token(access_token=None, quiet=False):
         return getpass.getpass('{0} Access Token: '.format(PLATFORM))
 
 
-def prompt_refresh_token(refresh_token=None, quiet=False):
+def prompt_refresh(refresh_token=None, quiet=False):
     if refresh_token is not None and refresh_token != '':
         if not quiet:
             print_stderr(

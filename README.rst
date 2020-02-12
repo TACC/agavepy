@@ -118,7 +118,7 @@ Advanced: Manually Refresh a Token
 
    >>> from agavepy.agave import Agave
    >>> ag = Agave.restore()
-   >>> ag.refresh_token()
+   >>> ag.refresh()
    '8776fba39858957ce72110135947af9f'
 
 .. _Agave: https://agaveapi.co/

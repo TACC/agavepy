@@ -78,3 +78,34 @@ def test_empty_cachedir_fail(temp_cache_empty_env):
     from agavepy.agave import Agave
     with pytest.raises(FileNotFoundError):
         Agave.restore()
+
+@pytest.mark.smoketest
+def test_token_only_client(temp_testing_env, test_api_server, test_forever_token, test_username):
+    """Client can make API call using only server and token
+    """
+    from agavepy.agave import Agave
+    ag = Agave(api_server=test_api_server, token=test_forever_token)
+    assert 'username' in ag.profiles.listByUsername(username=test_username)    
+
+def test_token_only_client_refresh(temp_testing_env, test_api_server, test_forever_token):
+    """Client.refresh() does not fail for token-only client
+    """
+    from agavepy.agave import Agave
+    ag = Agave(api_server=test_api_server, token=test_forever_token)
+    assert ag.refresh() == test_forever_token
+
+def test_token_only_client_restore(temp_cache_empty_env, test_api_server, test_forever_token):
+    """Client.restore() allowed even in token-only mode
+    """
+    from agavepy.agave import Agave
+    ag = Agave(api_server=test_api_server, token=test_forever_token)
+    ag.restore()
+
+def test_token_only_client_no_write_cache(temp_testing_env, test_api_server, test_forever_token):
+    """Client.refresh() does not fail for token-only client
+    """
+    from agavepy.agave import Agave
+    ag = Agave(api_server=test_api_server, token=test_forever_token)
+    with pytest.raises(NotImplementedError):
+        ag._write_client()
+

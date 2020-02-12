@@ -128,7 +128,7 @@ class AgaveAPI(object):
         auth = requests.auth.HTTPBasicAuth(consumer_key, consumer_secret)
         return self.POST(url, data=data, auth=auth)
 
-    def _refresh_token(self, client):
+    def _refresh(self, client):
         """Refresh token from cache info."""
 
         url = self._url('token')
@@ -159,7 +159,7 @@ class AgaveAPI(object):
             self.clients[client] = client_data
 
         if time.time() >= token_data['created'] + token_data['expires_in']:
-            token_data = self._refresh_token(client)
+            token_data = self._refresh(client)
 
         return token_data['access_token']
 
