@@ -24,8 +24,9 @@ from agavepy.constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
 
 from agavepy.aloe import (LAST_PRE_ALOE_VERSION, EXCEPTION_MODELS)
 from agavepy.configgen import (ConfigGen, load_resource)
-from agavepy.errors import (AgaveError, AgaveException, __handle_tapis_error,
-                            _handle_tapis_error)
+from agavepy.errors import (AgaveError, AgaveException, 
+                            __handle_tapis_error, _handle_tapis_error)
+from agavepy.interactive import InteractiveCommands
 from agavepy.processor import (AgaveProcessor, SwaggerClient, SwaggerClient,
                                SynchronousHttpClient, Operation, Resource)
 from agavepy.tenants import id_by_api_server
@@ -46,7 +47,7 @@ logging.getLogger(__name__).setLevel(
 __all__ = ['Agave']
 
 
-class Agave(object):
+class Agave(InteractiveCommands):
 
     can_refresh = True
 
@@ -599,3 +600,4 @@ class Agave(object):
             else:
                 raise Exception(
                     'Oauth client is not configured to refresh tokens')
+
