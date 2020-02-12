@@ -79,6 +79,28 @@ def test_client(test_api_key, test_api_secret, test_username, test_password,
     }
 
 @pytest.fixture(scope='function')
+def bare_client(test_api_server, test_forever_token):
+    return {
+        'TAPIS_BASE_URL': test_api_server,
+        'TAPIS_TOKEN': test_forever_token
+    }
+
+@pytest.fixture(scope='function')
+def basic_client(test_username, test_password, test_api_server):
+    return {
+        'TAPIS_USERNAME': test_username,
+        'TAPIS_PASSWORD': test_password,
+        'TAPIS_BASE_URL': test_api_server
+    }
+
+@pytest.fixture(scope='function')
+def incomplete_client(test_api_server, test_username):
+    return {
+        'TAPIS_BASE_URL': test_api_server,
+        'TAPIS_USERNAME': test_username
+    }
+
+@pytest.fixture(scope='function')
 def token_only_client(test_api_server, test_forever_token):
     return {
         'TAPIS_BASE_URL': test_api_server,
@@ -110,8 +132,35 @@ def temp_testing_env(test_client, temp_cache_env, monkeypatch):
         monkeypatch.setenv(k, v)
 
 @pytest.fixture(scope='function')
+def bare_testing_env(bare_client, temp_cache_env, monkeypatch):
+    """Configure client with test credentials and temp dir
+    """
+    for k, v in bare_client.items():
+        monkeypatch.setenv(k, v)
+
+@pytest.fixture(scope='function')
+def basic_testing_env(basic_client, temp_cache_env, monkeypatch):
+    """Configure client with test credentials and temp dir
+    """
+    for k, v in basic_client.items():
+        monkeypatch.setenv(k, v)
+
+@pytest.fixture(scope='function')
+def incomplete_testing_env(incomplete_client, temp_cache_env, monkeypatch):
+    """Configure client with test credentials and temp dir
+    """
+    for k, v in incomplete_client.items():
+        monkeypatch.setenv(k, v)
+
+@pytest.fixture(scope='function')
 def temp_cache_empty_env(temp_cache_empty, monkeypatch):
     """Set credentials cache to a temp directory
     """
     monkeypatch.setenv('TAPIS_CACHE_DIR', temp_cache_empty)
     return temp_cache_empty
+
+@pytest.fixture(scope='function')
+def tapis_py_log_level_debug(monkeypatch):
+    monkeypatch.setenv('TAPISPY_LOG_LEVEL', 'DEBUG')
+    monkeypatch.setenv('SWAGGERPY_LOG_LEVEL', 'WARNING')
+    return 'DEBUG'
