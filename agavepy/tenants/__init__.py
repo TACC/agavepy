@@ -42,6 +42,7 @@ def api_server_by_id(tenant_id, url=None):
         if t.get('code').lower() == tenant_id.lower():
             return t.get('baseUrl')
 
+
 def id_by_api_server(api_server, url=None):
     """Resolve tenant id by its API server
     """

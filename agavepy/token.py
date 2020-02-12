@@ -7,8 +7,8 @@ import requests
 import time
 
 from future import standard_library
-standard_library.install_aliases()    # noqa
-from urllib.parse import urlparse, urlencode, urljoin, urlsplit    # noqa
+standard_library.install_aliases()  # noqa
+from urllib.parse import urlparse, urlencode, urljoin, urlsplit  # noqa
 
 from agavepy.constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
                                SESSIONS_FILENAME, TOKEN_SCOPE, TOKEN_TTL,

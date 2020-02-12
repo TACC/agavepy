@@ -9,10 +9,10 @@ import time
 import xml.etree.ElementTree as ElementTree
 
 from future import standard_library
-standard_library.install_aliases()    # noqa
-from urllib.parse import urlsplit    # noqa
-from urllib.request import getproxies    # noqa
-from urllib.error import HTTPError    # noqa
+standard_library.install_aliases()  # noqa
+from urllib.parse import urlsplit  # noqa
+from urllib.request import getproxies  # noqa
+from urllib.error import HTTPError  # noqa
 
 from agavepy import settings
 
@@ -24,19 +24,14 @@ from agavepy.constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
 
 from agavepy.aloe import (LAST_PRE_ALOE_VERSION, EXCEPTION_MODELS)
 from agavepy.configgen import (ConfigGen, load_resource)
-from agavepy.errors import (AgaveError, AgaveException, 
-                            __handle_tapis_error, _handle_tapis_error)
+from agavepy.errors import (AgaveError, AgaveException, __handle_tapis_error,
+                            _handle_tapis_error)
 from agavepy.interactive import InteractiveCommands
 from agavepy.processor import (AgaveProcessor, SwaggerClient, SwaggerClient,
                                SynchronousHttpClient, Operation, Resource)
 from agavepy.tenants import id_by_api_server
 from agavepy.token import Token
 from agavepy.util import AttrDict, json_response, with_refresh
-
-# sys.path.insert(0, os.path.dirname(__file__))    # noqa
-# from .swaggerpy.processors import SwaggerProcessor    # noqa
-# from .swaggerpy.http_client import SynchronousHttpClient    # noqa
-# from .swaggerpy.client import SwaggerClient    # noqa
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -52,7 +47,7 @@ class Agave(InteractiveCommands):
     can_refresh = True
 
     PARAMS = [
-    # param name, mandatory?, attr_name, default
+        # param name, mandatory?, attr_name, default
         ("username", False, "username", None),
         ("password", False, "password", None),
         ("token_username", False, "token_username", None),
@@ -81,33 +76,34 @@ class Agave(InteractiveCommands):
 
         for param, mandatory, attr, default in self.PARAMS:
             try:
-                value = kwargs[param] if mandatory else kwargs.get(
-                    param, default)
+                value = (kwargs[param] if mandatory else kwargs.get(
+                    param, default))
             except KeyError:
-                pass
-
+                raise AgaveError('parameter "{}" is mandatory'.format(param))
             setattr(self, attr, value)
 
-        # Mark the client as unrefreshable if api server and token are
-        # provided, as it is considered a 'bare' client
+        # Mark the client as unrefreshable if api server and token (but
+        # not refresh_token) are provided, as it is considered a 'bare' client
         if self.api_key is None and self.api_secret is None:
-            if self.api_server is not None and self._token is not None:
+            if self.api_server is not None and self._token is not None and self._refresh_token is None:
                 setattr(self, 'can_refresh', False)
 
         if getattr(self, 'resources', None) is None:
             self.resources = load_resource(self.api_server)
         self.resource_exceptions = json.load(
-            open(os.path.join(HERE, "resource_exceptions.json"), "r"))
+            open(os.path.join(HERE, 'resource_exceptions.json'), 'r'))
         self.host = urlsplit(self.api_server).netloc
         if self.token_callback and not hasattr(self.token_callback,
                                                "__call__"):
-            raise AgaveError("token_callback must be callable.")
+            raise AgaveError('token_callback must be callable.')
+
         # If we are passed a JWT directly, we can bypass OAuth-related tasks
         if self.jwt:
             if not self.header_name:
                 raise AgaveError(
-                    "The jwt header name is required to use the jwt authenticator."
+                    'The jwt header name is required to use the jwt authenticator.'
                 )
+
         self.token = None
         if (self.api_key is not None and self.api_secret is not None
                 and self.jwt is None):
@@ -115,9 +111,11 @@ class Agave(InteractiveCommands):
         self.clients_resource = None
         self.all = None
         self.refresh_aris()
+
         if not hasattr(self, "apps"):
             raise AgaveError(
                 "Required parameters for client instantiation missing.")
+
         logger.debug('Agave: {0}'.format(self))
 
     def to_dict(self):
@@ -250,32 +248,6 @@ class Agave(InteractiveCommands):
         return clients
 
     @classmethod
-    def _read_env(cls):
-        """Instantiate a client using environment variables
-
-        The client must already be established in the API manager.
-        """
-        logger.debug('Read client from environment')
-        envkeys = [(ENV_BASE_URL, 'api_server', True),
-                   (ENV_API_KEY, 'api_key', True),
-                   (ENV_API_SECRET, 'api_secret', True),
-                   (ENV_TENANT_ID, 'tenant_id', True),
-                   (ENV_USERNAME, 'username', True),
-                   (ENV_PASSWORD, 'password', True),
-                   (ENV_TOKEN, 'access_token', False),
-                   (ENV_REFRESH_TOKEN, 'refresh_token', False)]
-        client = dict()
-        for env, key, req in envkeys:
-            val = os.environ.get(env, None)
-            if val is None and req is True:
-                raise KeyError('{0} must be present to use _read_env()')
-            if val is not None and val != '':
-                client[key] = val
-
-        logger.debug('Client: {0}'.format(client))
-        return client
-
-    @classmethod
     def _read_sessions(cls):
         """Read sessions from the credentials cache."""
         logger.debug('Agave._read_sessions()...')
@@ -287,40 +259,91 @@ class Agave(InteractiveCommands):
         return sessions
 
     @classmethod
-    def _restore_client(cls, **kwargs):
-        """Restore a client from a specific attr."""
-
-        # Try to populate a client from environment. Helpful for CICD or
-        # containerized environments!
-        try:
-            env_client = Agave._read_env()
-            if env_client is not None:
-                logger.debug('restored from os.env()')
-                return Agave(**env_client)
-        except KeyError:
-            pass
-
-        clients = Agave._read_clients()
-        if len(clients) == 0:
-            logger.error('No clients were found.')
-            raise AgaveError("No clients found.")
-        # if no attribute was passed restore the first client in the list:
-        if len(list(kwargs.items())) == 0:
-            return Agave(**clients[0])
-        for k, v in list(kwargs.items()):
-            for client in clients:
-                if client.get(k) == v:
-                    return Agave(**client)
-        logger.error('No matching client was found.')
-        raise AgaveError("No matching client found.")
-
-    @classmethod
-    def _restore_direct(cls, **kwargs):
+    def _restore_direct(cls, api_server=None, token=None):
         """Initialize a non-refreshable client from server and token
         """
-        ag = Agave(api_server=kwargs['api_server'], token=kwargs['token'])
-        ag.can_refresh = False
-        return ag
+        if api_server is None:
+            api_server = os.environ.get(ENV_BASE_URL, None)
+        if token is None:
+            token = os.environ.get(ENV_TOKEN, None)
+        if api_server is not None and token is not None:
+            ag = Agave(api_server=api_server, token=token)
+            ag.can_refresh = False
+            return ag
+        else:
+            raise AgaveError(
+                'Either api_server or token cannot be resolved from parameters or environment'
+            )
+
+    @classmethod
+    def _restore_cached(cls, **kwargs):
+        """Restore a cached client from a specific attr."""
+
+        try:
+            clients = Agave._read_clients()
+            # Deal with empty clients file
+            if len(clients) == 0:
+                logger.error('No clients found in cache.')
+                raise AgaveError('No clients found in cache.')
+            # If no attribute was passed, restore the first client in the list:
+            if len(list(kwargs.items())) == 0:
+                return Agave(**clients[0])
+            else:
+                for k, v in list(kwargs.items()):
+                    for client in clients:
+                        if client.get(k) == v:
+                            return Agave(**client)
+            raise AgaveError('Unable to resolve client by keyword')
+        except FileNotFoundError:
+            raise AgaveError('No cached credentials found')
+        except Exception:
+            raise
+
+    @classmethod
+    def _restore_env(cls):
+        # Three types of client can be initialized from env variables
+        #
+        # 1. refresh is at least able to refresh a token but may also manage clients
+        # and issue a new token pair if basic credentials are also provided
+        # 2. basic client is only able to interact with clients and issue an initial token
+        # 3. bare client is unable to refresh token or manage clients
+
+        clients = {
+            'refresh': [(ENV_BASE_URL, 'api_server', True),
+                        (ENV_API_KEY, 'api_key', True),
+                        (ENV_API_SECRET, 'api_secret', True),
+                        (ENV_TOKEN, 'token', True),
+                        (ENV_REFRESH_TOKEN, 'refresh_token', True),
+                        (ENV_USERNAME, 'username', False),
+                        (ENV_PASSWORD, 'password', False)],
+            'basic': [(ENV_BASE_URL, 'api_server', True),
+                      (ENV_USERNAME, 'username', True),
+                      (ENV_PASSWORD, 'password', True),
+                      (ENV_API_SECRET, 'api_secret', False),
+                      (ENV_API_KEY, 'api_key', False)],
+            'bare': [(ENV_BASE_URL, 'api_server', True),
+                     (ENV_TOKEN, 'token', True)],
+        }
+
+        for kind, envkeys in clients.items():
+            try:
+                client = {}
+                for env, key, req in envkeys:
+                    val = os.environ.get(env, None)
+                    if val is None and req is True:
+                        raise KeyError('{0} must be present')
+                    else:
+                        client[key] = val
+                logger.debug('Client-Type: {}'.format(kind))
+                logger.debug('Client: {0}'.format(client))
+                return Agave(**client)
+            except Exception:
+                pass
+
+        logger.warning('restore_env has not returned yet')
+        raise AgaveError(
+            'One or more missing keys prevent loading a client from the environment'
+        )
 
     @classmethod
     def restore(cls,
@@ -328,34 +351,70 @@ class Agave(InteractiveCommands):
                 client_name=None,
                 tenant_id=None,
                 token=None,
-                api_server=None):
-        """Public API to restore an agave client from a file."""
-        # This works with both .agpy and config.json formats
-        logger.debug(
-            'Agave.restore(api_key={0}, client_name={1}, tenant_id={2})...'.
-            format(api_key, client_name, tenant_id))
+                api_server=None,
+                cache_client=True):
+        """Public API to load an Agave client from an external source
+        """
 
-        # Resolve from cache by API key
-        if api_key:
-            logger.debug('By key {0}'.format(api_key))
-            return Agave._restore_client(api_key=api_key)
-        # Resolve from cache by client name
-        elif client_name:
-            logger.debug('By name {0}'.format(client_name))
-            return Agave._restore_client(client_name=client_name)
-        # Resolve from cache by tenant
-        elif tenant_id:
-            logger.debug('By tenant {0}'.format(tenant_id))
-            return Agave._restore_client(tenant_id=tenant_id)
-        # Return a 'bare' API client that cannot be refreshed
-        elif api_server and token:
-            logger.debug('By server + token')
+        # Attempt bare client first
+        try:
+            logger.debug('Restore from api_server & token')
             return Agave._restore_direct(api_server=api_server, token=token)
-        else:
-            logger.debug('Default client')
-            return Agave._restore_client()
+        except AgaveError:
+            pass
 
-    def _write_client(self):
+        # Attempt to load from cache file
+        # (works with current, .agpy, and config.json formats)
+        try:
+            logger.debug('Restore from cached...')
+            ag_from_cache = None
+
+            # Resolve from cache by API key
+            if api_key:
+                logger.debug('By key {0}'.format(api_key))
+                ag_from_cache = Agave._restore_cached(api_key=api_key)
+            # Resolve from cache by client name
+            elif client_name:
+                logger.debug('By name {0}'.format(client_name))
+                ag_from_cache = Agave._restore_cached(client_name=client_name)
+            # Resolve from cache by tenant
+            elif tenant_id:
+                logger.debug('By tenant {0}'.format(tenant_id))
+                ag_from_cache = Agave._restore_cached(tenant_id=tenant_id)
+            else:
+                # Load up default client
+                logger.debug('By default client...')
+                ag_from_cache = Agave._restore_cached()
+
+            # Return client, after writing to session file
+            if ag_from_cache is not None:
+                if cache_client:
+                    ag_from_cache._write_client()
+                return ag_from_cache
+
+        except FileNotFoundError:
+            raise
+        except AgaveError:
+            pass
+
+        # Attempt to load from environment
+        try:
+            logger.debug('Restore from env')
+            ag = Agave._restore_env()
+            if cache_client:
+                try:
+                    ag._write_client()
+                except Exception:
+                    raise
+            return ag
+        except AgaveError:
+            pass
+
+        raise AgaveError(
+            'Unable to restore a client from parameters, cache, or environment'
+        )
+
+    def _write_client(self, permissive=True):
         """Update the credential and sessions cache with the latest values
         """
         # If we are working with an 'current' file, then
@@ -364,7 +423,12 @@ class Agave(InteractiveCommands):
         logger.debug('Target: {0}'.format(Agave.tapis_current_path()))
 
         if self.can_refresh is False:
-            raise NotImplementedError('Cannot cache credentials if client is not configured for token refresh')
+            if permissive is False:
+                raise NotImplementedError(
+                    'Cannot cache credentials if client is not configured for token refresh'
+                )
+            else:
+                return False
 
         if Agave.agpy_path() == Agave.tapis_current_path():
             logger.debug('writing "current" cache file...')
@@ -600,4 +664,3 @@ class Agave(InteractiveCommands):
             else:
                 raise Exception(
                     'Oauth client is not configured to refresh tokens')
-

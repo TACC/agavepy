@@ -26,9 +26,14 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))  # noqa
 
 # logging.basicConfig(level=logging.ERROR)
 # log.setLevel(logging.ERROR)
-logging.getLogger(__name__).setLevel(os.environ.get('TAPISPY_LOG_LEVEL', logging.INFO))
-logging.getLogger("urllib3").setLevel(os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
+logging.getLogger(__name__).setLevel(
+    os.environ.get('SWAGGERPY_LOG_LEVEL',
+                   os.environ.get('TAPISPY_LOG_LEVEL', logging.INFO)))
+logging.getLogger("urllib3").setLevel(
+    os.environ.get('SWAGGERPY_LOG_LEVEL',
+                   os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING)))
 log = logging.getLogger(__name__)
+
 
 def print_stderr(message):
     # TODO - Support Python2 implementation
@@ -226,7 +231,10 @@ class Resource(object):
         decl = resource['api_declaration']
         self.http_client = http_client
         self.operations = {
-            oper['nickname']: self._build_operation(decl, api, oper, show_curl=show_curl)
+            oper['nickname']: self._build_operation(decl,
+                                                    api,
+                                                    oper,
+                                                    show_curl=show_curl)
             for api in decl['apis'] for oper in api['operations']
         }
 
@@ -309,7 +317,9 @@ class SwaggerClient(object):
             loader.process_resource_listing(self.api_docs)
 
         self.resources = {
-            resource['name']: Resource(resource, http_client, show_curl=show_curl)
+            resource['name']: Resource(resource,
+                                       http_client,
+                                       show_curl=show_curl)
             for resource in self.api_docs['apis']
         }
 

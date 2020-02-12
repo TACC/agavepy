@@ -2,8 +2,8 @@
 """
 
 from future import standard_library
-standard_library.install_aliases()    # noqa
-from urllib.error import HTTPError    # noqa
+standard_library.install_aliases()  # noqa
+from urllib.error import HTTPError  # noqa
 
 __all__ = [
     'AgaveError', 'AgaveException', '__handle_tapis_error',

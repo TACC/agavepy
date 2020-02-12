@@ -4,8 +4,8 @@ import logging
 import os
 
 from future import standard_library
-standard_library.install_aliases()    # noqa
-from urllib.parse import urlparse, urlencode, urljoin, urlsplit    # noqa
+standard_library.install_aliases()  # noqa
+from urllib.parse import urlparse, urlencode, urljoin, urlsplit  # noqa
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 

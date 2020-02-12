@@ -5,7 +5,6 @@ import os
 import warnings
 from dotenv import load_dotenv, find_dotenv
 
-
 with warnings.catch_warnings():
     warnings.simplefilter('ignore')
     if not load_dotenv(find_dotenv()):

@@ -10,10 +10,10 @@ from agavepy.aloe import EXCEPTION_MODELS
 from agavepy.errors import AgaveException, AgaveError
 from agavepy.util import AttrDict, with_refresh
 
-sys.path.insert(0, os.path.dirname(__file__))    # noqa
-from .swaggerpy.processors import SwaggerProcessor    # noqa
-from .swaggerpy.http_client import SynchronousHttpClient    # noqa
-from .swaggerpy.client import SwaggerClient    # noqa
+sys.path.insert(0, os.path.dirname(__file__))  # noqa
+from .swaggerpy.processors import SwaggerProcessor  # noqa
+from .swaggerpy.http_client import SynchronousHttpClient  # noqa
+from .swaggerpy.client import SwaggerClient  # noqa
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 logger = logging.getLogger(__name__)
