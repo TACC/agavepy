@@ -1,0 +1,13 @@
+NOTICE. This Software was developed under funding from the U.S. Government.
+Consequenty, the U.S. Government retains certain rights. As such, the U.S.
+Government has been granted for itself and others acting on its behalf a
+paid-up, nonexclusive, irrevocable, worldwide license in the Software to
+reproduce, distribute copies to the public, prepare derivative works, and
+perform publicly and display publicly, and to permit others to do so.
+
+Other Licenses
+--------------
+Swagger-py (in agavepy/swaggerpy) is copyright of Digium:
+
+    Copyright (c) 2013, Digium, Inc. All rights reserved.
+    Swagger.py is licensed with a BSD 3-Clause License.
