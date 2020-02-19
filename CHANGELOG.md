@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 1.0.0 - 2020-02-28
+### Added
+
+### Changed
+
+### Removed
+
+
 ## 0.9.0 - 2019-04-16
 ### Added
 - The jobs() methods have been updated to detect the version of the Jobs API and, when appropriate, use the Aloe
