@@ -53,11 +53,15 @@ You can view *and fork* the source code for Tapis, AgavePy, and Tapis CLI on
 GitHub. Join the community of users on GitHub to provide feedback, request features, 
 and submit your own contributions. 
 
-***********
-About Tapis
-***********
+************************
+About the Tapis Platform
+************************
 
-Placeholder overview of Tapis platform. One paragraph, hyperlinked to Tapis master site. 
+Tapis is an open source *Science-as-a-Service* API platform for powering  
+research computing and data management workflows. Tapis unites high-performance 
+computing (HPC), high-throughput computing (HTC), Cloud, and Big Data resources under a 
+single, web-friendly REST API featuring fine-grained access control, detailed 
+provenance, reproducibility, and scalability. 
 
 .. toctree::
     :maxdepth: 1
