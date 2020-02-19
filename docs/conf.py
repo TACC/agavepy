@@ -77,6 +77,14 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
+# Implement 
+# https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
+html_static_path = ['_static']
+html_context = {
+    'css_files': [
+        '_static/theme_overrides.css',  # override wide tables in RTD theme
+        ],
+     }
 
 # -- Options for HTML output ----------------------------------------------
 
