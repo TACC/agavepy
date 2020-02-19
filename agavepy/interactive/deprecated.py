@@ -105,4 +105,3 @@ class DeprecatedCommands(object):
 
     def files_upload(self, source, destination):
         raise DiscontinuedError
-    

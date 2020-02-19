@@ -14,7 +14,11 @@ logger = logging.getLogger(__name__)
 logging.getLogger(__name__).setLevel(
     os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
 
-__all__ = ['AttrDict', 'json_response', 'with_refresh', 'clients_url', 'random_client_name']
+__all__ = [
+    'AttrDict', 'json_response', 'with_refresh', 'clients_url',
+    'random_client_name'
+]
+
 
 class AttrDict(dict):
     def __getattr__(self, key):
@@ -74,10 +78,12 @@ def with_refresh(client, f, *args, **kwargs):
 
         return f(*args, **kwargs)
 
+
 def clients_url(tenant_url):
     """Returns the clients API endpoint for a given tenant
     """
     return '{0}/clients/v2'.format(tenant_url)
+
 
 def random_client_name(words=3, letters=6, hostname=False):
     """Generate a pseudorandom but human-readable Oauth client name

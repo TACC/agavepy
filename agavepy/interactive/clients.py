@@ -3,6 +3,7 @@ from agavepy.util import clients_url, random_client_name
 
 __all__ = ['ClientCommands']
 
+
 class ClientCommands(object):
     def clients_create(self,
                        client_name=None,
@@ -58,7 +59,9 @@ class ClientCommands(object):
                 'tier': 'Unlimited',
                 'callbackUrl': '',
             }
-            response = requests.post(endpoint, data=data, auth=(username, password))
+            response = requests.post(endpoint,
+                                     data=data,
+                                     auth=(username, password))
             del password
         except Exception:
             del password
@@ -69,6 +72,11 @@ class ClientCommands(object):
         api_key = result.get('consumerKey')
         api_secret = result.get('consumerSecret')
         if api_key == '' or api_secret == '':
-            raise requests.exceptions.HTTPError('Failed to create client {0}'.format(client_name))
+            raise requests.exceptions.HTTPError(
+                'Failed to create client {0}'.format(client_name))
 
-        return {'api_key': api_key, 'api_secret': api_secret, 'client_name': client_name}
+        return {
+            'api_key': api_key,
+            'api_secret': api_secret,
+            'client_name': client_name
+        }

@@ -144,6 +144,7 @@ def _get_results_socket():
         raise AgaveError(msg)
     return client
 
+
 def is_tapis_notebook():
     """
     Determine whether this code is running from within a Tapis notebook. This can be used for automatically
@@ -161,6 +162,7 @@ def is_tapis_notebook():
         except:
             return False
     return True
+
 
 def get_tapis_abaco_image(base_url):
     """
@@ -197,7 +199,7 @@ class AbacoExecutor(object):
             rsp = ag.actors.get(actorId=actor_id)
             self.actor_id = actor_id
             self.status = rsp.get('status')
-            self.image = rsp.get('image')       
+            self.image = rsp.get('image')
         else:
             # first, determine the image that should be used:
             if not image:
@@ -233,11 +235,16 @@ class AbacoExecutor(object):
                     self.image = 'abacosamples/py3_func:dev'
                 # register an Abaco actor with the appropriate image:
                 try:
-                    rsp = ag.actors.add(body={'image': self.image,
-                                              'stateless': True,
-                                              'name': 'agpy_abaco_executor'})
+                    rsp = ag.actors.add(
+                        body={
+                            'image': self.image,
+                            'stateless': True,
+                            'name': 'agpy_abaco_executor'
+                        })
                 except Exception as e:
-                    raise AgaveError("Unable to register the actor; exception: {}".format(e))
+                    raise AgaveError(
+                        "Unable to register the actor; exception: {}".format(
+                            e))
                 self.actor_id = rsp['id']
                 self.status = 'SUBMITTED'
 

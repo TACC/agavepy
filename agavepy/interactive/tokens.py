@@ -1,8 +1,7 @@
-
 __all__ = ['TokenCommands']
 
-class TokenCommands(object):
 
+class TokenCommands(object):
     def refresh(self):
         """If possible, attempt to refresh the Oauth token
 
