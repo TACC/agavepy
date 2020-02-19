@@ -1,6 +1,6 @@
-=======
+#######
 AgavePy
-=======
+#######
 
 .. image:: https://badge.fury.io/py/agavepy.svg
     :target: http://badge.fury.io/py/agavepy
@@ -14,116 +14,61 @@ AgavePy
 .. image:: https://img.shields.io/pypi/l/Django.svg
     :target: https://raw.githubusercontent.com/TACC/agavepy/master/LICENSE
 
-**Python2/3 binding for TACC.Cloud Agave and Abaco APIs**
+AgavePy is an open source Python SDK that enables you to interact 
+with Tapis services using functions in your Python scripts and REPL.
 
-- Documentation: https://agavepy.readthedocs.io/en/latest/
-- GitHub: https://github.com/TACC/agavepy
-- PyPI: https://pypi.python.org/pypi/agavepy
-- Free software: 3-Clause BSD License
-
-
+************
 Installation
-============
+************
 
-Install latest release from PyPI_::
+Install latest from PyPi_:
+
+.. code-block:: console
 
     pip install agavepy
 
+Install a specific version:
 
-Install latest release from GitHub::
+.. code-block:: console
 
+    pip install agavepy==1.0.0
+
+Install from source:
+
+.. code-block:: console
+
+    git clone https://github.com/TACC/agavepy
     cd agavepy
-    git checkout master
     python setup.py install
 
-Developing or testing
-=====================
+*****
+Usage
+*****
 
-Install latest development code from GitHub::
+Please consult the AgavePy_ for comprehensive configuration and 
+usage information. 
 
-    cd agavepy
-    git checkout develop
-    python setup.py install
+************
+Contributing
+************
 
-Configure a testing client, either by writing a `tests/configuration.json` file
-or by setting environment variables as documented in the [auth fixture](https://github.com/TACC/agavepy/blob/cli/tests/fixtures/auth.py#L13)
+    * `View and file issues <https://github.com/TACC/agavepy/issues/>`_
+    * `Request access to TACC.cloud Slack <http://bit.ly/join-tapis>`_
 
-Run unit tests with ``python -m pytest tests``
+.. Links
 
-Quickstart
-==========
-
-If you already have an active installation of the TACC Cloud CLI or have worked
-with AgavePy in the past, AgavePy can load credentials from a local cache. The
-cache directory defaults to ``$HOME/.agave/`` but this can be overridden by
-setting the ``TAPIS_CACHE_DIR`` or ``AGAVE_CACHE_DIR`` environment variables.
-
-If this is the first time you are setting up AgavePy on the current host, you
-will need to provide initial configuration details. In the future, AgavePy will
-leverage the credential cache.
-
-Pre-existing Tapis Auth Cache
------------------------------
-
-Load a cached client as follows:
-
-.. code-block:: pycon
-
-   >>> from agavepy.agave import Agave
-   >>> ag = Agave.restore()
-
-AgavePy will attempt to use the ``refresh_token`` Oauth2 workflow to maintain
-an active access token, allowing for uninterrupted use of the Tapis APIs.
-
-Configure a new Auth Cache
---------------------------
-
-.. code-block:: pycon
-
-   >>> from agavepy.agave import Agave
-   >>> ag = Agave(tenant_id=<tenant_id>, username=<username>, password=<password>, api_key=<api_key>, api_secret=<api_secret>, api_server=<api_server>)
-
-Advanced: Client from Environment
----------------------------------
-
-There are many cases where it is not feasible or acceptable to load or save
-cached credentials. Examples include public Docker container images, source
-code repositories, or continuous integration jobs.
-
-Handily, AgavePy supports loading an active client from the environment. To
-take advantage of this, set the following environment variables:
-
-.. code-block::
-
-   TAPIS_BASE_URL=https://<api_server>
-   TAPIS_TENANT_ID=<api_secret>
-   TAPIS_USERNAME=<username>
-   TAPIS_PASSWORD=<password>
-   TAPIS_API_KEY=<api_key>
-   TAPIS_API_SECRET=<api_secret>
-
-With these variable set, the standard ``restore()`` method will load a client
-
-.. code-block:: pycon
-
-   >>> from agavepy.agave import Agave
-   >>> ag = Agave.restore()
-   >>> ag.token.api_key
-   <api_key>
-
-Advanced: Manually Refresh a Token
-----------------------------------
-
-.. code-block:: pycon
-
-   >>> from agavepy.agave import Agave
-   >>> ag = Agave.restore()
-   >>> ag.refresh()
-   '8776fba39858957ce72110135947af9f'
-
-.. _Agave: https://agaveapi.co/
-.. _Abaco: http://useabaco.cloud/
-.. _PyPI: https://pypi.python.org/pypi
-.. _Developer Documentation: http://developer.tacc.cloud/
 .. _Docker: https://docs.docker.com/installation/#installation
 .. _Jupyter: https://jupyter.org/
+.. _Oauth2: https://auth0.com/docs/protocols/oauth2
+.. _PyPI: https://pypi.python.org/pypi
+.. |AgavePy| replace:: AgavePy docs
+.. _AgavePy: https://agavepy.readthedocs.io/en/latest/
+.. |TapisCLI| replace:: Tapis CLI docs
+.. _TapisCLI: https://tapis-cli.readthedocs.io/en/latest/
+.. |TapisAPI| replace:: Tapis API docs
+.. _TapisAPI: https://tacc-cloud.readthedocs.io/projects/agave/en/latest/
+.. |AbacoAPI| replace:: Abaco API docs
+.. _AbacoAPI: https://tacc-cloud.readthedocs.io/projects/abaco/en/latest/
+.. |TUP| replace:: TACC User Portal
+.. _TUP: https://portal.tacc.utexas.edu/account-request
+

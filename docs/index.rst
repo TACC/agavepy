@@ -3,39 +3,77 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-AgavePy documentation
-=====================
+#####################
+AgavePy Documentation
+#####################
 
-About AgavePy
--------------
+****************
+What is AgavePy?
+****************
 
-AgavePy is a client that will allow you to script your interaction with the
-Agave API.
-AgavePy is also the engine powering
-`TACC/Cloud/agave-cli <https://github.com/TACC-Cloud/agave-cli>`_.
+AgavePy is an open source Python SDK that enables you to interact 
+with Tapis services using functions in your Python scripts and REPL. 
 
+With minimal configuration, AgavePy lets you to start running commands 
+that implement functions equivalent to those provided by browser-based 
+Tapis web applications or the Tapis CLI.
+
+All Tapis PaaS (platform as a service) administration, management, and access 
+functions are available via AgavePy. AgavePy provides direct access to all  
+public Tapis APIs - You can explore a service's capabilities 
+with AgavePy, and develop Python scripts to manage resources, perform 
+computation or analysis workflows, build automations, and more. 
+
+Example: List contents of a Tapis storageSystem path
+====================================================
+
+The ``Agave.files.list()`` function returns the directory contents of a 
+Tapis storage system (similar to an S3 bucket) and path.
+
+.. code-block:: pycon
+
+   >>> from agavepy import Agave
+   >>> ag = Agave.restore()
+   >>> files = ag.files.list(storageSystem='tacc-public-demo', filePath='/examples')
+
+The same function could be performed via authenticated HTTP GET to 
+``/files/v2/listings/system/tacc-public-demo/examples`` or using the 
+Tapis CLI ``tapis files list agave://tacc-public-demo/examples``. The former 
+requires more sophisticated knowledge of working with web services, while 
+the latter is more suited to interactive or shell script usage. 
+
+Your use case informs your choice of tooling - If you are interested in these 
+other mechanisms for working with Tapis, please consult the appropriate resources:
+
+  * |TapisAPI|_ : Research computing web services
+  * |AbacoAPI|_ : Functions-as-a-Service for orchestration and integration
+  * |TapisCLI|_ : Shell environment for Tapis and Abaco
+
+You can view *and fork* the source code for Tapis, AgavePy, and Tapis CLI on 
+GitHub. Join the community of users on GitHub to provide feedback, request features, 
+and submit your own contributions. 
+
+***********
+About Tapis
+***********
+
+Placeholder overview of Tapis platform. One paragraph, hyperlinked to Tapis master site. 
 
 .. toctree::
-    :maxdepth: 2
-    :caption: Installation, Upgrade and Configuration
+    :maxdepth: 1
+    :caption: Install & Configure AgavePy
 
-    docsite/installation_guide/index
-
-
-.. toctree::
-    :maxdepth: 2
-    :caption: Contributing to AgavePy
-
-    docsite/contributing_guide/index
-
+    install/installation
+    account
+    authentication
 
 .. toctree::
    :maxdepth: 1
-   :caption: Using AgavePy
+   :caption: Use AgavePy
 
-   docsite/querying/index
-
-   docsite/authentication/index
+.. toctree::
+   :maxdepth: 1
+   :caption: Use AgavePy with Tapis APIs
 
    docsite/systems/index
    docsite/files/index
@@ -47,5 +85,29 @@ AgavePy is also the engine powering
    docsite/profiles/index
    docsite/actors/index
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Advanced Topics
+
+   docsite/querying/index
    docsite/admin/index
    docsite/clients/index
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Contribute to AgavePy
+
+.. Links
+
+.. _Docker: https://docs.docker.com/installation/#installation
+.. _Jupyter: https://jupyter.org/
+.. _Oauth2: https://auth0.com/docs/protocols/oauth2
+.. _PyPI: https://pypi.python.org/pypi
+.. |TapisCLI| replace:: Tapis CLI docs
+.. _TapisCLI: https://tapis-cli.readthedocs.io/en/latest/
+.. |TapisAPI| replace:: Tapis API docs
+.. _TapisAPI: https://tacc-cloud.readthedocs.io/projects/agave/en/latest/
+.. |AbacoAPI| replace:: Abaco API docs
+.. _AbacoAPI: https://tacc-cloud.readthedocs.io/projects/abaco/en/latest/
+.. |TUP| replace:: TACC User Portal
+.. _TUP: https://portal.tacc.utexas.edu/account-request

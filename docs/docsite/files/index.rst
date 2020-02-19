@@ -2,17 +2,13 @@
 Files
 =====
 
-Here we will describe how AgavePy allows us to interact with the API to store
-and manage data.
-The methods provided by AgavePy will allow us to setup the data for Agave apps
-to use, to share with collaborators, or to setup for long term storage.
-                                                                                
+These functions help you to upload, download, discover, inspect, share, 
+and administer files_ and folders managed by Tapis storage systems. 
+
 .. toctree::                                                                    
    :maxdepth: 2                                                                 
 
    files
-   admin
-   files-listing
 
 .. only::  subproject and html                                                  
                                                                                 
@@ -20,3 +16,7 @@ to use, to share with collaborators, or to setup for long term storage.
    =======                                                                      
                                                                                 
    * :ref:`genindex`
+
+.. Links
+
+.. _files: https://tacc-cloud.readthedocs.io/projects/agave/en/latest/agave/guides/files/introduction.html

@@ -1,10 +1,10 @@
 ====                                           
 Jobs
 ====                                           
-                                                                                
-Agave make job resources available to users so that these can be managed directly or
-through scripted applications.
-                                                                                
+
+These functions help you to submit, monitor, inspect, share, and 
+manage Tapis compute jobs_. 
+
 .. toctree::                                                                    
    :maxdepth: 2                                                                 
                                                                                 
@@ -16,3 +16,7 @@ through scripted applications.
    =======                                                                      
                                                                                 
    * :ref:`genindex`
+
+.. Links
+
+.. _jobs: https://tacc-cloud.readthedocs.io/projects/agave/en/latest/agave/guides/jobs/introduction.html

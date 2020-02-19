@@ -595,52 +595,6 @@ Response:
 ---------
     * *Array of ApplicationSummary objects*
 
-listByTag: Get a list of applications with the given tag.
-=========================================================
-``apps.listByTag(tag=<TAG>, limit=250, offset=0, privateOnly=None, publicOnly=None)``
-
-Keyword Args:
--------------
-    * **tag**: The tag of the application. (string)
-    * **publicOnly**: Whether to return only public apps. (boolean)
-    * **privateOnly**: Whether to return only private apps. (boolean)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
-
-
-Response:
----------
-    * *Array of ApplicationSummary objects*
-
-listByOntologyTerm: Get a list of applications with the given ontological term.
-===============================================================================
-``apps.listByOntologyTerm(term=<TERM>, limit=250, offset=0, privateOnly=None, publicOnly=None)``
-
-Keyword Args:
--------------
-    * **term**: The tag of the ontological term. (string)
-    * **publicOnly**: Whether to return only public apps. (boolean)
-    * **privateOnly**: Whether to return only private apps. (boolean)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
-
-
-Response:
----------
-    * *Array of ApplicationSummary objects*
-
-getJobSubmissionForm: Get a submission form for the named application.
-======================================================================
-``apps.getJobSubmissionForm()``
-
-Keyword Args:
--------------
-
-
-Response:
----------
-    * *String*
-
 listBySystemId: Get a list of applications with the given systemId as their executionHost.
 ==========================================================================================
 ``apps.listBySystemId(systemId=<SYSTEMID>, limit=250, offset=0, privateOnly=None, publicOnly=None)``

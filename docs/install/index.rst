@@ -1,8 +1,8 @@
-==================
-Installation Guide
-==================
+============
+Installation
+============
 
-Introductory installation guide.
+AgavePy can be installed using multiple methods.
                                                                                 
 .. toctree::
    :maxdepth: 2

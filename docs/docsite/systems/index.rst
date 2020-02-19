@@ -3,7 +3,8 @@ Systems
 =======                                           
                                                                                 
 
-Register and manage systems.
+These functions help you to discover, inspect, share, and manage Tapis 
+execution (compute) and storage (data) systems_.
 
                                                                                 
 .. toctree::                                                                    
@@ -17,3 +18,7 @@ Register and manage systems.
    =======                                                                      
                                                                                 
    * :ref:`genindex`
+
+.. Links
+
+.. _systems: https://tacc-cloud.readthedocs.io/projects/agave/en/latest/agave/guides/systems/introduction.html

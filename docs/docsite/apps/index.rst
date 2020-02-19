@@ -1,10 +1,8 @@
 ====                                           
 Apps
 ====                                           
-                                                                                
-Agave allows users to build and run applications through its API.
-Here we will walk through the methods available to interact use apps using
-AgavePy.
+
+These functions help you to discover, inspect, share, and manage Tapis apps_.
 
                                                                                 
 .. toctree::                                                                    
@@ -18,3 +16,7 @@ AgavePy.
    =======                                                                      
                                                                                 
    * :ref:`genindex`
+
+.. Links
+
+.. _apps: https://tacc-cloud.readthedocs.io/projects/agave/en/latest/agave/guides/apps/introduction.html
