@@ -12,7 +12,7 @@ What is AgavePy?
 ****************
 
 AgavePy is an open source Python SDK that enables you to interact 
-with Tapis services using functions in your Python scripts and REPL. 
+with TapisHome_ services using functions in your Python scripts and REPL. 
 
 With minimal configuration, AgavePy lets you to start running commands 
 that implement functions equivalent to those provided by browser-based 
@@ -73,7 +73,9 @@ provenance, reproducibility, and scalability.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Use AgavePy
+   :caption: Using AgavePy
+
+   use_agavepy
 
 .. toctree::
    :maxdepth: 1
@@ -107,6 +109,8 @@ provenance, reproducibility, and scalability.
 .. _Jupyter: https://jupyter.org/
 .. _Oauth2: https://auth0.com/docs/protocols/oauth2
 .. _PyPI: https://pypi.python.org/pypi
+.. |TapisHome| replace:: Tapis
+.. _TapisHome: https://www.tacc.utexas.edu/tapis
 .. |TapisCLI| replace:: Tapis CLI docs
 .. _TapisCLI: https://tapis-cli.readthedocs.io/en/latest/
 .. |TapisAPI| replace:: Tapis API docs
