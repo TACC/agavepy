@@ -1,9 +1,11 @@
 """Stub support for 0.9.x experimental interactive commands
 """
+import requests
+from agavepy.util import clients_url, random_client_name
 
-DISCONTINUED_MSG = 'This function is discontinuted. Consult the Tapis CLI Python API for an analogous capability.'
+DISCONTINUED_MSG = 'This function is discontinued. Consult the Tapis CLI Python API for an analogous capability.'
 
-__all__ = ['DiscontinuedError', 'InteractiveCommands']
+__all__ = ['DiscontinuedError', 'DeprecatedCommands']
 
 
 class DiscontinuedError(NotImplementedError):
@@ -11,7 +13,7 @@ class DiscontinuedError(NotImplementedError):
         NotImplementedError.__init__(self, DISCONTINUED_MSG)
 
 
-class InteractiveCommands(object):
+class DeprecatedCommands(object):
     def init(self, tenantsurl=None):
         raise DiscontinuedError
 
@@ -33,14 +35,6 @@ class InteractiveCommands(object):
         raise DiscontinuedError
 
     def list_tenants(self, tenantsurl=None):
-        raise DiscontinuedError
-
-    def clients_create(self,
-                       client_name,
-                       description,
-                       username=None,
-                       password=None,
-                       quiet=False):
         raise DiscontinuedError
 
     def clients_delete(self,
@@ -111,3 +105,4 @@ class InteractiveCommands(object):
 
     def files_upload(self, source, destination):
         raise DiscontinuedError
+    

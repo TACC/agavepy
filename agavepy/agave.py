@@ -26,7 +26,7 @@ from agavepy.aloe import (LAST_PRE_ALOE_VERSION, EXCEPTION_MODELS)
 from agavepy.configgen import (ConfigGen, load_resource)
 from agavepy.errors import (AgaveError, AgaveException, __handle_tapis_error,
                             _handle_tapis_error)
-from agavepy.interactive import InteractiveCommands
+from agavepy.interactive import ClientCommands, DeprecatedCommands, TokenCommands
 from agavepy.processor import (AgaveProcessor, SwaggerClient, SwaggerClient,
                                SynchronousHttpClient, Operation, Resource)
 from agavepy.tenants import id_by_api_server
@@ -39,10 +39,15 @@ logger = logging.getLogger(__name__)
 logging.getLogger(__name__).setLevel(
     os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING))
 
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = IOError
+
 __all__ = ['Agave']
 
 
-class Agave(InteractiveCommands):
+class Agave(ClientCommands, TokenCommands, DeprecatedCommands):
 
     can_refresh = True
 
@@ -648,19 +653,3 @@ class Agave(InteractiveCommands):
         if self.all is not None:
             base.extend(list(self.all.resources.keys()))
         return list(set(base))
-
-    def refresh(self):
-        """If possible, attempt to refresh the Oauth token
-
-        This is the function that should be used to 
-        regenerate an Oauth token as it can deal with 
-        cases where no refresh capability is configured. 
-        """
-        if getattr(self, 'token') is not None:
-            return self.token.refresh()
-        else:
-            if not self.can_refresh:
-                return getattr(self, '_token', None)
-            else:
-                raise Exception(
-                    'Oauth client is not configured to refresh tokens')
