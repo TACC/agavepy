@@ -1,6 +1,6 @@
-##############
-AgavePy client
-##############
+##################
+The AgavePy client
+##################
 
 The core aspect of an initialized AgavePy client is a submodule 
 and function structure that mirrors the Swagger 1.2 specification 
