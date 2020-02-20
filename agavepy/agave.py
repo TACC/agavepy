@@ -627,7 +627,7 @@ class Agave(ClientCommands, TokenCommands, DeprecatedCommands):
                 download_url,
                 headers={
                     "Authorization":
-                    "Bearer " + self.token.token_info["access_token"]
+                    "Bearer " + self._token
                 },
                 verify=self.verify,
                 proxies=self.proxies,

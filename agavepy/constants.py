@@ -6,7 +6,7 @@ __all__ = [
     'ENV_TOKEN', 'ENV_REFRESH_TOKEN', 'ENV_BASE_URL', 'ENV_API_KEY',
     'ENV_API_SECRET', 'ENV_TENANT_ID', 'TOKEN_SCOPE', 'TOKEN_TTL',
     'ENV_TENANTS_URL', 'DEFAULT_TENANTS_URL', 'DEFAULT_TENANT_ID',
-    'ENV_DEFAULT_TENANT_ID'
+    'ENV_DEFAULT_TENANT_ID', 'DEFAULT_TENANT_API_SERVER'
 ]
 
 # General
@@ -14,6 +14,7 @@ PLATFORM = 'Tapis'
 BASE_URL = 'https://api.tacc.utexas.edu'
 DEFAULT_TENANTS_URL = BASE_URL + '/tenants'
 DEFAULT_TENANT_ID = 'tacc.prod'
+DEFAULT_TENANT_API_SERVER = BASE_URL
 
 # Variable names usable in lieu of passed values to allow environment-driven
 # configuration of the library

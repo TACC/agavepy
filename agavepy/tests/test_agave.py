@@ -182,130 +182,6 @@ def validate_file_pem(pem):
     assert 'read' in pem.permission
     assert 'write' in pem.permission
 
-
-def test_add_compute_system(agave, test_compute_system):
-    system = agave.systems.add(body=test_compute_system)
-    # set system as default for subsequent testing
-    url = agave.api_server + '/systems/v2/' + test_compute_system['id']
-    try:
-        rsp = requests.put(url,
-                           data={'action': 'setDefault'},
-                           headers={'Authorization': 'Bearer ' + agave._token},
-                           verify=agave.verify)
-    except requests.exceptions.HTTPError as exc:
-        print(("Error trying to register compute system:", str(exc)))
-        raise exc
-    validate_system(system)
-
-
-def test_add_storage_system(agave, test_storage_system):
-    system = agave.systems.add(body=test_storage_system)
-    # set system as default for subsequent testing
-    url = agave.api_server + '/systems/v2/' + test_storage_system['id']
-    try:
-        rsp = requests.put(url,
-                           data={'action': 'setDefault'},
-                           headers={'Authorization': 'Bearer ' + agave._token},
-                           verify=agave.verify)
-    except requests.exceptions.HTTPError as exc:
-        print(("Error trying to set storage system as default:", str(exc)))
-        raise exc
-    validate_system(system)
-
-
-def test_list_apps(agave):
-    apps = agave.apps.list()
-    for app in apps:
-        validate_app(app)
-
-
-def test_list_public_apps(agave):
-    apps = agave.apps.list(publicOnly=True)
-    for app in apps:
-        validate_app(app)
-        assert app.isPublic
-
-
-def test_list_private_apps(agave):
-    apps = agave.apps.list(privateOnly=True)
-    for app in apps:
-        validate_app(app)
-        assert not app.isPublic
-
-
-def test_add_app(agave, test_app):
-    app = agave.apps.add(body=test_app)
-    validate_app(app)
-
-
-def test_list_clients(agave, credentials):
-    if not credentials.get('username') or not credentials.get('password'):
-        print("Skipping test_list_clients")
-        return
-    clients = agave.clients.list()
-    for client in clients:
-        validate_client(client)
-
-
-def test_list_files(agave, credentials):
-    files = agave.files.list(filePath=credentials['storage_user'],
-                             systemId=credentials['storage'])
-    for file in files:
-        validate_file(file)
-
-
-def test_get_file_history(agave, credentials):
-    history = agave.files.getHistory(filePath=credentials['storage_user'],
-                                     systemId=credentials['storage'])
-    for rec in history:
-        validate_history_rec(rec)
-
-
-def test_list_file_pems(agave, credentials):
-    pems = agave.files.listPermissions(filePath=credentials['storage_user'],
-                                       systemId=credentials['storage'])
-    for pem in pems:
-        validate_file_pem(pem)
-
-
-def test_add_file_permissions(agave, credentials):
-    body = {'permission': 'ALL', 'recursive': True, 'username': 'jstubbs'}
-    pems = agave.files.updatePermissions(systemId=credentials['storage'],
-                                         filePath=credentials['storage_user'],
-                                         body=body)
-    for pem in pems:
-        validate_file_pem(pem)
-
-
-def test_update_file_pems(agave, credentials):
-    body = {
-        'permission': 'READ',
-        'recursive': False,
-        'username': credentials['storage_user']
-    }
-    rsp = agave.files.updatePermissions(systemId=credentials['storage'],
-                                        filePath=credentials['storage_user'],
-                                        body=body)
-
-
-def test_upload_file(agave, credentials):
-    rsp = agave.files.importData(systemId=credentials['storage'],
-                                 filePath=credentials['storage_user'],
-                                 fileToUpload=open(
-                                     'test_file_upload_python_sdk', 'rb'))
-    arsp = AgaveAsyncResponse(agave, rsp)
-    status = arsp.result(timeout=120)
-    assert status == 'FINISHED'
-
-
-def test_download_file(agave, credentials):
-    rsp = agave.files.download(
-        systemId=credentials['storage'],
-        filePath='{}/test_file_upload_python_sdk'.format(
-            credentials['storage_user']))
-    assert rsp.status_code == 200
-
-
 def test_download_file_range(agave, credentials):
     rsp = agave.files.download(
         systemId=credentials['storage'],
@@ -321,26 +197,6 @@ def test_download_file_range(agave, credentials):
 #                            fileName='test_file_upload_python_sdk',
 #                            urlToIngest='agave://{}/{}/test_dest_transfer_python_sdk'.format(credentials['storage'],
 #                                                               credentials['storage_user']))
-
-
-def test_upload_binary_file(agave, credentials):
-    rsp = agave.files.importData(systemId=credentials['storage'],
-                                 filePath=credentials['storage_user'],
-                                 fileToUpload=open(
-                                     'test_upload_python_sdk_g_art.mov', 'rb'))
-    arsp = AgaveAsyncResponse(agave, rsp)
-    status = arsp.result(timeout=120)
-    assert status == 'FINISHED'
-
-
-def test_download_agave_uri(agave, credentials):
-    remote_path = '{}/test_file_upload_python_sdk'.format(
-        credentials['storage_user'])
-    local_path = os.path.join(HERE, 'local_test_download')
-    uri = 'agave://{}/{}'.format(credentials['storage'], remote_path)
-    rsp = agave.download_uri(uri, local_path)
-    assert os.path.exists(local_path)
-    os.remove(local_path)
 
 
 def test_download_job_output_listings_uri(agave):
@@ -366,40 +222,6 @@ def test_download_job_output_media_uri(agave):
     agave.download_uri(uri, local_path)
     assert os.path.exists(local_path)
     os.remove(local_path)
-
-
-def test_list_uploaded_file(agave, credentials):
-    files = agave.files.list(filePath=credentials['storage_user'],
-                             systemId=credentials['storage'])
-    for f in files:
-        if 'test_file_upload_python_sdk' in f.path:
-            break
-    else:
-        assert False
-
-
-def test_list_uploaded_binary_file(agave, credentials):
-    files = agave.files.list(filePath=credentials['storage_user'],
-                             systemId=credentials['storage'])
-    for f in files:
-        if 'test_upload_python_sdk_g_art.mov' in f.path:
-            break
-    else:
-        assert False
-
-
-def test_delete_uploaded_files(agave, credentials):
-    uploaded_files = [
-        'test_file_upload_python_sdk', 'test_upload_python_sdk_g_art.mov'
-    ]
-    for f in uploaded_files:
-        agave.files.delete(systemId=credentials['storage'],
-                           filePath='{}/{}'.format(credentials['storage_user'],
-                                                   f))
-        # make sure file isn't still there:
-        files = agave.files.list(filePath=credentials['storage_user'],
-                                 systemId=credentials['storage'])
-        assert f not in [fl.path for fl in files]
 
 
 def test_submit_job(agave, test_job):
