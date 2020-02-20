@@ -1,0 +1,55 @@
+{
+	"id": "test-execution-tacc-prod",
+	"name": "tacc.prod test compute system",
+	"status": "UP",
+	"type": "EXECUTION",
+	"description": "",
+	"site": "tacc.cloud",
+	"executionType": "CLI",
+    "scratchDir": "",
+    "workDir": "",
+   "queues": [
+     {
+       "name": "debug",
+       "maxJobs": 100,
+       "maxUserJobs": 10,
+       "maxNodes": 1,
+       "maxMemoryPerNode": "1GB",
+       "maxProcessorsPerNode": 1,
+       "maxRequestedTime": "24:00:00",
+       "customDirectives": "",
+       "default": true
+     }
+   ],
+   "login":{
+      "host":"",
+      "port": 22,
+      "protocol": "SSH",
+      "scratchDir": "",
+      "workDir": "",
+      "auth":{
+         "username":"",
+         "publicKey":"",
+         "privateKey":"",
+         "type":"SSHKEYS"
+      }
+   },
+   "storage":{
+      "host":"",
+      "port":22,
+      "protocol":"SFTP",
+      "rootDir":"/home/ubuntu",
+      "homeDir":"/",
+      "auth":{
+         "username":"ubuntu",
+         "publicKey":"",
+         "privateKey":"",
+         "type":"SSHKEYS"
+      }
+   },
+   "maxSystemJobs": 100,
+   "maxSystemJobsPerUser": 10,
+   "scheduler": "FORK",
+   "environment": "",
+   "startupScript": "./bashrc"
+}

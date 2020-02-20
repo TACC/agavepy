@@ -1,0 +1,21 @@
+{
+   "id": "test-storage-tacc-prod",
+   "name": "tacc.prod integration test storage system",
+   "status":"UP",
+   "type":"STORAGE",
+   "description":"",
+   "site":"tacc.prod",
+   "storage":{
+      "host":"",
+      "port":22,
+      "protocol":"SFTP",
+      "rootDir":"/home/ubuntu",
+      "homeDir":"/",
+      "auth":{
+         "username":"",
+         "publicKey": "",
+         "privateKey": "",
+         "type": "SSHKEYS"
+      }
+   }
+}

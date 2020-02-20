@@ -25,6 +25,7 @@ def temp_cache_b():
     """
     return mkdtemp(prefix='tapispy-', suffix='-cache_b')
 
+
 @pytest.fixture(scope='session')
 def temp_cache_empty():
     """Alternative to pytest's temporary directory function

@@ -1,3 +1,5 @@
+__author__ = 'vaughn'
+
 import pytest
 from . import TESTS_DATA
 
