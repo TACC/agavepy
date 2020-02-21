@@ -1,88 +1,107 @@
 {
-  "name": "",
-  "version": "0.0.1",
+  "id": "agavepy_sdk_wc-1.0.0",
+  "name": "agavepy_sdk_wc",
+  "version": "1.0.0",
+  "revision": 1,
+  "label": "Agavepy SDK wc",
+  "lastModified": "2020-02-21T11:45:49.000-06:00",
+  "shortDescription": "Counts up words in a file. Voila!",
+  "longDescription": "",
+  "owner": "sd2etest",
+  "isPublic": false,
+  "executionType": "CLI",
+  "executionSystem": "test-execution-tacc-prod",
+  "deploymentSystem": "test-storage-tacc-prod",
   "available": true,
   "parallelism": "SERIAL",
-  "helpURI": "https://agaveapi.co",
-  "label": "python-sdk",
-  "shortDescription": "Test app for python sdk",
-  "longDescription": "",
-  "author": "Joe Stubbs",
-  "datePublished": "",
-  "publiclyAvailable": "false",
-  "tags": [
-    "containers",
-    "docker",
-    "workflow"
-  ],
-  "executionSystem": "",
-  "executionType": "CLI",
-  "defaultQueue": "debug",
-  "defaultNodes": 1,
   "defaultProcessorsPerNode": 1,
-  "defaultMemoryPerNode": "2GB",
-  "defaultMaxRunTime": "01:00:00",
-  "deploymentSystem": "",
-  "deploymentPath": "/home/eod/endofday-app/",
-  "templatePath": "wrapper.sh",
-  "testPath": "tests/test.sh",
-  "checkpointable": true,
+  "defaultMemoryPerNode": 1,
+  "defaultNodeCount": 1,
+  "defaultMaxRunTime": "00:30:00",
+  "defaultQueue": null,
+  "tags": [],
+  "ontology": [
+    "test",
+    "coreutils",
+    "shell",
+    "demo"
+  ],
+  "helpURI": "",
+  "deploymentPath": "sd2etest/apps/agavepy_sdk_wc-1.0.0",
+  "templatePath": "run.sh",
+  "testPath": "test.sh",
+  "checkpointable": false,
+  "modules": [],
   "inputs": [
     {
-      "id": "wf",
+      "id": "input1",
       "value": {
-        "validator": "",
-        "required": true,
-        "default": "",
-        "order": 0,
+        "validator": null,
         "visible": true,
-        "enquote": false
+        "required": true,
+        "order": 0,
+        "enquote": false,
+        "default": "agave://test-storage-tacc-prod/sd2etest/apps/agavepy_sdk_wc-1.0.0/example.txt"
       },
       "details": {
-        "label": "Yaml file defining the workflow to execute.",
-        "description": "",
-        "repeatArgument": false,
-        "showArgument": false
+        "label": "Target file",
+        "description": "Words in this file will be counted",
+        "argument": null,
+        "showArgument": false,
+        "repeatArgument": false
       },
       "semantics": {
-        "ontology": [
-          "http://sswapmeet.sswap.info/util/TextDocument"
-        ],
         "minCardinality": 1,
         "maxCardinality": 1,
-        "fileTypes": [
-          "text-0"
-        ]
+        "ontology": [],
+        "fileTypes": []
       }
-    },
+    }
+  ],
+  "parameters": [
     {
-      "id": "glob_in",
+      "id": "cli_opts",
       "value": {
-        "validator": "",
-        "required": false,
-        "default": "",
-        "order": 1,
         "visible": true,
-        "enquote": false
+        "required": false,
+        "type": "string",
+        "order": 1,
+        "enquote": false,
+        "default": "",
+        "validator": null
       },
       "details": {
-        "label": "Global input file to the work flow",
-        "description": "",
-        "repeatArgument": false,
-        "showArgument": false
+        "label": "Command-line options",
+        "description": "These options will be passed to the 'wc' program.",
+        "argument": null,
+        "showArgument": false,
+        "repeatArgument": false
       },
       "semantics": {
-        "ontology": [
-          "http://sswapmeet.sswap.info/util/TextDocument"
-        ],
-        "minCardinality": 0,
-        "maxCardinality": -1,
-        "fileTypes": [
-          "text-0"
-        ]
+        "minCardinality": 1,
+        "maxCardinality": 1,
+        "ontology": []
       }
     }
   ],
   "outputs": [
+    {
+      "id": "output1",
+      "value": {
+        "validator": null,
+        "order": 100,
+        "default": "wc_out/output.txt"
+      },
+      "details": {
+        "label": "STDOUT from the wc command",
+        "description": null
+      },
+      "semantics": {
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "ontology": [],
+        "fileTypes": []
+      }
+    }
   ]
 }

@@ -1,0 +1,77 @@
+{
+  "checkpointable": false,
+  "name": "{{ app.name }}",
+  "executionSystem": "{{ app.execution_system }}",
+  "executionType": "CLI",
+  "deploymentPath": "{{ username }}/apps/{{ app.name }}-{{ app.version }}",
+  "deploymentSystem": "{{ app.deployment_system }}",
+  "helpURI": "",
+  "label": "{{ app.label }}",
+  "shortDescription": "{{ app.description }}",
+  "longDescription": "",
+  "modules": [],
+  "ontology": ["test", "coreutils", "shell", "demo"],
+  "parallelism": "SERIAL",
+  "tags": [],
+  "templatePath": "run.sh",
+  "testPath": "test.sh",
+  "version": "{{ app.version }}",
+  "defaultMaxRunTime": "00:30:00",
+  "inputs": [   {
+    "id": "input1",
+    "value": {
+      "visible": true,
+      "required": true,
+      "order": 0,
+      "default": "agave://{{ app.deployment_system }}/{{ username }}/apps/{{ app.name }}-{{ app.version }}/example.txt"
+    },
+    "details": {
+      "label": "Target file",
+      "description": "Words in this file will be counted"
+    },
+    "semantics": {
+      "minCardinality": 1,
+      "maxCardinality": 1,
+      "ontology": []
+    }
+  }
+],
+  "parameters": [
+    {
+      "id": "cli_opts",
+      "value": {
+        "visible": true,
+        "required": false,
+        "type": "string",
+        "order": 1,
+        "default": ""
+      },
+      "details": {
+        "label": "Command-line options",
+        "description": "These options will be passed to the 'wc' program."
+      },
+      "semantics": {
+        "minCardinality": 1,
+        "maxCardinality": 1,
+        "ontology": []
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output1",
+      "value": {
+        "order": 100,
+        "default": "wc_out/output.txt"
+      },
+      "details": {
+        "label": "STDOUT from the wc command"
+      },
+      "semantics": {
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "ontology": []
+      }
+    }
+  ]
+}

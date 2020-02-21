@@ -22,16 +22,11 @@ from swaggerpy.http_client import SynchronousHttpClient
 from swaggerpy.processors import WebsocketProcessor, SwaggerProcessor
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))  # noqa
-# from .. import settings
 
-# logging.basicConfig(level=logging.ERROR)
-# log.setLevel(logging.ERROR)
-logging.getLogger(__name__).setLevel(
-    os.environ.get('SWAGGERPY_LOG_LEVEL',
-                   os.environ.get('TAPISPY_LOG_LEVEL', logging.INFO)))
-logging.getLogger("urllib3").setLevel(
-    os.environ.get('SWAGGERPY_LOG_LEVEL',
-                   os.environ.get('TAPISPY_LOG_LEVEL', logging.WARNING)))
+LOG_LEVEL = os.environ.get('SWAGGERPY_LOG_LEVEL',
+                           os.environ.get('TAPISPY_LOG_LEVEL', logging.ERROR))
+logging.getLogger(__name__).setLevel(LOG_LEVEL)
+logging.getLogger("urllib3").setLevel(LOG_LEVEL)
 log = logging.getLogger(__name__)
 
 

@@ -1,0 +1,8 @@
+{
+  "name": "{{ app.name }}-test-{{ iso8601_basic_short }}",
+  "appId": "{{ app.name }}-{{ app.version}}",
+  "archive": true,
+  "inputs": {
+    "input1":  "agave://{{ app.deployment_system }}/{{ username }}/apps/{{ app.name }}-{{ app.version }}/example.txt"
+  }
+}

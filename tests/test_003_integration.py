@@ -1,4 +1,4 @@
-__author__ = 'vaughn'
+__author__ = 'vaughn, jstubbs'
 
 from pprint import pprint
 import datetime
@@ -16,7 +16,8 @@ import agavepy.settings as settings
 from .data import keys as sshkeys
 from agavepy.asynchronous import AgaveAsyncResponse
 from .data.integration import (MockData, TEST_UPLOAD_BINARY_FILE,
-                               TEST_UPLOAD_FILE, TEST_UPLOAD_TIMEOUT)
+                               TEST_UPLOAD_FILE, TEST_UPLOAD_TIMEOUT,
+                               TEST_JOB_TIMEOUT)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -81,6 +82,13 @@ def test_job(credentials):
 
 
 @pytest.fixture(scope='session')
+def test_job_static_id():
+    """This is a known, previously-submitted job
+    """
+    return '1784a694-0737-480e-95f2-44f55fb35fb7-007'
+
+
+@pytest.fixture(scope='session')
 def test_compute_system(credentials, execution_system_id, syshost, sysuser,
                         syspubkey, sysprivkey):
     return MockData(credentials).get_test_compute_system(
@@ -97,6 +105,11 @@ def test_storage_system(credentials, storage_system_id, syshost, sysuser,
 @pytest.fixture(scope='session')
 def test_pem_username():
     return 'cicsvc'
+
+
+##############
+# Validators #
+##############
 
 
 def validate_app(app):
@@ -124,6 +137,13 @@ def validate_file(file):
     assert file.system
 
 
+def validate_file_pem(pem):
+    assert pem.permission
+    assert 'execute' in pem.permission
+    assert 'read' in pem.permission
+    assert 'write' in pem.permission
+
+
 def validate_history_rec(rec):
     assert rec.description
 
@@ -132,7 +152,6 @@ def validate_job(job):
     assert job.appId
     if 'endTime' in job:
         assert job.endTime is None or type(job.endTime) is datetime.datetime
-    assert job.executionSystem
     assert job.id
     assert job.name
     assert job.owner
@@ -142,15 +161,11 @@ def validate_job(job):
     assert job.status
 
 
-def validate_system(system):
-    assert type(system.public) is bool
-    assert system.name
-    assert system.status
-    assert system.type
-
-
-def validate_profile(prof, user):
-    assert prof.username == user
+def validate_job_listing(job):
+    assert job.id
+    assert job.name
+    assert job.status
+    assert job.owner
 
 
 def validate_meta(md, name, value):
@@ -164,11 +179,41 @@ def validate_monitor(m):
     assert m.frequency
 
 
-def validate_file_pem(pem):
+def validate_notification(n):
+    assert n.id
+    assert n.event
+    assert n.url
+
+
+def validate_pem(pem):
+    assert pem.username
     assert pem.permission
-    assert 'execute' in pem.permission
-    assert 'read' in pem.permission
-    assert 'write' in pem.permission
+
+
+def validate_postit(postit):
+    assert postit.url
+    assert postit.method
+
+
+def validate_profile(prof, user):
+    assert prof.username == user
+
+
+def validate_role(role):
+    assert role.username
+    assert role.role
+
+
+def validate_system(system):
+    assert type(system.public) is bool
+    assert system.name
+    assert system.status
+    assert system.type
+
+
+###############
+# Add Systems #
+###############
 
 
 def test_add_compute_system(agave, test_compute_system):
@@ -306,6 +351,7 @@ def test_update_file_pems(agave, storage_system_id, test_username,
                                         body=body)
 
 
+@pytest.mark.longrun
 def test_upload_file(agave, storage_system_id, test_username):
     rsp = agave.files.importData(systemId=storage_system_id,
                                  filePath=test_username,
@@ -315,6 +361,7 @@ def test_upload_file(agave, storage_system_id, test_username):
     assert status == 'FINISHED'
 
 
+@pytest.mark.longrun
 def test_download_file(agave, storage_system_id, test_username):
     rsp = agave.files.download(systemId=storage_system_id,
                                filePath='{0}/{1}'.format(
@@ -323,6 +370,16 @@ def test_download_file(agave, storage_system_id, test_username):
     assert rsp.status_code == 200
 
 
+@pytest.mark.longrun
+def test_download_file_range(agave, storage_system_id, test_username):
+    rsp = agave.files.download(
+        systemId=storage_system_id,
+        filePath='{}/test_file_upload_python_sdk'.format(test_username),
+        headers={'range': 'bytes=1-5'})
+    assert rsp.status_code == 200
+
+
+@pytest.mark.longrun
 def test_upload_binary_file(agave, storage_system_id, test_username):
     rsp = agave.files.importData(systemId=storage_system_id,
                                  filePath=test_username,
@@ -333,6 +390,7 @@ def test_upload_binary_file(agave, storage_system_id, test_username):
     assert status == 'FINISHED'
 
 
+@pytest.mark.longrun
 def test_download_binary_file(agave, storage_system_id, test_username):
     rsp = agave.files.download(systemId=storage_system_id,
                                filePath='{0}/{1}'.format(
@@ -341,6 +399,7 @@ def test_download_binary_file(agave, storage_system_id, test_username):
     assert rsp.status_code == 200
 
 
+@pytest.mark.longrun
 def test_download_agave_uri(agave, storage_system_id, test_username):
     remote_path = '{}/test_file_upload_python_sdk'.format(test_username)
     local_path = tempfile.mkstemp()[1]
@@ -350,6 +409,7 @@ def test_download_agave_uri(agave, storage_system_id, test_username):
     os.remove(local_path)
 
 
+@pytest.mark.longrun
 def test_list_uploaded_file(agave, storage_system_id, test_username):
     files = agave.files.list(filePath='{0}/{1}'.format(
         test_username, os.path.basename(TEST_UPLOAD_FILE)),
@@ -361,6 +421,7 @@ def test_list_uploaded_file(agave, storage_system_id, test_username):
         assert False
 
 
+@pytest.mark.longrun
 def test_list_uploaded_binary_file(agave, storage_system_id, test_username):
     files = agave.files.list(filePath='{0}/{1}'.format(
         test_username, os.path.basename(TEST_UPLOAD_BINARY_FILE)),
@@ -372,6 +433,7 @@ def test_list_uploaded_binary_file(agave, storage_system_id, test_username):
         assert False
 
 
+@pytest.mark.longrun
 def test_delete_uploaded_files(agave, storage_system_id, test_username):
     uploaded_files = [
         os.path.basename(TEST_UPLOAD_BINARY_FILE),
@@ -394,10 +456,11 @@ def test_delete_uploaded_files(agave, storage_system_id, test_username):
 def test_list_jobs(agave):
     jobs = agave.jobs.list()
     for job in jobs:
-        validate_job(job)
-    assert len(jobs) > 0, 'User has no listable jobs'
+        validate_job_listing(job)
+    assert len(jobs) > 0, 'Test user has no listable jobs'
 
 
+@pytest.mark.longrun
 def test_list_single_job_many_times(agave):
     jobs = agave.jobs.list()
     if len(jobs) > 0:
@@ -406,4 +469,388 @@ def test_list_single_job_many_times(agave):
             j = agave.jobs.get(jobId=job.id)
             validate_job(j)
     else:
-        raise ValueError('User has no listable jobs')
+        raise IndexError('Test user has no listable jobs')
+
+
+@pytest.mark.longrun
+def test_download_job_output_listings_uri(agave, test_job_static_id):
+    # Relies on output of job ${test_job_static_id}
+    local_path = tempfile.mkstemp()[1]
+    uri = '{0}/jobs/v2/{1}/outputs/listings/wc_out/output.txt'.format(
+        agave.api_server, test_job_static_id)
+    agave.download_uri(uri, local_path)
+    assert os.path.exists(local_path)
+    os.remove(local_path)
+
+
+@pytest.mark.longrun
+def test_download_job_output_media_uri(agave, test_job_static_id):
+    # Relies on output of job ${test_job_static_id}
+    local_path = tempfile.mkstemp()[1]
+    uri = '{0}/jobs/v2/{1}/outputs/media/wc_out/output.txt'.format(
+        agave.api_server, test_job_static_id)
+    agave.download_uri(uri, local_path)
+    assert os.path.exists(local_path)
+    os.remove(local_path)
+
+
+@pytest.mark.longrun
+def test_submit_job(agave, test_job):
+    job = agave.jobs.submit(body=test_job)
+    validate_job(job)
+    # create an async object
+    arsp = AgaveAsyncResponse(agave, job)
+    # block until job finishes with a timeout of TEST_JOB_TIMEOUT sec.
+    assert arsp.result(TEST_JOB_TIMEOUT) == 'FINISHED'
+
+
+@pytest.mark.longrun
+def test_submit_archive_job(agave, test_job, storage_system_id):
+    test_job['archive'] = True
+    test_job['archiveSystem'] = storage_system_id
+    job = agave.jobs.submit(body=test_job)
+    validate_job(job)
+    # create an async object
+    arsp = AgaveAsyncResponse(agave, job)
+    # block until job finishes with a timeout of 3 minutes.
+    assert arsp.result(TEST_JOB_TIMEOUT) == 'FINISHED'
+    # TODO - check that the result was archived
+
+
+def test_search_jobs(agave):
+    # get the id of the first job from the full list
+    id = agave.jobs.list()[0].id
+    owner = agave.jobs.list()[0].owner
+    # use the search to filter for it:
+    jobs = agave.jobs.list(search={'id.like': id})
+    assert len(jobs) == 1
+    jobs = agave.jobs.list(search={'owner.like': owner})
+    assert len(jobs) > 1
+
+
+def test_list_job_permissions(agave):
+    job = agave.jobs.list()[0]
+    pems = agave.jobs.listPermissions(jobId=job.id)
+    for pem in pems:
+        validate_pem(pem)
+
+
+def test_job_geturl(agave):
+    job = agave.jobs.list()[0]
+    url = job._links['self']['href']
+    job_rsp = agave.geturl(url)
+    assert job_rsp.json().get('result').get('id') is not None
+
+
+############
+# Profiles #
+############
+
+
+def test_get_profile(agave, test_username):
+    prof = agave.profiles.get()
+    if test_username:
+        validate_profile(prof, test_username)
+
+
+def test_list_profiles(agave, test_username):
+    prof = agave.profiles.listByUsername(username='me')
+    if test_username:
+        validate_profile(prof, test_username)
+
+
+###########
+# Systems #
+###########
+
+
+def test_list_systems(agave):
+    systems = agave.systems.list()
+    for system in systems:
+        validate_system(system)
+
+
+def test_list_public_systems(agave):
+    systems = agave.systems.list(public=True)
+    for system in systems:
+        validate_system(system)
+        assert system.public
+
+
+def test_list_default_systems(agave):
+    systems = agave.systems.list(default=True)
+    for system in systems:
+        validate_system(system)
+        assert system.default
+
+
+def test_list_private_systems(agave):
+    systems = agave.systems.list(public=False)
+    for system in systems:
+        validate_system(system)
+        assert not system.public
+
+
+def test_list_default_systems(agave):
+    systems = agave.systems.list(default=True)
+    for system in systems:
+        validate_system(system)
+        assert system.get('default')
+
+
+def test_list_system_roles(agave, storage_system_id, test_username):
+    roles = agave.systems.listRoles(systemId=storage_system_id)
+    for role in roles:
+        validate_role(role)
+
+
+def test_get_system_role_for_user(agave, storage_system_id, test_username):
+    role = agave.systems.getRoleForUser(systemId=storage_system_id,
+                                        username=test_username)
+    validate_role(role)
+
+
+#################
+# Notifications #
+#################
+
+
+@pytest.fixture(scope='session')
+def test_postbin_url():
+    base_url = 'https://postb.in'
+    api_url = base_url + '/api/bin'
+    rsp = requests.post(api_url)
+    bin_name = rsp.json().get('binId')
+    bin_url = '{}/{}'.format(base_url, bin_name)
+    return bin_url
+
+
+def get_postbin_requests(postbin_url):
+    """Return all requests for a postb.in
+    """
+    pels = postbin_url.split('/')
+    requests_url = '{0}//{1}/api/bin/{2}/req/shift'.format(
+        pels[0], pels[2], pels[3])
+    reqs = []
+    count_resp = 0
+    while True and count_resp < 100:
+        resp = requests.get(requests_url)
+        count_resp = count_resp + 1
+        if resp.status_code == 200:
+            reqs.append(resp.json())
+        else:
+            return reqs
+
+
+def test_postbin_url_ok(test_postbin_url):
+    assert 'https' in test_postbin_url
+
+
+def test_create_notification_to_url(agave, storage_system_id,
+                                    test_postbin_url):
+
+    # get uuid of storage system
+    stor = agave.systems.get(systemId=storage_system_id)
+    assert stor.uuid
+
+    body = {
+        'associatedUuid': stor.uuid,
+        'event': '*',
+        'persistent': True,
+        'url': test_postbin_url
+    }
+    n = agave.notifications.add(body=json.dumps(body))
+
+
+def test_list_notification(agave, storage_system_id):
+    # get uuid of storage system
+    stor = agave.systems.get(systemId=storage_system_id)
+    assert stor.uuid
+    ns = agave.notifications.list(associatedUuid=stor.uuid)
+    for n in ns:
+        validate_notification(n)
+
+
+@pytest.mark.longrun
+def test_notification_to_url(agave, test_postbin_url, test_storage_system):
+    # create notification
+    # get uuid of storage system
+    stor = agave.systems.get(systemId=test_storage_system['id'])
+    assert stor.uuid
+    body = {
+        'associatedUuid': stor.uuid,
+        'event': '*',
+        'persistent': True,
+        'url': test_postbin_url
+    }
+    n = agave.notifications.add(body=json.dumps(body))
+    # wait for notification to be propagated
+    time.sleep(6)
+    # update the system:
+    agave.systems.add(body=test_storage_system)
+    # wait for notification to be sent
+    time.sleep(24)
+    # check for a notification
+    reqs = get_postbin_requests(test_postbin_url)
+    assert len(reqs) > 0
+    # delete the notification
+    agave.notifications.delete(uuid=n.id)
+
+
+def test_delete_notification(agave, storage_system_id):
+    # get uuid of storage system
+    stor = agave.systems.get(systemId=storage_system_id)
+    assert stor.uuid
+    # list notifications
+    ns = agave.notifications.list(associatedUuid=stor.uuid)
+    assert len(ns) > 0
+    id = ns[0].id
+    agave.notifications.delete(uuid=id)
+    # make sure it's actually gone
+    ns = agave.notifications.list(associatedUuid=stor.uuid)
+    for n in ns:
+        if n.id == id:
+            assert False
+
+
+def test_create_notification_to_email(agave, storage_system_id):
+    # get uuid of storage system
+    stor = agave.systems.get(systemId=storage_system_id)
+    assert stor.uuid
+    body = {
+        'associatedUuid': stor.uuid,
+        'event': '*',
+        'persistent': True,
+        'url': 'noreply@tacc.utexas.edu'
+    }
+    n = agave.notifications.add(body=json.dumps(body))
+    validate_notification(n)
+    # make sure it's there
+    ns = agave.notifications.list(associatedUuid=stor.uuid)
+    for nt in ns:
+        if nt.id == n.id:
+            agave.notifications.delete(uuid=n.id)
+            break
+    else:
+        assert False
+
+
+############
+# Metadata #
+############
+
+
+def test_list_metadata(agave):
+    md = agave.meta.listMetadata()
+    # there may not be any meta data in the system, so simply ensure the response code is a 20x.
+
+
+def test_list_metadata_with_query_empty(agave):
+    md = agave.meta.listMetadata(q="{'name': 'foofymcfoofoo'}")
+    assert len(md) == 0
+
+
+def test_add_list_delete_metadata(agave):
+    # add a new one
+    name = 'python-sdk-test-metadata'
+    value = 'test value'
+    d = {'name': name, 'value': value}
+    md = agave.meta.addMetadata(body=json.dumps(d))
+    validate_meta(md, name, value)
+    # find it in the list:
+    mds = agave.meta.listMetadata(q='')
+    for md in mds:
+        if md.name == 'python-sdk-test-metadata' and \
+        md.value == 'test value':
+            uuid = md.uuid
+            break
+    else:
+        assert False
+    # delete it
+    md = agave.meta.deleteMetadata(uuid=uuid)
+    # make sure it's really gone
+    mds = agave.meta.listMetadata(q='')
+    assert uuid not in [md.uuid for md in mds]
+
+
+# TODO - Add a test for searching metdata
+
+###########
+# Postits #
+###########
+
+
+def test_create_postit(agave, credentials):
+    body = {
+        'url': '{}/systems/v2'.format(credentials['apiserver']),
+        'maxUses': 2,
+        'noauth': False,
+        'method': 'GET'
+    }
+    agave.postits.create(body=body)
+
+
+def test_list_postits(agave):
+    postits = agave.postits.list()
+    for postit in postits:
+        validate_postit(postit)
+
+
+#####################
+# Token-only Access #
+#####################
+
+
+def test_token_only_access(credentials):
+    # create a fresh client
+    ag = a.Agave(
+        username=credentials.get('username'),
+        password=credentials.get('password'),
+        api_server=credentials.get('apiserver'),
+        api_key=credentials.get('apikey'),
+        api_secret=credentials.get('apisecret'),
+        #  token=credentials.get('token'),
+        #  refresh_token=credentials.get('refresh_token'),
+        verify=credentials.get('verify_certs', True))
+    # force a token refresh
+    token = ag.token.refresh()
+    # now, create a new client using just the token
+    token_client = a.Agave(api_server=credentials['apiserver'],
+                           token=token,
+                           verify=credentials.get('verify_certs', True))
+    # make sure configured and newly-generated token are not same
+    assert credentials.get('token') != token_client._token
+    # make sure the new client works
+    apps = token_client.apps.list()
+    for app in apps:
+        validate_app(app)
+
+
+##################
+# Token Callback #
+##################
+
+token_callback_calls = 0
+
+
+def test_token_callback(agave, credentials):
+    def sample_token_callback(**kwargs):
+        global token_callback_calls
+        token_callback_calls += 1
+        assert kwargs['access_token']
+        assert kwargs['refresh_token']
+        assert kwargs['created_at']
+        assert kwargs['expires_at']
+
+    # create a client with a token callback:
+    ag = a.Agave(username=credentials.get('username'),
+                 password=credentials.get('password'),
+                 api_server=credentials.get('apiserver'),
+                 api_key=credentials.get('apikey'),
+                 api_secret=credentials.get('apisecret'),
+                 verify=credentials.get('verify_certs', True),
+                 token_callback=sample_token_callback)
+    # once created, let's force a refresh
+    ag.refresh()
+    global token_callback_calls
+    assert token_callback_calls >= 1

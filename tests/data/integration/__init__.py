@@ -10,13 +10,14 @@ PARENT = os.path.dirname(HERE)
 
 __all__ = [
     'MockData', 'TEST_UPLOAD_FILE', 'TEST_UPLOAD_BINARY_FILE',
-    'TEST_UPLOAD_TIMEOUT'
+    'TEST_UPLOAD_TIMEOUT', 'TEST_JOB_TIMEOUT'
 ]
 
 TEST_UPLOAD_FILE = os.path.join(PARENT, 'test_file_upload_python_sdk')
 TEST_UPLOAD_BINARY_FILE = os.path.join(PARENT,
                                        'test_upload_python_sdk_g_art.mov')
 TEST_UPLOAD_TIMEOUT = 360
+TEST_JOB_TIMEOUT = 360
 
 
 class MockData(object):
@@ -86,9 +87,9 @@ class MockData(object):
 
     def get_test_app_from_file(self):
         app = self.file_to_json('test-app.json')
-        app['name'] = self.local_data['app_name']
-        app['executionSystem'] = self.local_data['execution']
-        app['deploymentSystem'] = self.local_data['storage']
+        # app['name'] = self.local_data['app_name']
+        # app['executionSystem'] = self.local_data['execution']
+        # app['deploymentSystem'] = self.local_data['storage']
         return app
 
     def get_test_job_from_file(self):
@@ -98,7 +99,7 @@ class MockData(object):
         test_app = self.get_test_app_from_file()
         test_stor = self.get_test_storage_system()
         job = self.file_to_json('test-job.json')
-        job['appId'] = test_app['name'] + '-' + test_app['version']
-        job['inputs']['wf'] = "agave://{}//data/algebra.yml".format(
-            test_stor['id'])
+        # job['appId'] = test_app['name'] + '-' + test_app['version']
+        # job['inputs']['wf'] = "agave://{}//data/algebra.yml".format(
+        #     test_stor['id'])
         return job
