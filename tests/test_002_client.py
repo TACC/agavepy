@@ -129,6 +129,15 @@ def test_bare_client_param(temp_testing_env, test_api_server,
     ag = Agave(api_server=test_api_server, token=test_forever_token)
     assert 'username' in ag.profiles.listByUsername(username=test_username)
 
+@pytest.mark.smoketest
+def test_bare_client_token_only(temp_testing_env, test_api_server,
+                           test_forever_token, test_username,
+                           tapis_py_log_level_debug):
+    """Client can make API call using only token assuming it matches api_server
+    """
+    from agavepy.agave import Agave
+    ag = Agave(token=test_forever_token)
+    assert 'username' in ag.profiles.listByUsername(username=test_username)
 
 def test_bare_client_param_refresh(temp_testing_env, test_api_server,
                                    test_forever_token):

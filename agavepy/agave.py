@@ -20,7 +20,8 @@ from agavepy.constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
                                SESSIONS_FILENAME, TOKEN_SCOPE, TOKEN_TTL,
                                ENV_BASE_URL, ENV_TOKEN, ENV_REFRESH_TOKEN,
                                ENV_USERNAME, ENV_PASSWORD, ENV_API_KEY,
-                               ENV_API_SECRET, ENV_TENANT_ID)
+                               ENV_API_SECRET, ENV_TENANT_ID, 
+                               DEFAULT_TENANT_API_SERVER)
 
 from agavepy.aloe import (LAST_PRE_ALOE_VERSION, EXCEPTION_MODELS)
 from agavepy.configgen import (ConfigGen, load_resource)
@@ -58,7 +59,7 @@ class Agave(ClientCommands, TokenCommands, DeprecatedCommands):
         ("token_username", False, "token_username", None),
         ("jwt", False, "jwt", None),
         ("jwt_header_name", False, "header_name", None),
-        ("api_server", True, "api_server", None),
+        ("api_server", False, "api_server", DEFAULT_TENANT_API_SERVER),
         ("tenant_id", False, "tenant_id", None),
         ("expires_in", False, "expires_in", None),
         ("expires_at", False, "expires_at", None),
