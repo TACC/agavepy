@@ -494,6 +494,7 @@ def test_download_job_output_media_uri(agave, test_job_static_id):
     os.remove(local_path)
 
 
+@pytest.mark.xfail(strict=False)
 @pytest.mark.longrun
 def test_submit_job(agave, test_job):
     job = agave.jobs.submit(body=test_job)
@@ -503,7 +504,7 @@ def test_submit_job(agave, test_job):
     # block until job finishes with a timeout of TEST_JOB_TIMEOUT sec.
     assert arsp.result(TEST_JOB_TIMEOUT) == 'FINISHED'
 
-
+@pytest.mark.xfail(strict=False)
 @pytest.mark.longrun
 def test_submit_archive_job(agave, test_job, storage_system_id):
     test_job['archive'] = True
