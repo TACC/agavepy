@@ -373,20 +373,21 @@ def main():
                                     '``\n\n')
                             #f.write(op.get('summary') + '\n\n')
 
-                            f.write(
-                                rst_heading('Keyword Args:', 'subsection') + '\n')
-                            for fp in fmtlist:
-                                # compute type
-                                fmttype = fp['jtype']
-                                fmtdesc = fp['desc']
+                            if len(fmtlist) > 0:
+                                f.write(
+                                    rst_heading('Keyword Args:', 'subsection') + '\n')
+                                for fp in fmtlist:
+                                    # compute type
+                                    fmttype = fp['jtype']
+                                    fmtdesc = fp['desc']
 
-                                if fp['ptype'] == 'body':
-                                    fmttype = 'JSON, ' + fp['jtype']
+                                    if fp['ptype'] == 'body':
+                                        fmttype = 'JSON, ' + fp['jtype']
 
-                                f.write('    * ' + rst_bold(fp['name']) + ': ' +
-                                        fmtdesc + ' (' + fmttype + ')' + '\n')
-
-                            f.write('\n\n')
+                                    f.write('    * ' + rst_bold(fp['name']) + ': ' +
+                                            fmtdesc + ' (' + fmttype + ')' + '\n')
+                                f.write('\n\n')
+                                
                             # format JSON schema for request object
                             if fp['ptype'] == 'body':
                                 if fp['jtype'] != 'string':

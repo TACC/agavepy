@@ -42,15 +42,11 @@ get: Find authenticated user profile
 ====================================
 ``profiles.get()``
 
-Keyword Args:
--------------
-
-
 Response:
 ---------
     * *A single Profile object*
 
-delete: Depete user profile
+delete: Delete user profile
 ===========================
 ``profiles.delete(username=<USERNAME>)``
 

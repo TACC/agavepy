@@ -59,10 +59,6 @@ list: List existing clients
 ===========================
 ``clients.list()``
 
-Keyword Args:
--------------
-
-
 **ClientRequest schema**
 
 .. code-block:: javascript

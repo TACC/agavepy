@@ -520,10 +520,6 @@ listAliases: List all current aliases
 =====================================
 ``actors.listAliases()``
 
-Keyword Args:
--------------
-
-
 **AddAliasRequest schema**
 
 .. code-block:: javascript
