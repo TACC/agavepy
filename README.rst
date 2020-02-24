@@ -15,7 +15,7 @@ AgavePy
     :target: https://raw.githubusercontent.com/TACC/agavepy/master/LICENSE
 
 AgavePy is an open source Python SDK that enables you to interact 
-with Tapis services using functions in your Python scripts and REPL.
+with TapisAPI_ services using functions in your Python scripts and REPL.
 
 ************
 Installation

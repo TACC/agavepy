@@ -1,16 +1,21 @@
 ======                                           
 Actors
 ======                                           
-                                                                                
-Agave actors are based off the 
-`actor model <https://en.wikipedia.org/wiki/Actor_model>`_.
-Actors are meant to respond to messages from the user or from thrid-party
-applications and act in the user's interest be it by creating other actors,
-running Agave applications, moving data, etc.
 
-For more info on how actors are implemented see 
-`TACC/abaco <https://github.com/TACC/abaco>`_.
-                                                                                
+`Abaco <http://useabaco.cloud/>`_ is a Tapis web service providing 
+functions-as-a-service (FaaS) to the research computing community. 
+It implements functions using the `Actor Model <https://en.wikipedia.org/wiki/Actor_model>`_ 
+of concurrent computation, so the relevant API name in Tapis is **actors**.
+
+In Abaco, each actor is associated with a Docker image, and actor containers 
+are executed in response to messages posted to their inbox, which itself is 
+given by a URI exposed over HTTP. Use cases for Abaco actors include moving 
+data, running Tapis apps, interacting with other actors, and interoperating 
+with third-party web services. 
+
+The functions documented here help you to discover, inspect, manage, and 
+use Abaco actors_.
+
 .. toctree::                                                                    
    :maxdepth: 2                                                                 
                                                                                 
@@ -22,3 +27,7 @@ For more info on how actors are implemented see
    =======                                                                      
                                                                                 
    * :ref:`genindex`
+
+.. Links
+
+.. _actors: https://tacc-cloud.readthedocs.io/projects/abaco/en/latest/
