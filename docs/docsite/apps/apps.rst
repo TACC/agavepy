@@ -168,10 +168,10 @@ list: Get a list of available applications.
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
-    * **privateOnly**: Whether to return only private apps. (boolean)
-    * **publicOnly**: Whether to return only public apps. (boolean)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
+    * **privateOnly**: Whether to return only private apps. (boolean, optional)
+    * **publicOnly**: Whether to return only public apps. (boolean, optional)
 
 
 Response:
@@ -441,8 +441,8 @@ listPermissions: Get the permission ACL for this application.
 Keyword Args:
 -------------
     * **appId**: The id of the application. The application id is made up of the name and version separated by a dash. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:
@@ -519,8 +519,8 @@ listPermissionsForUser: Get a specific user's permissions for an application.
 Keyword Args:
 -------------
     * **appId**: The id of the application. The application id is made up of the name and version separated by a dash. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
     * **username**: The username of the api user associated with the permission. (string)
 
 
@@ -549,11 +549,11 @@ listByName: Get a list of applications with the given name.
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
+    * **limit**: The max number of results. (integer, optional)
     * **name**: The name of the application. This should not include the version number. (string)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
-    * **privateOnly**: Whether to return only private apps. (boolean)
-    * **publicOnly**: Whether to return only public apps. (boolean)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
+    * **privateOnly**: Whether to return only private apps. (boolean, optional)
+    * **publicOnly**: Whether to return only public apps. (boolean, optional)
 
 
 Response:
@@ -566,10 +566,10 @@ listBySystemId: Get a list of applications with the given systemId as their exec
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
-    * **privateOnly**: Whether to return only private apps. (boolean)
-    * **publicOnly**: Whether to return only public apps. (boolean)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
+    * **privateOnly**: Whether to return only private apps. (boolean, optional)
+    * **publicOnly**: Whether to return only public apps. (boolean, optional)
     * **systemId**: The system in question (string)
 
 

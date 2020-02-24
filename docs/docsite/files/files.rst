@@ -36,12 +36,12 @@ importToDefaultSystem: Import a file via direct upload or importing from a url t
 
 Keyword Args:
 -------------
-    * **callbackURL**: The URI to notify when the import is complete. This can be an email address or http URL. If a URL is given, a GET will be made to this address. URL templating is supported. Valid template values are: ${NAME}, ${SOURCE_FORMAT}, ${DEST_FORMAT}, ${STATUS} (string)
-    * **fileName**: The name of the file after importing. If not specified, the uploaded file name will be used. (string)
-    * **fileToUpload**: The file object to import. (void)
-    * **fileType**: The file format this file is in. Defaults to raw. This will be used in file transform operations. (string)
+    * **callbackURL**: The URI to notify when the import is complete. This can be an email address or http URL. If a URL is given, a GET will be made to this address. URL templating is supported. Valid template values are: ${NAME}, ${SOURCE_FORMAT}, ${DEST_FORMAT}, ${STATUS} (string, optional)
+    * **fileName**: The name of the file after importing. If not specified, the uploaded file name will be used. (string, optional)
+    * **fileToUpload**: The file object to import. (void, optional)
+    * **fileType**: The file format this file is in. Defaults to raw. This will be used in file transform operations. (string, optional)
     * **sourcefilePath**: The path of the file relative to the user's default storage location. (string)
-    * **urlToIngest**: The URL to import the file from. This parameter is used if not file is uploaded with this post. (string)
+    * **urlToIngest**: The URL to import the file from. This parameter is used if not file is uploaded with this post. (string, optional)
 
 
 Response:
@@ -96,14 +96,14 @@ importData: Import a file via direct upload or importing from a url to the user'
 
 Keyword Args:
 -------------
-    * **callbackURL**: The URI to notify when the import is complete. This can be an email address or http URL. If a URL is given, a GET will be made to this address. URL templating is supported. Valid template values are: ${NAME}, ${SOURCE_FORMAT}, ${DEST_FORMAT}, ${STATUS} (string)
-    * **fileName**: The name of the file after importing. If not specified, the uploaded file name will be used. (string)
+    * **callbackURL**: The URI to notify when the import is complete. This can be an email address or http URL. If a URL is given, a GET will be made to this address. URL templating is supported. Valid template values are: ${NAME}, ${SOURCE_FORMAT}, ${DEST_FORMAT}, ${STATUS} (string, optional)
+    * **fileName**: The name of the file after importing. If not specified, the uploaded file name will be used. (string, optional)
     * **filePath**: The path of the file relative to the user's default storage location. (string)
-    * **fileToUpload**: The file object to import. (void)
-    * **fileType**: The file format this file is in. Defaults to raw. This will be used in file transform operations. (string)
-    * **notifications**: A list of notification objects to apply to the transfer.  (FileNotificationRequest)
+    * **fileToUpload**: The file object to import. (void, optional)
+    * **fileType**: The file format this file is in. Defaults to raw. This will be used in file transform operations. (string, optional)
+    * **notifications**: A list of notification objects to apply to the transfer.  (FileNotificationRequest, optional)
     * **systemId**: The unique id of the system on which the data resides. (string)
-    * **urlToIngest**: The URL to import the file from. This parameter is used if not file is uploaded with this post. (string)
+    * **urlToIngest**: The URL to import the file from. This parameter is used if not file is uploaded with this post. (string, optional)
 
 
 Response:
@@ -132,8 +132,8 @@ listOnDefaultSystem: Get a remote directory listing.
 Keyword Args:
 -------------
     * **filePath**: The path of the file relative to the user's default storage location. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:
@@ -147,8 +147,8 @@ list: Get a remote directory listing on a specific system.
 Keyword Args:
 -------------
     * **filePath**: The path of the file relative to the user's default storage location. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
     * **systemId**: The unique id of the system on which the data resides. (string)
 
 
@@ -163,8 +163,8 @@ getHistoryOnDefaultSystem: Download a file from the user's default storage locat
 Keyword Args:
 -------------
     * **filePath**: The path of the file relative to the user's default storage location. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:
@@ -178,8 +178,8 @@ getHistory: Return history of api actions.
 Keyword Args:
 -------------
     * **filePath**: The path of the file relative to the given system root location. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
     * **systemId**: The unique id of the system on which the data resides. (string)
 
 
@@ -194,8 +194,8 @@ listPermissionsOnDefaultSystem: List all the share permissions for a file or fol
 Keyword Args:
 -------------
     * **filePath**: The path of the file relative to the user's default storage location. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:
@@ -237,8 +237,8 @@ listPermissions: List all the share permissions for a file or folder.
 Keyword Args:
 -------------
     * **filePath**: The path of the file relative to the user's default storage location. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
     * **systemId**: The unique id of the system on which the data resides. (string)
 
 

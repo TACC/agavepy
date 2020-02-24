@@ -10,8 +10,8 @@ list: Get a list of jobs the authenticated user had submitted.
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:
@@ -150,8 +150,8 @@ getHistory: Get the history of this job.
 Keyword Args:
 -------------
     * **jobId**: The id of the job. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:
@@ -178,8 +178,8 @@ listPermissions: Get the permission ACL for this job.
 Keyword Args:
 -------------
     * **jobId**: The id of the job. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:
@@ -221,8 +221,8 @@ listPermissionsForUser: Get a specific user's permissions for a job.
 Keyword Args:
 -------------
     * **jobId**: The id of the job. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
     * **username**: The username of the api user associated with the permission. (string)
 
 
@@ -264,10 +264,10 @@ listOutputs: List contents of a job's output directory.
 
 Keyword Args:
 -------------
-    * **filePath**: Path to an output file or folder relative to the job output directory. This resource will follow data around as it moves from the execution system to archival storage. (string)
+    * **filePath**: Path to an output file or folder relative to the job output directory. This resource will follow data around as it moves from the execution system to archival storage. (string, optional)
     * **jobId**: The id of the job. (string)
-    * **limit**: max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:

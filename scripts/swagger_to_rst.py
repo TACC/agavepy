@@ -7,6 +7,7 @@ standard_library.install_aliases()
 import urllib.request, urllib.parse, urllib.error
 
 import os
+import re
 import jinja2
 import json
 import sys
@@ -274,6 +275,14 @@ def write_swagger_1_2(res, filename='openapi', form='json'):
     return True
 
 
+def inferdefault(param):
+    if re.search('url', param['name'], re.IGNORECASE):
+        return 'URL'
+    elif re.search('filename', param['name'], re.IGNORECASE):
+        return 'FILENAME'
+    else:
+        return None
+
 def main():
 
     os.makedirs('docs/_static/openapi/1.2', exist_ok=True)
@@ -344,7 +353,8 @@ def main():
                                     'name': pname,
                                     'jtype': jtype,
                                     'ptype': ptype,
-                                    'desc': pdesc
+                                    'desc': pdesc,
+                                    'req': param.get('required', False)
                                 }
 
                                 if param['required']:
@@ -354,6 +364,10 @@ def main():
                                 else:
                                     # use to extract exemplar JSON where provided
                                     default = param.get('defaultValue', None)
+                                    # if default is None:
+                                    #     default = inferdefault(param)
+                                    # if default is not None:
+                                    #     default = '[' + str(default) + ']'
                                     kwarglist.append(param['name'] +
                                                      '={0}'.format(default))
 
@@ -380,11 +394,16 @@ def main():
                                     # compute type
                                     fmttype = fp['jtype']
                                     fmtdesc = fp['desc']
+                                    fpname = fp['name']
+                                    # if not fp.get('required', False):
+                                    #     fpname = fpname + ' (optional)'
 
                                     if fp['ptype'] == 'body':
                                         fmttype = 'JSON, ' + fp['jtype']
+                                    if not fp.get('req', True):
+                                        fmttype = fmttype + ', optional'
 
-                                    f.write('    * ' + rst_bold(fp['name']) +
+                                    f.write('    * ' + rst_bold(fpname) +
                                             ': ' + fmtdesc + ' (' + fmttype +
                                             ')' + '\n')
                                 f.write('\n\n')

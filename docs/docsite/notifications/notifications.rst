@@ -53,9 +53,9 @@ list: Retrieve notification for a specific resource.
 
 Keyword Args:
 -------------
-    * **associatedUuid**: The uuid of the associated resource. All notifications for this resource visible to the user will be returned. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **associatedUuid**: The uuid of the associated resource. All notifications for this resource visible to the user will be returned. (string, optional)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:

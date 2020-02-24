@@ -69,8 +69,8 @@ list: List actors
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:
@@ -196,7 +196,7 @@ sendBinaryMessage: Send a message to an actor mailbox.
 Keyword Args:
 -------------
     * **actorId**: The id of the actor. (string)
-    * **environment**: Optional dictionary of environmental variables (dict)
+    * **environment**: Optional dictionary of environmental variables (dict, optional)
     * **message**: The description of the message to add. (JSON, MessageRequest)
 
 
@@ -230,7 +230,7 @@ Keyword Args:
 -------------
     * **actorId**: The id of the actor. (string)
     * **body**: The description of the message to add. (JSON, MessageRequest)
-    * **environment**: Optional dictionary of environmental variables (dict)
+    * **environment**: Optional dictionary of environmental variables (dict, optional)
 
 
 Response:
@@ -393,7 +393,7 @@ addNonce: Add a nonce to an actor.
 Keyword Args:
 -------------
     * **actorId**: The id of the actor. (string)
-    * **body**: The description of the nonce to add. (JSON, AddNonceRequest)
+    * **body**: The description of the nonce to add. (JSON, AddNonceRequest, optional)
 
 
 **AddNonceRequest schema**
@@ -469,7 +469,7 @@ addAlias: Add an alias of an actor.
 
 Keyword Args:
 -------------
-    * **body**: The description of the alias to add. (JSON, AddAliasRequest)
+    * **body**: The description of the alias to add. (JSON, AddAliasRequest, optional)
 
 
 **AddAliasRequest schema**
@@ -561,8 +561,8 @@ listExecutions: Summary data of all actor executions.
 Keyword Args:
 -------------
     * **actorId**: The id of the actor. (string)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:

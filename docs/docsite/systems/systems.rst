@@ -141,11 +141,11 @@ list: Show all systems available to the user.
 
 Keyword Args:
 -------------
-    * **default**: Should only default systems be returned (boolean)
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
-    * **public**: Should only publicly available systems be returned (boolean)
-    * **type**: The type of system to return (string)
+    * **default**: Should only default systems be returned (boolean, optional)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
+    * **public**: Should only publicly available systems be returned (boolean, optional)
+    * **type**: The type of system to return (string, optional)
 
 
 Response:
@@ -225,8 +225,8 @@ listRoles: Get a list of all users and their roles on this system.
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
     * **systemId**: The id of the system. (string)
 
 
@@ -268,8 +268,8 @@ getRoleForUser: Get a specific user's roles on this system.
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
     * **systemId**: The id of the system. (string)
     * **username**: The username of the user about whose role you are inquiring. (string)
 

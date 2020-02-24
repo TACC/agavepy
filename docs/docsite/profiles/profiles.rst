@@ -23,15 +23,15 @@ list: List user profiles
 
 Keyword Args:
 -------------
-    * **email**: Filter results by email. (string)
-    * **first_name**: Filter results by first_name. (string)
-    * **full_name**: Filter results by full_name. (string)
-    * **last_name**: Filter results by last_name. (string)
-    * **limit**: The max number of results. (integer)
-    * **name**: Filter results by name. (string)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
-    * **status**: Filter results by status. (string)
-    * **username**: Filter results by username. (string)
+    * **email**: Filter results by email. (string, optional)
+    * **first_name**: Filter results by first_name. (string, optional)
+    * **full_name**: Filter results by full_name. (string, optional)
+    * **last_name**: Filter results by last_name. (string, optional)
+    * **limit**: The max number of results. (integer, optional)
+    * **name**: Filter results by name. (string, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
+    * **status**: Filter results by status. (string, optional)
+    * **username**: Filter results by username. (string, optional)
 
 
 Response:

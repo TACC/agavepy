@@ -56,10 +56,10 @@ listMetadata: List and/or search metadata.
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
-    * **privileged**: If false, implicit permissions are ignored and only records to which the user has explicit permissions are returned (boolean)
-    * **q**: The query to perform. Traditional MongoDB queries are supported (string)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
+    * **privileged**: If false, implicit permissions are ignored and only records to which the user has explicit permissions are returned (boolean, optional)
+    * **q**: The query to perform. Traditional MongoDB queries are supported (string, optional)
 
 
 Response:
@@ -85,8 +85,8 @@ getMetadata: Retrieve Metadata.
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
     * **uuid**: The uuid of the metadata item (string)
 
 
@@ -127,8 +127,8 @@ searchSchema: Retrieve Metadata Schemata.
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
     * **uuid**: The uuid of the metadata schema item (string)
 
 
@@ -155,8 +155,8 @@ getSchema: Retrieve Metadata Schemata.
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
     * **uuid**: The uuid of the metadata schema item (string)
 
 
@@ -197,8 +197,8 @@ listMetadataPermissions: Get the permission ACL for this metadata.
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
     * **uuid**: The uuid of the metadata item (string)
 
 
@@ -282,8 +282,8 @@ listSchemaPermissions: Get the permission ACL for this schema.
 
 Keyword Args:
 -------------
-    * **limit**: The max number of results. (integer)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **limit**: The max number of results. (integer, optional)
+    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
     * **uuid**: The uuid of the metadata schema item (string)
 
 
