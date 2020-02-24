@@ -168,10 +168,10 @@ list: Get a list of available applications.
 
 Keyword Args:
 -------------
-    * **publicOnly**: Whether to return only public apps. (boolean)
-    * **privateOnly**: Whether to return only private apps. (boolean)
     * **limit**: The max number of results. (integer)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **privateOnly**: Whether to return only private apps. (boolean)
+    * **publicOnly**: Whether to return only public apps. (boolean)
 
 
 Response:
@@ -514,14 +514,14 @@ Response:
 
 listPermissionsForUser: Get a specific user's permissions for an application.
 =============================================================================
-``apps.listPermissionsForUser(appId=<APPID>, username=<USERNAME>, limit=250, offset=0)``
+``apps.listPermissionsForUser(appId=<APPID>, limit=250, offset=0, username=<USERNAME>)``
 
 Keyword Args:
 -------------
     * **appId**: The id of the application. The application id is made up of the name and version separated by a dash. (string)
-    * **username**: The username of the api user associated with the permission. (string)
     * **limit**: The max number of results. (integer)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **username**: The username of the api user associated with the permission. (string)
 
 
 Response:
@@ -535,44 +535,9 @@ updatePermissionsForUser: Add or update a user's permission for an application.
 Keyword Args:
 -------------
     * **appId**: The id of the application. The application id is made up of the name and version separated by a dash. (string)
-    * **username**: The username of the api user associated with the permission (string)
     * **body**: The permission add or update.  (JSON, ApplicationPermissionRequest)
+    * **username**: The username of the api user associated with the permission (string)
 
-
-**ApplicationPermissionRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/ApplicationPermissionRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "permission": {
-          "description": "The permission to set",
-          "enum": [
-            "READ",
-            "WRITE",
-            "EXECUTE",
-            "READ_WRITE",
-            "READ_EXECUTE",
-            "WRITE_EXECUTE",
-            "ALL",
-            "NONE"
-          ],
-          "type": "string"
-        },
-        "username": {
-          "description": "The username of the api user whose permission is to be set.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "username",
-        "permission"
-      ],
-      "title": "AgavePy ApplicationPermissionRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -580,15 +545,15 @@ Response:
 
 listByName: Get a list of applications with the given name.
 ===========================================================
-``apps.listByName(name=<NAME>, limit=250, offset=0, privateOnly=None, publicOnly=None)``
+``apps.listByName(limit=250, name=<NAME>, offset=0, privateOnly=None, publicOnly=None)``
 
 Keyword Args:
 -------------
-    * **name**: The name of the application. This should not include the version number. (string)
-    * **publicOnly**: Whether to return only public apps. (boolean)
-    * **privateOnly**: Whether to return only private apps. (boolean)
     * **limit**: The max number of results. (integer)
+    * **name**: The name of the application. This should not include the version number. (string)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **privateOnly**: Whether to return only private apps. (boolean)
+    * **publicOnly**: Whether to return only public apps. (boolean)
 
 
 Response:
@@ -597,15 +562,15 @@ Response:
 
 listBySystemId: Get a list of applications with the given systemId as their executionHost.
 ==========================================================================================
-``apps.listBySystemId(systemId=<SYSTEMID>, limit=250, offset=0, privateOnly=None, publicOnly=None)``
+``apps.listBySystemId(limit=250, offset=0, privateOnly=None, publicOnly=None, systemId=<SYSTEMID>)``
 
 Keyword Args:
 -------------
-    * **systemId**: The system in question (string)
-    * **publicOnly**: Whether to return only public apps. (boolean)
-    * **privateOnly**: Whether to return only private apps. (boolean)
     * **limit**: The max number of results. (integer)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **privateOnly**: Whether to return only private apps. (boolean)
+    * **publicOnly**: Whether to return only public apps. (boolean)
+    * **systemId**: The system in question (string)
 
 
 Response:

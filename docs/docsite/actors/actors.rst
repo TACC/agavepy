@@ -191,7 +191,7 @@ Response:
 
 sendBinaryMessage: Send a message to an actor mailbox.
 ======================================================
-``actors.sendBinaryMessage(actorId=<ACTORID>, message=<MESSAGE>, environment=None)``
+``actors.sendBinaryMessage(actorId=<ACTORID>, environment=None, message=<MESSAGE>)``
 
 Keyword Args:
 -------------
@@ -229,27 +229,9 @@ sendMessage: Send a message to an actor mailbox.
 Keyword Args:
 -------------
     * **actorId**: The id of the actor. (string)
-    * **environment**: Optional dictionary of environmental variables (dict)
     * **body**: The description of the message to add. (JSON, MessageRequest)
+    * **environment**: Optional dictionary of environmental variables (dict)
 
-
-**MessageRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/MessageRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "message": {
-          "description": "The message to send to the actor.",
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "AgavePy MessageRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------

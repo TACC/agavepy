@@ -141,11 +141,11 @@ list: Show all systems available to the user.
 
 Keyword Args:
 -------------
-    * **type**: The type of system to return (string)
     * **default**: Should only default systems be returned (boolean)
-    * **public**: Should only publicly available systems be returned (boolean)
     * **limit**: The max number of results. (integer)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **public**: Should only publicly available systems be returned (boolean)
+    * **type**: The type of system to return (string)
 
 
 Response:
@@ -184,44 +184,9 @@ manage: Perform a management action on the system.
 
 Keyword Args:
 -------------
-    * **systemId**: The unique id of the system (string)
     * **body**: The description of the system to update. (JSON, SystemOperationRequest)
+    * **systemId**: The unique id of the system (string)
 
-
-**SystemOperationRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/SystemOperationRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "action": {
-          "description": "Action to perform on the system.",
-          "enum": [
-            "ENABLE",
-            "DISABLE",
-            "PUBLISH",
-            "UNPUBLISH",
-            "SETDEFAULT",
-            "UNSETDEFAULT",
-            "SETGLOBALDEFAULT",
-            "UNSETGLOBALDEFAULT",
-            "CLONE"
-          ],
-          "type": "string"
-        },
-        "id": {
-          "description": "The new system id of the cloned system",
-          "type": "string"
-        }
-      },
-      "required": [
-        "action"
-      ],
-      "title": "AgavePy SystemOperationRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -233,127 +198,9 @@ update: Find information about an individual system.
 
 Keyword Args:
 -------------
-    * **systemId**: The unique id of the system (string)
     * **body**: The description of the system to update. (JSON, SystemRequest)
+    * **systemId**: The unique id of the system (string)
 
-
-**SystemRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/SystemRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "description": {
-          "description": "Verbose description of this system.",
-          "type": "string"
-        },
-        "environment": {
-          "description": "Environment variables to set upon login prior to job submission.",
-          "type": "string"
-        },
-        "executionType": {
-          "description": "The execution paradigm used to run jobs on this system.",
-          "enum": [
-            "HPC",
-            "CONDOR",
-            "CLI"
-          ],
-          "type": "string"
-        },
-        "id": {
-          "description": "Unique identifier for this system.",
-          "type": "string"
-        },
-        "login": {
-          "description": "The login config defining how to connect to this system for job submission.",
-          "type": "LoginConfig"
-        },
-        "maxSystemJobs": {
-          "description": "The maximum number of jobs that can be simultaneously run on the system across all queues.",
-          "type": "int"
-        },
-        "maxSystemJobsPerUser": {
-          "description": "The maximum number of jobs that can be simultaneously run on the system across all queues by a single user.",
-          "type": "int"
-        },
-        "name": {
-          "description": "Common name for this system.",
-          "type": "string"
-        },
-        "queues": {
-          "description": "The execution paradigm used to run jobs on this system.",
-          "type": "array"
-        },
-        "scheduler": {
-          "description": "The type of scheduled used to run jobs.",
-          "enum": [
-            "COBALT",
-            "CONDOR",
-            "FORK",
-            "LOADLEVELER",
-            "LSF",
-            "MOAB",
-            "PBS",
-            "SGE",
-            "SLURM",
-            "TORQUE",
-            "UNKNOWN"
-          ],
-          "type": "string"
-        },
-        "scratchDir": {
-          "description": "The scratch directory where job execution directories will be created at runtime. The workDir is used if this is not specified.",
-          "type": "string"
-        },
-        "site": {
-          "description": "The site associated with this system.",
-          "type": "string"
-        },
-        "startupScript": {
-          "description": "Script to be run after login and prior to execution.",
-          "type": "string"
-        },
-        "status": {
-          "description": "The status of this system. Systems must be in UP status to be used.",
-          "enum": [
-            "UP",
-            "DOWN",
-            "UNKNOWN"
-          ],
-          "type": "string"
-        },
-        "storage": {
-          "description": "The storage config defining how to connect to this system for data staging.",
-          "type": "StorageConfig"
-        },
-        "type": {
-          "description": "The type of this system.",
-          "enum": [
-            "EXECUTION",
-            "STORAGE"
-          ],
-          "type": "string"
-        },
-        "workDir": {
-          "description": "The work directory where job execution directories will be created at runtime. This is used if scratchDir is not specified. If neither are specified, the job directory will be created in the system homeDir.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "status",
-        "queues",
-        "storage",
-        "executionType",
-        "scheduler",
-        "login",
-        "type",
-        "name"
-      ],
-      "title": "AgavePy SystemRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -374,13 +221,13 @@ Response:
 
 listRoles: Get a list of all users and their roles on this system.
 ==================================================================
-``systems.listRoles(systemId=<SYSTEMID>, limit=250, offset=0)``
+``systems.listRoles(limit=250, offset=0, systemId=<SYSTEMID>)``
 
 Keyword Args:
 -------------
-    * **systemId**: The id of the system. (string)
     * **limit**: The max number of results. (integer)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **systemId**: The id of the system. (string)
 
 
 Response:
@@ -393,37 +240,9 @@ updateRole: Add or update a user's role on a system.
 
 Keyword Args:
 -------------
-    * **systemId**: The id of the system. (string)
     * **body**: The role to update. (JSON, SystemRole)
+    * **systemId**: The id of the system. (string)
 
-
-**SystemRole schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/SystemRole.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "role": {
-          "description": "The role granted this user.",
-          "enum": [
-            "USER",
-            "PUBLISHER",
-            "ADMIN",
-            "OWNER"
-          ],
-          "type": "string"
-        },
-        "username": {
-          "description": "The username of the api user granted this role.",
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "AgavePy SystemRole schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -445,14 +264,14 @@ Response:
 
 getRoleForUser: Get a specific user's roles on this system.
 ===========================================================
-``systems.getRoleForUser(systemId=<SYSTEMID>, username=<USERNAME>, limit=250, offset=0)``
+``systems.getRoleForUser(limit=250, offset=0, systemId=<SYSTEMID>, username=<USERNAME>)``
 
 Keyword Args:
 -------------
-    * **systemId**: The id of the system. (string)
-    * **username**: The username of the user about whose role you are inquiring. (string)
     * **limit**: The max number of results. (integer)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **systemId**: The id of the system. (string)
+    * **username**: The username of the user about whose role you are inquiring. (string)
 
 
 Response:
@@ -465,38 +284,10 @@ updateRoleForUser: Add or update a user's role on a system.
 
 Keyword Args:
 -------------
+    * **body**: The role to update. (JSON, SystemRole)
     * **systemId**: The id of the system. (string)
     * **username**: The username of the api user associated with the role (string)
-    * **body**: The role to update. (JSON, SystemRole)
 
-
-**SystemRole schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/SystemRole.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "role": {
-          "description": "The role granted this user.",
-          "enum": [
-            "USER",
-            "PUBLISHER",
-            "ADMIN",
-            "OWNER"
-          ],
-          "type": "string"
-        },
-        "username": {
-          "description": "The username of the api user granted this role.",
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "AgavePy SystemRole schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -521,8 +312,8 @@ deleteCredentialsForInternalUser: Deletes all credentials registered to a system
 
 Keyword Args:
 -------------
-    * **systemId**: The id of the system. (string)
     * **internalUsername**: The username of a internal user on this system. (string)
+    * **systemId**: The id of the system. (string)
 
 
 Response:

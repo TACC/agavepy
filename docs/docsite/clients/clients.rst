@@ -133,49 +133,9 @@ addSubscriptionForClient: Lists all APIs to which the client is subscribed
 
 Keyword Args:
 -------------
-    * **clientName**: The name of the client to be subscribe to this api (string)
     * **body**: The api client to create (JSON, ClientSubscriptionRequest)
+    * **clientName**: The name of the client to be subscribe to this api (string)
 
-
-**ClientSubscriptionRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/ClientSubscriptionRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "apiName": {
-          "description": "The name of the API.",
-          "type": "string"
-        },
-        "apiProvider": {
-          "description": "The user who registered the API.",
-          "type": "string"
-        },
-        "apiVersion": {
-          "description": "The current major version of the API. This is appended to the api_context to create the base API url.",
-          "type": "string"
-        },
-        "tier": {
-          "description": "The access tier for this client.",
-          "enum": [
-            "UNLIMITED",
-            "GOLD",
-            "SILVER",
-            "BRONZE"
-          ],
-          "type": "string"
-        }
-      },
-      "required": [
-        "apiProvider",
-        "apiVersion",
-        "apiName"
-      ],
-      "title": "AgavePy ClientSubscriptionRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------

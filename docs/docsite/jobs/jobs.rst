@@ -135,33 +135,9 @@ manage: Perform an action on a job.
 
 Keyword Args:
 -------------
-    * **jobId**: The id of the job. (string)
     * **body**: The operation to perform. (JSON, JobOperationRequest)
+    * **jobId**: The id of the job. (string)
 
-
-**JobOperationRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/JobOperationRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "action": {
-          "description": "Action to perform on the job.",
-          "enum": [
-            "resubmit",
-            "stop"
-          ],
-          "type": "string"
-        }
-      },
-      "required": [
-        "action"
-      ],
-      "title": "AgavePy JobOperationRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -216,44 +192,9 @@ updatePermissions: Add or update a user's permission for an application.
 
 Keyword Args:
 -------------
-    * **jobId**: The id of the job. (string)
     * **body**: The permission add or update.  (JSON, JobPermissionRequest)
+    * **jobId**: The id of the job. (string)
 
-
-**JobPermissionRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/JobPermissionRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "permission": {
-          "description": "The permission to set",
-          "enum": [
-            "READ",
-            "WRITE",
-            "EXECUTE",
-            "READ_WRITE",
-            "READ_EXECUTE",
-            "WRITE_EXECUTE",
-            "ALL",
-            "NONE"
-          ],
-          "type": "string"
-        },
-        "username": {
-          "description": "The username of the api user whose permission is to be set.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "username",
-        "permission"
-      ],
-      "title": "AgavePy JobPermissionRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -275,14 +216,14 @@ Response:
 
 listPermissionsForUser: Get a specific user's permissions for a job.
 ====================================================================
-``jobs.listPermissionsForUser(jobId=<JOBID>, username=<USERNAME>, limit=250, offset=0)``
+``jobs.listPermissionsForUser(jobId=<JOBID>, limit=250, offset=0, username=<USERNAME>)``
 
 Keyword Args:
 -------------
     * **jobId**: The id of the job. (string)
-    * **username**: The username of the api user associated with the permission. (string)
     * **limit**: The max number of results. (integer)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **username**: The username of the api user associated with the permission. (string)
 
 
 Response:
@@ -295,45 +236,10 @@ updatePermissionsForUser: Add or update a user's permission for an job.
 
 Keyword Args:
 -------------
+    * **body**: The permission to update.  (JSON, JobPermissionRequest)
     * **jobId**: The id of the job. (string)
     * **username**: The username of the api user associated with the permission (string)
-    * **body**: The permission to update.  (JSON, JobPermissionRequest)
 
-
-**JobPermissionRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/JobPermissionRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "permission": {
-          "description": "The permission to set",
-          "enum": [
-            "READ",
-            "WRITE",
-            "EXECUTE",
-            "READ_WRITE",
-            "READ_EXECUTE",
-            "WRITE_EXECUTE",
-            "ALL",
-            "NONE"
-          ],
-          "type": "string"
-        },
-        "username": {
-          "description": "The username of the api user whose permission is to be set.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "username",
-        "permission"
-      ],
-      "title": "AgavePy JobPermissionRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -354,12 +260,12 @@ Response:
 
 listOutputs: List contents of a job's output directory.
 =======================================================
-``jobs.listOutputs(jobId=<JOBID>, filePath=None, limit=250, offset=0)``
+``jobs.listOutputs(filePath=None, jobId=<JOBID>, limit=250, offset=0)``
 
 Keyword Args:
 -------------
-    * **jobId**: The id of the job. (string)
     * **filePath**: Path to an output file or folder relative to the job output directory. This resource will follow data around as it moves from the execution system to archival storage. (string)
+    * **jobId**: The id of the job. (string)
     * **limit**: max number of results. (integer)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
 
@@ -374,8 +280,8 @@ downloadOutput: Download an output file from a specific job.
 
 Keyword Args:
 -------------
-    * **jobId**: The id of the job. (string)
     * **filePath**: Path to an output file relative to the job output directory. (string)
+    * **jobId**: The id of the job. (string)
 
 
 Response:

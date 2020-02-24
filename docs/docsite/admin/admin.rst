@@ -259,27 +259,9 @@ addAccountToRole: Add a service account to a role.
 
 Keyword Args:
 -------------
-    * **roleId**: The id of the service role. (string)
     * **body**: The description of the service account to add. (JSON, AddServiceAccountToRoleRequest)
+    * **roleId**: The id of the service role. (string)
 
-
-**AddServiceAccountToRoleRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/AddServiceAccountToRoleRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "role_id": {
-          "description": "The id of the service account to add to the role.",
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "AgavePy AddServiceAccountToRoleRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -304,8 +286,8 @@ deleteAccountFromRole: Delete a service from the list of accounts occupying a se
 
 Keyword Args:
 -------------
-    * **roleId**: The id of the service role. (string)
     * **accountId**: The id of the service account. (string)
+    * **roleId**: The id of the service role. (string)
 
 
 Response:

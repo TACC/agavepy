@@ -21,10 +21,8 @@ PWD = os.getcwd()
 #   Used to soft-deprecate APIs or Swagger defs that
 #   are too broken to use
 SVC_BLACKLIST = ('transforms', 'monitors', 'uuid')
-API_BLACKLIST = ('apps.getJobSubmissionForm',
-                 'apps.listByOntologyTerm', 
-                 'apps.listByTag',
-                 'systems.listCredentials',
+API_BLACKLIST = ('apps.getJobSubmissionForm', 'apps.listByOntologyTerm',
+                 'apps.listByTag', 'systems.listCredentials',
                  'systems.updateCredentials',
                  'systems.deleteCredentialsForInternalUser'
                  'systems.deleteCredentialsForInternalUser',
@@ -320,34 +318,34 @@ def main():
                 for sub_api in api['api_declaration']['apis']:
                     # Iterate through operations
                     op_list = sorted(sub_api.get('operations'),
-                                    key=itemgetter('nickname'),
-                                    reverse=False)
+                                     key=itemgetter('nickname'),
+                                     reverse=False)
 
                     for op in op_list:
                         #for op in sub_api.get('operations'):
                         # agavepy.apps.list
                         submod_name_path = submod_name(op.get('nickname'),
-                                                    api_name)
+                                                       api_name)
                         if submod_name_path not in API_BLACKLIST:
                             print(" - {}".format(op.get('nickname')))
 
                             # assemble param list for func signature
                             arglist = []
                             kwarglist = []
-                            # param list for formatted list
-                            fmtlist = []
+                            # holds params, indexed by name
+                            fmtlist = {}
 
                             for param in op.get('parameters'):
                                 jtype = param.get('type')
                                 ptype = param.get('paramType')
                                 pdesc = param.get('description')
                                 pname = param.get('name')
-                                fmtlist.append({
+                                fmtlist[pname] = {
                                     'name': pname,
                                     'jtype': jtype,
                                     'ptype': ptype,
                                     'desc': pdesc
-                                })
+                                }
 
                                 if param['required']:
                                     arglist.append(
@@ -357,9 +355,9 @@ def main():
                                     # use to extract exemplar JSON where provided
                                     default = param.get('defaultValue', None)
                                     kwarglist.append(param['name'] +
-                                                    '={0}'.format(default))
+                                                     '={0}'.format(default))
 
-                            codeargs = sorted(arglist) + sorted(kwarglist)
+                            codeargs = sorted(arglist + kwarglist)
                             fmtcodeargs = ', '.join(codeargs)
 
                             # operation name
@@ -368,15 +366,17 @@ def main():
                                     op.get('nickname') + ': ' +
                                     op.get('summary'), 'section') + '\n')
 
-                            f.write('``' +
-                                    (submod_name_path + '(' + fmtcodeargs + ')') +
-                                    '``\n\n')
+                            f.write('``' + (submod_name_path + '(' +
+                                            fmtcodeargs + ')') + '``\n\n')
                             #f.write(op.get('summary') + '\n\n')
 
-                            if len(fmtlist) > 0:
+                            if len(fmtlist.items()) > 0:
                                 f.write(
-                                    rst_heading('Keyword Args:', 'subsection') + '\n')
-                                for fp in fmtlist:
+                                    rst_heading('Keyword Args:', 'subsection')
+                                    + '\n')
+                                for fn in sorted(list(fmtlist.keys())):
+                                    fp = fmtlist[fn]
+                                    # for fp in sorted(fmtlist, key=
                                     # compute type
                                     fmttype = fp['jtype']
                                     fmtdesc = fp['desc']
@@ -384,10 +384,11 @@ def main():
                                     if fp['ptype'] == 'body':
                                         fmttype = 'JSON, ' + fp['jtype']
 
-                                    f.write('    * ' + rst_bold(fp['name']) + ': ' +
-                                            fmtdesc + ' (' + fmttype + ')' + '\n')
+                                    f.write('    * ' + rst_bold(fp['name']) +
+                                            ': ' + fmtdesc + ' (' + fmttype +
+                                            ')' + '\n')
                                 f.write('\n\n')
-                                
+
                             # format JSON schema for request object
                             if fp['ptype'] == 'body':
                                 if fp['jtype'] != 'string':
@@ -396,11 +397,12 @@ def main():
                                             rst_bold(fp['jtype'] + ' schema') +
                                             '\n\n')
                                         js = schemify(fp['jtype'],
-                                                    classmods[fp['jtype']],
-                                                    'docs/_static/schema')
+                                                      classmods[fp['jtype']],
+                                                      'docs/_static/schema')
                                         f.write(js)
 
-                            f.write(rst_heading('Response:', 'subsection') + '\n')
+                            f.write(
+                                rst_heading('Response:', 'subsection') + '\n')
 
                             resp_type = op.get('type')
                             resp_string = 'None'
@@ -408,8 +410,8 @@ def main():
 
                             if resp_type in respmods:
                                 try:
-                                    resp_type_obj = respmods[resp_type]['result'][
-                                        'type']
+                                    resp_type_obj = respmods[resp_type][
+                                        'result']['type']
                                 except KeyError as e:
                                     print("ResponseType: {}".format(resp_type))
                                     print("Value: {} / Error: {}".format(
@@ -422,8 +424,8 @@ def main():
                                     resp_schema_type = resp_item
                                     resp_string = "Array of {} objects".format(
                                         resp_item)
-                                elif resp_type_obj in ('string', 'integer', 'int',
-                                                    'boolean'):
+                                elif resp_type_obj in ('string', 'integer',
+                                                       'int', 'boolean'):
                                     resp_string = resp_type_obj.capitalize()
                                 else:
                                     # agavepy class object
@@ -431,7 +433,8 @@ def main():
                                     resp_string = "A single {} object".format(
                                         resp_type_obj)
 
-                            f.write('    * ' + rst_italic(resp_string) + '\n\n')
+                            f.write('    * ' + rst_italic(resp_string) +
+                                    '\n\n')
 
                     # # print schema if response is single or array of agavepy class obj
                     # if resp_schema_type is not None:

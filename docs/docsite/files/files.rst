@@ -32,16 +32,16 @@ Response:
 
 importToDefaultSystem: Import a file via direct upload or importing from a url to the user's default storage location.
 ======================================================================================================================
-``files.importToDefaultSystem(sourcefilePath=<SOURCEFILEPATH>, callbackURL=None, fileName=None, fileToUpload=None, fileType=None, urlToIngest=None)``
+``files.importToDefaultSystem(callbackURL=None, fileName=None, fileToUpload=None, fileType=None, sourcefilePath=<SOURCEFILEPATH>, urlToIngest=None)``
 
 Keyword Args:
 -------------
-    * **sourcefilePath**: The path of the file relative to the user's default storage location. (string)
-    * **fileType**: The file format this file is in. Defaults to raw. This will be used in file transform operations. (string)
     * **callbackURL**: The URI to notify when the import is complete. This can be an email address or http URL. If a URL is given, a GET will be made to this address. URL templating is supported. Valid template values are: ${NAME}, ${SOURCE_FORMAT}, ${DEST_FORMAT}, ${STATUS} (string)
     * **fileName**: The name of the file after importing. If not specified, the uploaded file name will be used. (string)
-    * **urlToIngest**: The URL to import the file from. This parameter is used if not file is uploaded with this post. (string)
     * **fileToUpload**: The file object to import. (void)
+    * **fileType**: The file format this file is in. Defaults to raw. This will be used in file transform operations. (string)
+    * **sourcefilePath**: The path of the file relative to the user's default storage location. (string)
+    * **urlToIngest**: The URL to import the file from. This parameter is used if not file is uploaded with this post. (string)
 
 
 Response:
@@ -54,39 +54,9 @@ manageOnDefaultSystem: Perform an action on a file or folder.
 
 Keyword Args:
 -------------
-    * **sourcefilePath**: The path of the file relative to the user's default storage location. (string)
     * **body**: The operation to perform.  (JSON, FileOperationRequest)
+    * **sourcefilePath**: The path of the file relative to the user's default storage location. (string)
 
-
-**FileOperationRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/FileOperationRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "action": {
-          "description": "Action to perform on the file or folder.",
-          "enum": [
-            "mkdir",
-            "rename",
-            "copy",
-            "move"
-          ],
-          "type": "string"
-        },
-        "path": {
-          "description": "Destination file or folder.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "action"
-      ],
-      "title": "AgavePy FileOperationRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -98,8 +68,8 @@ delete: Deletes a file or folder.
 
 Keyword Args:
 -------------
-    * **systemId**: The unique id of the system on which the data resides. (string)
     * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **systemId**: The unique id of the system on which the data resides. (string)
 
 
 Response:
@@ -112,8 +82,8 @@ download: Download a file from the user's default storage location.
 
 Keyword Args:
 -------------
-    * **systemId**: The unique id of the system on which the data resides. (string)
     * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **systemId**: The unique id of the system on which the data resides. (string)
 
 
 Response:
@@ -122,18 +92,18 @@ Response:
 
 importData: Import a file via direct upload or importing from a url to the user's default storage location.
 ===========================================================================================================
-``files.importData(filePath=<FILEPATH>, systemId=<SYSTEMID>, callbackURL=None, fileName=None, fileToUpload=None, fileType=None, notifications=[], urlToIngest=None)``
+``files.importData(callbackURL=None, fileName=None, filePath=<FILEPATH>, fileToUpload=None, fileType=None, notifications=[], systemId=<SYSTEMID>, urlToIngest=None)``
 
 Keyword Args:
 -------------
-    * **systemId**: The unique id of the system on which the data resides. (string)
-    * **filePath**: The path of the file relative to the user's default storage location. (string)
-    * **fileType**: The file format this file is in. Defaults to raw. This will be used in file transform operations. (string)
     * **callbackURL**: The URI to notify when the import is complete. This can be an email address or http URL. If a URL is given, a GET will be made to this address. URL templating is supported. Valid template values are: ${NAME}, ${SOURCE_FORMAT}, ${DEST_FORMAT}, ${STATUS} (string)
     * **fileName**: The name of the file after importing. If not specified, the uploaded file name will be used. (string)
-    * **urlToIngest**: The URL to import the file from. This parameter is used if not file is uploaded with this post. (string)
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
     * **fileToUpload**: The file object to import. (void)
+    * **fileType**: The file format this file is in. Defaults to raw. This will be used in file transform operations. (string)
     * **notifications**: A list of notification objects to apply to the transfer.  (FileNotificationRequest)
+    * **systemId**: The unique id of the system on which the data resides. (string)
+    * **urlToIngest**: The URL to import the file from. This parameter is used if not file is uploaded with this post. (string)
 
 
 Response:
@@ -146,40 +116,10 @@ manage: Perform an action on a file or folder.
 
 Keyword Args:
 -------------
-    * **systemId**: The unique id of the system on which the data resides. (string)
-    * **filePath**: The path of the file relative to the user's default storage location. (string)
     * **body**: The operation to perform.  (JSON, FileOperationRequest)
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
+    * **systemId**: The unique id of the system on which the data resides. (string)
 
-
-**FileOperationRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/FileOperationRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "action": {
-          "description": "Action to perform on the file or folder.",
-          "enum": [
-            "mkdir",
-            "rename",
-            "copy",
-            "move"
-          ],
-          "type": "string"
-        },
-        "path": {
-          "description": "Destination file or folder.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "action"
-      ],
-      "title": "AgavePy FileOperationRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -202,14 +142,14 @@ Response:
 
 list: Get a remote directory listing on a specific system.
 ==========================================================
-``files.list(filePath=<FILEPATH>, systemId=<SYSTEMID>, limit=250, offset=0)``
+``files.list(filePath=<FILEPATH>, limit=250, offset=0, systemId=<SYSTEMID>)``
 
 Keyword Args:
 -------------
-    * **systemId**: The unique id of the system on which the data resides. (string)
     * **filePath**: The path of the file relative to the user's default storage location. (string)
     * **limit**: The max number of results. (integer)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **systemId**: The unique id of the system on which the data resides. (string)
 
 
 Response:
@@ -233,14 +173,14 @@ Response:
 
 getHistory: Return history of api actions.
 ==========================================
-``files.getHistory(filePath=<FILEPATH>, systemId=<SYSTEMID>, limit=250, offset=0)``
+``files.getHistory(filePath=<FILEPATH>, limit=250, offset=0, systemId=<SYSTEMID>)``
 
 Keyword Args:
 -------------
-    * **systemId**: The unique id of the system on which the data resides. (string)
     * **filePath**: The path of the file relative to the given system root location. (string)
     * **limit**: The max number of results. (integer)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **systemId**: The unique id of the system on which the data resides. (string)
 
 
 Response:
@@ -268,48 +208,9 @@ updatePermissionsOnDefaultSystem: Update permissions for a single user.
 
 Keyword Args:
 -------------
-    * **filePath**: The path of the file relative to the user's default storage location. (string)
     * **body**: The permission add or update.  (JSON, FilePermissionRequest)
+    * **filePath**: The path of the file relative to the user's default storage location. (string)
 
-
-**FilePermissionRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/FilePermissionRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "permission": {
-          "description": "The permission to set",
-          "enum": [
-            "READ",
-            "WRITE",
-            "EXECUTE",
-            "READ_WRITE",
-            "READ_EXECUTE",
-            "WRITE_EXECUTE",
-            "ALL",
-            "NONE"
-          ],
-          "type": "string"
-        },
-        "recursive": {
-          "description": "Should updated permissions be applied recursively. Defaults to false.",
-          "type": "boolean"
-        },
-        "username": {
-          "description": "The username of the api user whose permission is to be set.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "username",
-        "permission"
-      ],
-      "title": "AgavePy FilePermissionRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -331,14 +232,14 @@ Response:
 
 listPermissions: List all the share permissions for a file or folder.
 =====================================================================
-``files.listPermissions(filePath=<FILEPATH>, systemId=<SYSTEMID>, limit=250, offset=0)``
+``files.listPermissions(filePath=<FILEPATH>, limit=250, offset=0, systemId=<SYSTEMID>)``
 
 Keyword Args:
 -------------
     * **filePath**: The path of the file relative to the user's default storage location. (string)
     * **limit**: The max number of results. (integer)
-    * **systemId**: The unique id of the system on which the data resides. (string)
     * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer)
+    * **systemId**: The unique id of the system on which the data resides. (string)
 
 
 Response:
@@ -351,49 +252,10 @@ updatePermissions: Update permissions for a single user.
 
 Keyword Args:
 -------------
+    * **body**: The permission add or update.  (JSON, FilePermissionRequest)
     * **filePath**: The path of the file relative to the user's default storage location. (string)
     * **systemId**: The unique id of the system on which the data resides. (string)
-    * **body**: The permission add or update.  (JSON, FilePermissionRequest)
 
-
-**FilePermissionRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/FilePermissionRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "permission": {
-          "description": "The permission to set",
-          "enum": [
-            "READ",
-            "WRITE",
-            "EXECUTE",
-            "READ_WRITE",
-            "READ_EXECUTE",
-            "WRITE_EXECUTE",
-            "ALL",
-            "NONE"
-          ],
-          "type": "string"
-        },
-        "recursive": {
-          "description": "Should updated permissions be applied recursively. Defaults to false.",
-          "type": "boolean"
-        },
-        "username": {
-          "description": "The username of the api user whose permission is to be set.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "username",
-        "permission"
-      ],
-      "title": "AgavePy FilePermissionRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------
