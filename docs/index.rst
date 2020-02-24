@@ -12,9 +12,10 @@ services to manage data, perform computational analysis workflows,
 build automations, and more, all from within Python scripts or 
 the Python interactive REPL. 
 
-You can view *and fork* the source code for AgavePy on GitHub. Join our 
+You can view and fork the source code for AgavePy on 
+`GitHub <https://github.com/TACC/agavepy>`_. Join our 
 community of users to provide feedback, request features, 
-and submit your own very welcome contributions. 
+and submit your own contributions. 
 
 ***********
 About Tapis
