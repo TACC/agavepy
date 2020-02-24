@@ -32,9 +32,7 @@ Specifying Parameters
 
 In the table below are some common parameters, a list of services that accept them 
 for at least one command, and a description of what they are. Usage examples are shown 
-below the table - note that all values are passed as keyword arguments in 
-AgavePy. Don't assume that Python will "figure it out" if you pass them as positionals, 
-because that behavior varies between APIs and Python versions. 
+below the table. 
 
 +--------------------------------+-------------------------------+---------------------------------+
 | **Keyword Argument**           | **Service(s)**                | **Description**                 |
@@ -59,6 +57,11 @@ because that behavior varies between APIs and Python versions.
 | ``offset``                     | apps, jobs, notifications,    | integer >= 0                    |
 |                                | metadata, systems             |                                 |
 +--------------------------------+-------------------------------+---------------------------------+
+
+.. note:: All values must be passed as keyword arguments in AgavePy. A common coding 
+          convention is that Python keyword arguments can be passed positionally. 
+          This isn't a safe assumption when using AgavePy due to some low-level details 
+          of how the library is implemented.
 
 .. code-block:: pycon
    :caption: Refer to a specific Tapis entity by its identifier

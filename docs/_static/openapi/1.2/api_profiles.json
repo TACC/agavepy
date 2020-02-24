@@ -282,7 +282,7 @@
                                         "type": "string"
                                     }
                                 ],
-                                "summary": "Depete user profile",
+                                "summary": "Delete user profile",
                                 "type": "SingleProfileResponse"
                             }
                         ],

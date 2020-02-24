@@ -2,7 +2,7 @@
 Authenticating with Tapis
 #########################
 
-To interact with the Tapis APIs, you will need an Tapis platform account, 
+To interact with the Tapis APIs, you will need a Tapis platform account, 
 an Oauth API client (created using your account credentials), and an 
 access/refresh token pair (created using your Oauth client). 
 
@@ -123,7 +123,7 @@ configure AgavePy for use by your application.
 Access-Only Client
 ==================
 
-AgavePy can be set up as a **access-only client** using just an access token. This is 
+AgavePy can be set up as an **access-only client** using just an access token. This is 
 helpful for short-term usage, but does require the access token be generated using 
 another means. Also, the token will be active no more than an hour. Keep these 
 limitations in mind when designing an implementation that relies on an access-only 

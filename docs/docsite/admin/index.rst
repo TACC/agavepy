@@ -3,7 +3,7 @@ Admin
 =====
 
 These functions help you to discover, inspect, and manage custom 
-APIS on a specific Tapis tenant. They generally require special 
+APIs on a specific Tapis tenant. They generally require special 
 administrative access to use. 
 
 .. toctree::

@@ -11,7 +11,8 @@ be the default and correct choice.
 
 Thus, you will need an active TACC account. Go to the TUP_ and 
 create an account, or, if you have a TACC account already, please confirm that 
-you are able log into the TUP_ with your TACC username and password.
+you are able log into `https://portal.tacc.utexas.edu <https://portal.tacc.utexas.edu/>`_ 
+with your TACC username and password.
 
 .. note:: New TACC accounts must be confirmed via an email-based workflow before 
           they are active, so please check your email and follow any validation 

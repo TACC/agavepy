@@ -8,7 +8,7 @@ you may search Jobs submissions for a specific appId using the following code:
 
 ``Agave.jobs.list(query={"appId.like", "*matlab*"})``
 
-Additional detail on Tapis seach is available from the Tapis API documentation_. 
+Additional detail on Tapis search is available from the Tapis API documentation_. 
 
 .. Links
 

@@ -2,13 +2,7 @@
 Installing AgavePy
 ##################
 
-.. contents:: Topics
-
 .. _from_pipy:
-
-*********
-From PiPy
-*********
 
 The preferred, most compatible way to install AgavePy is to use 
 PyPi. Current and all past `releases <https://pypi.org/project/agavepy/#history>`_ 

@@ -7,28 +7,31 @@
 AgavePy Documentation
 #####################
 
-****************
-What is AgavePy?
-****************
+AgavePy is an open-source Python SDK that lets you to use Tapis_ (v2) 
+services to manage data, perform computational analysis workflows, 
+build automations, and more, all from within Python scripts or 
+the Python interactive REPL. 
 
-AgavePy is an open source Python SDK that enables you to interact 
-with Tapis_ (v2) services using functions in your Python scripts and REPL. 
+You can view *and fork* the source code for AgavePy on GitHub. Join our 
+community of users to provide feedback, request features, 
+and submit your own very welcome contributions. 
 
-With minimal configuration, AgavePy lets you to start running commands 
-that implement functions equivalent to those provided by browser-based 
-Tapis web applications or the Tapis CLI.
+***********
+About Tapis
+***********
 
-All Tapis PaaS (platform as a service) administration, management, and access 
-functions are available via AgavePy. AgavePy provides direct access to all  
-public Tapis APIs - You can explore a service's capabilities 
-with AgavePy, and develop Python scripts to manage resources, perform 
-computation or analysis workflows, build automations, and more. 
+Tapis is an open source *Science-as-a-Service* API that powers 
+research computing and data management workflows. Tapis unites high-performance 
+computing (HPC), high-throughput computing (HTC), Cloud, and Big Data resources under a 
+single, web-friendly REST API featuring fine-grained access control, detailed 
+provenance, reproducibility, and scalability. 
 
 Example: List contents of a Tapis storageSystem path
 ====================================================
 
-The ``Agave.files.list()`` function returns the directory contents of a 
-Tapis storage system (similar to an S3 bucket) and path.
+To illustrate how one can use AgavePy, consider this example. Here, the 
+``Agave.files.list()`` function is used to return a Python list of the 
+contents of a directory on a Tapis storage system.
 
 .. code-block:: pycon
 
@@ -36,32 +39,32 @@ Tapis storage system (similar to an S3 bucket) and path.
    >>> ag = Agave.restore()
    >>> files = ag.files.list(storageSystem='tacc-public-demo', filePath='/examples')
 
-The same function could be performed via authenticated HTTP GET to 
-``/files/v2/listings/system/tacc-public-demo/examples`` or using the 
-Tapis CLI ``tapis files list agave://tacc-public-demo/examples``. The former 
-requires more sophisticated knowledge of working with web services, while 
-the latter is more suited to interactive or shell script usage. 
+This same function can be accomplished by making an authenticated HTTP GET to 
+the files API:
 
-Your use case informs your choice of tooling - If you are interested in these 
-other mechanisms for working with Tapis, please consult the appropriate resources:
+.. code-block:: shell
+
+   curl -XGET -H "Authentication: Bearer 24cace8cea8cd541012a323d9ebd2b6" \
+   'https://api.tacc.utexas.edu/files/v2/listings/system/files/v2/listings/system/tacc-public-demo/examples'
+
+It could also be done using the Tapis CLI:
+
+.. code-block:: shell
+
+    tapis files list agave://tacc-public-demo/examples
+
+Making a direct API call requires more experience working with web services, 
+but is extremely flexible. Using the CLI is very accessible, though it is 
+a bit more opinionated and is also suited to interactive or script usage. AgavePy 
+aims for the middle ground, providing an expressive, embeddable interface to Tapis 
+that is closely aligned with the platform API's syntax and usage. 
+
+Ultimately, your use case informs your choice of tooling - If you are interested in
+these other paths for working with Tapis, they are amply documented:
 
   * |TapisAPI|_ : Research computing web services
   * |AbacoAPI|_ : Functions-as-a-Service for orchestration and integration
   * |TapisCLI|_ : Shell environment for Tapis and Abaco
-
-You can view *and fork* the source code for Tapis, AgavePy, and Tapis CLI on 
-GitHub. Join the community of users on GitHub to provide feedback, request features, 
-and submit your own contributions. 
-
-************************
-About the Tapis Platform
-************************
-
-Tapis is an open source *Science-as-a-Service* API platform for powering  
-research computing and data management workflows. Tapis unites high-performance 
-computing (HPC), high-throughput computing (HTC), Cloud, and Big Data resources under a 
-single, web-friendly REST API featuring fine-grained access control, detailed 
-provenance, reproducibility, and scalability. 
 
 .. toctree::
     :maxdepth: 1
