@@ -1,4 +1,4 @@
-Jinja2>=2.7.3
+Jinja2>=2.10.1
 backports.ssl-match-hostname>=3.4.0.2
 py>=1.4.26
 petname==2.2
