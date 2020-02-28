@@ -20,7 +20,7 @@ from agavepy.constants import (CACHES_DOT_DIR, AGPY_FILENAME, CACHE_FILENAME,
                                SESSIONS_FILENAME, TOKEN_SCOPE, TOKEN_TTL,
                                ENV_BASE_URL, ENV_TOKEN, ENV_REFRESH_TOKEN,
                                ENV_USERNAME, ENV_PASSWORD, ENV_API_KEY,
-                               ENV_API_SECRET, ENV_TENANT_ID, 
+                               ENV_API_SECRET, ENV_TENANT_ID,
                                DEFAULT_TENANT_API_SERVER)
 
 from agavepy.aloe import (LAST_PRE_ALOE_VERSION, EXCEPTION_MODELS)

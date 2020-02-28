@@ -25,20 +25,20 @@ __all__ = ['Token']
 
 class Token(object):
     def __init__(
-        self,
-        username,
-        password,
-        api_server,
-        api_key,
-        api_secret,
-        verify,
-        parent,
-        _token=None,
-        _refresh_token=None,
-        token_username=None,
-        expires_at=None,
-        expires_in=None,
-        created_at=None,
+            self,
+            username,
+            password,
+            api_server,
+            api_key,
+            api_secret,
+            verify,
+            parent,
+            _token=None,
+            _refresh_token=None,
+            token_username=None,
+            expires_at=None,
+            expires_in=None,
+            created_at=None,
     ):
         self.username = username
         self.password = password

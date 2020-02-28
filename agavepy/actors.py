@@ -177,21 +177,21 @@ def get_tapis_abaco_image(base_url):
 class AbacoExecutor(object):
     """Executor class that leverages an Abaco actor for executions"""
     def __init__(
-        self,
-        # the agave oauth client to use to connect to the abaco instance
-        ag,
-        # use an existing actor; it must have been defined with an allowable image.
-        actor_id=None,
-        # specify an image to use for the abaco actor. it must be able to accept a message that contains a
-        # callable and parameters and execute the callable.
-        image=None,
-        # if not specifying an image, one of a pre-defined set of strings that determines the image to use for the actor
-        context=None,
-        # the number of abaco workers to use for the actor
-        num_workers=1,
-        # timeout (in seconds) to wait for actor to be READY; for very large images, may need to increase this
-        # to allow for longer download times on the abaco side.
-        timeout=60):
+            self,
+            # the agave oauth client to use to connect to the abaco instance
+            ag,
+            # use an existing actor; it must have been defined with an allowable image.
+            actor_id=None,
+            # specify an image to use for the abaco actor. it must be able to accept a message that contains a
+            # callable and parameters and execute the callable.
+            image=None,
+            # if not specifying an image, one of a pre-defined set of strings that determines the image to use for the actor
+            context=None,
+            # the number of abaco workers to use for the actor
+            num_workers=1,
+            # timeout (in seconds) to wait for actor to be READY; for very large images, may need to increase this
+            # to allow for longer download times on the abaco side.
+            timeout=60):
         self.ag = ag
         self.timeout = timeout
         if actor_id:
