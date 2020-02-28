@@ -1,10 +1,10 @@
 {
     "info": {
-        "termsOfServiceUrl": "http://agaveapi.co/terms/",
-        "contact": "dooley@tacc.utexas.edu",
-        "description": "Your Science-as-a-Service API Platform. \nFor more information, visit <a href=\"http://agaveapi.co\">http://agaveapi.co</a>",
-        "licenseUrl": "http://agaveapi.co/terms",
-        "title": "iPlant Agave API"
+        "termsOfServiceUrl": "https://portal.tacc.utexas.edu/tacc-usage-policy",
+        "contact": "jstubbs@tacc.utexas.edu",
+        "description": "Science-as-a-Service API for powering research computing and data management workflows",
+        "licenseUrl": "https://opensource.org/licenses/BSD-3-Clause",
+        "title": "Tapis API (v2)"
     },
     "authorizations": {
         "oauth2": {
