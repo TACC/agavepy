@@ -8,11 +8,12 @@ python:
   - "3.8"
 
 # install:
-#   - pip install -r requirements.txt
+#   - pip install -r requirements-dev.txt
 
 script:
   - python -m pytest tests --longrun
 
 before_install:
   - pip install -r requirements.txt
+  - pip install -r requirements-dev.txt
   - python setup.py install
