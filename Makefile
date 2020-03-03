@@ -69,3 +69,7 @@ format-code:
 
 format-tests:
 	yapf --recursive --style pep8 -i tests
+
+release:
+	python setup.py sdist bdist_wheel
+	twine upload dist/*
