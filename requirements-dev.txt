@@ -10,3 +10,5 @@ pytest-runner>=5.1
 Sphinx>=1.8.5
 sphinxcontrib-napoleon>=0.7
 yapf>=0.28.0
+mock
+
