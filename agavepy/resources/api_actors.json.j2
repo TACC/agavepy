@@ -800,6 +800,71 @@
                             {
                                 "parameters": [
                                     {
+                                        "description": "The Abaco database to be searched.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "type": "string",
+                                        "paramType": "path",
+                                        "name": "search_type"
+                                    },
+                                    {
+                                        "description": "The query to perform. Traditional MongoDB queries are supported",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "type": "string",
+                                        "paramType": "query",
+                                        "name": "q"
+                                    },
+                                    {
+                                        "defaultValue": 10,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "limit"
+                                    },
+                                    {
+                                        "defaultValue": 0,
+                                        "description": "The number of records skip when returing recods.",
+                                        "format": "int32",
+                                        "allowMultiple": false,
+                                        "required": false,
+                                        "min": 0,
+                                        "type": "integer",
+                                        "paramType": "query",
+                                        "name": "skip"
+                                    }
+                                ],
+                                "type": "searchDatabase",
+                                "notes": "",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the actor database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Search a specific Abaco database.",
+                                "nickname": "getSearch",
+                                "method": "GET"
+                            }
+                        ],
+                        "path": "/actors/v2/search/{search_type}",
+                        "description": "Search a specific abaco database.",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
                                         "description": "The id of the actor.",
                                         "allowMultiple": false,
                                         "required": true,
