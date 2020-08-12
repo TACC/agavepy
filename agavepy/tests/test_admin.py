@@ -44,7 +44,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 def credentials():
     credentials_file = os.environ.get('creds',
                                       'test_credentials_admin_tests.json')
-    print "Using: {}".format(credentials_file)
+    print("Using: {}".format(credentials_file))
     return json.load(open(os.path.join(HERE, credentials_file)))
 
 

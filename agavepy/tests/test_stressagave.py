@@ -36,7 +36,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 @pytest.fixture(scope='session')
 def credentials():
     credentials_file = os.environ.get('creds', 'test_credentials.json')
-    print "Using: {}".format(credentials_file)
+    print("Using: {}".format(credentials_file))
     return json.load(open(os.path.join(HERE, credentials_file)))
 
 
