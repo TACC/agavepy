@@ -13,6 +13,8 @@ import time
 
 from .agave import Agave, AgaveError, AttrDict
 
+def reserved_environment_vars():
+    return ['MSG', '_abaco_Content-Type', '_abaco_execution_id', '_abaco_username', '_abaco_actor_state', '_abaco_actor_dbid', '_abaco_actor_id']
 
 def get_client():
     """Returns a pre-authenticated Agave client using the abaco environment variables."""
