@@ -71,7 +71,7 @@ class Agave(ClientCommands, TokenCommands, DeprecatedCommands):
         ("refresh_token", False, "_refresh_token", None),
         ("use_nonce", False, "use_nonce", False),
         ("resources", False, "resources", None),
-        ("verify", False, "verify", True),
+        ("verify", False, "verify", settings.TAPISPY_VERIFY_SSL),
         ("token_callback", False, "token_callback", None),
         ("proxies", False, "proxies", getproxies()),
     ]
@@ -247,7 +247,8 @@ class Agave(ClientCommands, TokenCommands, DeprecatedCommands):
                 # add missing attrs:
                 if "verify" not in client:
                     # default to verifying SSL:
-                    client["verify"] = True
+                    client["verify"] = settings.TAPISPY_VERIFY_SSL
+
                 logger.debug('Found client {0}'.format(client))
 
         logger.debug('Total clients found: {0}'.format(len(clients)))
