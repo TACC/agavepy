@@ -2,9 +2,6 @@
 """
 from agavepy.settings import TAPIS_TENANTS_URL, TAPISPY_VERIFY_SSL
 import requests
-# Disable InsecureRequestWarning from embedded urlib3
-# from requests.packages.urllib3.exceptions import InsecureRequestWarning
-# requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 __all__ = ['list_tenants', 'api_server_by_id', 'id_by_api_server']
 
@@ -34,7 +31,9 @@ def list_tenants(url=None, verify_ssl=TAPISPY_VERIFY_SSL):
     except Exception:
         raise
 
-    return resp.json().get('result', [])
+    tenants = resp.json().get('result', [])
+    resp.close()
+    return tenants
 
 
 def api_server_by_id(tenant_id, url=None, verify_ssl=TAPISPY_VERIFY_SSL):

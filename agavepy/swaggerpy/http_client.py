@@ -12,10 +12,6 @@ import requests.auth
 import urllib.parse
 import websocket
 
-# # Disable InsecureRequestWarning
-# from requests.packages.urllib3.exceptions import InsecureRequestWarning
-# requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-
 log = logging.getLogger(__name__)
 
 
