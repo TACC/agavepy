@@ -3,8 +3,8 @@
 from agavepy.settings import TAPIS_TENANTS_URL, TAPISPY_VERIFY_SSL
 import requests
 # Disable InsecureRequestWarning from embedded urlib3
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+# from requests.packages.urllib3.exceptions import InsecureRequestWarning
+# requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 __all__ = ['list_tenants', 'api_server_by_id', 'id_by_api_server']
 
