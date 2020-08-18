@@ -39,7 +39,7 @@ data_files = [('', ['requirements.txt', 'requirements-py2.txt'])]
 
 setup(
     name='agavepy',
-    version='1.0.0a9',
+    version='1.0.0a10',
     description='SDK for TACC Tapis (formerly Agave)',
     long_description=readme,
     author='Texas Advanced Computing Center',
