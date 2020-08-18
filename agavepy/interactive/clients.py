@@ -11,6 +11,7 @@ class ClientCommands(object):
                        tenant_url=None,
                        username=None,
                        password=None,
+                       verify_ssl=None,
                        quiet=False):
         """ Create an Oauth client
 
@@ -29,6 +30,8 @@ class ClientCommands(object):
             The user's username.
         password: string
             The user's password
+        verify_ssl: bool
+            Whether to verify SSL connections
 
         RETURNS
         -------
@@ -46,6 +49,9 @@ class ClientCommands(object):
             username = getattr(self, 'username')
         if password is None:
             password = getattr(self, 'password')
+        
+        if verify_ssl is None:
+            verify_ssl = getattr(self, 'verify', True)
 
         # Make sure client_name is not empty
         if client_name == '' or client_name is None:
@@ -61,7 +67,8 @@ class ClientCommands(object):
             }
             response = requests.post(endpoint,
                                      data=data,
-                                     auth=(username, password))
+                                     auth=(username, password),
+                                     verify=verify_ssl)
             del password
         except Exception:
             del password
