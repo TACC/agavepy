@@ -28,7 +28,7 @@ from agavepy.configgen import (ConfigGen, load_resource)
 from agavepy.errors import (AgaveError, AgaveException, __handle_tapis_error,
                             _handle_tapis_error)
 from agavepy.interactive import ClientCommands, DeprecatedCommands, TokenCommands
-from agavepy.processor import (AgaveProcessor, SwaggerClient, SwaggerClient,
+from agavepy.processor import (AgaveProcessor, SwaggerClient,
                                SynchronousHttpClient, Operation, Resource)
 from agavepy.tenants import id_by_api_server
 from agavepy.token import Token
@@ -71,7 +71,7 @@ class Agave(ClientCommands, TokenCommands, DeprecatedCommands):
         ("refresh_token", False, "_refresh_token", None),
         ("use_nonce", False, "use_nonce", False),
         ("resources", False, "resources", None),
-        ("verify", False, "verify", True),
+        ("verify", False, "verify", settings.TAPISPY_VERIFY_SSL),
         ("token_callback", False, "token_callback", None),
         ("proxies", False, "proxies", getproxies()),
     ]
@@ -247,7 +247,8 @@ class Agave(ClientCommands, TokenCommands, DeprecatedCommands):
                 # add missing attrs:
                 if "verify" not in client:
                     # default to verifying SSL:
-                    client["verify"] = True
+                    client["verify"] = settings.TAPISPY_VERIFY_SSL
+
                 logger.debug('Found client {0}'.format(client))
 
         logger.debug('Total clients found: {0}'.format(len(clients)))
@@ -455,7 +456,7 @@ class Agave(ClientCommands, TokenCommands, DeprecatedCommands):
 
             # Some Tapis client managers drop tenant_id - this fixes that issue
             if getattr(self, 'tenant_id', None) is None:
-                self.tenant_id = id_by_api_server(self.api_server)
+                self.tenant_id = id_by_api_server(self.api_server, verify_ssl=self.verify)
                 new_data['tenantid'] = self.tenant_id
 
             with open(Agave.agpy_path(), "w") as agpy:

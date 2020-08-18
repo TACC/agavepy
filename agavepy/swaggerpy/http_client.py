@@ -181,6 +181,15 @@ class SynchronousHttpClient(HttpClient):
         self.websockets = set()
         self.verify = verify
 
+        # Keep-Alive is problematic when making unverified
+        # connections to API servers via HTTPS. It leads to 
+        # hangs and timeouts, so here we incur the overhead 
+        # of creating a new HTTP connection for each API 
+        # call if SSL verification is disabled. 
+        if not self.verify:
+            self.session.headers['Connection'] = 'close'
+
+
     def close(self):
         self.session.close()
         # There's no WebSocket factory to close; close connections individually
