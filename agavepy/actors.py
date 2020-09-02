@@ -45,11 +45,14 @@ def get_context():
     context = AttrDict({
         'raw_message': os.environ.get('MSG'),
         'content_type': os.environ.get('_abaco_Content-Type'),
+        'actor_repo': os.environ.get('_abaco_container_repo'),
+        'actor_name': os.environ.get('_abaco_actor_name'),
+        'actor_id': os.environ.get('_abaco_actor_id'),
+        'actor_dbid': os.environ.get('_abaco_actor_dbid'),
         'execution_id': os.environ.get('_abaco_execution_id'),
+        'worker_id': os.environ.get('_abaco_worker_id'),
         'username': os.environ.get('_abaco_username'),
         'state': os.environ.get('_abaco_actor_state'),
-        'actor_dbid': os.environ.get('_abaco_actor_dbid'),
-        'actor_id': os.environ.get('_abaco_actor_id'),
         'raw_message_parse_log': ''
     })
 
