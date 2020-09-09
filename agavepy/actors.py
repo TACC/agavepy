@@ -4,6 +4,7 @@ Module to facilitate writing actor containers for the abaco platform. See https:
 """
 
 import ast
+import json
 from concurrent.futures import TimeoutError
 import cloudpickle
 import getpass
@@ -42,7 +43,7 @@ def get_context():
     """
     Returns a context dictionary with message and metadata about the message
     """
-    context = AttrDict({
+    context = {
         'raw_message': os.environ.get('MSG'),
         'content_type': os.environ.get('_abaco_Content-Type'),
         'actor_repo': os.environ.get('_abaco_container_repo'),
@@ -53,25 +54,32 @@ def get_context():
         'worker_id': os.environ.get('_abaco_worker_id'),
         'username': os.environ.get('_abaco_username'),
         'state': os.environ.get('_abaco_actor_state'),
-        'raw_message_parse_log': ''
-    })
+        'raw_message_parse_log': []
+    }
 
     # Set up message_dict and error log preemptively
     # message_dict is actually an AttrDict so users can use
     # dot notation when programming against it
-    context['message_dict'] = AttrDict()
-    context['raw_message_parse_log'] = ''
+    context['message_dict'] = {}
+    context['raw_message_parse_log'] = []
+
+    # Try the safer AST eval to load the raw message into a dict, 
+    # falling back to trying json.loads() if that fails
     try:
         temp_dict = ast.literal_eval(context['raw_message'])
         if isinstance(temp_dict, dict):
-            context['message_dict'] = AttrDict(temp_dict)
-    except Exception as e:
-        context['raw_message_parse_log'] = \
-            "Error parsing message: {}".format(e)
-        pass
+            context['message_dict'] = temp_dict
+    except Exception as e_ast:
+        context['raw_message_parse_log'].append(str(e_ast))
+        try:
+            temp_dict = json.loads(context['raw_message'])
+            context['message_dict'] = temp_dict
+        except Exception as e_json:
+            context['raw_message_parse_log'].append(str(e_json))
+            pass
 
     context.update(os.environ)
-    return context
+    return AttrDict(context)
 
 
 def get_binary_message():
