@@ -92,12 +92,12 @@
                             {
                                 "parameters": [
                                     {
-                                        "description": "The nonce of this PostIt URL",
+                                        "description": "The UUID of this PostIt URL",
                                         "allowMultiple": false,
                                         "required": true,
                                         "type": "string",
                                         "paramType": "path",
-                                        "name": "nonce"
+                                        "name": "uuid"
                                     }
                                 ],
                                 "nickname": "delete",
@@ -108,7 +108,7 @@
                                 "method": "DELETE"
                             }
                         ],
-                        "path": "/postits/v2/{nonce}",
+                        "path": "/postits/v2/{uuid}",
                         "description": "Operations on a specific PostIt.",
                         "has_websocket": false
                     }
@@ -140,7 +140,7 @@
                             },
                             "postit": {
                                 "type": "string",
-                                "description": "The PostIt nonce.",
+                                "description": "The PostIt UUID.",
                                 "name": "postit"
                             },
                             "created": {
