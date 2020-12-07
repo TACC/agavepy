@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.9.4 - 2020-12-07
+### Added
+- No change.
+
+### Changed
+- Fix to POSTITS DELETE
+
+### Removed
+- No change.
+
+
 ## 0.9.0 - 2019-04-16
 ### Added
 - The jobs() methods have been updated to detect the version of the Jobs API and, when appropriate, use the Aloe

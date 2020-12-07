@@ -46,11 +46,11 @@ print(data_files)
 
 setup(
     name='agavepy',
-    version='0.9.1',
-    description='SDK for Agave',
+    version='0.9.4',
+    description='SDK for Tapis',
     long_description=readme,
     author='Texas Advanced Computing Center',
-    author_email='jstubbs@tacc.utexas.edu, jochoa@tacc.utexas.edu',
+    author_email='jstubbs@tacc.utexas.edu, vaughn@tacc.utexas.edu',
     url='https://github.com/TACC/agavepy',
     packages=[
         'agavepy',
@@ -77,7 +77,8 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.6'
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7'
     ],
     cmdclass={'test': PyTest},
     tests_require=['pytest'],
