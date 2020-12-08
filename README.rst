@@ -45,7 +45,7 @@ Install from source:
 Usage
 *****
 
-Please consult the AgavePy_ for comprehensive configuration and 
+Please consult AgavePy_ docs for comprehensive configuration and 
 usage information. 
 
 ************
