@@ -34,19 +34,11 @@ requires = [pkg for pkg in open('requirements.txt').readlines()]
 if sys.version_info[0] == 2:
     requires.extend([pkg for pkg in open('requirements-py2.txt').readlines()])
 
-# append resources files into the data_files object:
 data_files = [('', ['requirements.txt', 'requirements-py2.txt'])]
-resources = os.listdir(os.path.join(HERE, 'agavepy', 'resources'))
-resource_list = []
-for r in resources:
-    resource_list.append(os.path.join('agavepy', 'resources', r))
-
-data_files.append(('agavepy/resources', resource_list))
-print(data_files)
 
 setup(
     name='agavepy',
-    version='0.9.4',
+    version='0.9.5',
     description='SDK for Tapis',
     long_description=readme,
     author='Texas Advanced Computing Center',
@@ -62,7 +54,8 @@ setup(
         "agavepy.utils",
     ],
     package_dir={'agavepy': 'agavepy'},
-    package_data={'agavepy': ['resources.json', 'resources.json.j2', 'resource_exceptions.json']},
+    package_data={'agavepy': [
+        'resources.json', 'resources.json.j2', 'resource_exceptions.json', 'resources/*.j2']},
     data_files=data_files,
     install_requires=requires,
     license="BSD",
@@ -78,7 +71,8 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7'
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8'
     ],
     cmdclass={'test': PyTest},
     tests_require=['pytest'],
