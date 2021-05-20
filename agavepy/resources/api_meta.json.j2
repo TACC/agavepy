@@ -62,6 +62,53 @@
                             {
                                 "parameters": [
                                     {
+                                        "defaultValue": "[{\n\t\"uuid\": \"1052668239654088215-242ac119-0001-012\",\n\t\"update\": {\n\t\"value.type\": \"ds_file_meta\",\n\t\"value.system\": \"slt-designsafe.storage.default\",\n\t\"value.filePath\": \"/slt/path/from/folder\",\n\t\"value.parentPath\": \"/slt/path/from\"\n\t}}",
+                                        "description": "An array of metadata documents to update.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "type": "array",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "MetadataResponse",
+                                "notes": "this is a bulk update service for updating metadata documents",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies an invalid form",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Raised if the user is not authorized.",
+                                        "code": 401
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Update multiple Metadata documents.",
+                                "nickname": "bulkCreateMetadata",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/meta/v2/bulk/update",
+                        "description": "Bulk update metadata resources",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
                                         "description": "The query to perform. Traditional MongoDB queries are supported",
                                         "allowMultiple": false,
                                         "required": false,
