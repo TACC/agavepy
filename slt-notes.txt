@@ -1,0 +1,28 @@
+{'api_key': 'Ttt2IH7nI3VQj2zzHRokEy9HqHEa','api_secret': 'zKzUWnwmFq9OGWDCQZoMCXwT59ga','client_name': 'sterry1-mbpr.attlocal.net-amazed-goat'}
+
+# 5.20 8:32a
+{'access_token': '1d71aff9e519302c7ebd293ce5959528', 'refresh_token': '78a9e7384aefc42bc478a2a8142c0dd'}
+
+# decoded jwt claims
+{
+  "iss": "wso2.org/products/am",
+  "exp": 1621525867115,
+  "http://wso2.org/claims/subscriber": "ALOEDEV/testuser7",
+  "http://wso2.org/claims/applicationid": "4263",
+  "http://wso2.org/claims/applicationname": "sterry1-mbpr.attlocal.net-amazed-goat",
+  "http://wso2.org/claims/applicationtier": "Unlimited",
+  "http://wso2.org/claims/apicontext": "/meta/v2",
+  "http://wso2.org/claims/version": "v2",
+  "http://wso2.org/claims/tier": "Unlimited",
+  "http://wso2.org/claims/keytype": "PRODUCTION",
+  "http://wso2.org/claims/usertype": "APPLICATION_USER",
+  "http://wso2.org/claims/enduser": "testuser7@carbon.super",
+  "http://wso2.org/claims/enduserTenantId": "-1234",
+  "http://wso2.org/claims/emailaddress": "testuser7@tacc.utexas.edu",
+  "http://wso2.org/claims/fullname": "testuser7",
+  "http://wso2.org/claims/lastname": "testuser7",
+  "http://wso2.org/claims/role": "Internal/ALOEDEV_testuser7_rsthrtapp_PRODUCTION,Internal/ALOEDEV_testuser7_rhapp_PRODUCTION,Internal/ALOEDEV_testuser7_app2_PRODUCTION,Internal/ALOEDEV_testuser7_sterry1-mbpr.attlocal.net-amazed-goat_PRODUCTION,Internal/ALOEDEV_testuser7_DefaultApplication_PRODUCTION,Internal/vdj,Internal/ALOEDEV_testuser7_test_app_PRODUCTION,Internal/ALOEDEV_testuser7_sltapp_PRODUCTION,Internal/abaco-admin,Internal/everyone,Internal/designsafe,Internal/ALOEDEV_testuser7_pow_PRODUCTION"
+}
+
+# jwt for the above claims.
+ x-jwt-assertion-dev:eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik5tSm1PR1V4TXpabFlqTTJaRFJoTlRabFlUQTFZemRoWlRSaU9XRTBOV0kyTTJKbU9UYzFaQT09In0=.eyJpc3MiOiJ3c28yLm9yZy9wcm9kdWN0cy9hbSIsImV4cCI6MTYyMTUyNTg2NzExNSwiaHR0cDovL3dzbzIub3JnL2NsYWltcy9zdWJzY3JpYmVyIjoiQUxPRURFVi90ZXN0dXNlcjciLCJodHRwOi8vd3NvMi5vcmcvY2xhaW1zL2FwcGxpY2F0aW9uaWQiOiI0MjYzIiwiaHR0cDovL3dzbzIub3JnL2NsYWltcy9hcHBsaWNhdGlvbm5hbWUiOiJzdGVycnkxLW1icHIuYXR0bG9jYWwubmV0LWFtYXplZC1nb2F0IiwiaHR0cDovL3dzbzIub3JnL2NsYWltcy9hcHBsaWNhdGlvbnRpZXIiOiJVbmxpbWl0ZWQiLCJodHRwOi8vd3NvMi5vcmcvY2xhaW1zL2FwaWNvbnRleHQiOiIvbWV0YS92MiIsImh0dHA6Ly93c28yLm9yZy9jbGFpbXMvdmVyc2lvbiI6InYyIiwiaHR0cDovL3dzbzIub3JnL2NsYWltcy90aWVyIjoiVW5saW1pdGVkIiwiaHR0cDovL3dzbzIub3JnL2NsYWltcy9rZXl0eXBlIjoiUFJPRFVDVElPTiIsImh0dHA6Ly93c28yLm9yZy9jbGFpbXMvdXNlcnR5cGUiOiJBUFBMSUNBVElPTl9VU0VSIiwiaHR0cDovL3dzbzIub3JnL2NsYWltcy9lbmR1c2VyIjoidGVzdHVzZXI3QGNhcmJvbi5zdXBlciIsImh0dHA6Ly93c28yLm9yZy9jbGFpbXMvZW5kdXNlclRlbmFudElkIjoiLTEyMzQiLCJodHRwOi8vd3NvMi5vcmcvY2xhaW1zL2VtYWlsYWRkcmVzcyI6InRlc3R1c2VyN0B0YWNjLnV0ZXhhcy5lZHUiLCJodHRwOi8vd3NvMi5vcmcvY2xhaW1zL2Z1bGxuYW1lIjoidGVzdHVzZXI3IiwiaHR0cDovL3dzbzIub3JnL2NsYWltcy9sYXN0bmFtZSI6InRlc3R1c2VyNyIsImh0dHA6Ly93c28yLm9yZy9jbGFpbXMvcm9sZSI6IkludGVybmFsL0FMT0VERVZfdGVzdHVzZXI3X3JzdGhydGFwcF9QUk9EVUNUSU9OLEludGVybmFsL0FMT0VERVZfdGVzdHVzZXI3X3JoYXBwX1BST0RVQ1RJT04sSW50ZXJuYWwvQUxPRURFVl90ZXN0dXNlcjdfYXBwMl9QUk9EVUNUSU9OLEludGVybmFsL0FMT0VERVZfdGVzdHVzZXI3X3N0ZXJyeTEtbWJwci5hdHRsb2NhbC5uZXQtYW1hemVkLWdvYXRfUFJPRFVDVElPTixJbnRlcm5hbC9BTE9FREVWX3Rlc3R1c2VyN19EZWZhdWx0QXBwbGljYXRpb25fUFJPRFVDVElPTixJbnRlcm5hbC92ZGosSW50ZXJuYWwvQUxPRURFVl90ZXN0dXNlcjdfdGVzdF9hcHBfUFJPRFVDVElPTixJbnRlcm5hbC9BTE9FREVWX3Rlc3R1c2VyN19zbHRhcHBfUFJPRFVDVElPTixJbnRlcm5hbC9hYmFjby1hZG1pbixJbnRlcm5hbC9ldmVyeW9uZSxJbnRlcm5hbC9kZXNpZ25zYWZlLEludGVybmFsL0FMT0VERVZfdGVzdHVzZXI3X3Bvd19QUk9EVUNUSU9OIn0=.kZidht6xHBc60/7d1w6xSVYmo5kqbcReGKdu0qLuhdB84VIpIbCL6z0XK6w2yFotwmd8cERGXIsZ5VINmDlWKyTQVRy6/gqUHt7cKYJS4mqglv7wOU3mEnTwGAn8bdWW47F9otfPRA+cjaZuzH8pHM3/FheKAaF/GSM5cjpjWAU=

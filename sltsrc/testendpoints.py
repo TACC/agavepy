@@ -1,0 +1,4 @@
+
+from agavepy import Agave
+
+myJson='[ { "uuid": "1052668239654088215-242ac119-0001-012","associationIds": [],"lastUpdated": "2021-02-01T09:54:08.113-06:00","name": "designsafe.project.slt""value": {"type": "ds_file_meta","system": "slt-designsafe.storage.default","filePath": "/slt/path/from/folder","parentPath": "/slt/path/from","projectType": "experimental","projectId": "PRJ-2224","description": "a pseudo-Latin text used in web design, typography, layout, and printing in place of English to emphasise design elements over content. It\'s also called placeholder (or filler) text. It\'s a convenient tool for mock-ups. It helps to outline the visual elements of a document or presentation, eg typography, font, or layout.","title": "Walk Experiment Demo","pi": "thbrown",},"created": "2019-02-20T07:46:37.197-06:00","owner": "ds_admin","tenantId": "designsafe"}]'

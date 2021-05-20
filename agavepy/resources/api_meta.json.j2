@@ -15,6 +15,53 @@
                             {
                                 "parameters": [
                                     {
+                                        "defaultValue": "[{\n\t\"name\": \"color\",\n\t\"value\": \"blue\",\n\t\"schemaId\": null,\n\t\"associatedIds\": []\n}]",
+                                        "description": "An array of metadata documents to add.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "type": "array",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "MetadataResponse",
+                                "notes": "this is a bulk creation service for creating copies of metadata",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies an invalid form",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Raised if the user is not authorized.",
+                                        "code": 401
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Create multiple new Metadata documents.",
+                                "nickname": "bulkCreateMetadata",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/meta/v2/bulk/create",
+                        "description": "Bulk add metadata resources",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
                                         "description": "The query to perform. Traditional MongoDB queries are supported",
                                         "allowMultiple": false,
                                         "required": false,
