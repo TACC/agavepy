@@ -27,7 +27,7 @@
                                         "name": "body"
                                     }
                                 ],
-                                "type": "EmptyMetadataResponse",
+                                "type": "MetadataStringResponse",
                                 "notes": "this is a bulk creation service for creating copies of metadata",
                                 "is_websocket": false,
                                 "responseMessages": [
@@ -74,7 +74,7 @@
                                         "name": "body"
                                     }
                                 ],
-                                "type": "EmptyMetadataResponse",
+                                "type": "MetadataStringResponse",
                                 "notes": "this is a bulk update service for updating metadata documents",
                                 "is_websocket": false,
                                 "responseMessages": [
@@ -1367,6 +1367,31 @@
                             }
                         },
                         "id": "MultipleMetadataSchemaPermissionResponse",
+                        "name": ""
+                    },
+                    "MetadataStringResponse": {
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "description": "success or failure",
+                                "name": "status"
+                            },
+                            "message": {
+                                "type": "string",
+                                "description": "Error message caused by this request",
+                                "name": "message"
+                            },
+                            "version": {
+                                "type": "string",
+                                "description": "API version number",
+                                "name": "version"
+                            },
+                            "result": {
+                                "type": "string",
+                                "name": "result"
+                            }
+                        },
+                        "id": "MetadataStringResponse",
                         "name": ""
                     },
                     "EmptyMetadataResponse": {
