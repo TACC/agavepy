@@ -109,6 +109,53 @@
                             {
                                 "parameters": [
                                     {
+                                        "defaultValue": "[\"1052668239654088215-242ac119-0001-012\", \"1052668239654088215-242ac119-0001-012\"]",
+                                        "description": "An array of metadata document UUIDs to delete.",
+                                        "allowMultiple": false,
+                                        "required": true,
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "type": "array",
+                                        "paramType": "body",
+                                        "name": "body"
+                                    }
+                                ],
+                                "type": "MetadataStringResponse",
+                                "notes": "this is a bulk delete service for deleting metadata documents",
+                                "is_websocket": false,
+                                "responseMessages": [
+                                    {
+                                        "message": "Raised if a user supplies an invalid form",
+                                        "code": 400
+                                    },
+                                    {
+                                        "message": "Raised if the user is not authorized.",
+                                        "code": 401
+                                    },
+                                    {
+                                        "message": "Failed to authenticate the user",
+                                        "code": 403
+                                    },
+                                    {
+                                        "message": "The service was unable to query the metadata database",
+                                        "code": 500
+                                    }
+                                ],
+                                "summary": "Update multiple Metadata documents.",
+                                "nickname": "bulkDelete",
+                                "method": "POST"
+                            }
+                        ],
+                        "path": "/meta/v2/bulk/delete",
+                        "description": "Bulk delete metadata resources",
+                        "has_websocket": false
+                    },
+                    {
+                        "operations": [
+                            {
+                                "parameters": [
+                                    {
                                         "description": "The query to perform. Traditional MongoDB queries are supported",
                                         "allowMultiple": false,
                                         "required": false,
