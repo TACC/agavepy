@@ -50,6 +50,18 @@ Response:
 ---------
     * *A single Metadata object*
 
+bulkCreate: Create multiple new Metadata.
+========================================
+``meta.bulkCreate(body=[<BODY>])``
+
+Keyword Args:
+-------------
+    * **body**: The list of metadata to add. (JSON, MetadataRequest)
+
+Response:
+---------
+    * *Array of newly created metadata UUIDs*
+
 listMetadata: List and/or search metadata.
 ==========================================
 ``meta.listMetadata(limit=250, offset=0, privileged=True, q=None)``
@@ -79,6 +91,18 @@ Response:
 ---------
     * *A single EmptyMetadata object*
 
+bulkDelete: Delete multiple Metadata.
+========================================
+``meta.bulkDelete(body=[<UUID>])``
+
+Keyword Args:
+-------------
+    * **body**: The list of metadata uuids to delete. (JSON)
+
+Response:
+---------
+    * *A single MetadataStringResponse*
+
 getMetadata: Retrieve Metadata.
 ===============================
 ``meta.getMetadata(limit=250, offset=0, uuid=<UUID>)``
@@ -107,6 +131,18 @@ Keyword Args:
 Response:
 ---------
     * *A single Metadata object*
+
+bulkUpdate: Update multiple Metadata.
+========================================
+``meta.bulkCreate(body=[{'uuid':<UUID>, 'update':<BODY>}])``
+
+Keyword Args:
+-------------
+    * **body**: The list of uuids and metadata to update. (JSON, MetadataRequest)
+
+Response:
+---------
+    * *A single MetadataStringResponse*
 
 addSchema: Add a new Metadata Schema.
 =====================================
