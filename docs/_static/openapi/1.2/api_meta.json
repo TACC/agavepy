@@ -5,6 +5,147 @@
                 "apiVersion": "2.2.14",
                 "apis": [
                     {
+                        "description": "Bulk add metadata resources",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "POST",
+                                "nickname": "bulkCreate",
+                                "notes": "this is a bulk creation service for creating copies of metadata",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": "[{\n\t\"name\": \"color\",\n\t\"value\": \"blue\",\n\t\"schemaId\": null,\n\t\"associatedIds\": []\n}]",
+                                        "description": "An array of metadata documents to add.",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "name": "body",
+                                        "paramType": "body",
+                                        "required": true,
+                                        "type": "array"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 400,
+                                        "message": "Raised if a user supplies an invalid form"
+                                    },
+                                    {
+                                        "code": 401,
+                                        "message": "Raised if the user is not authorized."
+                                    },
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the metadata database"
+                                    }
+                                ],
+                                "summary": "Create multiple new Metadata documents.",
+                                "type": "MetadataStringResponse"
+                            }
+                        ],
+                        "path": "/meta/v2/bulk/create"
+                    },
+                    {
+                        "description": "Bulk update metadata resources",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "POST",
+                                "nickname": "bulkUpdate",
+                                "notes": "this is a bulk update service for updating metadata documents",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": "[{\n\t\"uuid\": \"1052668239654088215-242ac119-0001-012\",\n\t\"update\": {\n\t\"value.type\": \"ds_file_meta\",\n\t\"value.system\": \"slt-designsafe.storage.default\",\n\t\"value.filePath\": \"/slt/path/from/folder\",\n\t\"value.parentPath\": \"/slt/path/from\"\n\t}}",
+                                        "description": "An array of metadata documents to update.",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "name": "body",
+                                        "paramType": "body",
+                                        "required": true,
+                                        "type": "array"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 400,
+                                        "message": "Raised if a user supplies an invalid form"
+                                    },
+                                    {
+                                        "code": 401,
+                                        "message": "Raised if the user is not authorized."
+                                    },
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the metadata database"
+                                    }
+                                ],
+                                "summary": "Update multiple Metadata documents.",
+                                "type": "MetadataStringResponse"
+                            }
+                        ],
+                        "path": "/meta/v2/bulk/update"
+                    },
+                    {
+                        "description": "Bulk delete metadata resources",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "POST",
+                                "nickname": "bulkDelete",
+                                "notes": "this is a bulk delete service for deleting metadata documents",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": "[\"1052668239654088215-242ac119-0001-012\", \"1052668239654088215-242ac119-0001-012\"]",
+                                        "description": "An array of metadata document UUIDs to delete.",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "name": "body",
+                                        "paramType": "body",
+                                        "required": true,
+                                        "type": "array"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 400,
+                                        "message": "Raised if a user supplies an invalid form"
+                                    },
+                                    {
+                                        "code": 401,
+                                        "message": "Raised if the user is not authorized."
+                                    },
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the metadata database"
+                                    }
+                                ],
+                                "summary": "Update multiple Metadata documents.",
+                                "type": "MetadataStringResponse"
+                            }
+                        ],
+                        "path": "/meta/v2/bulk/delete"
+                    },
+                    {
                         "description": "Search and manage metadata resources",
                         "has_websocket": false,
                         "operations": [
@@ -1366,6 +1507,31 @@
                             "result": {
                                 "name": "result",
                                 "type": "MetadataSchema"
+                            },
+                            "status": {
+                                "description": "success or failure",
+                                "name": "status",
+                                "type": "string"
+                            },
+                            "version": {
+                                "description": "API version number",
+                                "name": "version",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "MetadataStringResponse": {
+                        "id": "MetadataStringResponse",
+                        "name": "",
+                        "properties": {
+                            "message": {
+                                "description": "Error message caused by this request",
+                                "name": "message",
+                                "type": "string"
+                            },
+                            "result": {
+                                "name": "result",
+                                "type": "string"
                             },
                             "status": {
                                 "description": "success or failure",

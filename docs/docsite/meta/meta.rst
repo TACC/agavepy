@@ -4,6 +4,45 @@ meta
 
 Summary: Create and manage metadata
 
+bulkCreate: Create multiple new Metadata documents.
+===================================================
+``meta.bulkCreate(body=<BODY>)``
+
+Keyword Args:
+-------------
+    * **body**: An array of metadata documents to add. (JSON, array)
+
+
+Response:
+---------
+    * *String*
+
+bulkUpdate: Update multiple Metadata documents.
+===============================================
+``meta.bulkUpdate(body=<BODY>)``
+
+Keyword Args:
+-------------
+    * **body**: An array of metadata documents to update. (JSON, array)
+
+
+Response:
+---------
+    * *String*
+
+bulkDelete: Update multiple Metadata documents.
+===============================================
+``meta.bulkDelete(body=<BODY>)``
+
+Keyword Args:
+-------------
+    * **body**: An array of metadata document UUIDs to delete. (JSON, array)
+
+
+Response:
+---------
+    * *String*
+
 addMetadata: Update or Add new Metadata.
 ========================================
 ``meta.addMetadata(body=<BODY>)``

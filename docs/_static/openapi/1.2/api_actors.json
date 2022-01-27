@@ -16,7 +16,15 @@
                                 "parameters": [
                                     {
                                         "allowMultiple": false,
-                                        "defaultValue": 250,
+                                        "description": "The query to perform. Traditional MongoDB queries are supported",
+                                        "name": "q",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": 100,
                                         "description": "The max number of results.",
                                         "format": "int32",
                                         "min": 0,
@@ -31,7 +39,7 @@
                                         "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
                                         "format": "int32",
                                         "min": 0,
-                                        "name": "offset",
+                                        "name": "skip",
                                         "paramType": "query",
                                         "required": false,
                                         "type": "integer"
@@ -483,6 +491,36 @@
                                         "paramType": "body",
                                         "required": true,
                                         "type": "AddWorkersRequest"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The query to perform. Traditional MongoDB queries are supported",
+                                        "name": "q",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": 100,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "min": 0,
+                                        "name": "limit",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "min": 0,
+                                        "name": "skip",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "integer"
                                     }
                                 ],
                                 "summary": "Add a worker to an actor.",
@@ -790,6 +828,71 @@
                         "path": "/actors/v2/aliases/{alias}"
                     },
                     {
+                        "description": "Search a specific abaco database.",
+                        "has_websocket": false,
+                        "operations": [
+                            {
+                                "is_websocket": false,
+                                "method": "GET",
+                                "nickname": "getSearch",
+                                "notes": "",
+                                "parameters": [
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The Abaco database to be searched.",
+                                        "name": "search_type",
+                                        "paramType": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The query to perform. Traditional MongoDB queries are supported",
+                                        "name": "q",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": 100,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "min": 0,
+                                        "name": "limit",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "min": 0,
+                                        "name": "skip",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "integer"
+                                    }
+                                ],
+                                "responseMessages": [
+                                    {
+                                        "code": 403,
+                                        "message": "Failed to authenticate the user"
+                                    },
+                                    {
+                                        "code": 500,
+                                        "message": "The service was unable to query the actor database"
+                                    }
+                                ],
+                                "summary": "Search a specific Abaco database.",
+                                "type": "searchDatabase"
+                            }
+                        ],
+                        "path": "/actors/v2/search/{search_type}"
+                    },
+                    {
                         "description": "Worker with actor executions.",
                         "has_websocket": false,
                         "operations": [
@@ -809,7 +912,15 @@
                                     },
                                     {
                                         "allowMultiple": false,
-                                        "defaultValue": 250,
+                                        "description": "The query to perform. Traditional MongoDB queries are supported",
+                                        "name": "q",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": 100,
                                         "description": "The max number of results.",
                                         "format": "int32",
                                         "min": 0,
@@ -824,7 +935,7 @@
                                         "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
                                         "format": "int32",
                                         "min": 0,
-                                        "name": "offset",
+                                        "name": "skip",
                                         "paramType": "query",
                                         "required": false,
                                         "type": "integer"
@@ -957,6 +1068,36 @@
                                         "paramType": "path",
                                         "required": true,
                                         "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "description": "The query to perform. Traditional MongoDB queries are supported",
+                                        "name": "q",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": 100,
+                                        "description": "The max number of results.",
+                                        "format": "int32",
+                                        "min": 0,
+                                        "name": "limit",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "allowMultiple": false,
+                                        "defaultValue": 0,
+                                        "description": "The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit)",
+                                        "format": "int32",
+                                        "min": 0,
+                                        "name": "skip",
+                                        "paramType": "query",
+                                        "required": false,
+                                        "type": "integer"
                                     }
                                 ],
                                 "responseMessages": [

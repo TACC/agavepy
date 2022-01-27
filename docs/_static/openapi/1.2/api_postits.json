@@ -93,8 +93,8 @@
                                 "parameters": [
                                     {
                                         "allowMultiple": false,
-                                        "description": "The nonce of this PostIt URL",
-                                        "name": "nonce",
+                                        "description": "The UUID of this PostIt URL",
+                                        "name": "uuid",
                                         "paramType": "path",
                                         "required": true,
                                         "type": "string"
@@ -104,7 +104,7 @@
                                 "type": "SinglePostItResponse"
                             }
                         ],
-                        "path": "/postits/v2/{nonce}"
+                        "path": "/postits/v2/{uuid}"
                     }
                 ],
                 "authorizations": [
@@ -168,7 +168,7 @@
                                 "type": "string"
                             },
                             "postit": {
-                                "description": "The PostIt nonce.",
+                                "description": "The PostIt UUID.",
                                 "name": "postit",
                                 "type": "string"
                             },

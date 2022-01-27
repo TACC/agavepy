@@ -65,12 +65,13 @@ Response:
 
 list: List actors
 =================
-``actors.list(limit=250, offset=0)``
+``actors.list(limit=100, q=None, skip=0)``
 
 Keyword Args:
 -------------
     * **limit**: The max number of results. (integer, optional)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
+    * **q**: The query to perform. Traditional MongoDB queries are supported (string, optional)
+    * **skip**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:
@@ -315,31 +316,16 @@ Response:
 
 addWorker: Add a worker to an actor.
 ====================================
-``actors.addWorker(actorId=<ACTORID>, body=<BODY>)``
+``actors.addWorker(actorId=<ACTORID>, body=<BODY>, limit=100, q=None, skip=0)``
 
 Keyword Args:
 -------------
     * **actorId**: The id of the actor. (string)
     * **body**: The description of the workers to add. (JSON, AddWorkersRequest)
+    * **limit**: The max number of results. (integer, optional)
+    * **q**: The query to perform. Traditional MongoDB queries are supported (string, optional)
+    * **skip**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
-
-**AddWorkersRequest schema**
-
-.. code-block:: javascript
-
-    {
-      "$id": "http://agavepy.readthedocs.io/en/latest/AddWorkersRequest.json",
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "properties": {
-        "num": {
-          "description": "The number of workers to ensure are running.",
-          "type": "int"
-        }
-      },
-      "required": [],
-      "title": "AgavePy AddWorkersRequest schema",
-      "type": "object"
-    }
 
 Response:
 ---------
@@ -554,15 +540,32 @@ Response:
 ---------
     * *A single ActorAlias object*
 
+getSearch: Search a specific Abaco database.
+============================================
+``actors.getSearch(limit=100, q=None, search_type=<SEARCH_TYPE>, skip=0)``
+
+Keyword Args:
+-------------
+    * **limit**: The max number of results. (integer, optional)
+    * **q**: The query to perform. Traditional MongoDB queries are supported (string, optional)
+    * **search_type**: The Abaco database to be searched. (string)
+    * **skip**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
+
+
+Response:
+---------
+    * *None*
+
 listExecutions: Summary data of all actor executions.
 =====================================================
-``actors.listExecutions(actorId=<ACTORID>, limit=250, offset=0)``
+``actors.listExecutions(actorId=<ACTORID>, limit=100, q=None, skip=0)``
 
 Keyword Args:
 -------------
     * **actorId**: The id of the actor. (string)
     * **limit**: The max number of results. (integer, optional)
-    * **offset**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
+    * **q**: The query to perform. Traditional MongoDB queries are supported (string, optional)
+    * **skip**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:
@@ -599,12 +602,15 @@ Response:
 
 getExecutionLogs: Get logs for a specific actor execution.
 ==========================================================
-``actors.getExecutionLogs(actorId=<ACTORID>, executionId=<EXECUTIONID>)``
+``actors.getExecutionLogs(actorId=<ACTORID>, executionId=<EXECUTIONID>, limit=100, q=None, skip=0)``
 
 Keyword Args:
 -------------
     * **actorId**: The id of the actor. (string)
     * **executionId**: The id of the execution. (string)
+    * **limit**: The max number of results. (integer, optional)
+    * **q**: The query to perform. Traditional MongoDB queries are supported (string, optional)
+    * **skip**: The number of records to when returning the results. When paginating results, the page number = ceil(offset/limit) (integer, optional)
 
 
 Response:

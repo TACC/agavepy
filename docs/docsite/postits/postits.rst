@@ -79,11 +79,11 @@ Response:
 
 delete: Immediately invalidates this PostIt URL.
 ================================================
-``postits.delete(nonce=<NONCE>)``
+``postits.delete(uuid=<UUID>)``
 
 Keyword Args:
 -------------
-    * **nonce**: The nonce of this PostIt URL (string)
+    * **uuid**: The UUID of this PostIt URL (string)
 
 
 Response:
