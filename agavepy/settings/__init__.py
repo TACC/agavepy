@@ -11,7 +11,7 @@ with warnings.catch_warnings():
         if not load_dotenv(find_dotenv(usecwd=True)):
             load_dotenv(os.path.join(os.path.expanduser('~'), '.env'))
 
-from attrdict import AttrDict  # noqa
+from ..util import AttrDict  # noqa
 from .helpers import ENV_PREFIX  # noqa
 from .log import *  # noqa
 from .tenancy import *  # noqa
